@@ -217,11 +217,11 @@ mpz_t miller_loop_s;
 mpz_t X_1_div2,X_1,X_2,X_2_1,four;//(kai +1)/2,(kai -1),(kai^2)をあらかじめ求めておく
 
 //emb6
-fp_t frobenius_1_10;//c^((p-1)/10)の計算結果
-fp_t frobenius_2_10;//c^(2(p-1)/10)の計算結果
+fp_t frobenius_1_6;//c^((p-1)/10)の計算結果
+fp_t frobenius_2_6;//c^(2(p-1)/10)の計算結果
 //c^(3(p-1)/6) = c^((p-1)/2) = -1
-fp_t frobenius_4_10;//c^(6(p-1)/10)の計算結果
-fp_t frobenius_5_10;//c^(7(p-1)/2)の計算結果
+fp_t frobenius_4_6;//c^(6(p-1)/10)の計算結果
+fp_t frobenius_5_6;//c^(7(p-1)/2)の計算結果
 
 //emb10
 fp_t frobenius_1_10;//c^((p-1)/10)の計算結果

@@ -240,6 +240,64 @@ void check_base(){
 
 //   mpz_clear(expo);
 // }
+// void frobenius_precalculation(){
+//   fp_t tmp;
+//   mpz_t expo;
+//   fp_init(&tmp);
+//   mpz_init(expo);
+
+//   //tmp = c^((p-1)/14)
+//   mpz_sub_ui(expo,prime_z,1);
+//   mpz_divexact_ui(expo,expo,14);
+//   fp_pow(&tmp,&base_c,expo);
+//   fp_set(&frobenius_1_14,&tmp);
+//   // fp_printf("\n1_14\n",&frobenius_1_14);
+//   mpz_set_ui(expo,2);
+//   fp_pow(&frobenius_2_14,&tmp,expo);
+//   // fp_printf("\n2_14\n",&frobenius_2_14);
+//   mpz_set_ui(expo,3);
+//   fp_pow(&frobenius_3_14,&tmp,expo);
+//   // fp_printf("\n3_14\n",&frobenius_3_14);
+
+//   mpz_set_ui(expo,4);
+//   fp_pow(&frobenius_4_14,&tmp,expo);
+//   // fp_printf("\n4_14\n",&frobenius_4_14);
+
+//   mpz_set_ui(expo,5);
+//   fp_pow(&frobenius_5_14,&tmp,expo);
+//   // fp_printf("\n5_14\n",&frobenius_5_14);
+
+//   mpz_set_ui(expo,6);
+//   fp_pow(&frobenius_6_14,&tmp,expo);
+//   // fp_printf("\n6_14\n",&frobenius_6_14);
+
+//   mpz_set_ui(expo,8);
+//   fp_pow(&frobenius_8_14,&tmp,expo);
+//   // fp_printf("\n8_14\n",&frobenius_8_14);
+
+//   mpz_set_ui(expo,9);
+//   fp_pow(&frobenius_9_14,&tmp,expo);
+//   // fp_printf("\n9_14\n",&frobenius_9_14);
+
+//   mpz_set_ui(expo,10);
+//   fp_pow(&frobenius_10_14,&tmp,expo);
+//   // fp_printf("\n10_14\n",&frobenius_10_14);
+
+//   mpz_set_ui(expo,11);
+//   fp_pow(&frobenius_11_14,&tmp,expo);
+//   // fp_printf("\n11_14\n",&frobenius_11_14);
+
+//   mpz_set_ui(expo,12);
+//   fp_pow(&frobenius_12_14,&tmp,expo);
+//   // fp_printf("\n12_14\n",&frobenius_12_14);
+
+//   mpz_set_ui(expo,13);
+//   fp_pow(&frobenius_13_14,&tmp,expo);
+//   // fp_printf("\n1_13\n",&frobenius_13_14);
+//   // getchar();
+//   mpz_clear(expo);
+// }
+
 void frobenius_precalculation(){
   fp_t tmp;
   mpz_t expo;
@@ -248,53 +306,22 @@ void frobenius_precalculation(){
 
   //tmp = c^((p-1)/14)
   mpz_sub_ui(expo,prime_z,1);
-  mpz_divexact_ui(expo,expo,14);
+  mpz_divexact_ui(expo,expo,6);
   fp_pow(&tmp,&base_c,expo);
-  fp_set(&frobenius_1_14,&tmp);
+  fp_set(&frobenius_1_6,&tmp);
   // fp_printf("\n1_14\n",&frobenius_1_14);
   mpz_set_ui(expo,2);
-  fp_pow(&frobenius_2_14,&tmp,expo);
+  fp_pow(&frobenius_2_6,&tmp,expo);
   // fp_printf("\n2_14\n",&frobenius_2_14);
-  mpz_set_ui(expo,3);
-  fp_pow(&frobenius_3_14,&tmp,expo);
-  // fp_printf("\n3_14\n",&frobenius_3_14);
 
   mpz_set_ui(expo,4);
-  fp_pow(&frobenius_4_14,&tmp,expo);
+  fp_pow(&frobenius_4_6,&tmp,expo);
   // fp_printf("\n4_14\n",&frobenius_4_14);
 
   mpz_set_ui(expo,5);
-  fp_pow(&frobenius_5_14,&tmp,expo);
+  fp_pow(&frobenius_5_6,&tmp,expo);
   // fp_printf("\n5_14\n",&frobenius_5_14);
 
-  mpz_set_ui(expo,6);
-  fp_pow(&frobenius_6_14,&tmp,expo);
-  // fp_printf("\n6_14\n",&frobenius_6_14);
-
-  mpz_set_ui(expo,8);
-  fp_pow(&frobenius_8_14,&tmp,expo);
-  // fp_printf("\n8_14\n",&frobenius_8_14);
-
-  mpz_set_ui(expo,9);
-  fp_pow(&frobenius_9_14,&tmp,expo);
-  // fp_printf("\n9_14\n",&frobenius_9_14);
-
-  mpz_set_ui(expo,10);
-  fp_pow(&frobenius_10_14,&tmp,expo);
-  // fp_printf("\n10_14\n",&frobenius_10_14);
-
-  mpz_set_ui(expo,11);
-  fp_pow(&frobenius_11_14,&tmp,expo);
-  // fp_printf("\n11_14\n",&frobenius_11_14);
-
-  mpz_set_ui(expo,12);
-  fp_pow(&frobenius_12_14,&tmp,expo);
-  // fp_printf("\n12_14\n",&frobenius_12_14);
-
-  mpz_set_ui(expo,13);
-  fp_pow(&frobenius_13_14,&tmp,expo);
-  // fp_printf("\n1_13\n",&frobenius_13_14);
-  // getchar();
   mpz_clear(expo);
 }
 
