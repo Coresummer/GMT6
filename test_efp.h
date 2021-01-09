@@ -2,11 +2,11 @@
 #define TEST_EFP_H
 
 #include "count.h"
-#include "efp14.h"
+#include "efp6.h"
 
 void check_efp();
-void check_efp7();
-void check_efp14();
+void check_efp2();
+void check_efp6();
 void check_g1_g2();
 
 #endif

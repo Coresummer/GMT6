@@ -20,60 +20,60 @@ void check_efp(){
   printf("*********************************************************************************************\n\n");
 }
 
-void check_efp7(){
-  printf("check_efp7() 開始\n");
-  efp7_t P,ANS;
-  efp7_init(&P);
-  efp7_init(&ANS);
+void check_efp2(){
+  printf("check_efp2() 開始\n");
+  efp2_t P,ANS;
+  efp2_init(&P);
+  efp2_init(&ANS);
 
-  efp7_rational_point(&P);
-  efp7_println("P = ",&P);
+  efp2_rational_point(&P);
+  efp2_println("P = ",&P);
   printf("---------------------------------\n");
 
   printf("weil定理の確認\n");
-  efp7_scm(&ANS,&P,efp7_total);
-  efp7_println("[p^7 +1 -t7]P = ",&ANS);
+  efp2_scm(&ANS,&P,efp2_total);
+  efp2_println("[p^2 +1 -t2]P = ",&ANS);
   printf("---------------------------------\n");
 
-  efp7_println("P = ",&P);//Aが変わっていないことの確認
+  efp2_println("P = ",&P);//Aが変わっていないことの確認
 
   printf("*********************************************************************************************\n\n");
 }
 
-void check_efp14(){
-  printf("check_efp14() 開始\n");
-  efp14_t P,ANS;
-  efp14_init(&P);
-  efp14_init(&ANS);
-  efp14_rational_point(&P);
-  efp14_println("P = ",&P);
+void check_efp6(){
+  printf("check_efp6() 開始\n");
+  efp6_t P,ANS;
+  efp6_init(&P);
+  efp6_init(&ANS);
+  efp6_rational_point(&P);
+  efp6_println("P = ",&P);
   printf("---------------------------------\n");
 
   printf("weil定理の確認\n");
-  efp14_scm(&ANS,&P,efp14_total);
-  efp14_println("[p^14 +1 -t14]P = ",&ANS);
+  efp6_scm(&ANS,&P,efp6_total);
+  efp6_println("[p^6 +1 -t6]P = ",&ANS);
   printf("---------------------------------\n");
 
-  efp14_println("P = ",&P);//Aが変わっていないことの確認
+  efp6_println("P = ",&P);//Aが変わっていないことの確認
 
   printf("*********************************************************************************************\n\n");
 }
 
 void check_g1_g2(){
   printf("check_g1_g2() 開始\n");
-  efp14_t P,Q;
-  efp14_init(&P);
-  efp14_init(&Q);
+  efp6_t P,Q;
+  efp6_init(&P);
+  efp6_init(&Q);
 
   generate_g1(&P);
-  efp14_println("P in G1 = ",&P);
-  efp14_scm(&P,&P,order_z);
-  efp14_println("[r]P = ",&P);
+  efp6_println("P in G1 = ",&P);
+  efp6_scm(&P,&P,order_z);
+  efp6_println("[r]P = ",&P);
   printf("---------------------------------\n");
   generate_g2(&Q);
-  efp14_println("Q in G2 = ",&Q);
-  efp14_scm(&Q,&Q,order_z);
-  efp14_println("[r]Q = ",&Q);
+  efp6_println("Q in G2 = ",&Q);
+  efp6_scm(&Q,&Q,order_z);
+  efp6_println("[r]Q = ",&Q);
 
   printf("*********************************************************************************************\n\n");
 }

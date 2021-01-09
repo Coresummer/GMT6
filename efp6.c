@@ -71,11 +71,12 @@ void efp6_rational_point(efp6_t *P){
   P->infinity=0;
   while(1){
     fp6_set_random(&P->x,state);
-    //y^2 = x^3 + ax
+    //y^2 = x^3 + b
     fp6_sqr(&tmp_y2,&P->x);
     fp6_mul(&tmp_y2,&tmp_y2,&P->x);
-    fp6_mul_mpn(&tmp_ax,&P->x,curve_a.x0);
-    fp6_add(&tmp_y2,&tmp_y2,&tmp_ax);
+    //fp6_mul_mpn(&tmp_ax,&P->x,curve_a.x0);
+    //fp6_add(&tmp_y2,&tmp_y2,&tmp_ax);
+    fp_add(&tmp_y2.x0.x0,&tmp_y2.x0.x0,&curve_b);
     if(fp6_legendre(&tmp_y2)==1){
       fp6_sqrt(&P->y,&tmp_y2);
       break;
@@ -139,11 +140,11 @@ void efp6_ecd(efp6_t *ANS,efp6_t *P){
   //tmp1_fp = 1/2yp
   fp6_add(&tmp1_fp6,&tmp1_efp6.y,&tmp1_efp6.y);
   fp6_inv(&tmp1_fp6,&tmp1_fp6);
-  //tmp2_fp = 3x^2 +a
+  //tmp2_fp = 3x^2
   fp6_sqr(&tmp2_fp6,&tmp1_efp6.x);
   fp6_add(&tmp3_fp6,&tmp2_fp6,&tmp2_fp6);
   fp6_add(&tmp2_fp6,&tmp2_fp6,&tmp3_fp6);
-  fp_add(&tmp2_fp6.x0.x0,&tmp2_fp6.x0.x0,&curve_a);
+  //fp_add(&tmp2_fp6.x0.x0,&tmp2_fp6.x0.x0,&curve_a);
   //tmp3_fp = lambda
   fp6_mul(&tmp3_fp6,&tmp1_fp6,&tmp2_fp6);
 

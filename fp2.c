@@ -101,8 +101,8 @@ void fp2_mul(fp2_t *ANS,fp2_t *A,fp2_t *B){
   static fp_t tmp1_fp,tmp2_fp,tmp3_fp,tmp4_fp,tmp5_fp;
   fp_mul(&tmp1_fp,&tmp_A.x0,&tmp_B.x0); //ac
   fp_mul(&tmp2_fp,&tmp_A.x1,&tmp_B.x1); //bd
-
-  fp_mul_base(&ANS->x0, &tmp2_fp);  //ab+bdΘ
+  fp_mul_base(&tmp3_fp, &tmp2_fp);  //ab+bdΘ^2
+  fp_add(&ANS->x0, &tmp1_fp, &tmp3_fp);  //ab+bdΘ^2
 
   fp_add(&tmp3_fp,&tmp_A.x0,&tmp_A.x1);//a+b
   fp_add(&tmp4_fp,&tmp_B.x0,&tmp_B.x1);//c+d
@@ -110,7 +110,7 @@ void fp2_mul(fp2_t *ANS,fp2_t *A,fp2_t *B){
   
   fp_sub(&tmp3_fp,&tmp5_fp,&tmp1_fp);//(a+b)(c+d) - ac
   fp_sub(&ANS->x1,&tmp3_fp,&tmp2_fp);//(a+b)(c+d) - ac -bd
-}
+} 
 
 void fp2_mul_ui(fp2_t *ANS,fp2_t *A,unsigned long int UI){
   fp_mul_ui(&ANS->x0,&A->x0,UI);
@@ -131,7 +131,7 @@ void fp2_sqr(fp2_t *ANS,fp2_t *A){
   static fp2_t tmp_A;
   fp2_set(&tmp_A,A);
 
-  static fp_t tmp1_fp,tmp2_fp,tmp3_fp,tmp4_fp,tmp5_fp,tmp6_fp,tmp2_fp,tmp8_fp,tmp9_fp;
+  static fp_t tmp1_fp,tmp2_fp,tmp3_fp,tmp4_fp,tmp5_fp,tmp6_fp,tmp7_fp,tmp8_fp,tmp9_fp;
 
   fp_sqr(&tmp1_fp, &tmp_A.x0);  //a^2
   fp_sqr(&tmp2_fp, &tmp_A.x1);  //b^2
@@ -375,7 +375,7 @@ void fp2_frobenius_map_p1(fp2_t *ANS,fp2_t *A){
   fp_set_neg(&ANS->x1,&A->x1);
 }
 
-void fp2_mul_base(fp2_t *ANS,fp2_t *A){
+void fp2_mul_basis(fp2_t *ANS,fp2_t *A){
   static fp2_t tmp_A;
   fp2_set(&tmp_A,A);
 

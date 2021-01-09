@@ -55,6 +55,6 @@ void fp2_frobenius_map_p1(fp2_t *ANS,fp2_t *A);
 void fp2_frobenius_map_p2(fp2_t *ANS,fp2_t *A);
 void fp2_frobenius_map_p3(fp2_t *ANS,fp2_t *A);
 
-void fp2_mul_base(fp2_t *ANS,fp2_t *A);
+void fp2_mul_basis(fp2_t *ANS,fp2_t *A);
 
 #endif

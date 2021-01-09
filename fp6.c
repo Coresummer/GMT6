@@ -26,15 +26,15 @@ void fp6_println(char *str,fp6_t *A){
   gmp_printf(")\n");
 }
 
-void fp6_printf_montgomery(char *str,fp6_t *A){
-  gmp_printf("%s(",str);
-  fp2_printf_montgomery("",&A->x0);
-  gmp_printf(",");
-  fp2_printf_montgomery("",&A->x1);
-  gmp_printf(",");
-  fp2_printf_montgomery("",&A->x2);
-  gmp_printf(")");
-}
+// void fp6_printf_montgomery(char *str,fp6_t *A){
+//   gmp_printf("%s(",str);
+//   fp2_printf_montgomery("",&A->x0);
+//   gmp_printf(",");
+//   fp2_printf_montgomery("",&A->x1);
+//   gmp_printf(",");
+//   fp2_printf_montgomery("",&A->x2);
+//   gmp_printf(")");
+// }
 
 void fp6_set(fp6_t *ANS,fp6_t *A){
   fp2_set(&ANS->x0,&A->x0);
@@ -67,18 +67,18 @@ void fp6_set_neg(fp6_t *ANS,fp6_t *A){
 
 }
 
-void fp6_to_montgomery(fp6_t *ANS,fp6_t *A){
-  fp2_to_montgomery(&ANS->x0,&A->x0);
-  fp2_to_montgomery(&ANS->x1,&A->x1);
-  fp2_to_montgomery(&ANS->x2,&A->x2);
-}
+// void fp6_to_montgomery(fp6_t *ANS,fp6_t *A){
+//   fp2_to_montgomery(&ANS->x0,&A->x0);
+//   fp2_to_montgomery(&ANS->x1,&A->x1);
+//   fp2_to_montgomery(&ANS->x2,&A->x2);
+// }
 
-void fp6_mod_montgomery(fp6_t *ANS,fp6_t *A){
-  fp2_mod_montgomery(&ANS->x0,&A->x0);
-  fp2_mod_montgomery(&ANS->x1,&A->x1);
-  fp2_mod_montgomery(&ANS->x2,&A->x2);
+// void fp6_mod_montgomery(fp6_t *ANS,fp6_t *A){
+//   fp2_mod_montgomery(&ANS->x0,&A->x0);
+//   fp2_mod_montgomery(&ANS->x1,&A->x1);
+//   fp2_mod_montgomery(&ANS->x2,&A->x2);
 
-}
+// }
 
 void fp6_set_random(fp6_t *ANS,gmp_randstate_t state){
   fp2_set_random(&ANS->x0,state);
@@ -126,13 +126,13 @@ void fp6_mul(fp6_t *ANS,fp6_t *A,fp6_t *B){
   fp2_sub(&ANS->x0,&tmp5,&tmp4);
   fp2_sub(&ANS->x0,&ANS->x0,&tmp6);
   fp2_add(&ANS->x0,&ANS->x0,&tmp1);
-  fp2_mul_base(&ANS->x0,&ANS->x0);
+  fp2_mul_basis(&ANS->x0,&ANS->x0);
   fp2_add(&ANS->x0,&ANS->x0,&tmp1);
 
   //x1 = (a+b)(b+e)-ad-be+cfθ^3
   fp2_sub(&ANS->x1,&tmp4,&tmp1);
   fp2_sub(&ANS->x1,&ANS->x1,&tmp2);
-  fp2_mul_base(&ANS->x2,&tmp3);
+  fp2_mul_basis(&ANS->x2,&tmp3);
   fp2_add(&ANS->x1,&ANS->x1,&ANS->x2);
 
   //x2 = be+(a+c)(d+f)-ad-cf
@@ -152,7 +152,7 @@ void fp6_mul(fp6_t *ANS,fp6_t *A,fp6_t *B){
 //   fp2_mul_lazy_montgomery(&tmp1,&A->x0,&B->x0);//a0*b0
 
 //   //x0
-//   fp2_mul_base(&ANS->x0,&tmp2);//(a1*b1)*alpha
+//   fp2_mul_basis(&ANS->x0,&tmp2);//(a1*b1)*alpha
 //   fp2_add(&ANS->x0,&ANS->x0,&tmp1);//(a0*b0)+(a1*b1)*alpha
 
 //   //x1
@@ -210,13 +210,13 @@ void fp6_sqr(fp6_t *ANS,fp6_t *A){
   fp2_sub(&ANS->x0,&tmp5,&tmp4);
   fp2_sub(&ANS->x0,&ANS->x0,&tmp6);
   fp2_add(&ANS->x0,&ANS->x0,&tmp1);
-  fp2_mul_base(&ANS->x0,&ANS->x0);
+  fp2_mul_basis(&ANS->x0,&ANS->x0);
   fp2_add(&ANS->x0,&ANS->x0,&tmp1);
 
   //x1 = (a+b)(b+e)-ad-be+cfθ^3
   fp2_sub(&ANS->x1,&tmp4,&tmp1);
   fp2_sub(&ANS->x1,&ANS->x1,&tmp2);
-  fp2_mul_base(&ANS->x2,&tmp3);
+  fp2_mul_basis(&ANS->x2,&tmp3);
   fp2_add(&ANS->x1,&ANS->x1,&ANS->x2);
 
   //x2 = be+(a+c)(d+f)-ad-cf
@@ -230,14 +230,14 @@ void fp6_sqr(fp6_t *ANS,fp6_t *A){
 //   static fp2_t tmp1,tmp2,tmp3;
 
 //   fp2_add_nonmod_single(&tmp1,&A->x0,&A->x1);
-//   fp2_mul_base(&tmp2,&A->x1);
+//   fp2_mul_basis(&tmp2,&A->x1);
 //   fp2_add_nonmod_single(&tmp2,&tmp2,&A->x0);
 //   fp2_mul_lazy_montgomery(&tmp3,&A->x0,&A->x1);
 
 //   //x0
 //   fp2_mul_lazy_montgomery(&ANS->x0,&tmp1,&tmp2);
 //   fp2_sub(&ANS->x0,&ANS->x0,&tmp3);
-//   fp2_mul_base(&tmp1,&tmp3);
+//   fp2_mul_basis(&tmp1,&tmp3);
 //   fp2_sub(&ANS->x0,&ANS->x0,&tmp1);
 
 //   //x1
@@ -257,12 +257,14 @@ void fp6_add_lazy(fp6_t *ANS,fp6_t *A,fp6_t *B){
   fp2_add_nonmod_single(&ANS->x2,&A->x2,&B->x2);
 
 }
-
+void fp6_add_fp(fp6_t *ANS,fp6_t *A,fp_t *B){
+  fp6_set(ANS,A);
+  fp_add(&ANS->x0.x0,&ANS->x0.x0,B);
+}
 void fp6_add_ui(fp6_t *ANS,fp6_t *A,unsigned long int UI){
   fp2_add_ui(&ANS->x0,&A->x0,UI);
   fp2_set(&ANS->x1,&A->x1);
   fp2_set(&ANS->x2,&A->x2);
-
 }
 
 void fp6_add_ui_ui(fp6_t *ANS,fp6_t *A,unsigned long int UI){
@@ -346,19 +348,19 @@ void fp6_inv(fp6_t *ANS,fp6_t *A){
     fp2_mul(&ANS->x2,&tmp8_fp2,&tmp5_fp2);
 }
 
-void fp6_inv_lazy_montgomery(fp6_t *ANS,fp6_t *A){
-  static fp2_t tmp1,tmp2;
+// void fp6_inv_lazy_montgomery(fp6_t *ANS,fp6_t *A){
+//   static fp2_t tmp1,tmp2;
 
-  fp2_sqr_lazy_montgomery(&tmp1,&A->x0);
-  fp2_sqr_lazy_montgomery(&tmp2,&A->x1);
-  fp2_mul_base(&tmp2,&tmp2);
-  fp2_sub(&tmp1,&tmp1,&tmp2);//a0^2 -a1^2*alpha
-  fp2_inv_lazy_montgomery(&tmp1,&tmp1);
+//   fp2_sqr_lazy_montgomery(&tmp1,&A->x0);
+//   fp2_sqr_lazy_montgomery(&tmp2,&A->x1);
+//   fp2_mul_basis(&tmp2,&tmp2);
+//   fp2_sub(&tmp1,&tmp1,&tmp2);//a0^2 -a1^2*alpha
+//   fp2_inv_lazy_montgomery(&tmp1,&tmp1);
 
-  fp2_mul_lazy_montgomery(&ANS->x0,&A->x0,&tmp1);
-  fp2_set_neg(&tmp2,&A->x1);
-  fp2_mul_lazy_montgomery(&ANS->x1,&tmp2,&tmp1);
-}
+//   fp2_mul_lazy_montgomery(&ANS->x0,&A->x0,&tmp1);
+//   fp2_set_neg(&tmp2,&A->x1);
+//   fp2_mul_lazy_montgomery(&ANS->x1,&tmp2,&tmp1);
+// }
 
 int fp6_legendre(fp6_t *A){
   mpz_t expo;
@@ -497,111 +499,49 @@ int  fp6_cmp_one(fp6_t *A){
   return 1;
 }
 
-int fp6_montgomery_trick_montgomery(fp6_t *A_inv,fp6_t *A,int n){
-  int i;
-  fp6_t ANS[n],ALL_inv;
-  fp6_set(&ANS[0],&A[0]);
-  fp6_t check;
+// int fp6_montgomery_trick_montgomery(fp6_t *A_inv,fp6_t *A,int n){
+//   int i;
+//   fp6_t ANS[n],ALL_inv;
+//   fp6_set(&ANS[0],&A[0]);
+//   fp6_t check;
 
-  for(i=1;i<n;i++){
-    fp6_mul_lazy_montgomery(&ANS[i],&ANS[i-1],&A[i]);
-  }
-  fp6_inv_lazy_montgomery(&ALL_inv,&ANS[n-1]);
-  for(i=n-1;i>0;i--){
-    fp6_mul_lazy_montgomery(&A_inv[i],&ALL_inv,&ANS[i-1]);
-    fp6_mul_lazy_montgomery(&ALL_inv,&ALL_inv,&A[i]);
-  }
+//   for(i=1;i<n;i++){
+//     fp6_mul_lazy_montgomery(&ANS[i],&ANS[i-1],&A[i]);
+//   }
+//   fp6_inv_lazy_montgomery(&ALL_inv,&ANS[n-1]);
+//   for(i=n-1;i>0;i--){
+//     fp6_mul_lazy_montgomery(&A_inv[i],&ALL_inv,&ANS[i-1]);
+//     fp6_mul_lazy_montgomery(&ALL_inv,&ALL_inv,&A[i]);
+//   }
 
-  fp6_set(&A_inv[0],&ALL_inv);
-  return 0;
-}
+//   fp6_set(&A_inv[0],&ALL_inv);
+//   return 0;
+// }
 
 void fp6_frobenius_map_p1(fp6_t *ANS,fp6_t *A){
   fp_set(&ANS->x0.x0,&A->x0.x0);
-  fp_mul(&ANS->x0.x1,&A->x0.x1,&frobenius_2_14);
-  fp_mul(&ANS->x0.x2,&A->x0.x2,&frobenius_4_14);
-  fp_mul(&ANS->x0.x3,&A->x0.x3,&frobenius_6_14);
-  fp_mul(&ANS->x0.x4,&A->x0.x4,&frobenius_8_14);
-  fp_mul(&ANS->x0.x5,&A->x0.x5,&frobenius_10_14);
-  fp_mul(&ANS->x0.x6,&A->x0.x6,&frobenius_12_14);
-
-  fp_mul(&ANS->x1.x0,&A->x1.x0,&frobenius_1_14);
-  fp_mul(&ANS->x1.x1,&A->x1.x1,&frobenius_3_14);
-  fp_mul(&ANS->x1.x2,&A->x1.x2,&frobenius_5_14);
-  fp_set_neg(&ANS->x1.x3,&A->x1.x3);
-  fp_mul(&ANS->x1.x4,&A->x1.x4,&frobenius_9_14);
-  fp_mul(&ANS->x1.x5,&A->x1.x5,&frobenius_11_14);
-  fp_mul(&ANS->x1.x6,&A->x1.x6,&frobenius_13_14);
+  fp_set_neg(&ANS->x0.x1,&A->x0.x1);
+  fp_mul(&ANS->x1.x0,&A->x1.x0,&frobenius_1_6);
+  fp_mul(&ANS->x1.x1,&A->x1.x1,&frobenius_4_6);
+  fp_mul(&ANS->x2.x0,&A->x1.x0,&frobenius_2_6);
+  fp_mul(&ANS->x2.x1,&A->x1.x1,&frobenius_5_6);
 }
 
-void fp6_frobenius_map_p2(fp6_t *ANS,fp6_t *A){
+void fp6_frobenius_map_p2(fp6_t *ANS,fp6_t *A){ //not sure ...
   fp_set(&ANS->x0.x0,&A->x0.x0);
-  fp_mul(&ANS->x0.x1,&A->x0.x1,&frobenius_4_14);
-  fp_mul(&ANS->x0.x2,&A->x0.x2,&frobenius_8_14);
-  fp_mul(&ANS->x0.x3,&A->x0.x3,&frobenius_12_14);
-  fp_mul(&ANS->x0.x4,&A->x0.x4,&frobenius_2_14);
-  fp_mul(&ANS->x0.x5,&A->x0.x5,&frobenius_6_14);
-  fp_mul(&ANS->x0.x6,&A->x0.x6,&frobenius_10_14);
-
-  fp_mul(&ANS->x1.x0,&A->x1.x0,&frobenius_2_14);
-  fp_mul(&ANS->x1.x1,&A->x1.x1,&frobenius_6_14);
-  fp_mul(&ANS->x1.x2,&A->x1.x2,&frobenius_10_14);
-  fp_set(&ANS->x1.x3,&A->x1.x3);
-  fp_mul(&ANS->x1.x4,&A->x1.x4,&frobenius_4_14);
-  fp_mul(&ANS->x1.x5,&A->x1.x5,&frobenius_8_14);
-  fp_mul(&ANS->x1.x6,&A->x1.x6,&frobenius_12_14);
+  fp_set(&ANS->x0.x1,&A->x0.x1);
+  fp_mul(&ANS->x1.x0,&A->x1.x0,&frobenius_2_6);
+  fp_mul(&ANS->x1.x1,&A->x1.x1,&frobenius_2_6);
+  fp_mul(&ANS->x2.x0,&A->x1.x0,&frobenius_4_6);
+  fp_mul(&ANS->x2.x1,&A->x1.x1,&frobenius_4_6);
 }
 
-void fp6_frobenius_map_p3(fp6_t *ANS,fp6_t *A){
+void fp6_frobenius_map_p3(fp6_t *ANS,fp6_t *A){ //not sure ...
   fp_set(&ANS->x0.x0,&A->x0.x0);
-  fp_mul(&ANS->x0.x1,&A->x0.x1,&frobenius_6_14);
-  fp_mul(&ANS->x0.x2,&A->x0.x2,&frobenius_12_14);
-  fp_mul(&ANS->x0.x3,&A->x0.x3,&frobenius_4_14);
-  fp_mul(&ANS->x0.x4,&A->x0.x4,&frobenius_10_14);
-  fp_mul(&ANS->x0.x5,&A->x0.x5,&frobenius_2_14);
-  fp_mul(&ANS->x0.x6,&A->x0.x6,&frobenius_8_14);
-
-  fp_mul(&ANS->x1.x0,&A->x1.x0,&frobenius_3_14);
-  fp_mul(&ANS->x1.x1,&A->x1.x1,&frobenius_9_14);
-  fp_mul(&ANS->x1.x2,&A->x1.x2,&frobenius_1_14);
-  fp_set_neg(&ANS->x1.x3,&A->x1.x3);
-  fp_mul(&ANS->x1.x4,&A->x1.x4,&frobenius_13_14);
-  fp_mul(&ANS->x1.x5,&A->x1.x5,&frobenius_5_14);
-  fp_mul(&ANS->x1.x6,&A->x1.x6,&frobenius_11_14);
+  fp_set_neg(&ANS->x0.x1,&A->x0.x1);
+  fp_mul(&ANS->x1.x0,&A->x1.x0,&frobenius_4_6);
+  fp_mul(&ANS->x1.x1,&A->x1.x1,&frobenius_4_6);
+  fp_mul(&ANS->x2.x0,&A->x1.x0,&frobenius_2_6);
+  fp_mul(&ANS->x2.x1,&A->x1.x1,&frobenius_2_6);
 }
 
-void fp6_frobenius_map_p4(fp6_t *ANS,fp6_t *A){
-  fp_set(&ANS->x0.x0,&A->x0.x0);
-  fp_mul(&ANS->x0.x1,&A->x0.x1,&frobenius_8_14);
-  fp_mul(&ANS->x0.x2,&A->x0.x2,&frobenius_2_14);
-  fp_mul(&ANS->x0.x3,&A->x0.x3,&frobenius_10_14);
-  fp_mul(&ANS->x0.x4,&A->x0.x4,&frobenius_4_14);
-  fp_mul(&ANS->x0.x5,&A->x0.x5,&frobenius_12_14);
-  fp_mul(&ANS->x0.x6,&A->x0.x6,&frobenius_6_14);
-
-  fp_mul(&ANS->x1.x0,&A->x1.x0,&frobenius_4_14);
-  fp_mul(&ANS->x1.x1,&A->x1.x1,&frobenius_12_14);
-  fp_mul(&ANS->x1.x2,&A->x1.x2,&frobenius_6_14);
-  fp_set(&ANS->x1.x3,&A->x1.x3);
-  fp_mul(&ANS->x1.x4,&A->x1.x4,&frobenius_8_14);
-  fp_mul(&ANS->x1.x5,&A->x1.x5,&frobenius_2_14);
-  fp_mul(&ANS->x1.x6,&A->x1.x6,&frobenius_10_14);
-}
-
-void fp6_frobenius_map_p5(fp6_t *ANS,fp6_t *A){
-  fp_set(&ANS->x0.x0,&A->x0.x0);
-  fp_mul(&ANS->x0.x1,&A->x0.x1,&frobenius_10_14);
-  fp_mul(&ANS->x0.x2,&A->x0.x2,&frobenius_6_14);
-  fp_mul(&ANS->x0.x3,&A->x0.x3,&frobenius_2_14);
-  fp_mul(&ANS->x0.x4,&A->x0.x4,&frobenius_12_14);
-  fp_mul(&ANS->x0.x5,&A->x0.x5,&frobenius_8_14);
-  fp_mul(&ANS->x0.x6,&A->x0.x6,&frobenius_4_14);
-
-  fp_mul(&ANS->x1.x0,&A->x1.x0,&frobenius_5_14);
-  fp_mul(&ANS->x1.x1,&A->x1.x1,&frobenius_1_14);
-  fp_mul(&ANS->x1.x2,&A->x1.x2,&frobenius_11_14);
-  fp_set_neg(&ANS->x1.x3,&A->x1.x3);
-  fp_mul(&ANS->x1.x4,&A->x1.x4,&frobenius_3_14);
-  fp_mul(&ANS->x1.x5,&A->x1.x5,&frobenius_13_14);
-  fp_mul(&ANS->x1.x6,&A->x1.x6,&frobenius_9_14);
-}

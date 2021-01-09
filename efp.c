@@ -227,11 +227,10 @@ void efp_rational_point(efp_t *P){
   P->infinity=0;
   while(1){
     fp_set_random(&P->x,state);
-    //y^2 = x^3 + ax
+    //y^2 = x^3 + b
     fp_sqr(&tmp_y2,&P->x);
     fp_mul(&tmp_y2,&tmp_y2,&P->x);
-    fp_mul(&tmp_ax,&P->x,&curve_a);
-    fp_add(&tmp_y2,&tmp_y2,&tmp_ax);
+    fp_add(&tmp_y2,&tmp_y2,&curve_b);
     if(fp_legendre(&tmp_y2)==1){
       fp_sqrt(&P->y,&tmp_y2);
       break;
@@ -260,7 +259,7 @@ void efp_ecd(efp_t *ANS,efp_t *P){
   fp_sqr(&tmp2_fp,&tmp1_efp.x);
   fp_add(&tmp3_fp,&tmp2_fp,&tmp2_fp);
   fp_add(&tmp2_fp,&tmp2_fp,&tmp3_fp);
-  fp_add(&tmp2_fp,&tmp2_fp,&curve_a);
+  //fp_add(&tmp2_fp,&tmp2_fp,&curve_a);
   //tmp3_fp = lambda
   fp_mul(&tmp3_fp,&tmp1_fp,&tmp2_fp);
 

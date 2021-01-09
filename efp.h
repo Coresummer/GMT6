@@ -1,7 +1,7 @@
 #ifndef EFP_H
 #define EFP_H
 
-#include "fp14.h"
+#include "fp6.h"
 
 void efp_init(efp_t *P);
 void efp_projective_init(efp_projective_t *P);
