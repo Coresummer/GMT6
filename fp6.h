@@ -1,7 +1,7 @@
 #ifndef FP6_H
 #define FP6_H
 
-#include "fp2.h"
+#include "fp3.h"
 
 void fp6_init(fp6_t *A);
 void fp6_printf(char *str,fp6_t *A);

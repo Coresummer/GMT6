@@ -42,45 +42,45 @@ void check_fp(){
   printf("*********************************************************************************************\n\n");
 }
 
-void check_fp2(){
-  printf("check_fp2() 開始\n");
-  fp2_t A,ANS;
-  fp2_init(&A);
-  fp2_init(&ANS);
+void check_fp3(){
+  printf("check_fp3() 開始\n");
+  fp3_t A,ANS;
+  fp3_init(&A);
+  fp3_init(&ANS);
 
-  fp2_set_random(&A,state);
-  fp2_println("A = ",&A);
+  fp3_set_random(&A,state);
+  fp3_println("A = ",&A);
 
-  fp2_inv(&ANS,&A);
-  fp2_println("A^-1 = ",&ANS);
-  fp2_mul(&ANS,&ANS,&A);
-  fp2_println("A * A^-1 = ",&ANS);
+  fp3_inv(&ANS,&A);
+  fp3_println("A^-1 = ",&ANS);
+  fp3_mul(&ANS,&ANS,&A);
+  fp3_println("A * A^-1 = ",&ANS);
   printf("---------------------------------\n");
   printf("平方根アルゴリズムの確認\n");
-  int flag=fp2_legendre(&A);
-  printf("fp2_legendre(A) = %d\n",flag);
+  int flag=fp3_legendre(&A);
+  printf("fp3_legendre(A) = %d\n",flag);
   if(flag==1){
-    fp2_sqrt(&ANS,&A);
-    fp2_println("fp2_sqrt(A) = ",&ANS);
-    //fp2_mul(&ANS,&ANS,&ANS);
-    fp2_sqr(&ANS,&ANS);
-    if(fp2_cmp(&ANS,&A)==0){
-      printf("(fp2_sqrt(A))^2 = A\n\n");
+    fp3_sqrt(&ANS,&A);
+    fp3_println("fp3_sqrt(A) = ",&ANS);
+    //fp3_mul(&ANS,&ANS,&ANS);
+    fp3_sqr(&ANS,&ANS);
+    if(fp3_cmp(&ANS,&A)==0){
+      printf("(fp3_sqrt(A))^2 = A\n\n");
     }
-    else  printf("(fp2_sqrt(A))^2 != A\n\n");
+    else  printf("(fp3_sqrt(A))^2 != A\n\n");
   }
   printf("---------------------------------\n");
 
   printf("フェルマーの小定理の確認\n");
   mpz_t tmp;
   mpz_init(tmp);
-  mpz_pow_ui(tmp,prime_z,2);
+  mpz_pow_ui(tmp,prime_z,3);
   mpz_sub_ui(tmp,tmp,1);
-  fp2_pow(&ANS,&A,tmp);
-  fp2_println("A^(p^2-1) = ",&ANS);
+  fp3_pow(&ANS,&A,tmp);
+  fp3_println("A^(p^3-1) = ",&ANS);
   printf("---------------------------------\n");
 
-  fp2_println("A = ",&A);//Aが変わっていないことの確認
+  fp3_println("A = ",&A);//Aが変わっていないことの確認
 
   printf("*********************************************************************************************\n\n");
 }
@@ -129,31 +129,31 @@ void check_fp6(){
   printf("*********************************************************************************************\n\n");
 }
 
-void check_fp2_count(){
-  printf("check_fp2_count() 開始\n");
-  fp2_t A,B,ANS;
-  fp2_init(&A);
-  fp2_init(&B);
-  fp2_init(&ANS);
+void check_fp3_count(){
+  printf("check_fp3_count() 開始\n");
+  fp3_t A,B,ANS;
+  fp3_init(&A);
+  fp3_init(&B);
+  fp3_init(&ANS);
 
-  fp2_set_random(&A,state);
-  fp2_set_random(&B,state);
-  //fp2_println("A = ",&A);
-  //fp2_println("B = ",&B);
+  fp3_set_random(&A,state);
+  fp3_set_random(&B,state);
+  //fp3_println("A = ",&A);
+  //fp3_println("B = ",&B);
   printf("---------------------------------\n");
-  printf("fp2_mul() count\n");
+  printf("fp3_mul() count\n");
   count_start();
-  fp2_mul(&ANS,&A,&B);
+  fp3_mul(&ANS,&A,&B);
   count_printf();
   printf("---------------------------------\n");
-  printf("fp2_sqr() count\n");
+  printf("fp3_sqr() count\n");
   count_start();
-  fp2_sqr(&ANS,&A);
+  fp3_sqr(&ANS,&A);
   count_printf();
   printf("---------------------------------\n");
-  printf("fp2_inv() count\n");
+  printf("fp3_inv() count\n");
   count_start();
-  fp2_inv(&ANS,&A);
+  fp3_inv(&ANS,&A);
   count_printf();
   printf("*********************************************************************************************\n\n");
 }
