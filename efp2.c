@@ -325,8 +325,6 @@ void efp2_rational_point(efp2_t *P){
     //y^2 = x^3 + b
     fp2_sqr(&tmp_y2,&P->x);
     fp2_mul(&tmp_y2,&tmp_y2,&P->x);
-    //fp2_mul_mpn(&tmp_ax,&P->x,curve_a.x0);
-    //fp2_add(&tmp_y2,&tmp_y2,&tmp_ax);
     fp_add(&tmp_y2.x0,&tmp_y2.x0,&curve_b);
     if(fp2_legendre(&tmp_y2)==1){
       fp2_sqrt(&P->y,&tmp_y2);

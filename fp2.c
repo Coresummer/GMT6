@@ -220,14 +220,16 @@ void fp2_sub_mpn(fp2_t *ANS,fp2_t *A,mp_limb_t *B){
 void fp2_inv(fp2_t *ANS,fp2_t *A){  
 	static fp_t tmp1_fp,tmp2_fp,tmp3_fp,tmp4_fp;
   fp_set(&tmp1_fp,&A->x0);  //a
-  fp_set_neg(&tmp2_fp,&A->x1); //-b
+  fp_set_neg(&tmp2_fp,&A->x1); //b
 
   fp_sqr(&tmp3_fp,&tmp1_fp);  //a^2
-  fp_mul(&tmp4_fp,&tmp2_fp,&A->x1);  //-b^2
-  fp_sub(&tmp3_fp,&tmp3_fp,&tmp4_fp); //a^2 - b^2 //mabe need mul_basis?
-  fp_inv(&tmp3_fp,&tmp3_fp);  //  (a^2 - b^2)^-1
-  fp_mul(&ANS->x0,&tmp1_fp,&tmp3_fp); // a*(a^2 - b^2)^-1
-  fp_mul(&ANS->x1,&tmp2_fp,&tmp3_fp); //-b*(a^2 - b^2)^-1
+  fp_mul(&tmp4_fp,&tmp2_fp,&A->x1);  //b^2*c
+  fp_mul_base(&tmp4_fp,&tmp4_fp);
+  fp_add(&tmp3_fp,&tmp3_fp,&tmp4_fp); //a^2 - b^2c //mabe need mul_basis?
+
+  fp_inv(&tmp3_fp,&tmp3_fp);  //  (a^2 - b^2c)^-1
+  fp_mul(&ANS->x0,&tmp1_fp,&tmp3_fp); // a*(a^2- b^2c)^-1
+  fp_mul(&ANS->x1,&tmp2_fp,&tmp3_fp); //-b*(a^2 - b^2c)^-1
 
 }
 

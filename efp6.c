@@ -64,8 +64,7 @@ int efp6_cmp(efp6_t *A,efp6_t *B){
 }
 
 void efp6_rational_point(efp6_t *P){
-  fp6_t tmp_ax,tmp_y2;
-  fp6_init(&tmp_ax);
+  fp6_t tmp_y2;
   fp6_init(&tmp_y2);
 
   P->infinity=0;
@@ -74,8 +73,6 @@ void efp6_rational_point(efp6_t *P){
     //y^2 = x^3 + b
     fp6_sqr(&tmp_y2,&P->x);
     fp6_mul(&tmp_y2,&tmp_y2,&P->x);
-    //fp6_mul_mpn(&tmp_ax,&P->x,curve_a.x0);
-    //fp6_add(&tmp_y2,&tmp_y2,&tmp_ax);
     fp_add(&tmp_y2.x0.x0,&tmp_y2.x0.x0,&curve_b);
     if(fp6_legendre(&tmp_y2)==1){
       fp6_sqrt(&P->y,&tmp_y2);

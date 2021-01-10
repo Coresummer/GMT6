@@ -121,7 +121,7 @@ void check_fp6(){
   mpz_pow_ui(tmp,prime_z,6);
   mpz_sub_ui(tmp,tmp,1);
   fp6_pow(&ANS,&A,tmp);
-  fp6_println("A^(p^14-1) = ",&ANS);
+  fp6_println("A^(p^6-1) = ",&ANS);
   printf("---------------------------------\n");
 
   fp6_println("A = ",&A);//Aが変わっていないことの確認
@@ -189,8 +189,8 @@ void check_fp6_count(){
 
 void check_fp_time(){
   printf("check_fp_time() 開始\n");
-  int loop=100;//1万
-  int max=1000;//10万
+  int loop=1000;//1万
+  int max=10000;//10万
   int i,j;
   fp_t *a;
   fp_t *b;
