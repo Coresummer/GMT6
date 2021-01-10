@@ -368,7 +368,7 @@ int fp6_legendre(fp6_t *A){
   fp6_t tmp;
   fp6_init(&tmp);
 
-  mpz_pow_ui(expo,prime_z,14);
+  mpz_pow_ui(expo,prime_z,6);
   mpz_sub_ui(expo,expo,1);
   mpz_tdiv_q_ui(expo,expo,2);
   fp6_pow(&tmp,A,expo);
@@ -405,7 +405,7 @@ void fp6_sqrt(fp6_t *ANS,fp6_t *A){
   while(fp6_legendre(&n)!=-1){
     fp6_set_random(&n,state);
   }
-  mpz_pow_ui(q,prime_z,14);
+  mpz_pow_ui(q,prime_z,6);
   mpz_sub_ui(q,q,1);
   mpz_mod_ui(result,q,2);
   e=0;
@@ -523,8 +523,8 @@ void fp6_frobenius_map_p1(fp6_t *ANS,fp6_t *A){
   fp_set_neg(&ANS->x0.x1,&A->x0.x1);
   fp_mul(&ANS->x1.x0,&A->x1.x0,&frobenius_1_6);
   fp_mul(&ANS->x1.x1,&A->x1.x1,&frobenius_4_6);
-  fp_mul(&ANS->x2.x0,&A->x1.x0,&frobenius_2_6);
-  fp_mul(&ANS->x2.x1,&A->x1.x1,&frobenius_5_6);
+  fp_mul(&ANS->x2.x0,&A->x2.x0,&frobenius_2_6);
+  fp_mul(&ANS->x2.x1,&A->x2.x1,&frobenius_5_6);
 }
 
 void fp6_frobenius_map_p2(fp6_t *ANS,fp6_t *A){ //not sure ...
@@ -532,8 +532,8 @@ void fp6_frobenius_map_p2(fp6_t *ANS,fp6_t *A){ //not sure ...
   fp_set(&ANS->x0.x1,&A->x0.x1);
   fp_mul(&ANS->x1.x0,&A->x1.x0,&frobenius_2_6);
   fp_mul(&ANS->x1.x1,&A->x1.x1,&frobenius_2_6);
-  fp_mul(&ANS->x2.x0,&A->x1.x0,&frobenius_4_6);
-  fp_mul(&ANS->x2.x1,&A->x1.x1,&frobenius_4_6);
+  fp_mul(&ANS->x2.x0,&A->x2.x0,&frobenius_4_6);
+  fp_mul(&ANS->x2.x1,&A->x2.x1,&frobenius_4_6);
 }
 
 void fp6_frobenius_map_p3(fp6_t *ANS,fp6_t *A){ //not sure ...
@@ -541,7 +541,7 @@ void fp6_frobenius_map_p3(fp6_t *ANS,fp6_t *A){ //not sure ...
   fp_set_neg(&ANS->x0.x1,&A->x0.x1);
   fp_mul(&ANS->x1.x0,&A->x1.x0,&frobenius_4_6);
   fp_mul(&ANS->x1.x1,&A->x1.x1,&frobenius_4_6);
-  fp_mul(&ANS->x2.x0,&A->x1.x0,&frobenius_2_6);
-  fp_mul(&ANS->x2.x1,&A->x1.x1,&frobenius_2_6);
+  fp_mul(&ANS->x2.x0,&A->x2.x0,&frobenius_2_6);
+  fp_mul(&ANS->x2.x1,&A->x2.x1,&frobenius_2_6);
 }
 

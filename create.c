@@ -85,6 +85,7 @@ void frobenius_precalculation(){
   //tmp = c^((p-1)/14)
   mpz_sub_ui(expo,prime_z,1);
   mpz_divexact_ui(expo,expo,6);
+
   fp_pow(&tmp,&base_c,expo);
   fp_set(&frobenius_1_6,&tmp);
   // fp_printf("\n1_14\n",&frobenius_1_14);
