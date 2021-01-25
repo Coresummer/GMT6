@@ -14,9 +14,8 @@ void efp6_to_efp(efp_t *ANS,efp6_t *A){
 }
 
 //double line 
-void ff_lttp(fp6_t *mn,fp6_t *md, efp_jacobian_t *S, efp_t *P){
-  fp6_sqr(mn,mn);
-  fp6_sqr(md,md);
+void ff_lttp(fp6_t *f, efp_jacobian_t *S, efp_t *P){
+  fp6_sqr(f,f);
 
   static fp_t tmp1_fp, tmp2_fp,tmp3_fp;
   static fp_t t1,t2,t3;
@@ -47,8 +46,8 @@ void ff_lttp(fp6_t *mn,fp6_t *md, efp_jacobian_t *S, efp_t *P){
 
   fp_sqr(&tmp1_fp,&S->z);
   fp_mul(&tmp1_fp6.x1.x1,&nextZ,&tmp1_fp); //tmp1_fp = rambda_d
-  
-  fp6_mul(md,md,&tmp1_fp6); //can be lighter
+  fp_mul_base_inv(&tmp1_fp6.x1.x1,&tmp1_fp6.x1.x1);
+  // fp6_mul(md,md,&tmp1_fp6); //can be lighter
 
   fp_mul(&tmp1_fp6.x1.x1,&tmp1_fp6.x1.x1,&P->y);
 
@@ -56,11 +55,12 @@ void ff_lttp(fp6_t *mn,fp6_t *md, efp_jacobian_t *S, efp_t *P){
   fp_mul(&tmp3_fp,&t3,&S->x);
   fp_sub(&tmp1_fp6.x0.x0,&tmp3_fp,&tmp2_fp);
 
-  fp_mul(&tmp1_fp6.x0.x1,&t3,&P->x);
-  fp_mul(&tmp1_fp6.x0.x1,&tmp1_fp6.x0.x1,&tmp1_fp);
-  fp_set_neg(&tmp1_fp6.x0.x1,&tmp1_fp6.x0.x1);
+  fp_mul(&tmp1_fp6.x0.x2,&t3,&P->x);
+  fp_mul(&tmp1_fp6.x0.x2,&tmp1_fp6.x0.x2,&tmp1_fp);
+  fp_set_neg(&tmp1_fp6.x0.x2,&tmp1_fp6.x0.x2);
+  fp_mul_base_inv(&tmp1_fp6.x0.x2,&tmp1_fp6.x0.x2);
 
-  fp6_mul(mn,mn,&tmp1_fp6);
+  fp6_mul(f,f,&tmp1_fp6);
 
   fp_set(&S->x,&nextX);
   fp_set(&S->y,&nextY);
@@ -68,7 +68,7 @@ void ff_lttp(fp6_t *mn,fp6_t *md, efp_jacobian_t *S, efp_t *P){
 }
 
 //add line
-void ff_ltqp(fp6_t *mn,fp6_t *md, efp_jacobian_t *S, efp_t *Q,efp_t *P){
+void ff_ltqp(fp6_t *f, efp_jacobian_t *S, efp_t *Q,efp_t *P){
   static fp_t tmp1_fp, tmp2_fp,tmp3_fp;
   static fp_t t1,t2,t3,t4,t5;
   static fp_t nextX,nextY,nextZ;
@@ -101,20 +101,20 @@ void ff_ltqp(fp6_t *mn,fp6_t *md, efp_jacobian_t *S, efp_t *Q,efp_t *P){
 
   fp_mul(&nextZ,&S->z,&t1);
 
-  fp_set(&tmp1_fp6.x1.x0,&nextZ);
-  fp6_mul(md,md,&tmp1_fp6);
+  fp_set(&tmp1_fp6.x1.x2,&nextZ);
+  fp_mul_base_inv(&tmp1_fp6.x1.x2,&tmp1_fp6.x1.x2);
+  // fp6_mul(md,md,&tmp1_fp6);
 
-  fp_mul(&tmp1_fp6.x1.x0,&tmp1_fp6.x1.x0,&P->y);
+  fp_mul(&tmp1_fp6.x1.x2,&tmp1_fp6.x1.x2,&P->y);
 
   fp_mul(&tmp1_fp6.x0.x0,&t2,&P->x);
   fp_set_neg(&tmp1_fp6.x0.x0,&tmp1_fp6.x0.x0);
 
   fp_mul(&tmp1_fp,&t2,&Q->x);
   fp_mul(&tmp2_fp,&nextZ,&Q->y);
-  fp_sub(&tmp1_fp6.x0.x2,&tmp1_fp,&tmp2_fp);
-  fp_mul_base_inv(&tmp1_fp6.x0.x2,&tmp1_fp6.x0.x2);
+  fp_sub(&tmp1_fp6.x0.x1,&tmp1_fp,&tmp2_fp);
 
-  fp6_mul(mn,mn,&tmp1_fp6);
+  fp6_mul(f,f,&tmp1_fp6);
 
   fp_set(&S->x,&nextX);
   fp_set(&S->y,&nextY);
@@ -124,47 +124,25 @@ void ff_ltqp(fp6_t *mn,fp6_t *md, efp_jacobian_t *S, efp_t *Q,efp_t *P){
 void miller_ate(fp6_t *f,efp6_t *P,efp6_t *Q){
     static efp_t mapped_P,mapped_Q;
     static efp_jacobian_t S;
-    static fp6_t mn,md;
 
     fp6_set_ui_ui(f,0);
     fp_set_ui(&f->x0.x0,1);
-
-    fp6_set_ui_ui(&mn,0);
-    fp_set_ui(&mn.x0.x0,1);
-
-    fp6_set_ui_ui(&md,0);
-    fp_set_ui(&md.x0.x0,1);
 
     fp_set(&mapped_P.x,&P->x.x0.x0);
     fp_set(&mapped_P.y,&P->y.x0.x0);
     mapped_P.infinity = 0;
 
     efp6_to_efp(&mapped_Q,Q);//twist
-    efp6_to_Jacefp(&S,Q);
 
-    // efp_checkOnCurve_Twsit(&mapped_Q);
-    // efp_jacobi_checkOnCurve_Twist(&S);
-    // efp_jacobian_printf("S:",&S);
-    // printf("\n\n");
+    efp6_to_Jacefp(&S,Q);
 
     mp_bitcnt_t i;
     for(i=(mpz_sizeinbase(miller_loop_s,2)-2);i!=-1;i--){
-      ff_lttp(&mn,&md,&S,&mapped_P);
-      // efp_jacobi_checkOnCurve_Twist(&S);
-
+      ff_lttp(f,&S,&mapped_P);
       if(mpz_tstbit(miller_loop_s,i)==1){
-        ff_ltqp(&mn,&md,&S,&mapped_Q,&mapped_P);
-        // efp_jacobi_checkOnCurve_Twist(&S);
+        ff_ltqp(f,&S,&mapped_Q,&mapped_P);
       }
     }
-    // efp_checkOnCurve_Twsit(&mapped_Q);
-    // efp_jacobi_checkOnCurve_Twist(&S);
-    // efp_jacobian_printf("S:",&S);
-    // printf("\n\n");
-
-    //f = mn/md
-    fp6_inv(&md,&md);
-    fp6_mul(f,&mn,&md);
 }
 
 // void miller_ate_7sparse(fp6_t *f,efp6_t *P,efp6_t *Q){
