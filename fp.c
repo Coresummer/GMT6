@@ -707,9 +707,10 @@ int fp_montgomery_trick_montgomery(fp_t *A_inv,fp_t *A,int n){
 void fp_mul_base(fp_t *ANS,fp_t *A){
   #ifdef DEBUG_COST_A
   cost_mul_base++;
-  cost_mul--;
+  // cost_mul--;
   #endif
-  fp_mul(ANS,A,&base_c);
+  // fp_mul(ANS,A,&base_c);
+  fp_lshift_1(ANS,A);
 }
 
 void fp_mul_base_inv(fp_t *ANS,fp_t *A){
