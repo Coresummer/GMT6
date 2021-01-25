@@ -186,13 +186,19 @@ void create_weil(){
   efpm_order(&efp_total,1);
   efpm_order(&efp3_total,3);
   efpm_order(&efp6_total,6);
-
-  mpz_sub_ui(miller_loop_s,trace_z,1);
-
-  //X = 1 (mod 2) である
-  //(X+1)/2をあらかじめ求めておく
   mpz_t temp;
   mpz_init(temp);
+
+  frobenius_trace(&temp,6);
+  mpz_add(fp6_total_r,efp6_total,temp);
+  mpz_sub_ui(fp6_total_r,fp6_total_r,2);
+  mpz_divexact(fp6_total_r,fp6_total_r,order_z);
+  // gmp_printf("fp6_total_r:%Zd\n",fp6_total_r);
+
+  mpz_set(miller_loop_s,X_z);
+  //X = 1 (mod 2) である
+  //(X+1)/2をあらかじめ求めておく
+
   //mpz_add_ui(X_1_div2,X_z,1);
   mpz_powm_ui(X_1_div2,X_z,6,prime_z);
   mpz_powm_ui(temp,X_z,4,prime_z);
@@ -200,6 +206,12 @@ void create_weil(){
   mpz_mul(temp,X_z,X_z);
   mpz_sub(X_1_div2,X_1_div2,temp);
   mpz_add_ui(X_1_div2,X_1_div2,1);
+
+  mpz_mul(hardpart,prime_z,prime_z);
+  mpz_sub(hardpart,hardpart,prime_z);
+  mpz_add_ui(hardpart,hardpart,1);
+  mpz_divexact(hardpart,hardpart,order_z);
+  
   mpz_clear(temp);
   //in k14 X_1_div2 = Rmabda5 = x^6 - x^4 -x^2 + 1
   //(X -1)をあらかじめ求めておく
@@ -225,6 +237,7 @@ void tmp_init(){
   mpz_init(efp_total);
   mpz_init(efp3_total);
   mpz_init(efp6_total);
+  mpz_init(fp6_total_r);
 
   mpz_init(miller_loop_s);
   mpz_init(X_1_div2);
@@ -232,4 +245,6 @@ void tmp_init(){
   mpz_init(X_2);
   mpz_init(X_2_1);
   mpz_init_set_ui(four,4);
+
+  mpz_init(hardpart);
 }

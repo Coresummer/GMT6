@@ -3,6 +3,7 @@
 
 #include "miller.h"
 
-void final_exp(fp14_t *ANS,fp14_t *A);
+// void final_exp_basic(fp6_t *ANS,fp6_t *A);
+void final_exp(fp6_t *ANS,fp6_t *A);
 
 #endif

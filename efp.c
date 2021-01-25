@@ -542,3 +542,35 @@ void efp_scm(efp_t *ANS,efp_t *P,mpz_t scalar){
   }
   efp_set(ANS,&Next_P);
 }
+
+void efp_jacobi_checkOnCurve_Twist(efp_jacobian_t* A){
+  static fp_t tmp1_fp, tmp2_fp, tmp3_fp, tmp4_fp;
+
+  fp_sqr(&tmp1_fp,&A->z);           //Z^2
+  fp_mul(&tmp2_fp,&tmp1_fp,&A->z);  //Z^3
+
+  fp_inv(&tmp1_fp,&tmp1_fp);      //Z^-2
+  fp_inv(&tmp2_fp,&tmp2_fp);      //Z^-3
+
+  fp_mul(&tmp3_fp,&tmp1_fp,&A->x);  //x = X*Z^-2
+  fp_mul(&tmp4_fp,&tmp2_fp,&A->y);  //y = Y*Z^-3
+
+  fp_sqr(&tmp1_fp,&tmp3_fp);
+  fp_mul(&tmp1_fp,&tmp1_fp,&tmp3_fp); //x^3
+
+  fp_sqr(&tmp2_fp,&tmp4_fp);  //y^2
+
+  fp_sub(&tmp3_fp,&tmp1_fp,&tmp2_fp);
+  fp_println("proj_diff:",&tmp3_fp);
+}
+
+void efp_checkOnCurve_Twsit(efp_t* A){
+  static fp_t tmp1_fp,tmp2_fp,tmp3_fp,tmp4_fp;
+
+  fp_sqr(&tmp1_fp,&A->y);
+  fp_sqr(&tmp2_fp,&A->x);
+  fp_mul(&tmp2_fp,&tmp2_fp,&A->x);
+
+  fp_sub(&tmp1_fp,&tmp2_fp,&tmp1_fp);
+  fp_println("afin_diff:",&tmp1_fp);
+}

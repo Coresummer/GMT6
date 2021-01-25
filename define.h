@@ -143,10 +143,10 @@ fp_t line_3sparse_x0;//3sparse乗算をするときに使う (xP^-3)*(yP^2) を�
 fp_t line_5sparse_x0;//5sparse乗算をするときに使う (xP^-3)*(yP^2) を格納する
 fp_t line_7sparse_x0;//7sparse乗算をするときに使う (xP^-3)*(yP^2) を格納する
 
-mpz_t efp_total,efp3_total,efp6_total;//#efp,#efp5,#efp10,#efp7,#efp14
+mpz_t efp_total,efp3_total,efp6_total,fp6_total_r;//#efp,#efp5,#efp10,#efp7,#efp14
 mpz_t miller_loop_s;
 mpz_t X_1_div2,X_1,X_2,X_2_1,four;//(kai +1)/2,(kai -1),(kai^2)をあらかじめ求めておく
-
+mpz_t hardpart;
 //emb6
 fp_t frobenius_1_6;//c^((p-1)/10)の計算結果
 fp_t frobenius_2_6;//c^(2(p-1)/10)の計算結果

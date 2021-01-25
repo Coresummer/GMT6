@@ -25,9 +25,9 @@
 #include "efp6.h"
 #include "test_efp.h"
 #include "create.h"
-// #include "miller.h"
-// #include "final_exp.h"
-// #include "test_pairing.h"
+#include "miller.h"
+#include "final_exp.h"
+#include "test_pairing.h"
 
 
 int main(){
@@ -77,10 +77,10 @@ printf("Fp7_mul using Karatsuba24\n\n");
   check_efp6();
   check_g1_g2();
 
-  // //SCM_func_check();//未完成
-  // check_pairing();
-  // //check_pairing_count();
-  // check_pairing_time();
+  //SCM_func_check();//未完成
+  check_pairing();
+  check_pairing_count();
+  check_pairing_time();
 
   return 0;
 }

@@ -404,6 +404,7 @@ void fp6_frobenius_map_p1(fp6_t *ANS,fp6_t *A){
   fp_set(&ANS->x0.x0,&A->x0.x0);
   fp_mul(&ANS->x0.x1,&A->x0.x1,&frobenius_2_6);
   fp_mul(&ANS->x0.x2,&A->x0.x2,&frobenius_4_6);
+
   fp_mul(&ANS->x1.x0,&A->x1.x0,&frobenius_1_6);
   fp_set_neg(&ANS->x1.x1,&A->x1.x1);
   fp_mul(&ANS->x1.x2,&A->x1.x2,&frobenius_5_6);
@@ -413,6 +414,7 @@ void fp6_frobenius_map_p2(fp6_t *ANS,fp6_t *A){ //not sure ...
   fp_set(&ANS->x0.x0,&A->x0.x0);
   fp_mul(&ANS->x0.x1,&A->x0.x1,&frobenius_4_6);
   fp_mul(&ANS->x0.x2,&A->x0.x2,&frobenius_2_6);
+
   fp_mul(&ANS->x1.x0,&A->x1.x0,&frobenius_2_6);
   fp_set(&ANS->x1.x1,&A->x1.x1);
   fp_mul(&ANS->x1.x2,&A->x1.x2,&frobenius_4_6);
@@ -420,10 +422,12 @@ void fp6_frobenius_map_p2(fp6_t *ANS,fp6_t *A){ //not sure ...
 
 void fp6_frobenius_map_p3(fp6_t *ANS,fp6_t *A){ //not sure ...
   fp_set(&ANS->x0.x0,&A->x0.x0);
-  fp_mul(&ANS->x0.x1,&A->x0.x1,&frobenius_2_6);
-  fp_mul(&ANS->x0.x2,&A->x0.x2,&frobenius_4_6);
-  fp_mul(&ANS->x1.x0,&A->x1.x0,&frobenius_4_6);
-  fp_set(&ANS->x1.x1,&A->x1.x1);
-  fp_mul(&ANS->x1.x2,&A->x1.x2,&frobenius_2_6);
+  fp_set(&ANS->x0.x1,&A->x0.x1);
+  fp_set(&ANS->x0.x2,&A->x0.x2);
+
+  fp_set_neg(&ANS->x1.x0,&A->x1.x0);
+  fp_set_neg(&ANS->x1.x1,&A->x1.x1);
+  fp_set_neg(&ANS->x1.x2,&A->x1.x2);
+
 }
 

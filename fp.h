@@ -58,5 +58,6 @@ int fp_montgomery_trick(fp_t *A_inv,fp_t *A,int n);
 int fp_montgomery_trick_montgomery(fp_t *A_inv,fp_t *A,int n);
 
 void fp_mul_base(fp_t *ANS,fp_t *A);
+void fp_mul_base_inv(fp_t *ANS,fp_t *A);
 
 #endif
