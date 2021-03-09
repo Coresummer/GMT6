@@ -200,17 +200,19 @@ void create_weil(){
   //(X+1)/2をあらかじめ求めておく
 
   //mpz_add_ui(X_1_div2,X_z,1);
-  mpz_powm_ui(X_1_div2,X_z,6,prime_z);
-  mpz_powm_ui(temp,X_z,4,prime_z);
-  mpz_sub(X_1_div2,X_1_div2,temp);
-  mpz_mul(temp,X_z,X_z);
-  mpz_sub(X_1_div2,X_1_div2,temp);
-  mpz_add_ui(X_1_div2,X_1_div2,1);
+  // mpz_powm_ui(X_1_div2,X_z,6,prime_z);
+  // mpz_powm_ui(temp,X_z,4,prime_z);
+  // mpz_sub(X_1_div2,X_1_div2,temp);
+  // mpz_mul(temp,X_z,X_z);
+  // mpz_sub(X_1_div2,X_1_div2,temp);
+  // mpz_add_ui(X_1_div2,X_1_div2,1);
 
   mpz_mul(hardpart,prime_z,prime_z);
   mpz_sub(hardpart,hardpart,prime_z);
   mpz_add_ui(hardpart,hardpart,1);
   mpz_divexact(hardpart,hardpart,order_z);
+
+  mpz_set_str(hp_3w,"1811507161526425387769904",10);
   
   mpz_clear(temp);
   //in k14 X_1_div2 = Rmabda5 = x^6 - x^4 -x^2 + 1
@@ -247,4 +249,8 @@ void tmp_init(){
   mpz_init_set_ui(four,4);
 
   mpz_init(hardpart);
+  mpz_init(hp_3w);
+  mpz_init_set_ui(four,4);
+  mpz_init_set_ui(three,3);
+
 }

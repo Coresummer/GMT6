@@ -115,7 +115,7 @@ void SetupPrime_cp6(){
   hy_2 = hy*hy;
   originalP = hexToZZ("9401ff90f28bffb0c610fb10bf9e0fefd59211629a7991563c5e468d43ec9cfe1549fd59c20ab5b9a7cda7f27a0067b8303eeb4b31555cf4f24050ed155555cd7fa7a5f8aaaaaaad47ede1a6aaaaaaaab69e6dcb");
   cout << "Parameter cp k=6" << endl;
-  Base = 1;
+  Base = 12;
   P.SetLength(5);
   R.SetLength(3);
 
@@ -133,43 +133,44 @@ void SetupPrime_cp6(){
 
   t1[0][2] = 9;
   t1[0][1] = 12;//12
-  t1[0][0] = 4;//4
+  t1[0][0] = 16;//4
 
   t1[1][2] = -18;
   t1[1][1] = -12;
-  t1[1][0] = 0; //-12?
+  t1[1][0] = -24; //0
 
   t1[2][2] = 27;
   t1[2][1] = 18;
-  t1[2][0] = 16;
+  t1[2][0] = 28;//16
 
   t1[3][2] = -18;//-18
   t1[3][1] = -6;//-6
   t1[3][0] = -12;//-12
 
-  t1[4][2] = 3; //9
-  t1[4][1] = 0; //6
-  t1[4][0] = 0; //4
+  t1[4][2] = 9; //9
+  t1[4][1] = 6; //6
+  t1[4][0] = 4; //4
 
-  for(int i=0;i<5;i++){
-    tt=0;
-    for(int j=0;j<3;j++){
-      if(j==0){
-        tt += t1[i][j];
-      }else if(j==1){
-        tt += t1[i][j] * hy;
-      }else if(j==2){
-        tt += t1[i][j] * hy_2;
-      }
-    }
-    tt *= power(x,i);
-    cout << "tt^" << i << ":" << tt << endl;
+  // for(int i=0;i<5;i++){
+  //   tt=0;
+  //   for(int j=0;j<3;j++){
+  //     if(j==0){
+  //       tt += t1[i][j];
+  //     }else if(j==1){
+  //       tt += t1[i][j] * hy;
+  //     }else if(j==2){
+  //       tt += t1[i][j] * hy_2;
+  //     }
+  //   }
+  //   tt *= power(x,i);
+  //   // cout << "tt^" << i << ":" << tt << endl;
 
-    cout << "x^" << i << ":" << power(x,i) << endl;
-    p += tt;
-    cout << "p^" << i << ":" << p << endl << endl;
-  }
-  
+  //   // cout << "x^" << i << ":" << power(x,i) << endl;
+  //   p += tt;
+  //   // cout << "p^" << i << ":" << p << endl << endl;
+  // }
+  p /= 12;
+
   cout << "         p:" << p << endl;
   cout << "original p:" << originalP << endl;
 
@@ -178,44 +179,45 @@ void SetupPrime_cp6(){
   cout << "         r:" << r << endl;
   cout << "original r:" << originalR << endl;
 
-  //P^2
-  for(int i=0;i<5;i++){
-    for(int j=0;j<5;j++){
-      P2[i+j] += (t1[i]*t1[j]);
-    }
-  }
-  for(int i=0;i<9;i++){
-    cout << "P2-" <<i<<":" << P2[i] << endl;
-  }
-      cout << endl << endl ;
+  //(12P)^2
+  // for(int i=0;i<5;i++){
+  //   for(int j=0;j<5;j++){
+  //     P2[i+j] += (t1[i]*t1[j]);
+  //   }
+  // }
+  cout << endl << endl ;
 
-  // P^2 - P
-  for(int i=0;i<5;i++){
-    P2[i] -= t1[i];
-  }
+  // (12P)^2 - 12P
+  // for(int i=0;i<5;i++){
+  //   P2[i] -= t1[i]*12;
+  // }
 
-  //P^2 - P + 1
-  P2[0][0]+=1;
+  //(12P)^2 - 12P + 144
+  // P2[0][0]+=144;
 
-  for(int i=0;i<9;i++){
-    cout << "P2-" <<i<<":" << P2[i] << endl;
-  }
+  // cout << "(12p(x))^2 - 12p(x) + 144" << endl;
 
-  for(int i=8;i>=2;i--){
-    P2[i-2] -= P2[i];
-    P2[i-1] += P2[i];
-    R_Ans[i-2] = P2[i];
-    P2[i] -= P2[i];
-  }
-    cout << endl << endl ;
+  // for(int i=0;i<9;i++){
+  //   cout << "P2-" <<i<<":" << P2[i] << endl;
+  // }
 
-  for(int i=0;i<9;i++){
-    cout << "P2-" <<i<<":" << P2[i] << endl;
+  for(int i=5;i>=2;i--){
+    t1[i-2] -= t1[i];
+    t1[i-1] += t1[i];
+    R_Ans[i-2] = t1[i];
+    t1[i] -= t1[i];
   }
     cout << endl << endl ;
 
-  for(int i=0;i<7;i++){
-    cout << "(x^2-x+1)*x^"<<i<<"*(:" << R_Ans[i] << ")" << endl;
+  cout << "surplus" << endl;
+  for(int i=0;i<5;i++){
+    cout << "P-" <<i<<":" << t1[i] << endl;
+  }
+  cout << endl << endl ;
+
+  cout << "Quotient*144" << endl;
+  for(int i=0;i<5;i++){
+    cout << "r*x^"<<i<<"*(:" << R_Ans[i] << ")" << endl;
   }
 
 }

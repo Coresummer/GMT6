@@ -16,7 +16,6 @@
 //#define DEBUG_ASSERT
 #define CHECK_PAIRING_TIME_LOOP 10
 
-
 /**************Option**************/
 #define X64
 /**********************************/
@@ -146,7 +145,7 @@ fp_t line_7sparse_x0;//7sparse乗算をするときに使う (xP^-3)*(yP^2) を�
 mpz_t efp_total,efp3_total,efp6_total,fp6_total_r;//#efp,#efp5,#efp10,#efp7,#efp14
 mpz_t miller_loop_s;
 mpz_t X_1_div2,X_1,X_2,X_2_1,four;//(kai +1)/2,(kai -1),(kai^2)をあらかじめ求めておく
-mpz_t hardpart;
+mpz_t hardpart,hp_3w,three,four;
 //emb6
 fp_t frobenius_1_6;//c^((p-1)/10)の計算結果
 fp_t frobenius_2_6;//c^(2(p-1)/10)の計算結果
