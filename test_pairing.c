@@ -179,9 +179,11 @@ void check_pairing_time(){
   FINAL_EXP_TIME=0;
 
   generate_g2(&Q);
+
   for(int i=0;i<CHECK_PAIRING_TIME_LOOP;i++){
     generate_g1(&P);
-    
+    fp_set_ui(&f.x0.x0,1);
+
     gettimeofday(&tv_start,NULL);
     miller_ate(&f,&P,&Q);
     gettimeofday(&tv_end,NULL);

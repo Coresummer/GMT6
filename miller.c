@@ -122,8 +122,8 @@ void miller_ate(fp6_t *f,efp6_t *P,efp6_t *Q){
     static efp_t mapped_P,mapped_Q;
     static efp_jacobian_t S;
 
-    // fp6_set_ui_ui(f,0);
-    // fp_set_ui(&f->x0.x0,1);
+    fp6_set_ui_ui(f,0);
+    fp_set_ui(&f->x0.x0,1);
 
     fp_set(&mapped_P.x,&P->x.x0.x0);
     fp_set(&mapped_P.y,&P->y.x0.x0);
