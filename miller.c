@@ -47,7 +47,6 @@ void ff_lttp(fp6_t *f, efp_jacobian_t *S, efp_t *P){
   fp_sqr(&tmp1_fp,&S->z);
   fp_mul(&tmp1_fp6.x1.x1,&nextZ,&tmp1_fp); //tmp1_fp = rambda_d
   fp_mul_base_inv(&tmp1_fp6.x1.x1,&tmp1_fp6.x1.x1);
-  // fp6_mul(md,md,&tmp1_fp6); //can be lighter
 
   fp_mul(&tmp1_fp6.x1.x1,&tmp1_fp6.x1.x1,&P->y);
 
@@ -60,7 +59,6 @@ void ff_lttp(fp6_t *f, efp_jacobian_t *S, efp_t *P){
   fp_set_neg(&tmp1_fp6.x0.x2,&tmp1_fp6.x0.x2);
   fp_mul_base_inv(&tmp1_fp6.x0.x2,&tmp1_fp6.x0.x2);
 
-  // fp6_mul(f,f,&tmp1_fp6);
   fp6_mul_sparse_dbl(f,&tmp1_fp6,f);
 
   fp_set(&S->x,&nextX);
@@ -104,7 +102,6 @@ void ff_ltqp(fp6_t *f, efp_jacobian_t *S, efp_t *Q,efp_t *P){
 
   fp_set(&tmp1_fp6.x1.x2,&nextZ);
   fp_mul_base_inv(&tmp1_fp6.x1.x2,&tmp1_fp6.x1.x2);
-  // fp6_mul(md,md,&tmp1_fp6);
 
   fp_mul(&tmp1_fp6.x1.x2,&tmp1_fp6.x1.x2,&P->y);
 
@@ -115,8 +112,6 @@ void ff_ltqp(fp6_t *f, efp_jacobian_t *S, efp_t *Q,efp_t *P){
   fp_mul(&tmp2_fp,&nextZ,&Q->y);
   fp_sub(&tmp1_fp6.x0.x1,&tmp1_fp,&tmp2_fp);
 
-  // fp6_mul(f,f,&tmp1_fp6);
-  // fp6_println("add:",&tmp1_fp6);
   fp6_mul_sparse_add(f,&tmp1_fp6,f);
   fp_set(&S->x,&nextX);
   fp_set(&S->y,&nextY);
@@ -127,15 +122,14 @@ void miller_ate(fp6_t *f,efp6_t *P,efp6_t *Q){
     static efp_t mapped_P,mapped_Q;
     static efp_jacobian_t S;
 
-    fp6_set_ui_ui(f,0);
-    fp_set_ui(&f->x0.x0,1);
+    // fp6_set_ui_ui(f,0);
+    // fp_set_ui(&f->x0.x0,1);
 
     fp_set(&mapped_P.x,&P->x.x0.x0);
     fp_set(&mapped_P.y,&P->y.x0.x0);
     mapped_P.infinity = 0;
 
     efp6_to_efp(&mapped_Q,Q);//twist
-
     efp6_to_Jacefp(&S,Q);
 
     mp_bitcnt_t i;
