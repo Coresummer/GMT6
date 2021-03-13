@@ -93,6 +93,51 @@ void fp6_mul(fp6_t *ANS,fp6_t *A,fp6_t *B){
   fp3_sub(&ANS->x1,&tmp3_fp3,&tmp2_fp3);//(a+b)(c+d) - ac -bd
 }
 
+
+void fp6_mul_sparse_add(fp6_t *ANS,fp6_t *A,fp6_t *B){  //??000? * ??????
+  static fp6_t tmp_A,tmp_B;
+  fp6_set(&tmp_A,A);
+  fp6_set(&tmp_B,B);
+
+  static fp3_t tmp1_fp3,tmp2_fp3,tmp3_fp3,tmp4_fp3,tmp5_fp3;
+  fp3_mul_sparse_add_1(&tmp1_fp3,&tmp_A.x0,&tmp_B.x0); //ac
+  fp3_mul_sparse_add_2(&tmp2_fp3,&tmp_A.x1,&tmp_B.x1); //bd
+  fp3_mul_base(&tmp3_fp3, &tmp2_fp3);  //ab+bdΘ^2
+  fp3_add(&ANS->x0, &tmp1_fp3, &tmp3_fp3);  //ab+bdΘ^2
+
+  // fp3_add(&tmp3_fp3,&tmp_A.x0,&tmp_A.x1);//a+b
+  fp3_set(&tmp3_fp3,&tmp_A.x0);
+  fp_set(&tmp3_fp3.x2,&tmp_A.x1.x2);
+
+  fp3_add(&tmp4_fp3,&tmp_B.x0,&tmp_B.x1);//c+d
+  fp3_mul(&tmp5_fp3,&tmp3_fp3,&tmp4_fp3); //(a+b)(c+d)
+  
+  fp3_sub(&tmp3_fp3,&tmp5_fp3,&tmp1_fp3);//(a+b)(c+d) - ac
+  fp3_sub(&ANS->x1,&tmp3_fp3,&tmp2_fp3);//(a+b)(c+d) - ac -bd
+}
+
+void fp6_mul_sparse_dbl(fp6_t *ANS,fp6_t *A,fp6_t *B){  //??000? * ??????
+  static fp6_t tmp_A,tmp_B;
+  fp6_set(&tmp_A,A);
+  fp6_set(&tmp_B,B);
+
+  static fp3_t tmp1_fp3,tmp2_fp3,tmp3_fp3,tmp4_fp3,tmp5_fp3;
+  fp3_mul_sparse_dbl_1(&tmp1_fp3,&tmp_A.x0,&tmp_B.x0); //ac
+  fp3_mul_sparse_dbl_2(&tmp2_fp3,&tmp_A.x1,&tmp_B.x1); //bd
+  fp3_mul_base(&tmp3_fp3, &tmp2_fp3);  //ab+bdΘ^2
+  fp3_add(&ANS->x0, &tmp1_fp3, &tmp3_fp3);  //ab+bdΘ^2
+
+  // fp3_add(&tmp3_fp3,&tmp_A.x0,&tmp_A.x1);//a+b
+  fp3_set(&tmp3_fp3,&tmp_A.x0);
+  fp_set(&tmp3_fp3.x1,&tmp_A.x1.x1);
+
+  fp3_add(&tmp4_fp3,&tmp_B.x0,&tmp_B.x1);//c+d
+  fp3_mul(&tmp5_fp3,&tmp3_fp3,&tmp4_fp3); //(a+b)(c+d)
+  
+  fp3_sub(&tmp3_fp3,&tmp5_fp3,&tmp1_fp3);//(a+b)(c+d) - ac
+  fp3_sub(&ANS->x1,&tmp3_fp3,&tmp2_fp3);//(a+b)(c+d) - ac -bd
+}
+
 // void fp6_mul_lazy_montgomery(fp6_t *ANS,fp6_t *A,fp6_t *B){
 //   static fp3_t tmp1,tmp2;
 

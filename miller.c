@@ -60,7 +60,8 @@ void ff_lttp(fp6_t *f, efp_jacobian_t *S, efp_t *P){
   fp_set_neg(&tmp1_fp6.x0.x2,&tmp1_fp6.x0.x2);
   fp_mul_base_inv(&tmp1_fp6.x0.x2,&tmp1_fp6.x0.x2);
 
-  fp6_mul(f,f,&tmp1_fp6);
+  // fp6_mul(f,f,&tmp1_fp6);
+  fp6_mul_sparse_dbl(f,&tmp1_fp6,f);
 
   fp_set(&S->x,&nextX);
   fp_set(&S->y,&nextY);
@@ -114,8 +115,9 @@ void ff_ltqp(fp6_t *f, efp_jacobian_t *S, efp_t *Q,efp_t *P){
   fp_mul(&tmp2_fp,&nextZ,&Q->y);
   fp_sub(&tmp1_fp6.x0.x1,&tmp1_fp,&tmp2_fp);
 
-  fp6_mul(f,f,&tmp1_fp6);
-
+  // fp6_mul(f,f,&tmp1_fp6);
+  // fp6_println("add:",&tmp1_fp6);
+  fp6_mul_sparse_add(f,&tmp1_fp6,f);
   fp_set(&S->x,&nextX);
   fp_set(&S->y,&nextY);
   fp_set(&S->z,&nextZ);

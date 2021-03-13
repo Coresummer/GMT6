@@ -164,7 +164,7 @@ void fp3_mul(fp3_t *ANS,fp3_t *A,fp3_t *B){
   fp_mul_base(&ANS->x0,&ANS->x0);
   fp_add(&ANS->x0,&ANS->x0,&tmp1);
 
-  //x1 = (a+b)(b+e)-ad-be+cfθ^3
+  //x1 = (a+b)(d+e)-ad-be+cfθ^3
   fp_sub(&ANS->x1,&tmp4,&tmp1);
   fp_sub(&ANS->x1,&ANS->x1,&tmp2);
   fp_mul_base(&ANS->x2,&tmp3);
@@ -174,7 +174,216 @@ void fp3_mul(fp3_t *ANS,fp3_t *A,fp3_t *B){
   fp_add(&ANS->x2,&tmp2,&tmp6);
   fp_sub(&ANS->x2,&ANS->x2,&tmp1);
   fp_sub(&ANS->x2,&ANS->x2,&tmp3);
+} 
 
+void fp3_mul_sparse_add_1(fp3_t *ANS,fp3_t *A,fp3_t *B){  //??0 * ???
+  static fp3_t tmp_A,tmp_B;
+  static fp_t tmp1,tmp2,tmp3,tmp4,tmp5,tmp6;
+
+  fp3_set(&tmp_A,A);
+  fp3_set(&tmp_B,B);
+
+  //1:ad + θ^3((a+b)(d+e+f)-(a)(d+f)-(a+b)(d+e)+ad)
+  //θ:(a+b)(b+e)-ad-be
+  //θ^2: be+(a)(d+f)-ad
+
+  //(a+b)(d+e) = tmp4
+  fp_add(&tmp1,&tmp_A.x0,&tmp_A.x1);
+  fp_add(&tmp2,&tmp_B.x0,&tmp_B.x1);
+  fp_mul(&tmp4,&tmp1,&tmp2);
+
+  //(a+b)(d+e+f) = tmp5
+  // fp_add(&tmp1,&tmp1,&tmp_A.x2);
+  fp_add(&tmp2,&tmp2,&tmp_B.x2);
+  fp_mul(&tmp5,&tmp1,&tmp2);
+
+  //(a)(d+f) = tmp6
+  // fp_sub(&tmp1,&tmp1,&tmp_A.x1);
+  fp_sub(&tmp2,&tmp2,&tmp_B.x1);
+  fp_mul(&tmp6,&tmp_A.x0,&tmp2);
+
+  //ad = tmp1
+  fp_mul(&tmp1,&tmp_A.x0,&tmp_B.x0);
+  //be = tmp2
+  fp_mul(&tmp2,&tmp_A.x1,&tmp_B.x1);
+  //cf = tmp3
+  // fp_mul(&tmp3,&tmp_A.x2,&tmp_B.x2);
+
+  //x0 = ad + θ^3((a+b)(d+e+f)-(a)(d+f)-(a+b)(d+e)+ad)
+  // = tmp1 + mul_base(tmp5-tmp6-tmp2-tmp4+)
+  fp_sub(&ANS->x0,&tmp5,&tmp4);
+  fp_sub(&ANS->x0,&ANS->x0,&tmp6);
+  fp_add(&ANS->x0,&ANS->x0,&tmp1);
+  fp_mul_base(&ANS->x0,&ANS->x0);
+  fp_add(&ANS->x0,&ANS->x0,&tmp1);
+
+  //x1 = (a+b)(b+e)-ad-be
+  fp_sub(&ANS->x1,&tmp4,&tmp1);
+  fp_sub(&ANS->x1,&ANS->x1,&tmp2);
+  // fp_mul_base(&ANS->x2,&tmp3);
+  // fp_add(&ANS->x1,&ANS->x1,&ANS->x2);
+
+  //x2 = be+(a)(d+f)-ad
+  fp_add(&ANS->x2,&tmp2,&tmp6);
+  fp_sub(&ANS->x2,&ANS->x2,&tmp1);
+  // fp_sub(&ANS->x2,&ANS->x2,&tmp3);
+} 
+
+
+void fp3_mul_sparse_add_2(fp3_t *ANS,fp3_t *A,fp3_t *B){  //00? * ???
+  static fp3_t tmp_A,tmp_B;
+  static fp_t tmp1,tmp2,tmp3,tmp4,tmp5,tmp6;
+
+  fp3_set(&tmp_A,A);
+  fp3_set(&tmp_B,B);
+
+  //1:ad + θ^3((a+c+b)(d+e+f)-(a+c)(d+f)-(a+b)(d+e)+ad)
+  //θ:(a+b)(b+e)-ad-be+cfθ^3
+  //θ^2: be+(a+c)(d+f)-ad-cf
+
+  //(0)(d+e) = tmp4
+  // fp_add(&tmp1,&tmp_A.x0,&tmp_A.x1);
+  fp_add(&tmp2,&tmp_B.x0,&tmp_B.x1);
+  // fp_mul(&tmp4,&tmp1,&tmp2);
+
+  //(c)(d+e+f) = tmp5
+  // fp_add(&tmp1,&tmp1,&tmp_A.x2);
+  fp_add(&tmp2,&tmp2,&tmp_B.x2);
+  fp_mul(&tmp5,&tmp_A.x2,&tmp2);
+
+  //(c)(d+f) = tmp6
+  // fp_sub(&tmp1,&tmp1,&tmp_A.x1);
+  fp_sub(&tmp2,&tmp2,&tmp_B.x1);
+  fp_mul(&tmp6,&tmp_A.x2,&tmp2);
+
+  //ad = tmp1
+  // fp_mul(&tmp1,&tmp_A.x0,&tmp_B.x0);
+  //be = tmp2
+  // fp_mul(&tmp2,&tmp_A.x1,&tmp_B.x1);
+  //cf = tmp3
+  fp_mul(&tmp3,&tmp_A.x2,&tmp_B.x2);
+
+  //x0 = ad + θ^3((c)(d+e+f)-(c)(d+f))
+  // = tmp1 + mul_base(tmp5-tmp6-tmp2-tmp4+)
+  // fp_sub(&ANS->x0,&tmp5,&tmp4);
+  fp_sub(&ANS->x0,&tmp5,&tmp6);
+  fp_mul_base(&ANS->x0,&ANS->x0);
+  // fp_add(&ANS->x0,&ANS->x0,&tmp1);
+
+  //x1 = cfθ^3
+  fp_mul_base(&ANS->x1,&tmp3);
+  // fp_add(&ANS->x1,&ANS->x1,&ANS->x2);
+
+  //x2 = (c)(d+f)-cf
+  fp_sub(&ANS->x2,&tmp6,&tmp3);
+} 
+
+
+void fp3_mul_sparse_dbl_1(fp3_t *ANS,fp3_t *A,fp3_t *B){  //?0? * ???
+  static fp3_t tmp_A,tmp_B;
+  static fp_t tmp1,tmp2,tmp3,tmp4,tmp5,tmp6;
+
+  fp3_set(&tmp_A,A);
+  fp3_set(&tmp_B,B);
+
+  //1:ad + θ^3((a+c+b)(d+e+f)-(a+c)(d+f)-(a+b)(d+e)+ad)
+  //θ:(a+b)(b+e)-ad-be+cfθ^3
+  //θ^2: be+(a+c)(d+f)-ad-cf
+
+  //(a)(d+e) = tmp4
+  // fp_add(&tmp1,&tmp_A.x0,&tmp_A.x1);
+  fp_add(&tmp2,&tmp_B.x0,&tmp_B.x1);
+  fp_mul(&tmp4,&tmp_A.x0,&tmp2);
+
+  //(a+c)(d+e+f) = tmp5
+  fp_add(&tmp1,&tmp_A.x0,&tmp_A.x2);
+  fp_add(&tmp2,&tmp2,&tmp_B.x2);
+  fp_mul(&tmp5,&tmp1,&tmp2);
+
+  //(a+c)(d+f) = tmp6
+  fp_sub(&tmp1,&tmp1,&tmp_A.x1);
+  fp_sub(&tmp2,&tmp2,&tmp_B.x1);
+  fp_mul(&tmp6,&tmp1,&tmp2);
+
+  //ad = tmp1
+  fp_mul(&tmp1,&tmp_A.x0,&tmp_B.x0);
+  //be = tmp2
+  // fp_mul(&tmp2,&tmp_A.x1,&tmp_B.x1);
+  //cf = tmp3
+  fp_mul(&tmp3,&tmp_A.x2,&tmp_B.x2);
+
+  //x0 = ad + θ^3((a+c)(d+e+f)-(a+c)(d+f)-(a)(d+e)+ad)
+  // = tmp1 + mul_base(tmp5-tmp6-tmp2-tmp4+)
+  fp_sub(&ANS->x0,&tmp5,&tmp4);
+  fp_sub(&ANS->x0,&ANS->x0,&tmp6);
+  fp_add(&ANS->x0,&ANS->x0,&tmp1);
+  fp_mul_base(&ANS->x0,&ANS->x0);
+  fp_add(&ANS->x0,&ANS->x0,&tmp1);
+
+  //x1 = (a)(d+e)-ad+cfθ^3
+  fp_sub(&ANS->x1,&tmp4,&tmp1);
+  // fp_sub(&ANS->x1,&ANS->x1,&tmp2);
+  fp_mul_base(&ANS->x2,&tmp3);
+  fp_add(&ANS->x1,&ANS->x1,&ANS->x2);
+
+  //x2 = (a+c)(d+f)-ad-cf
+  // fp_add(&ANS->x2,&tmp2,&tmp6);
+  fp_sub(&ANS->x2,&tmp6,&tmp1);
+  fp_sub(&ANS->x2,&ANS->x2,&tmp3);
+} 
+
+
+void fp3_mul_sparse_dbl_2(fp3_t *ANS,fp3_t *A,fp3_t *B){ //0?0 * ???
+  static fp3_t tmp_A,tmp_B;
+  static fp_t tmp1,tmp2,tmp3,tmp4,tmp5,tmp6;
+
+  fp3_set(&tmp_A,A);
+  fp3_set(&tmp_B,B);
+
+  //1:ad + θ^3((a+c+b)(d+e+f)-(a+c)(d+f)-(a+b)(d+e)+ad)
+  //θ:(a+b)(b+e)-ad-be+cfθ^3
+  //θ^2: be+(a+c)(d+f)-ad-cf
+
+  //(b)(d+e) = tmp4
+  // fp_add(&tmp1,&tmp_A.x0,&tmp_A.x1);
+  fp_add(&tmp2,&tmp_B.x0,&tmp_B.x1);
+  fp_mul(&tmp4,&tmp_A.x1,&tmp2);
+
+  //(b)(d+e+f) = tmp5
+  // fp_add(&tmp1,&tmp1,&tmp_A.x2);
+  fp_add(&tmp2,&tmp2,&tmp_B.x2);
+  fp_mul(&tmp5,&tmp_A.x1,&tmp2);
+
+  //(a+c)(d+f) = tmp6
+  // fp_sub(&tmp1,&tmp1,&tmp_A.x1);
+  // fp_sub(&tmp2,&tmp2,&tmp_B.x1);
+  // fp_mul(&tmp6,&tmp1,&tmp2);
+
+  //ad = tmp1
+  // fp_mul(&tmp1,&tmp_A.x0,&tmp_B.x0);
+  //be = tmp2
+  fp_mul(&ANS->x2,&tmp_A.x1,&tmp_B.x1);
+  //cf = tmp3
+  // fp_mul(&tmp3,&tmp_A.x2,&tmp_B.x2);
+
+  //x0 = θ^3((b)(d+e+f)-(b)(d+e))
+  // = tmp1 + mul_base(tmp5-tmp6-tmp2-tmp4+)
+  fp_sub(&ANS->x0,&tmp5,&tmp4);
+  // fp_sub(&ANS->x0,&ANS->x0,&tmp6);
+  // fp_add(&ANS->x0,&ANS->x0,&tmp1);
+  fp_mul_base(&ANS->x0,&ANS->x0);
+  // fp_add(&ANS->x0,&ANS->x0,&tmp1);
+
+  //x1 = (b)(d+e)-be
+  fp_sub(&ANS->x1,&tmp4,&ANS->x2);
+  // fp_sub(&ANS->x1,&ANS->x1,&tmp2);
+  // fp_mul_base(&ANS->x2,&tmp3);
+  // fp_add(&ANS->x1,&ANS->x1,&ANS->x2);
+
+  //x2 = be
+  // fp_add(&ANS->x2,&tmp2,&tmp6);
+  // fp_sub(&ANS->x2,&ANS->x2,&tmp1);
+  // fp_sub(&ANS->x2,&ANS->x2,&tmp3);
 } 
 
 void fp3_mul_ui(fp3_t *ANS,fp3_t *A,unsigned long int UI){

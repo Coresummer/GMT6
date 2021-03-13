@@ -20,6 +20,13 @@ void fp3_lshift_1(fp3_t *ANS,fp3_t *A);
 void fp3_hlv(fp3_t *ANS,fp3_t *A);
 void fp3_set_random(fp3_t *ANS,gmp_randstate_t state);
 void fp3_mul(fp3_t *ANS,fp3_t *A,fp3_t *B);
+
+void fp3_mul_sparse_add_1(fp3_t *ANS,fp3_t *A,fp3_t *B);
+void fp3_mul_sparse_add_2(fp3_t *ANS,fp3_t *A,fp3_t *B);
+
+void fp3_mul_sparse_dbl_1(fp3_t *ANS,fp3_t *A,fp3_t *B);
+void fp3_mul_sparse_dbl_2(fp3_t *ANS,fp3_t *A,fp3_t *B);
+
 void fp3_mul_lazy_montgomery(fp3_t *ANS,fp3_t *A,fp3_t *B);
 void fp3_mul_nonmod_montgomery(fp3_t *ANS,fp3_t *A,fp3_t *B);
 void fp3_mul_ui(fp3_t *ANS,fp3_t *A,unsigned long int UI);
