@@ -47,7 +47,6 @@ void ff_lttp(fp6_t *f, efp_jacobian_t *S, efp_t *P){
   fp_sqr(&tmp1_fp,&S->z);
   fp_mul(&tmp1_fp6.x1.x1,&nextZ,&tmp1_fp); //tmp1_fp = rambda_d
   fp_mul_base_inv(&tmp1_fp6.x1.x1,&tmp1_fp6.x1.x1);
-
   fp_mul(&tmp1_fp6.x1.x1,&tmp1_fp6.x1.x1,&P->y);
 
   fp_mul_ui(&tmp2_fp,&t1,2);
@@ -77,26 +76,33 @@ void ff_ltqp(fp6_t *f, efp_jacobian_t *S, efp_t *Q,efp_t *P){
   fp_sqr(&tmp1_fp,&S->z);
   fp_mul(&t1,&Q->x,&tmp1_fp);
   fp_sub(&t1,&t1,&S->x);
+  //t1 = (Z^2)*Qx - X
 
   fp_mul(&tmp1_fp,&tmp1_fp,&S->z);
   fp_mul(&t2,&tmp1_fp,&Q->y);
   fp_sub(&t2,&t2,&S->y);
+  //t2 = Z^3 * Qy - Y
 
   fp_sqr(&t3,&t1);
+  //t3 = t1^2 = ((Z^2)*Qx - X)^2
 
   fp_mul(&t4,&t1,&t3);
+  //t4 = ((Z^2)*Qx - X)^3
 
   fp_mul(&t5,&S->x,&t3);
+  //t5 = X((Z^2)*Qx - X)^2
 
   fp_sqr(&tmp1_fp,&t2);
   fp_mul_ui(&tmp2_fp,&t5,2);
   fp_add(&tmp2_fp,&tmp2_fp,&t4);
   fp_sub(&nextX,&tmp1_fp,&tmp2_fp);
+  //X = t2^2 -(2t5+t4)
 
   fp_sub(&nextY,&t5,&nextX);
   fp_mul(&nextY,&nextY,&t2);
   fp_mul(&tmp1_fp,&t4,&S->y);
   fp_sub(&nextY,&nextY,&tmp1_fp);
+  //Y = (t5 - X)t2 - t4Y
 
   fp_mul(&nextZ,&S->z,&t1);
 
