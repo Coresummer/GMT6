@@ -12,10 +12,9 @@
 #include <stdarg.h>
 #include <assert.h>
 
-#define DEBUG_COST_A
+// #define DEBUG_COST_A
 //#define DEBUG_ASSERT
-#define CHECK_PAIRING_TIME_LOOP 10
-
+#define CHECK_PAIRING_TIME_LOOP 100000
 
 /**************Option**************/
 #define X64
@@ -54,10 +53,10 @@ typedef struct{
   mp_limb_t x0[FPLIMB];
 }fp_t;
 typedef struct{
-  fp_t x0,x1;
-}fp2_t;
+  fp_t x0,x1,x2;
+}fp3_t;
 typedef struct{
-  fp2_t x0,x1,x2;
+  fp3_t x0,x1;
 }fp6_t;
 
 /*Field*/
@@ -66,10 +65,10 @@ typedef struct{
   mp_limb_t x0[FPLIMB2];
 }fpd_t;
 typedef struct{
-  fpd_t x0,x1;
-}fpd2_t;
+  fpd_t x0,x1,x2;
+}fpd3_t;
 typedef struct{
-  fpd2_t x0,x1,x2;
+  fpd3_t x0,x1;
 }fpd6_t;
 //tmp finite field
 mp_limb_t buf[FPLIMB];
@@ -81,9 +80,9 @@ typedef struct{
   int infinity;
 }efp_t;
 typedef struct{
-  fp2_t x,y;
+  fp3_t x,y;
   int infinity;
-}efp2_t;
+}efp3_t;
 typedef struct{
   fp6_t x,y;
   int infinity;
@@ -95,9 +94,9 @@ typedef struct{
   int infinity;
 }efp_projective_t;
 typedef struct{
-  fp2_t x,y,z;
+  fp3_t x,y,z;
   int infinity;
-}efp2_projective_t;
+}efp3_projective_t;
 typedef struct{
   fp6_t x,y,z;
   int infinity;
@@ -109,9 +108,9 @@ typedef struct{
   int infinity;
 }efp_jacobian_t;
 typedef struct{
-  fp2_t x,y,z;
+  fp3_t x,y,z;
   int infinity;
-}efp2_jacobian_t;
+}efp3_jacobian_t;
 typedef struct{
   fp6_t x,y,z;
   int infinity;
@@ -143,10 +142,10 @@ fp_t line_3sparse_x0;//3sparse乗算をするときに使う (xP^-3)*(yP^2) を�
 fp_t line_5sparse_x0;//5sparse乗算をするときに使う (xP^-3)*(yP^2) を格納する
 fp_t line_7sparse_x0;//7sparse乗算をするときに使う (xP^-3)*(yP^2) を格納する
 
-mpz_t efp_total,efp2_total,efp5_total,efp6_total,efp7_total,efp10_total,efp14_total;//#efp,#efp5,#efp10,#efp7,#efp14
+mpz_t efp_total,efp3_total,efp6_total,fp6_total_r;//#efp,#efp5,#efp10,#efp7,#efp14
 mpz_t miller_loop_s;
 mpz_t X_1_div2,X_1,X_2,X_2_1,four;//(kai +1)/2,(kai -1),(kai^2)をあらかじめ求めておく
-
+mpz_t hardpart,hp_3w,three,four;
 //emb6
 fp_t frobenius_1_6;//c^((p-1)/10)の計算結果
 fp_t frobenius_2_6;//c^(2(p-1)/10)の計算結果

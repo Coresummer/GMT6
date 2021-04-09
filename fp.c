@@ -58,6 +58,11 @@ void fp_lshift_1(fp_t *ANS,fp_t *A){
   if(mpn_cmp(ANS->x0,prime,FPLIMB)>=0)  mpn_sub_n(ANS->x0,ANS->x0,prime,FPLIMB);
 }
 
+void fp_rshift_1(fp_t *ANS,fp_t *A){
+  mpn_rshift(ANS->x0,A->x0,FPLIMB,1);
+  if(mpn_cmp(ANS->x0,prime,FPLIMB)>=0)  mpn_sub_n(ANS->x0,ANS->x0,prime,FPLIMB);
+}
+
 void fp_hlv(fp_t *ANS,fp_t *A){
   static mp_limb_t buf[FPLIMB];
   if(A->x0[0] & 1) mpn_add_n(buf,A->x0,prime,FPLIMB);
@@ -706,8 +711,26 @@ int fp_montgomery_trick_montgomery(fp_t *A_inv,fp_t *A,int n){
 
 void fp_mul_base(fp_t *ANS,fp_t *A){
   #ifdef DEBUG_COST_A
+  cost_add++;
+  // cost_mul_base++;
+  // cost_mul--;
+  #endif
+  // fp_mul(ANS,A,&base_c);
+  fp_lshift_1(ANS,A);
+}
+
+void fp_mul_base_inv(fp_t *ANS,fp_t *A){
+
+  if( __builtin_ctzl(A->x0[0]) >= 1){
+  #ifdef DEBUG_COST_A
+  cost_add++;
+  #endif
+    fp_rshift_1(ANS,A);
+  }else{
+  #ifdef DEBUG_COST_A
   cost_mul_base++;
   cost_mul--;
   #endif
-  fp_mul(ANS,A,&base_c);
+    fp_mul(ANS,A,&base_c_inv);
+  }
 }

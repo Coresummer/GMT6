@@ -18,16 +18,16 @@
 #include "scalar.h"
 #include "mpn.h"
 #include "fp.h"
-#include "fp2.h"
+#include "fp3.h"
 #include "fp6.h"
 #include "test_fp.h"
 #include "efp.h"
 #include "efp6.h"
 #include "test_efp.h"
 #include "create.h"
-// #include "miller.h"
-// #include "final_exp.h"
-// #include "test_pairing.h"
+#include "miller.h"
+#include "final_exp.h"
+#include "test_pairing.h"
 
 
 int main(){
@@ -65,22 +65,22 @@ printf("Fp7_mul using Karatsuba24\n\n");
   gmp_randseed_ui(state,(unsigned long int)time(NULL));
 
   //各関数の動作確認、コスト計算、時間計測など
-  check_fp();
-  check_fp2();
-  check_fp6();
-  check_fp2_count();
-  check_fp6_count();
-  check_fp_time();
+  // check_fp();
+  // check_fp3();
+  // check_fp6();
+  // check_fp3_count();
+  // check_fp6_count();
+  // check_fp_time();
 
-  check_efp();
-  check_efp2();
-  check_efp6();
-  check_g1_g2();
+  // check_efp();
+  // check_efp3();
+  // check_efp6();
+  // check_g1_g2();
 
-  // //SCM_func_check();//未完成
-  // check_pairing();
-  // //check_pairing_count();
-  // check_pairing_time();
+  //SCM_func_check();//未完成
+  check_pairing();
+  check_pairing_count();
+  check_pairing_time();
 
   return 0;
 }

@@ -2,10 +2,10 @@
 /*
 void SCM_func_check(){
 printf("SCM_func_check() 開始\n");
-efp14 efp14_point_P,efp14_point_Q;
+efp6 efp6_point_P,efp6_point_Q;
 mpz_t s,a,b,ab;
-efp14_init(&efp14_point_P);
-efp14_init(&efp14_point_Q);
+efp6_init(&efp6_point_P);
+efp6_init(&efp6_point_Q);
 mpz_init(s);
 mpz_init(a);
 mpz_init(b);
@@ -20,12 +20,12 @@ efp7_init(&efp7_bQ1);
 efp7_init(&efp7_bQ2);
 
 
-find_P_inG1_Q_inG2(&efp14_point_P,&efp14_point_Q);
+find_P_inG1_Q_inG2(&efp6_point_P,&efp6_point_Q);
 mpz_urandomm(a,state,p);
 mpz_urandomm(b,state,p);
 
-twist_mapping_to_efp(&efp_P,&efp14_point_P);
-twist_mapping_to_efp7(&efp7_Q,&efp14_point_Q);
+twist_mapping_to_efp(&efp_P,&efp6_point_P);
+twist_mapping_to_efp7(&efp7_Q,&efp6_point_Q);
 #if 1
 printf("P  :");
 efp_print(&efp_P);
@@ -56,8 +56,8 @@ count_print();
 
 printf("\nSCM_func_check() 終了\n");
 printf("*********************************************************************************************\n\n");
-efp14_clear(&efp14_point_P);
-efp14_clear(&efp14_point_Q);
+efp6_clear(&efp6_point_P);
+efp6_clear(&efp6_point_Q);
 mpz_clear(s);
 mpz_clear(a);
 mpz_clear(b);
@@ -71,34 +71,42 @@ efp7_clear(&efp7_bQ2);
 
 void check_pairing(){
   printf("check_pairing() 開始\n");
-  efp14_t P,Q,aP,bQ,tmp1;
-  fp14_t f,e1,e2;
+  efp6_t P,Q,Q_dash,aP,bQ,tmp1;
+  fp6_t f,e1,e2;
   mpz_t a,b,ab;
-  efp14_init(&P);
-  efp14_init(&Q);
-  efp14_init(&aP);
-  efp14_init(&bQ);
-  efp14_init(&tmp1);
-  fp14_init(&f);
-  fp14_init(&e1);
-  fp14_init(&e2);
+  efp6_init(&P);
+  efp6_init(&Q);
+  efp6_init(&Q_dash);
+  efp6_init(&aP);
+  efp6_init(&bQ);
+  efp6_init(&tmp1);
+  fp6_init(&f);
+  fp6_init(&e1);
+  fp6_init(&e2);
   mpz_init(a);
   mpz_init(b);
   mpz_init(ab);
 
   generate_g1(&P);
   generate_g2(&Q);
+  fp_set(&Q_dash.x.x0.x0,&Q.x.x0.x1);
+  fp_set(&Q_dash.y.x0.x0,&Q.y.x1.x1);
+  Q_dash.infinity = 0;
+
   mpz_urandomm(a,state,prime_z);
   mpz_urandomm(b,state,prime_z);
 
   #if 1
-  efp14_println("P = ",&P);
-  efp14_println("Q = ",&Q);
+  efp6_println("P = ",&P);
+  efp6_println("Q = ",&Q);
+  efp6_println("Q' = ",&Q_dash);
 
-  efp14_scm(&tmp1,&P,order_z);
-  efp14_println("[r]P = ",&tmp1);
-  efp14_scm(&tmp1,&Q,order_z);
-  efp14_println("[r]Q = ",&tmp1);
+  efp6_scm(&tmp1,&P,order_z);
+  efp6_println("[r]P = ",&tmp1);
+  efp6_scm(&tmp1,&Q,order_z);
+  efp6_println("[r]Q = ",&tmp1);
+  efp6_scm(&tmp1,&Q_dash,order_z);
+  efp6_println("[r]Q' = ",&tmp1);
 
   gmp_printf("a = %Zd\n",a);
   gmp_printf("b = %Zd\n",b);
@@ -106,43 +114,22 @@ void check_pairing(){
   #endif
 
 
-  printf("miller_ate_6sparse() の動作確認\n");
+  printf("miller_ate() の動作確認\n");
   //e([a]P,[b]Q) を求める
-  efp14_scm(&aP,&P,a);
-  efp14_scm(&bQ,&Q,b);
-  miller_ate_6sparse(&f,&aP,&bQ);
+  efp6_scm(&aP,&P,a);
+  efp6_scm(&bQ,&Q,b);
+  miller_ate(&f,&aP,&bQ);
   final_exp(&e1,&f);
   //e(P,Q)^(a*b) を求める
-  miller_ate_6sparse(&f,&P,&Q);
+  miller_ate(&f,&P,&Q);
   final_exp(&e2,&f);
   mpz_mul(ab,a,b);
-  fp14_pow(&e2,&e2,ab);
-  fp14_println("e([a]P,[b]Q) = ",&e1);
-  fp14_println("e(P,Q)^(a*b) = ",&e2);
-  if(fp14_cmp(&e1,&e2)==0)  printf("e([a]P,[b]Q) == e(P,Q)^(a*b)\n\n");
+  fp6_pow(&e2,&e2,ab);
+  fp6_println("e([a]P,[b]Q) = ",&e1);
+  fp6_println("e(P,Q)^(a*b) = ",&e2);
+  if(fp6_cmp(&e1,&e2)==0)  printf("e([a]P,[b]Q) == e(P,Q)^(a*b)\n\n");
   else{
     printf("e([a]P,[b]Q) != e(P,Q)^(a*b)\n\n");
-    fp14_println("e(P,Q)^(a*b) = ",&e2);
-  }
-  printf("---------------------------------\n");
-
-  printf("miller_ate_7sparse() の動作確認\n");
-  //e([a]P,[b]Q) を求める
-  efp14_scm(&aP,&P,a);
-  efp14_scm(&bQ,&Q,b);
-  miller_ate_7sparse(&f,&aP,&bQ);
-  final_exp(&e1,&f);
-  //e(P,Q)^(a*b) を求める
-  miller_ate_7sparse(&f,&P,&Q);
-  final_exp(&e2,&f);
-  mpz_mul(ab,a,b);
-  fp14_pow(&e2,&e2,ab);
-  fp14_println("e([a]P,[b]Q) = ",&e1);
-  fp14_println("e(P,Q)^(a*b) = ",&e2);
-  if(fp14_cmp(&e1,&e2)==0)  printf("e([a]P,[b]Q) == e(P,Q)^(a*b)\n\n");
-  else{
-    printf("e([a]P,[b]Q) != e(P,Q)^(a*b)\n\n");
-    fp14_println("e(P,Q)^(a*b) = ",&e2);
   }
   printf("---------------------------------\n");
 
@@ -154,25 +141,19 @@ void check_pairing(){
 
 void check_pairing_count(){
   printf("check_pairing_count() 開始\n");
-  efp14_t P,Q;
-  fp14_t f,e;
-  efp14_init(&P);
-  efp14_init(&Q);
-  fp14_init(&f);
-  fp14_init(&e);
+  efp6_t P,Q;
+  fp6_t f,e;
+  efp6_init(&P);
+  efp6_init(&Q);
+  fp6_init(&f);
+  fp6_init(&e);
 
   generate_g1(&P);
   generate_g2(&Q);
 
-  printf("miller_ate_6sparse() count\n");
+  printf("miller_ate count\n");
   count_start();
-  miller_ate_6sparse(&f,&P,&Q);
-  count_printf();
-  printf("---------------------------------\n");
-
-  printf("miller_ate_7sparse() count\n");
-  count_start();
-  miller_ate_7sparse(&f,&P,&Q);
+  miller_ate(&f,&P,&Q);
   count_printf();
   printf("---------------------------------\n");
 
@@ -187,30 +168,26 @@ void check_pairing_count(){
 
 void check_pairing_time(){
   printf("check_pairing_time() 開始\n");
-  efp14_t P,Q;
-  fp14_t f,e;
-  efp14_init(&P);
-  efp14_init(&Q);
-  fp14_init(&f);
-  fp14_init(&e);
+  efp6_t P,Q;
+  fp6_t f,e;
+  efp6_init(&P);
+  efp6_init(&Q);
+  fp6_init(&f);
+  fp6_init(&e);
 
   MILLER_ATE_6SPARSE_TIME=0;
-  MILLER_ATE_7SPARSE_TIME=0;
   FINAL_EXP_TIME=0;
 
   generate_g2(&Q);
+
   for(int i=0;i<CHECK_PAIRING_TIME_LOOP;i++){
     generate_g1(&P);
-    
-    gettimeofday(&tv_start,NULL);
-    miller_ate_6sparse(&f,&P,&Q);
-    gettimeofday(&tv_end,NULL);
-    MILLER_ATE_6SPARSE_TIME+=timedifference_msec(tv_start,tv_end);
+    fp_set_ui(&f.x0.x0,1);
 
     gettimeofday(&tv_start,NULL);
-    miller_ate_7sparse(&f,&P,&Q);
+    miller_ate(&f,&P,&Q);
     gettimeofday(&tv_end,NULL);
-    MILLER_ATE_7SPARSE_TIME+=timedifference_msec(tv_start,tv_end);
+    MILLER_ATE_6SPARSE_TIME+=timedifference_msec(tv_start,tv_end);
 
     gettimeofday(&tv_start,NULL);
     final_exp(&e,&f);
@@ -218,8 +195,7 @@ void check_pairing_time(){
     FINAL_EXP_TIME+=timedifference_msec(tv_start,tv_end);
   }
 
-  printf("miller_ate_6sparse  :%.4f[ms]\n",MILLER_ATE_6SPARSE_TIME/CHECK_PAIRING_TIME_LOOP);
-  printf("miller_ate_7sparse  :%.4f[ms]\n",MILLER_ATE_7SPARSE_TIME/CHECK_PAIRING_TIME_LOOP);
+  printf("miller_ate  :%.4f[ms]\n",MILLER_ATE_6SPARSE_TIME/CHECK_PAIRING_TIME_LOOP);
   printf("final_exp           :%.4f[ms]\n",FINAL_EXP_TIME/CHECK_PAIRING_TIME_LOOP);
 
   printf("*********************************************************************************************\n\n");

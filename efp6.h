@@ -1,7 +1,7 @@
 #ifndef EFP6_H
 #define EFP6_H
 
-#include "efp2.h"
+#include "efp3.h"
 
 void efp6_init(efp6_t *P);
 void efp6_printf(char *str,efp6_t *P);
