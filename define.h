@@ -65,11 +65,11 @@ typedef struct{
   mp_limb_t x0[FPLIMB2];
 }fpd_t;
 typedef struct{
-  fpd_t x0,x1,x2;
-}fpd3_t;
+  fp_t x0,x1;
+}fp2_t;
 typedef struct{
-  fpd3_t x0,x1;
-}fpd6_t;
+  fp2_t x0,x1,x2;
+}fp6_t;
 //tmp finite field
 mp_limb_t buf[FPLIMB];
 
@@ -80,9 +80,9 @@ typedef struct{
   int infinity;
 }efp_t;
 typedef struct{
-  fp3_t x,y;
+  fp2_t x,y;
   int infinity;
-}efp3_t;
+}efp2_t;
 typedef struct{
   fp6_t x,y;
   int infinity;
@@ -94,9 +94,9 @@ typedef struct{
   int infinity;
 }efp_projective_t;
 typedef struct{
-  fp3_t x,y,z;
+  fp2_t x,y,z;
   int infinity;
-}efp3_projective_t;
+}efp2_projective_t;
 typedef struct{
   fp6_t x,y,z;
   int infinity;
@@ -108,9 +108,9 @@ typedef struct{
   int infinity;
 }efp_jacobian_t;
 typedef struct{
-  fp3_t x,y,z;
+  fp2_t x,y,z;
   int infinity;
-}efp3_jacobian_t;
+}efp2_jacobian_t;
 typedef struct{
   fp6_t x,y,z;
   int infinity;

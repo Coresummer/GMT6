@@ -189,13 +189,8 @@ void check_fp6_count(){
 
 void check_fp_time(){
   printf("check_fp_time() 開始\n");
-<<<<<<< HEAD
   int loop=100;//1万
   int max=1000;//10万
-=======
-  int loop=10000;//1万
-  int max=1000000;//10万
->>>>>>> CP3-6
   int i,j;
   fp_t *a;
   fp_t *b;
