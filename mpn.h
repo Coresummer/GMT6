@@ -1,3 +1,4 @@
+#pragma once
 #ifndef MPN_H
 #define MPN_H
 

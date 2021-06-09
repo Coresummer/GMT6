@@ -1,3 +1,4 @@
+#pragma once
 #ifndef MILLER_H
 #define MILLER_H
 

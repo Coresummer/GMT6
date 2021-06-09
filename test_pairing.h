@@ -1,3 +1,4 @@
+#pragma once
 #ifndef TEST_PAIRING_H
 #define TEST_PAIRING_H
 

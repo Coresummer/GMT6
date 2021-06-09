@@ -1,3 +1,4 @@
+#pragma once
 #ifndef Efp3_H
 #define Efp3_H
 
