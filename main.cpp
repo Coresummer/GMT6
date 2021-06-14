@@ -1,17 +1,4 @@
-//まだできていない関数！！！
-/*fp5.c*/
-//fp5_mul_lazy_montgomery
-//fp5_mul_nonmod_montgomery
-//fp5_sqr_lazy_montgomery
-//fp5_inv_lazy_montgomery
-/*efp.c*/
-//efp_ecd_jacobian_lazy_montgomery
-//efp_eca_jacobian_lazy_montgomery
-//efp_eca_mixture_lazy_montgomery
-/*efp5.c*/
-//efp5_ecd_jacobian_lazy_montgomery
-//efp5_eca_jacobian_lazy_montgomery
-//efp5_eca_mixture_lazy_montgomery
+#define TTT_INSTANCE_HERE
 
 #include "define.h"
 #include "count.h"
@@ -65,17 +52,17 @@ printf("Fp7_mul using Karatsuba24\n\n");
   gmp_randseed_ui(state,(unsigned long int)time(NULL));
 
   //各関数の動作確認、コスト計算、時間計測など
-  // check_fp();
-  // check_fp3();
-  // check_fp6();
-  // check_fp3_count();
-  // check_fp6_count();
+  check_fp();
+  check_fp3();
+  check_fp6();
+  check_fp3_count();
+  check_fp6_count();
   // check_fp_time();
 
-  // check_efp();
-  // check_efp3();
-  // check_efp6();
-  // check_g1_g2();
+  check_efp();
+  check_efp3();
+  check_efp6();
+  check_g1_g2();
 
   //SCM_func_check();//未完成
   check_pairing();

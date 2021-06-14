@@ -4,8 +4,8 @@
 #include "efp5.h"
 
 void efp10_init(efp10_t *P);
-void efp10_printf(char *str,efp10_t *P);
-void efp10_println(char *str,efp10_t *P);
+void efp10_printf(std::string str,efp10_t *P);
+void efp10_println(std::string str,efp10_t *P);
 void efp10_set(efp10_t *ANS,efp10_t *A);
 void efp10_set_ui(efp10_t *ANS,unsigned long int UI1,unsigned long int UI2);
 void efp10_set_mpn(efp10_t *ANS,mp_limb_t *A);

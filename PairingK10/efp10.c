@@ -6,8 +6,8 @@ void efp10_init(efp10_t *P){
   P->infinity=1;
 }
 
-void efp10_printf(char *str,efp10_t *P){
-  printf("%s",str);
+void efp10_printf(std::string str,efp10_t *P){
+  std::cout << str << std::endl;
   if(P->infinity==0){
     printf("(");
     fp10_printf("",&P->x);
@@ -19,8 +19,8 @@ void efp10_printf(char *str,efp10_t *P){
   }
 }
 
-void efp10_println(char *str,efp10_t *P){
-  printf("%s",str);
+void efp10_println(std::string str,efp10_t *P){
+  std::cout << str << std::endl;
   if(P->infinity==0){
     printf("(");
     fp10_printf("",&P->x);

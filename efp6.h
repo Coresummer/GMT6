@@ -1,11 +1,12 @@
+#pragma once
 #ifndef EFP6_H
 #define EFP6_H
 
 #include "efp3.h"
 
 void efp6_init(efp6_t *P);
-void efp6_printf(char *str,efp6_t *P);
-void efp6_println(char *str,efp6_t *P);
+void efp6_printf(std::string str,efp6_t *P);
+void efp6_println(std::string str,efp6_t *P);
 void efp6_set(efp6_t *ANS,efp6_t *A);
 void efp6_set_ui(efp6_t *ANS,unsigned long int UI1,unsigned long int UI2);
 void efp6_set_mpn(efp6_t *ANS,mp_limb_t *A);

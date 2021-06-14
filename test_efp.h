@@ -1,3 +1,4 @@
+#pragma once
 #ifndef TEST_EFP_H
 #define TEST_EFP_H
 

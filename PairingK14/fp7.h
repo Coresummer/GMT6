@@ -4,10 +4,10 @@
 #include "fp.h"
 
 void fp7_init(fp7_t *A);
-void fp7_printf(char *str,fp7_t *A);
-void fp7_println(char *str,fp7_t *A);
-void fpd7_println(char *str,fpd7_t *A);
-void fp7_printf_montgomery(char *str,fp7_t *A);
+void fp7_printf(std::string str,fp7_t *A);
+void fp7_println(std::string str,fp7_t *A);
+void fpd7_println(std::string str,fpd7_t *A);
+void fp7_printf_montgomery(std::string str,fp7_t *A);
 void fp7_set(fp7_t *ANS,fp7_t *A);
 void fp7_set_ui(fp7_t *ANS,unsigned long int UI);
 void fp7_set_ui_ui(fp7_t *ANS,unsigned long int UI);

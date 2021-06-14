@@ -1,13 +1,14 @@
+#pragma once
 #ifndef fp3_H
 #define fp3_H
 
 #include "fp.h"
 
 void fp3_init(fp3_t *A);
-void fp3_printf(char *str,fp3_t *A);
-void fp3_println(char *str,fp3_t *A);
-void fpd3_println(char *str,fpd3_t *A);
-void fp3_printf_montgomery(char *str,fp3_t *A);
+void fp3_printf(std::string str,fp3_t *A);
+void fp3_println(std::string str,fp3_t *A);
+void fpd3_println(std::string str,fpd3_t *A);
+void fp3_printf_montgomery(std::string str,fp3_t *A);
 void fp3_set(fp3_t *ANS,fp3_t *A);
 void fp3_set_ui(fp3_t *ANS,unsigned long int UI);
 void fp3_set_ui_ui(fp3_t *ANS,unsigned long int UI);

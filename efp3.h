@@ -1,3 +1,4 @@
+#pragma once
 #ifndef Efp3_H
 #define Efp3_H
 
@@ -6,15 +7,15 @@
 void efp3_init(efp3_t *P);
 void efp3_projective_init(efp3_projective_t *P);
 void efp3_jacobian_init(efp3_jacobian_t *P);
-void efp3_printf(char *str,efp3_t *P);
-void efp3_println(char *str,efp3_t *P);
-void efp3_projective_printf(char *str,efp3_projective_t *P);
-void efp3_jacobian_printf(char *str,efp3_jacobian_t *P);
-void efp3_printf_montgomery(char *str,efp3_t *P);
-void efp3_jacobian_printf_montgomery(char *str,efp3_jacobian_t *P);
-void efp3_projective_printf_montgomery(char *str,efp3_projective_t *P);
-void efp3_projective_printf_affine(char *str,efp3_projective_t *P);
-void efp3_projective_printf_affine_montgomery(char *str,efp3_projective_t *P);
+void efp3_printf(std::string str,efp3_t *P);
+void efp3_println(std::string str,efp3_t *P);
+void efp3_projective_printf(std::string str,efp3_projective_t *P);
+void efp3_jacobian_printf(std::string str,efp3_jacobian_t *P);
+void efp3_printf_montgomery(std::string str,efp3_t *P);
+void efp3_jacobian_printf_montgomery(std::string str,efp3_jacobian_t *P);
+void efp3_projective_printf_montgomery(std::string str,efp3_projective_t *P);
+void efp3_projective_printf_affine(std::string str,efp3_projective_t *P);
+void efp3_projective_printf_affine_montgomery(std::string str,efp3_projective_t *P);
 void efp3_set(efp3_t *ANS,efp3_t *A);
 void efp3_projective_set(efp3_projective_t *ANS,efp3_projective_t *A);
 void efp3_jacobian_set(efp3_jacobian_t *ANS,efp3_jacobian_t *A);

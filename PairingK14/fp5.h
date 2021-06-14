@@ -4,10 +4,10 @@
 #include "fp.h"
 
 void fp5_init(fp5_t *A);
-void fp5_printf(char *str,fp5_t *A);
-void fp5_println(char *str,fp5_t *A);
-void fpd5_println(char *str,fpd5_t *A);
-void fp5_printf_montgomery(char *str,fp5_t *A);
+void fp5_printf(std::string str,fp5_t *A);
+void fp5_println(std::string str,fp5_t *A);
+void fpd5_println(std::string str,fpd5_t *A);
+void fp5_printf_montgomery(std::string str,fp5_t *A);
 void fp5_set(fp5_t *ANS,fp5_t *A);
 void fp5_set_ui(fp5_t *ANS,unsigned long int UI);
 void fp5_set_ui_ui(fp5_t *ANS,unsigned long int UI);

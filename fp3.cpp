@@ -7,7 +7,7 @@ void fp3_init(fp3_t *A){
 
 }
 
-void fp3_printf(char *str,fp3_t *A){
+void fp3_printf(std::string str,fp3_t *A){
   gmp_printf("%s(",str);
   fp_printf("",&A->x0);
   gmp_printf(",");
@@ -17,7 +17,7 @@ void fp3_printf(char *str,fp3_t *A){
   gmp_printf(")\n");
 }
 
-void fp3_println(char *str,fp3_t *A){
+void fp3_println(std::string str,fp3_t *A){
   gmp_printf("%s(",str);
   fp_printf("",&A->x0);
   gmp_printf(",");
@@ -27,7 +27,7 @@ void fp3_println(char *str,fp3_t *A){
   gmp_printf(")\n");
 }
 
-void fpd3_println(char *str,fpd3_t *A){
+void fpd3_println(std::string str,fpd3_t *A){
   gmp_printf("%s(",str);
   fpd_printf("",&A->x0);
   gmp_printf(",");
@@ -38,7 +38,7 @@ void fpd3_println(char *str,fpd3_t *A){
 
 }
 
-void fp3_printf_montgomery(char *str,fp3_t *A){
+void fp3_printf_montgomery(std::string str,fp3_t *A){
   gmp_printf("%s(",str);
   fp_printf_montgomery("",&A->x0);
   gmp_printf(",");

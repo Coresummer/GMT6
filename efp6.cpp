@@ -6,8 +6,8 @@ void efp6_init(efp6_t *P){
   P->infinity=1;
 }
 
-void efp6_printf(char *str,efp6_t *P){
-  printf("%s",str);
+void efp6_printf(std::string str,efp6_t *P){
+  std::cout << str << std::endl;
   if(P->infinity==0){
     printf("(");
     fp6_printf("",&P->x);
@@ -19,8 +19,8 @@ void efp6_printf(char *str,efp6_t *P){
   }
 }
 
-void efp6_println(char *str,efp6_t *P){
-  printf("%s",str);
+void efp6_println(std::string str,efp6_t *P){
+  std::cout << str << std::endl;
   if(P->infinity==0){
     printf("(");
     fp6_printf("",&P->x);

@@ -1,12 +1,13 @@
+#pragma once
 #ifndef FP6_H
 #define FP6_H
 
 #include "fp3.h"
 
 void fp6_init(fp6_t *A);
-void fp6_printf(char *str,fp6_t *A);
-void fp6_println(char *str,fp6_t *A);
-void fp6_printf_montgomery(char *str,fp6_t *A);
+void fp6_printf(std::string str,fp6_t *A);
+void fp6_println(std::string str,fp6_t *A);
+void fp6_printf_montgomery(std::string str,fp6_t *A);
 void fp6_set(fp6_t *ANS,fp6_t *A);
 void fp6_set_ui(fp6_t *ANS,unsigned long int UI);
 void fp6_set_ui_ui(fp6_t *ANS,unsigned long int UI);

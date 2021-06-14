@@ -1,3 +1,4 @@
+#pragma once
 #ifndef CREATE_H
 #define CREATE_H
 
