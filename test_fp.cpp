@@ -340,15 +340,87 @@ void check_fp_time(){
   inv_time*=100;
   inv_time-=overhead_time;
 
-  printf("overhead_time        :%.4f[s]\n",overhead_time/1000);
-  printf("fp_add_time    (A+B) :%.4f[s]\n",add_time/1000);
-  printf("fp_add_time    (A+A) :%.4f[s]\n",add2_time/1000);
-  printf("fp_lshift_time (A+A) :%.4f[s]\n",lshift_time/1000);
-  printf("fp_mul_time          :%.4f[s]\n",mul_time/1000);
-  printf("fp_mul_mod_time      :%.4f[s]\n",mul_mod_time/1000);
-  printf("fp_mul_base_time     :%.4f[s]\n",mul_base_time/1000);
-  printf("fp_sqr_time          :%.4f[s]\n",sqr_time/1000);
-  printf("fp_inv_time          :%.4f[s]\n",inv_time/1000);
-  printf("fp_mod_time          :%.4f[s]\n",mod_time/1000);
+  // printf("overhead_time        :%.4f[s]\n",overhead_time/1000);
+  // printf("fp_add_time    (A+B) :%.4f[s]\n",add_time/1000);
+  // printf("fp_add_time    (A+A) :%.4f[s]\n",add2_time/1000);
+  // printf("fp_lshift_time (A+A) :%.4f[s]\n",lshift_time/1000);
+  // printf("fp_mul_time          :%.4f[s]\n",mul_time/1000);
+  // printf("fp_mul_mod_time      :%.4f[s]\n",mul_mod_time/1000);
+  // printf("fp_mul_base_time     :%.4f[s]\n",mul_base_time/1000);
+  // printf("fp_sqr_time          :%.4f[s]\n",sqr_time/1000);
+  // printf("fp_inv_time          :%.4f[s]\n",inv_time/1000);
+  // printf("fp_mod_time          :%.4f[s]\n",mod_time/1000);
+  printf("*********************************************************************************************\n\n");
+}
+
+void check_fp_time_clk(){
+  printf("check_fp_time_clk() 開始\n");
+  int loop=10000000;//1万
+  int max=10*loop;//10万
+  int i,j;
+  fp_t *a;
+  fp_t *b;
+  a=(fp_t *)malloc(max*sizeof(fp_t));
+  b=(fp_t *)malloc(max*sizeof(fp_t));
+  fp_t A,B,ANS;
+  fpd_t ANS2;
+
+  //乱数生成
+  for(i=0;i<max;i++){
+    fp_set_random(&a[i],state);
+    fp_set_random(&b[i],state);
+  }
+  
+  //メモリアクセスのオーバーヘッド
+  CYBOZU_BENCH_C("set       ",loop,fp_set,&A,&a[0]);
+  CYBOZU_BENCH_C("set       ",loop,fp_set,&B,&b[0]);
+  fp_printf("setA:",&A);
+  fp_printf("setB:",&B);
+
+  //add (A+B)
+  //     fp_add(&ANS,&A,&B);
+  CYBOZU_BENCH_C("add (A+B) ",loop,fp_add,&ANS,&A,&B);
+  fp_printf("add(A+B):",&ANS);
+
+  //add (A+A)
+  //     fp_add(&ANS,&A,&A);
+  CYBOZU_BENCH_C("add (A+A) ",loop,fp_add,&ANS,&A,&A);
+  fp_printf("add(A+A):",&ANS);
+
+  //1bit_shift (A+A)
+  //     fp_lshift_1(&ANS,&A);
+  CYBOZU_BENCH_C("lshift_1(&ANS,&A)",loop,fp_lshift_1,&ANS,&A);
+  fp_printf("lshift_1(&ANS,&A):",&ANS);
+
+  //mul
+  //     fp_mul_nonmod(&ANS2,&A,&B);
+  CYBOZU_BENCH_C("mul_nonmod(&ANS2,&A,&B)",loop,fp_mul_nonmod,&ANS2,&A,&B);
+  fpd_printf("mul_nonmod(&ANS2,&A,&B):",&ANS2);
+
+  //mod
+  //     fp_mod(&ANS,ANS2.x0,FPLIMB2);
+  CYBOZU_BENCH_C("mod(&ANS,ANS2.x0,FPLIMB2)",loop,fp_mod,&ANS,ANS2.x0,FPLIMB2);
+  fp_printf("mod(&ANS,ANS2.x0,FPLIMB2):",&ANS);
+
+  //mul_mod
+  //     fp_mul(&ANS,&A,&B);
+  CYBOZU_BENCH_C("mul(&ANS,&A,&B)",loop,fp_mul,&ANS,&A,&B);
+  fp_printf("mul(&ANS,&A,&B):",&ANS);
+
+  //mul_base
+  //     fp_mul_base(&ANS,&A);
+  CYBOZU_BENCH_C("mul_base(&ANS,&A)",loop,fp_mul_base,&ANS,&A);
+  fp_printf("mul_base(&ANS,&A):",&ANS);
+
+  //sqr
+  //     fp_sqr_nonmod(&ANS2,&A);
+  CYBOZU_BENCH_C("sqr_nonmod(&ANS2,&A)",loop,fp_sqr_nonmod,&ANS2,&A);
+  fpd_printf("sqr_nonmod(&ANS2,&A):",&ANS2);
+
+  //inv
+  //     fp_inv(&ANS,&A);
+  CYBOZU_BENCH_C("inv(&ANS,&A)",loop,fp_inv,&ANS,&A);
+  fp_printf("inv(&ANS,&A):",&ANS);
+
   printf("*********************************************************************************************\n\n");
 }
