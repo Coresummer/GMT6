@@ -30,6 +30,8 @@
 #define X64
 /**********************************/
 
+#define FPBITS 704
+
 #ifdef X64
 #define FPLIMB_BITS 512
 #define FPLIMB 11 //??
@@ -57,10 +59,12 @@
 #define k6_X_length 128//////37??
 TTT_EXTERN int k6_X_binary[k6_X_length+1];  //CP-6
 
+typedef unsigned _ExtInt(FPBITS) fp_t;
+
 /*Field*/
-typedef struct{
-  mp_limb_t x0[FPLIMB];
-}fp_t;
+// typedef struct{
+//   mp_limb_t x0[FPLIMB];
+// }fp_t;
 typedef struct{
   fp_t x0,x1,x2;
 }fp3_t;

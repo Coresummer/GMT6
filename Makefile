@@ -1,4 +1,4 @@
-CC = clang
+CC = clang++-11
 PROGRAM = CP6
 #OBJS = main.o count.o scalar.o mpn.o fp.o fp7.o fp14.o test_fp.o efp.o efp7.o efp14.o test_efp.o create.o miller.o final_exp.o test_pairing.o
 #HEADER = define.h count.h scalar.h mpn.h fp.h fp7.h fp14.h test_fp.h efp.h efp7.h efp14.h test_efp.h create.h miller.h final_exp.h test_pairing.h
@@ -13,8 +13,8 @@ $(PROGRAM): $(OBJS)
 
 #c言語のソースファイルから拡張子が.oのファイルを作成する
 .c.o:
-	$(CC) -c --std=c++11 $< 
-	# -std=c99
+	$(CC) -c  $< 
+	# -std=c99 --std=c++11
 
 #ヘッダファイルの依存関係(ヘッダファイルが変わったらすべてコンパイルし直す)
 $(OBJS): $(HEADER)
