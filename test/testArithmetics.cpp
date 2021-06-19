@@ -17,12 +17,19 @@ void mpn_init(fp_t *op){
     *op = 0;
 }
 
-void mpn_init_str(fp_t *op, std::string str){
+void mpn_init_set_str_base10(fp_t *op, char* str){
     *op = 0;
+    
+}
+
+void mpn_init_set_str_base16(fp_t *op, char* str){
+    *op = 0;
+    
 }
 
 void mpn_print(fp_t *op, std::string str){
     std::cout << str ;
+    // printf("%s",str);
 
     uint8_t buf[WORDS];
     memcpy(buf, op, sizeof(buf));
@@ -37,6 +44,7 @@ void mpn_print(fp_t *op, std::string str){
     }
 }
 
+
 int main()
 {
     fp_t a;
@@ -44,7 +52,13 @@ int main()
     mpn_print(&a, "fp_init(&a): ");
 
     a = 11111111111111;
+    a *= a;
+    a *= a;
+    a *= a;
+    a *= a;
+    a *= a;
+    a *= a;
     mpn_print(&a, "fp_set_int(&a,11111111111111): ");
     
-    return 0;
+    return 0; 
 }
