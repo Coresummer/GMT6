@@ -1,77 +1,112 @@
 #include "fp.h"
-#include <cstdint>
 
 typedef unsigned _ExtInt(BITS)  fp_t;
 typedef unsigned _ExtInt(DBITS) fpd_t;
 
-void fp_init(UINT *A){
-  *(fp_t*)A = 0;
+void fp_init(fp *A){
+  *(fp_t*)A->v0 = 0;
+}
+void fpd_init(fpd *A){
+  *(fpd_t*)A->v0 = 0;
 }
 
-void fp_init_set_uint64(UINT *A, uint64_t op){
-  *(fp_t*)A = 0;
+void fp_init_set_ui(fp *A, uint64_t UI){
+  *(fp_t*)A->v0 = UI;
 }
 
-char* fp_get_str(UINT *A){
-  char* res = (char*)malloc(sizeof(char)*BWORDS+1);
+char* fp_get_str(fp *A){
+  char* res = (char*)malloc(sizeof(char)*BWORDS*2+2);
+  bool zeroflag = false;
   if (A == NULL){
     res[0] = '\0';
   }else{
     uint8_t buf[BWORDS];
-    memcpy(buf, A, sizeof(buf));
+    memcpy(buf, A->v0, sizeof(buf));
     for(int i=BWORDS-1;i>=0; i--){
-      sprintf(&res[i],"%x",buf[i]);
+      sprintf(&res[(BWORDS-1)*2 - 2*i],"%02x",buf[i]);
     }
+    res[2*BWORDS] = '\n';
+    res[2*BWORDS+1] = '\0';
   }
-
   return res;
 }
 
-void fp_print(char* str, UINT* A){
-  printf("%s",str);
+char* fpd_get_str(fpd *A){
+  char* res = (char*)malloc(sizeof(char)*DBWORDS*2+2);
+  bool zeroflag = false;
+  if (A == NULL){
+    res[0] = '\0';
+  }else{
+    uint8_t buf[DBWORDS];
+    memcpy(buf, A->v0, sizeof(buf));
+    for(int i=DBWORDS-1;i>=0; i--){
+      sprintf(&res[(DBWORDS-1)*2 - 2*i],"%02x",buf[i]);
+    }
+    res[2*DBWORDS] = '\n';
+    res[2*DBWORDS+1] = '\0';
+  }
+  return res;
+}
+
+void fp_print(std::string str, fp *A){
+  printf("%s",toCharPtr(str));
   char* fp_str = fp_get_str(A);
   printf("Fp:0x%s",fp_str);
   free(fp_str);
 }
 
-// void fpd_printf(std::string str,fpd_t *A){
-//   gmp_printf("%s%Nu",str,A->x0,FPLIMB2);
-// }
 
-// void fp_println(std::string str,UINT *A){
-//   gmp_printf("%s%Nu\n",str,A->x0,FPLIMB);
-// }
+void fp_println(std::string str, fp *A){
+  printf("%s",toCharPtr(str));
+  char* fp_str = fp_get_str(A);
+  printf("Fp:0x%s",fp_str);
+  free(fp_str);
+  printf("\n");
+}
 
-// void fp_printf_montgomery(std::string str,UINT *A){
-//   static UINT out;
+void fpd_print(std::string str, fpd *A){
+  printf("%s",toCharPtr(str));
+  char* fp_str = fpd_get_str(A);
+  printf("Fp:0x%s",fp_str);
+  free(fp_str);
+}
+
+
+void fpd_println(std::string str, fpd *A){
+  printf("%s",toCharPtr(str));
+  char* fp_str = fpd_get_str(A);
+  printf("Fp:0x%s",fp_str);
+  free(fp_str);
+  printf("\n");
+}
+
+// void fp_printf_montgomery(std::string str,fp *A){
+//   static fp out;
 //   fp_mod_montgomery(&out,A);
 //   gmp_printf("%s%Nu",str,out.x0,FPLIMB);
 // }
 
-// void fp_set(UINT *ANS,UINT *A){
-//   mpn_copyd(ANS->x0,A->x0,FPLIMB);
-// }
+void fp_set(fp *ANS,fp *A){
+  *(fp_t*)ANS->v0 = *(fp_t*)A->v0;
+}
 
-// void fpd_set(fpd_t *ANS,fpd_t *A){
-//   mpn_copyd(ANS->x0,A->x0,FPLIMB2);
-// }
+void fp_set_mpz(fp *ANS, mpz_t A){
+  
+}
 
-// void fp_set_ui(UINT *ANS,unsigned long int UI){
-//   mpn_set_ui(ANS->x0,FPLIMB,UI);
-// }
+void fpd_set(fpd *ANS,fpd *A){
+  *(fpd_t*)ANS->v0 = *(fpd_t*)A->v0;
+}
 
-// void fp_set_mpn(UINT *ANS,mp_limb_t *A){
-//   mpn_copyd(ANS->x0,A,FPLIMB);
-// }
+void fp_set_ui(fp *ANS,uint64_t UI){
+   *(fp_t*)ANS->v0 = UI;
+}
 
-// void fp_set_neg(UINT *ANS,UINT *A){
-//   #ifdef DEBUG_ASSERT
-//   assert(mpn_cmp(A->x0,prime,FPLIMB)>0)
-//   #endif
-//   mpn_sub_n(ANS->x0,prime,A->x0,FPLIMB);
-// }
+void fp_set_neg(fp *ANS,fp *A){
+   *(fp_t*)ANS->v0 = (*(fp_t*)cp_prime.v0 - *(fp_t*)A->v0);
+}
 
-// void fp_set_neg_montgomery(UINT *ANS,UINT *A){
+// void fp_set_neg_montgomery(fp *ANS,fp *A){
 //   #ifdef DEBUG_ASSERT
 //   assert(mpn_cmp(A->x0,prime,FPLIMB)>0)
 //   #endif
@@ -79,32 +114,28 @@ void fp_print(char* str, UINT* A){
 //   //fp_mod(ANS,ANS->x0,FPLIMB);
 // }
 
-// void fp_lshift_1(UINT *ANS,UINT *A){
-//   mpn_lshift(ANS->x0,A->x0,FPLIMB,1);
-//   if(mpn_cmp(ANS->x0,prime,FPLIMB)>=0)  mpn_sub_n(ANS->x0,ANS->x0,prime,FPLIMB);
-// }
+void fp_lshift_1(fp *ANS,fp *A){
+   *(fpd_t*)ANS->v0 =  1<<*(fpd_t*)A->v0;
+}
 
-// void fp_rshift_1(UINT *ANS,UINT *A){
-//   mpn_rshift(ANS->x0,A->x0,FPLIMB,1);
-//   if(mpn_cmp(ANS->x0,prime,FPLIMB)>=0)  mpn_sub_n(ANS->x0,ANS->x0,prime,FPLIMB);
-// }
+void fp_rshift_1(fp *ANS,fp *A){
+   *(fpd_t*)ANS->v0 = *(fpd_t*)A->v0 >> 1;
+}
 
-// void fp_hlv(UINT *ANS,UINT *A){
+// void fp_hlv(fp *ANS,fp *A){
 //   static mp_limb_t buf[FPLIMB];
 //   if(A->x0[0] & 1) mpn_add_n(buf,A->x0,prime,FPLIMB);
 //   else mpn_copyd(buf,A->x0,FPLIMB);
 //   mpn_rshift(ANS->x0,buf,FPLIMB,1);
 // }
 
-// void fp_set_random(UINT *ANS,gmp_randstate_t state){
-//   mpz_t tmp;
-//   mpz_init(tmp);
-
-//   mpz_urandomm(tmp,state,prime_z);
-//   mpn_set_mpz(ANS->x0,tmp);
-
-//   mpz_clear(tmp);
-// }
+void fp_set_random(fp *ANS,gmp_randstate_t state){
+  mpz_t tmp;
+  mpz_init(tmp);
+  mpz_urandomm(tmp,state,cp_prime_z);
+  fp_set_mpz(ANS,tmp);
+  mpz_clear(tmp);
+}
 
 // void pre_montgomery(){
 //   mp_limb_t tmp1[FPLIMB+1],tmp2[FPLIMB2+2];
@@ -130,7 +161,7 @@ void fp_print(char* str, UINT* A){
 //   mpz_clear(NN);
 // }
 
-// void fp_mulmod_montgomery(UINT *ANS,UINT *A,UINT *B){
+// void fp_mulmod_montgomery(fp *ANS,fp *A,fp *B){
 //   #ifdef DEBUG_COST_A
 //   cost_mul++;
 //   cost_mod++;
@@ -181,7 +212,7 @@ void fp_print(char* str, UINT* A){
 //   }
 // }
 
-// void fp_sqrmod_montgomery(UINT *ANS,UINT *A){
+// void fp_sqrmod_montgomery(fp *ANS,fp *A){
 //   #ifdef DEBUG_COST_A
 //   cost_sqr++;
 //   cost_mod++;
@@ -232,7 +263,7 @@ void fp_print(char* str, UINT* A){
 //   }
 // }
 
-// void fp_mod_montgomery(UINT *ANS,UINT *A){
+// void fp_mod_montgomery(fp *ANS,fp *A){
 //   #ifdef DEBUG_COST_A
 //   cost_mod++;
 //   #endif
@@ -284,7 +315,7 @@ void fp_print(char* str, UINT* A){
 //   }
 // }
 
-// void UINTo_montgomery(UINT *ANS, UINT *A){
+// void fpo_montgomery(fp *ANS, fp *A){
 //   #ifdef DEBUG_COST_A
 //   cost_mod++;
 //   #endif
@@ -306,17 +337,24 @@ void fp_print(char* str, UINT* A){
 //   mpn_mod(ANS,tmp,FPLIMB2);
 // }
 
-// void fp_mod(UINT *ans,mp_limb_t *a,mp_size_t size_a){
-//   #ifdef DEBUG_COST_A
-//   cost_mod++;
-//   #endif
+void fp_mod(fp *Ans,fp *A){
+  #ifdef DEBUG_COST_A
+  cost_mod++;
+  #endif
+  const fp_t& a = *(fp_t*)A->v0;
+  *(fp_t*)Ans = a %  *(fp_t*)cp_prime.v0;
+}
 
-//   mp_limb_t dumy[size_a];
-//   mpn_tdiv_qr(dumy,ans->x0,0,a,size_a,prime,FPLIMB);
+void fp_mul(fp *Ans,fp *A,fp *B){
+  #ifdef DEBUG_COST_A
+  cost_mul++;
+  #endif
 
-// }
 
-// void fp_mul(UINT *ANS,UINT *A,UINT *B){
+
+}
+
+// void fp_mul(fp *ANS,fp *A,fp *B){
 //   #ifdef DEBUG_COST_A
 //   cost_mul++;
 //   #endif
@@ -338,14 +376,14 @@ void fp_print(char* str, UINT* A){
 //   fp_mod(ANS,tmp_mul,FPLIMB2);
 // }
 
-// void fp_mul_nonmod(fpd_t *ANS,UINT *A,UINT *B){
+// void fp_mul_nonmod(fpd_t *ANS,fp *A,fp *B){
 //   #ifdef DEBUG_COST_A
 //   cost_mul++;
 //   #endif
 //   mpn_mul_n(ANS->x0,A->x0,B->x0,FPLIMB);
 // }
 
-// void fp_mul_ui(UINT *ANS,UINT *A,unsigned long int UI){
+// void fp_mul_ui(fp *ANS,fp *A,unsigned long int UI){
 //   #ifdef DEBUG_COST_A
 //   cost_mul_ui++;
 //   #endif
@@ -354,7 +392,7 @@ void fp_print(char* str, UINT* A){
 //   fp_mod(ANS,tmp_mul,FPLIMB2);
 // }
 
-// void fp_mul_mpn(UINT *ANS,UINT *A,mp_limb_t *B){
+// void fp_mul_mpn(fp *ANS,fp *A,mp_limb_t *B){
 //   #ifdef DEBUG_COST_A
 //   cost_mul++;
 //   #endif
@@ -363,7 +401,7 @@ void fp_print(char* str, UINT* A){
 //   fp_mod(ANS,tmp_mul,FPLIMB2);
 // }
 
-// void fp_sqr(UINT *ANS,UINT *A){
+// void fp_sqr(fp *ANS,fp *A){
 //   #ifdef DEBUG_COST_A
 //   cost_sqr++;
 //   #endif
@@ -372,14 +410,14 @@ void fp_print(char* str, UINT* A){
 //   fp_mod(ANS,tmp_sqr,FPLIMB2);
 // }
 
-// void fp_sqr_nonmod(fpd_t *ANS,UINT *A){
+// void fp_sqr_nonmod(fpd_t *ANS,fp *A){
 //   #ifdef DEBUG_COST_A
 //   cost_sqr++;
 //   #endif
 //   mpn_sqr(ANS->x0,A->x0,FPLIMB);
 // }
 
-// void fp_add(UINT *ANS,UINT *A,UINT *B){
+// void fp_add(fp *ANS,fp *A,fp *B){
 //   #ifdef DEBUG_COST_A
 //   cost_add++;
 //   #endif
@@ -387,7 +425,7 @@ void fp_print(char* str, UINT* A){
 //   if(mpn_cmp(ANS->x0,prime,FPLIMB)>=0)mpn_sub_n(ANS->x0,ANS->x0,prime,FPLIMB);
 // }
 
-// void fp_add_nonmod_single(UINT *ANS,UINT *A,UINT *B){
+// void fp_add_nonmod_single(fp *ANS,fp *A,fp *B){
 //   #ifdef DEBUG_COST_A
 //   cost_add++;
 //   #endif
@@ -401,7 +439,7 @@ void fp_print(char* str, UINT* A){
 //   mpn_add_n(ANS->x0,A->x0,B->x0,FPLIMB2);
 // }
 
-// void fp_add_ui(UINT *ANS,UINT *A,unsigned long int UI){
+// void fp_add_ui(fp *ANS,fp *A,unsigned long int UI){
 //   #ifdef DEBUG_COST_A
 //   cost_add_ui++;
 //   #endif
@@ -411,7 +449,7 @@ void fp_print(char* str, UINT* A){
 //   else mpn_copyd(ANS->x0,buf,FPLIMB);
 // }
 
-// void fp_add_mpn(UINT *ANS,UINT *A,mp_limb_t *B){
+// void fp_add_mpn(fp *ANS,fp *A,mp_limb_t *B){
 //   #ifdef DEBUG_COST_A
 //   cost_add++;
 //   #endif
@@ -421,7 +459,7 @@ void fp_print(char* str, UINT* A){
 //   else mpn_copyd(ANS->x0,buf,FPLIMB);
 // }
 
-// void fp_sub(UINT *ANS,UINT *A,UINT *B){
+// void fp_sub(fp *ANS,fp *A,fp *B){
 //   #ifdef DEBUG_COST_A
 //   cost_sub++;
 //   #endif
@@ -435,7 +473,7 @@ void fp_print(char* str, UINT* A){
 //   }
 // }
 
-// void fp_sub_nonmod_single(UINT *ANS,UINT *A,UINT *B){
+// void fp_sub_nonmod_single(fp *ANS,fp *A,fp *B){
 //   #ifdef DEBUG_COST_A
 //   cost_sub++;
 //   #endif
@@ -466,7 +504,7 @@ void fp_print(char* str, UINT* A){
 //   }
 // }
 
-// void fp_sub_ui(UINT *ANS,UINT *A,unsigned long int UI){
+// void fp_sub_ui(fp *ANS,fp *A,unsigned long int UI){
 //   #ifdef DEBUG_COST_A
 //   cost_sub_ui++;
 //   #endif
@@ -475,7 +513,7 @@ void fp_print(char* str, UINT* A){
 //   else  mpn_sub_ui(ANS->x0,A->x0,FPLIMB,UI);
 // }
 
-// void fp_sub_mpn(UINT *ANS,UINT *A,mp_limb_t *B){
+// void fp_sub_mpn(fp *ANS,fp *A,mp_limb_t *B){
 //   #ifdef DEBUG_COST_A
 //   cost_sub++;
 //   #endif
@@ -494,7 +532,7 @@ void fp_print(char* str, UINT* A){
 //   }
 // }
 
-// void fp_inv(UINT *ANS,UINT *A){
+// void fp_inv(fp *ANS,fp *A){
 //   #ifdef DEBUG_COST_A
 //   cost_inv++;
 //   #endif
@@ -517,7 +555,7 @@ void fp_print(char* str, UINT* A){
 //   fp_mod(ANS,tmp,FPLIMB);
 // }
 
-// void fp_inv_montgomery(UINT *ANS,UINT *A){
+// void fp_inv_montgomery(fp *ANS,fp *A){
 //   #ifdef DEBUG_COST_A
 //   cost_mul++;
 //   #endif
@@ -527,10 +565,10 @@ void fp_print(char* str, UINT* A){
 //   //gmp_printf("R2=%Nu\n",R2,FPLIMB);
 // }
 
-// int fp_legendre(UINT *A){
+// int fp_legendre(fp *A){
 //   int i;
 //   mpz_t tmp1,tmp2;
-//   UINT tmp1_fp;
+//   fp tmp1_fp;
 //   mpz_init(tmp1);
 //   mpz_init(tmp2);
 //   fp_init(&tmp1_fp);
@@ -549,8 +587,8 @@ void fp_print(char* str, UINT* A){
 //   return i;
 // }
 
-// void fp_sqrt(UINT *ANS,UINT *A){
-//   UINT x,y,t,k,n,tmp;
+// void fp_sqrt(fp *ANS,fp *A){
+//   fp x,y,t,k,n,tmp;
 //   fp_init(&x);
 //   fp_init(&y);
 //   fp_init(&t);
@@ -613,12 +651,12 @@ void fp_print(char* str, UINT* A){
 //   mpz_clear(result);
 // }
 
-// void fp_pow(UINT *ANS,UINT *A,mpz_t scalar){
+// void fp_pow(fp *ANS,fp *A,mpz_t scalar){
 //   int i,length;
 //   length=(int)mpz_sizeinbase(scalar,2);
 //   char binary[length+1];
 //   mpz_get_str(binary,2,scalar);
-//   UINT tmp;
+//   fp tmp;
 //   fp_init(&tmp);
 
 //   fp_set(&tmp,A);
@@ -630,8 +668,8 @@ void fp_print(char* str, UINT* A){
 //   fp_set(ANS,&tmp);
 // }
 
-// void fp_pow_mpn(UINT *ans,UINT *a,mp_limb_t *r,mp_size_t n){
-//   UINT Temp,tmp;
+// void fp_pow_mpn(fp *ans,fp *a,mp_limb_t *r,mp_size_t n){
+//   fp Temp,tmp;
 //   mp_limb_t bit[FPLIMB],bit_copy[FPLIMB];
 //   size_t bit_size;
 //   mp_size_t size;
@@ -672,36 +710,36 @@ void fp_print(char* str, UINT* A){
 //   mpn_copyd(ans->x0,Temp.x0,size);
 // }
 
-// int  fp_cmp(UINT *A,UINT *B){
+// int  fp_cmp(fp *A,fp *B){
 //   if(mpn_cmp(A->x0,B->x0,FPLIMB)==0)  return 0;
 //   return 1;
 // }
 
-// int  fp_cmp_ui(UINT *A,unsigned long int UI){
+// int  fp_cmp_ui(fp *A,unsigned long int UI){
 //   if(mpn_cmp_ui(A->x0,FPLIMB,UI)==0)  return 0;
 //   return 1;
 // }
 
-// int  fp_cmp_mpn(UINT *A,mp_limb_t *B){
+// int  fp_cmp_mpn(fp *A,mp_limb_t *B){
 //   if(mpn_cmp(A->x0,B,FPLIMB)==0)  return 0;
 //   return 1;
 // }
 
-// int  fp_cmp_zero(UINT *A){
+// int  fp_cmp_zero(fp *A){
 //   if(mpn_cmp_ui(A->x0,FPLIMB,0)==0) return 0;
 //   return 1;
 // }
 
-// int  fp_cmp_one(UINT *A){
+// int  fp_cmp_one(fp *A){
 //   if(mpn_cmp_ui(A->x0,FPLIMB,1)==0) return 0;
 //   return 1;
 // }
 
-// int fp_montgomery_trick(UINT *A_inv,UINT *A,int n){
+// int fp_montgomery_trick(fp *A_inv,fp *A,int n){
 //   int i;
-//   UINT ANS[n],ALL_inv;
+//   fp ANS[n],ALL_inv;
 //   fp_set(&ANS[0],&A[0]);
-//   UINT check;
+//   fp check;
 
 //   for(i=1;i<n;i++){
 //     fp_mul(&ANS[i],&ANS[i-1],&A[i]);
@@ -716,11 +754,11 @@ void fp_print(char* str, UINT* A){
 //   return 0;
 // }
 
-// int fp_montgomery_trick_montgomery(UINT *A_inv,UINT *A,int n){
+// int fp_montgomery_trick_montgomery(fp *A_inv,fp *A,int n){
 //   int i;
-//   UINT ANS[n],ALL_inv;
+//   fp ANS[n],ALL_inv;
 //   fp_set(&ANS[0],&A[0]);
-//   UINT check;
+//   fp check;
 
 //   for(i=1;i<n;i++){
 //     fp_mulmod_montgomery(&ANS[i],&ANS[i-1],&A[i]);
@@ -735,7 +773,7 @@ void fp_print(char* str, UINT* A){
 //   return 0;
 // }
 
-// void fp_mul_base(UINT *ANS,UINT *A){
+// void fp_mul_base(fp *ANS,fp *A){
 //   #ifdef DEBUG_COST_A
 //   cost_add++;
 //   // cost_mul_base++;
@@ -745,7 +783,7 @@ void fp_print(char* str, UINT* A){
 //   fp_lshift_1(ANS,A);
 // }
 
-// void fp_mul_base_inv(UINT *ANS,UINT *A){
+// void fp_mul_base_inv(fp *ANS,fp *A){
 
 //   if( __builtin_ctzl(A->x0[0]) >= 1){
 //   #ifdef DEBUG_COST_A
@@ -759,4 +797,20 @@ void fp_print(char* str, UINT* A){
 //   #endif
 //     fp_mul(ANS,A,&base_c_inv);
 //   }
+// }
+
+// void mpn_print(fp *op, std::string str){
+//     std::cout << str ;
+
+//     uint8_t buf[BWORDS];
+//     memcpy(buf, op->v0, sizeof(buf));
+//     printf("0x");
+//     if(buf[0]==0){
+//         printf("0\n");
+//     }else{
+//         for(int i=BWORDS-1;i>=0;i--){
+//         if(buf[i] != 0) printf("%x",buf[i]);
+//         }
+//         printf("\n");
+//     }
 // }

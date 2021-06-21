@@ -6,8 +6,8 @@ OBJS   = main.o fp.o utils.o#count.o scalar.o mpn.o fp3.o fp6.o test_fp.o efp.o 
 HEADER = define.h fp.h utils.h# count.h scalar.h mpn.h fp3.h fp6.h test_fp.h efp.h efp3.h efp6.h test_efp.h create.h miller.h final_exp.h test_pairing.h
 
 $(PROGRAM): $(OBJS)
-	$(CXX) -Wall -g -o -I $(PROGRAM) $(OBJS) -O2 -march=native -lgmp
-# -lstdc++
+	$(CXX) -Wall -g -I -o  $(PROGRAM) $(OBJS) -O2 -march=native -lgmp -lm
+# -lstdc++# -I
 #サフィックスルールの適応対象の拡張子の定義
 .SUFFIXES: .c .o
 
