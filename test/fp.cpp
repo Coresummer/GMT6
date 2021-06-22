@@ -3,6 +3,13 @@
 typedef unsigned _ExtInt(BITS)  fp_t;
 typedef unsigned _ExtInt(DBITS) fpd_t;
 
+char* toCharPtr(std::string str){
+    int len = sizeof(char)*(str.length() + 1);
+    char* res = (char*)malloc(len);
+    memcpy(res, str.c_str(), len);
+    return res;
+}
+
 void fp_init(fp *A){
   *(fp_t*)A->v0 = 0;
 }
@@ -10,11 +17,11 @@ void fpd_init(fpd *A){
   *(fpd_t*)A->v0 = 0;
 }
 
-void fp_init_set_ui(fp *A, uint64_t UI){
+void fp_init_set_ui(fp *A,const uint64_t UI){
   *(fp_t*)A->v0 = UI;
 }
 
-char* fp_get_str(fp *A){
+char* fp_get_str(const fp *A){
   char* res = (char*)malloc(sizeof(char)*BWORDS*2+2);
   bool zeroflag = false;
   if (A == NULL){
@@ -31,7 +38,7 @@ char* fp_get_str(fp *A){
   return res;
 }
 
-char* fpd_get_str(fpd *A){
+char* fpd_get_str(const fpd *A){
   char* res = (char*)malloc(sizeof(char)*DBWORDS*2+2);
   bool zeroflag = false;
   if (A == NULL){
@@ -48,15 +55,14 @@ char* fpd_get_str(fpd *A){
   return res;
 }
 
-void fp_print(std::string str, fp *A){
+void fp_print(const std::string str,const fp *A){
   printf("%s",toCharPtr(str));
   char* fp_str = fp_get_str(A);
   printf("Fp:0x%s",fp_str);
   free(fp_str);
 }
 
-
-void fp_println(std::string str, fp *A){
+void fp_println(const std::string str,const fp *A){
   printf("%s",toCharPtr(str));
   char* fp_str = fp_get_str(A);
   printf("Fp:0x%s",fp_str);
@@ -64,15 +70,14 @@ void fp_println(std::string str, fp *A){
   printf("\n");
 }
 
-void fpd_print(std::string str, fpd *A){
+void fpd_print(const std::string str,const fpd *A){
   printf("%s",toCharPtr(str));
   char* fp_str = fpd_get_str(A);
   printf("Fp:0x%s",fp_str);
   free(fp_str);
 }
 
-
-void fpd_println(std::string str, fpd *A){
+void fpd_println(const std::string str,const fpd *A){
   printf("%s",toCharPtr(str));
   char* fp_str = fpd_get_str(A);
   printf("Fp:0x%s",fp_str);
@@ -86,24 +91,31 @@ void fpd_println(std::string str, fpd *A){
 //   gmp_printf("%s%Nu",str,out.x0,FPLIMB);
 // }
 
-void fp_set(fp *ANS,fp *A){
-  *(fp_t*)ANS->v0 = *(fp_t*)A->v0;
+void fp_set(fp *ANS,const fp *A){
+  const fp_t& a = *(fp_t*)A;
+  *(fp_t*)ANS->v0 = a;
 }
 
-void fp_set_mpz(fp *ANS, mpz_t A){
-  
+void mpz_set_fp( mpz_t* ANS, const fp *A){
+  mpz_import(*ANS, WORDS64 ,-1, sizeof(A->v0[0]) ,0 ,0 ,A->v0);
 }
 
-void fpd_set(fpd *ANS,fpd *A){
-  *(fpd_t*)ANS->v0 = *(fpd_t*)A->v0;
+void fp_set_mpz(fp *ANS,const mpz_t A){
+  // mpz_export();
 }
 
-void fp_set_ui(fp *ANS,uint64_t UI){
+void fpd_set(fpd *ANS,const fpd *A){
+  const fp_t& a = *(fp_t*)A;
+  *(fpd_t*)ANS->v0 = a;
+}
+
+void fp_set_ui(fp *ANS,const uint64_t UI){
    *(fp_t*)ANS->v0 = UI;
 }
 
-void fp_set_neg(fp *ANS,fp *A){
-   *(fp_t*)ANS->v0 = (*(fp_t*)cp_prime.v0 - *(fp_t*)A->v0);
+void fp_set_neg(fp *ANS,const fp *A){
+    const fp_t& a = *(fp_t*)A;
+   *(fp_t*)ANS->v0 = ((*(fp_t*)cp_prime.v0 - a ));
 }
 
 // void fp_set_neg_montgomery(fp *ANS,fp *A){
@@ -114,12 +126,14 @@ void fp_set_neg(fp *ANS,fp *A){
 //   //fp_mod(ANS,ANS->x0,FPLIMB);
 // }
 
-void fp_lshift_1(fp *ANS,fp *A){
-   *(fpd_t*)ANS->v0 =  1<<*(fpd_t*)A->v0;
+void fp_lshift_1(fp *ANS,const fp *A){
+    const fp_t& a = *(fp_t*)A;
+   *(fp_t*)ANS->v0 =  1<<a;
 }
 
-void fp_rshift_1(fp *ANS,fp *A){
-   *(fpd_t*)ANS->v0 = *(fpd_t*)A->v0 >> 1;
+void fp_rshift_1(fp *ANS,const fp *A){
+    const fp_t& a = *(fp_t*)A;
+   *(fp_t*)ANS->v0 = a>>1;
 }
 
 // void fp_hlv(fp *ANS,fp *A){
@@ -337,93 +351,89 @@ void fp_set_random(fp *ANS,gmp_randstate_t state){
 //   mpn_mod(ANS,tmp,FPLIMB2);
 // }
 
-void fp_mod(fp *Ans,fp *A){
-  #ifdef DEBUG_COST_A
-  cost_mod++;
-  #endif
-  const fp_t& a = *(fp_t*)A->v0;
-  *(fp_t*)Ans = a %  *(fp_t*)cp_prime.v0;
-}
+// void fp_mod(fp *Ans,const fp *A){
+//   #ifdef DEBUG_COST_A
+//   cost_mod++;
+//   #endif
+//   const fp_t& a = *(fp_t*)A->v0;
+//   *(fp_t*)Ans->v0 = a %  *(fp_t*)cp_prime.v0;
+// }
 
-void fp_mul(fp *Ans,fp *A,fp *B){
+void fp_mul(fp *Ans,const fp *A,const fp *B){
   #ifdef DEBUG_COST_A
   cost_mul++;
   #endif
+  const fpd_t& a = *(fpd_t*)A->v0;
+  const fpd_t& b = *(fpd_t*)B->v0;
 
-
+  *(fpd_t*)Ans->v0 = (a * b) % (fpd_t)cp_prime.v0;
 
 }
 
-// void fp_mul(fp *ANS,fp *A,fp *B){
-//   #ifdef DEBUG_COST_A
-//   cost_mul++;
-//   #endif
-//   static mp_limb_t tmp_mul[FPLIMB2];
-//   /*
-//     if(mpn_zero_p(A->x0,FPLIMB)==1||mpn_zero_p(B->x0,FPLIMB)==1){
-//       mpn_set_ui(ANS->x0,FPLIMB,0);
-//     }else if(mpn_cmp_ui(A->x0,FPLIMB,1)==0){
-//       if(mpn_cmp(B->x0,prime,FPLIMB)>0) fp_mod(ANS,B->x0,FPLIMB);
-//       else fp_set(ANS,B);
-//     }else if(mpn_cmp_ui(B->x0,FPLIMB,1)==0){
-//       if(mpn_cmp(A->x0,prime,FPLIMB)>0) fp_mod(ANS,A->x0,FPLIMB);
-//       else fp_set(ANS,A);
-//     }else{
-//       mpn_mul_n(tmp_mul,A->x0,B->x0,FPLIMB);
-//       fp_mod(ANS,tmp_mul,FPLIMB2);
-//   }*/
-//   mpn_mul_n(tmp_mul,A->x0,B->x0,FPLIMB);
-//   fp_mod(ANS,tmp_mul,FPLIMB2);
-// }
+void fp_mul_nonmod(fpd *Ans,const fp *A,const fp *B){
+  #ifdef DEBUG_COST_A
+  cost_mul++;
+  #endif
+  const fpd_t& a = *(fpd_t*)A->v0;
+  const fpd_t& b = *(fpd_t*)B->v0;
+  *(fpd_t*)Ans->v0 = a * b;
+}
 
-// void fp_mul_nonmod(fpd_t *ANS,fp *A,fp *B){
-//   #ifdef DEBUG_COST_A
-//   cost_mul++;
-//   #endif
-//   mpn_mul_n(ANS->x0,A->x0,B->x0,FPLIMB);
-// }
+void fp_mul_ui(fp *Ans,const fp *A,const uint64_t UI){
+  #ifdef DEBUG_COST_A
+  cost_mul_ui++;
+  #endif
+  const fp_t& a = *(fp_t*)A->v0;
+  const fp_t& b = UI;
 
-// void fp_mul_ui(fp *ANS,fp *A,unsigned long int UI){
-//   #ifdef DEBUG_COST_A
-//   cost_mul_ui++;
-//   #endif
-//   static mp_limb_t tmp_mul[FPLIMB2];
-//   mpn_mul_ui(tmp_mul,A->x0,FPLIMB,UI);
-//   fp_mod(ANS,tmp_mul,FPLIMB2);
-// }
 
-// void fp_mul_mpn(fp *ANS,fp *A,mp_limb_t *B){
-//   #ifdef DEBUG_COST_A
-//   cost_mul++;
-//   #endif
-//   static mp_limb_t tmp_mul[FPLIMB2];
-//   mpn_mul_n(tmp_mul,A->x0,B,FPLIMB);
-//   fp_mod(ANS,tmp_mul,FPLIMB2);
-// }
+  *(fp_t*)Ans=>v0 = *(fpd_t*)(a * b) % *(fpd_t*)cp_prime.v0;
 
-// void fp_sqr(fp *ANS,fp *A){
-//   #ifdef DEBUG_COST_A
-//   cost_sqr++;
-//   #endif
-//   static mp_limb_t tmp_sqr[FPLIMB2];
-//   mpn_sqr(tmp_sqr,A->x0,FPLIMB);
-//   fp_mod(ANS,tmp_sqr,FPLIMB2);
-// }
+}
 
-// void fp_sqr_nonmod(fpd_t *ANS,fp *A){
-//   #ifdef DEBUG_COST_A
-//   cost_sqr++;
-//   #endif
-//   mpn_sqr(ANS->x0,A->x0,FPLIMB);
-// }
+void fp_mul_fp_t(fp *Ans,const fp *A,const fp_t *B){
+  //   #ifdef DEBUG_COST_A
+  //   cost_mul++;
+  //   #endif
+  const fp_t& a = *(fp_t*)A->v0;
+  const fp_t b = *B;
+  fp z;
+  *(fp_t*)z.v0 = a * b;
+  fp_mod(Ans, &z);
+}
 
-// void fp_add(fp *ANS,fp *A,fp *B){
-//   #ifdef DEBUG_COST_A
-//   cost_add++;
-//   #endif
-//   mpn_add_n(ANS->x0,A->x0,B->x0,FPLIMB);
-//   if(mpn_cmp(ANS->x0,prime,FPLIMB)>=0)mpn_sub_n(ANS->x0,ANS->x0,prime,FPLIMB);
-// }
+void fp_sqr(fp *Ans,const fp *A){
+  //   #ifdef DEBUG_COST_A
+  //   cost_sqr++;
+  //   #endif
+  const fp_t& a = *(fp_t*)A->v0;
+  fp z;
+  *(fp_t*)z.v0 = a * a;
+  fp_mod(Ans, &z);
+}
+
+void fp_sqr_nonmod(fpd *Ans,const fp *A){
+  //   #ifdef DEBUG_COST_A
+  //   cost_sqr++;
+  //   #endif
+  const fp_t& a = *(fp_t*)A->v0;
+  fpd z;
+  *(fpd_t*)Ans->v0 = a * a;
+}
+
+void fp_add(fp *Ans,const fp *A,const fp *B){
+  #ifdef DEBUG_COST_A
+  cost_add++;
+  #endif
+  const fp_t& a = *(fp_t*)A->v0;
+  const fp_t& b = *(fp_t*)B->v0;
+  fp z;
+  *(fp_t*)z.v0 = a + b;
+  if (*(fp_t*)z.v0 >= *(fp_t*)cp_prime.v0) {
+    *(fp_t*)z.v0 -= *(fp_t*)cp_prime.v0;
+  }
+  *(fp_t*)Ans->v0 = *(fp_t*)z.v0;
+}
 
 // void fp_add_nonmod_single(fp *ANS,fp *A,fp *B){
 //   #ifdef DEBUG_COST_A
@@ -439,39 +449,48 @@ void fp_mul(fp *Ans,fp *A,fp *B){
 //   mpn_add_n(ANS->x0,A->x0,B->x0,FPLIMB2);
 // }
 
-// void fp_add_ui(fp *ANS,fp *A,unsigned long int UI){
-//   #ifdef DEBUG_COST_A
-//   cost_add_ui++;
-//   #endif
-//   static mp_limb_t buf[FPLIMB];
-//   mpn_add_ui(buf,A->x0,FPLIMB,UI);
-//   if(mpn_cmp(buf,prime,FPLIMB)>0) mpn_sub_n(ANS->x0,buf,prime,FPLIMB);
-//   else mpn_copyd(ANS->x0,buf,FPLIMB);
-// }
+void fp_add_ui(fp *Ans,const fp *A,const uint64_t UI){
+  #ifdef DEBUG_COST_A
+  cost_add_ui++;
+  #endif
+  const fp_t& a = *(fp_t*)A->v0;
+  const fp_t& b = UI;
+  fp z;
+  *(fp_t*)z.v0 = a + b;
+  if (*(fp_t*)z.v0 >= *(fp_t*)cp_prime.v0) {
+    *(fp_t*)z.v0 -= *(fp_t*)cp_prime.v0;
+  }
+  *(fp_t*)Ans->v0 = *(fp_t*)z.v0;
+}
 
-// void fp_add_mpn(fp *ANS,fp *A,mp_limb_t *B){
-//   #ifdef DEBUG_COST_A
-//   cost_add++;
-//   #endif
-//   static mp_limb_t buf[FPLIMB];
-//   mpn_add_n(buf,A->x0,B,FPLIMB);
-//   if(mpn_cmp(buf,prime,FPLIMB)>0)mpn_sub_n(ANS->x0,buf,prime,FPLIMB);
-//   else mpn_copyd(ANS->x0,buf,FPLIMB);
-// }
+void fp_add_fp_t(fp *Ans,const fp *A,const fp_t *B){
+  #ifdef DEBUG_COST_A
+  cost_add++;
+  #endif
 
-// void fp_sub(fp *ANS,fp *A,fp *B){
-//   #ifdef DEBUG_COST_A
-//   cost_sub++;
-//   #endif
-//   static mp_limb_t buf[FPLIMB];
+  const fp_t& a = *(fp_t*)A->v0;
+  const fp_t& b = *B;
+  fp z;
+  *(fp_t*)z.v0 = a + b;
+  if (*(fp_t*)z.v0 >= *(fp_t*)cp_prime.v0) {
+    *(fp_t*)z.v0 -= *(fp_t*)cp_prime.v0;
+  }
+  *(fp_t*)Ans->v0 = *(fp_t*)z.v0;
+}
 
-//   if(mpn_cmp(A->x0,B->x0,FPLIMB)<0){
-//     mpn_sub_n(buf,A->x0,B->x0,FPLIMB);
-//     mpn_add_n(ANS->x0,prime,buf,FPLIMB);
-//   }else{
-//     mpn_sub_n(ANS->x0,A->x0,B->x0,FPLIMB);
-//   }
-// }
+void fp_sub(fp *Ans,const fp *A,const fp *B){
+  #ifdef DEBUG_COST_A
+  cost_sub++;
+  #endif
+  const fp_t& a = *(fp_t*)A->v0;
+  const fp_t& b = *(fp_t*)B->v0;
+  fp z;
+  *(fp_t*)z.v0 = a -b;
+  if (*(fp_t*)z.v0 < *(fp_t*)cp_zero.v0) {
+    *(fp_t*)z.v0 += *(fp_t*)cp_prime.v0;
+  }
+  *(fp_t*)Ans->v0 = *(fp_t*)z.v0;
+}
 
 // void fp_sub_nonmod_single(fp *ANS,fp *A,fp *B){
 //   #ifdef DEBUG_COST_A
@@ -503,35 +522,36 @@ void fp_mul(fp *Ans,fp *A,fp *B){
 //     mpn_sub_n(ANS->x0,A->x0,B->x0,FPLIMB2);
 //   }
 // }
+void fp_sub_ui(fp *Ans,const fp *A,const uint64_t UI){
+  #ifdef DEBUG_COST_A
+  cost_sub_ui++;
+  #endif
+  const fp_t& a = *(fp_t*)A->v0;
+  const fp_t& b = UI;
+  fp z;
+  *(fp_t*)z.v0 = a - b;
+  if (*(fp_t*)z.v0 >= *(fp_t*)cp_zero.v0) {
+    *(fp_t*)z.v0 += *(fp_t*)cp_prime.v0;
+  }
+  *(fp_t*)Ans->v0 = *(fp_t*)z.v0;
+}
 
-// void fp_sub_ui(fp *ANS,fp *A,unsigned long int UI){
-//   #ifdef DEBUG_COST_A
-//   cost_sub_ui++;
-//   #endif
-//   static mp_limb_t buf[FPLIMB];
-//   if(UI==0) fp_set(ANS,A);
-//   else  mpn_sub_ui(ANS->x0,A->x0,FPLIMB,UI);
-// }
+void fp_sub_fp_t(fp *Ans,const fp *A,const fp_t *B){
+  #ifdef DEBUG_COST_A
+  cost_sub++;
+  #endif
 
-// void fp_sub_mpn(fp *ANS,fp *A,mp_limb_t *B){
-//   #ifdef DEBUG_COST_A
-//   cost_sub++;
-//   #endif
-//   static mp_limb_t buf[FPLIMB];
-//   if(mpn_zero_p(B,FPLIMB)==1){
-//     fp_set(ANS,A);
-//   }else{
-//     if(mpn_cmp(A->x0,B,FPLIMB)<0){
-//       mpn_sub_n(buf,B,A->x0,FPLIMB);
-//       mpn_sub_n(buf,prime,buf,FPLIMB);
-//       fp_mod(ANS,buf,FPLIMB);
-//     }else{
-//       mpn_sub_n(buf,A->x0,B,FPLIMB);
-//       fp_mod(ANS,buf,FPLIMB);
-//     }
-//   }
-// }
+  const fp_t& a = *(fp_t*)A->v0;
+  const fp_t& b = *B;
+  fp z;
+  *(fp_t*)z.v0 = a - b;
+  if (*(fp_t*)z.v0 < *(fp_t*)cp_zero.v0) {
+    *(fp_t*)z.v0 += *(fp_t*)cp_prime.v0;
+  }
+  *(fp_t*)Ans->v0 = *(fp_t*)z.v0;
+}
 
+//extgcd
 // void fp_inv(fp *ANS,fp *A){
 //   #ifdef DEBUG_COST_A
 //   cost_inv++;

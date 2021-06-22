@@ -6,13 +6,20 @@
     #define TTT_EXTERN extern
 #endif
 
-#include "stdint.h"
-#include "stdio.h"
-#include "string.h"
-#include "stdlib.h"
-#include <gmp.h>
+#ifndef DEFINE_H
+#define DEFINE_H
 
+
+#include <stdlib.h>
+#include <gmp.h>
+#include <sys/time.h>
+#include <string.h>
+#include <stdlib.h>
 #include "utils.h"
+#include <string>
+#include <iostream>
+
+#endif
 extern "C"{
     #define WORDS64 11
     #define DWORDS64 22
@@ -26,6 +33,7 @@ extern "C"{
     struct fp{
         uint64_t v0[WORDS64];
     };
+
     struct fp2{
         fp v0[WORDS64];
         fp v1[WORDS64];
@@ -85,6 +93,7 @@ extern "C"{
     };
 
     TTT_EXTERN fp cp_prime;
+    TTT_EXTERN fp cp_zero;
     TTT_EXTERN mpz_t cp_prime_z;
 
 }
