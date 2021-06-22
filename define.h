@@ -4,6 +4,7 @@
 #else
     #define TTT_EXTERN extern
 #endif
+
 #ifndef DEFINE_H
 #define DEFINE_H
 

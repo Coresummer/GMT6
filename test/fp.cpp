@@ -387,7 +387,7 @@ void fp_mul_ui(fp *Ans,const fp *A,const uint64_t UI){
   const fp_t& b = UI;
 
 
-  *(fp_t*)Ans=>v0 = *(fpd_t*)(a * b) % *(fpd_t*)cp_prime.v0;
+  *(fp_t*)Ans->v0 = *(fpd_t*)(a * b) % *(fpd_t*)cp_prime.v0;
 
 }
 
