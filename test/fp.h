@@ -1,6 +1,8 @@
 #include "define.h"
+#define TTT_INSTANCE_HERE
 
 extern "C"{
+    void fp_field_setup();
     void fp_init(fp *A);
     void fpd_init(fpd *A);
 
@@ -28,7 +30,7 @@ extern "C"{
 
     void fp_set_random(fp *ANS,gmp_randstate_t state);
 
-    void fp_mod(fp *Ans, const fp *A);
+    void fp_mod(fp *ANS, const fp *A);
 
     void fp_mul(fp *Ans,const fp *A,const fp *B);
     void fp_mul_nonmod(fpd *Ans,const fp *A,const fp *B);
@@ -45,6 +47,8 @@ extern "C"{
     void fp_sub(fp *ANS,const  fp *A,const  fp *B);
     void fp_sub_ui(fp *Ans,const fp *A,const uint64_t UI);
     void fp_sub_fp_t(fp *Ans,const fp *A,const uint64_t *B);
+
+    TTT_EXTERN fp cp_prime;
 
 }
 

@@ -92,8 +92,8 @@ extern "C"{
         int inf;
     };
 
-    TTT_EXTERN fp cp_prime;
-    TTT_EXTERN fp cp_zero;
-    TTT_EXTERN mpz_t cp_prime_z;
+    // TTT_EXTERN fp cp_prime;
+    // TTT_EXTERN fp cp_zero;
+    // TTT_EXTERN mpz_t cp_prime_z;
 
 }

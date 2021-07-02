@@ -4,8 +4,6 @@
 #define BITS WORDS*8
 #define DBITS DWORDS*8
 
-
-// #include <cstring>
 #include <iostream>
 #include "stdio.h"
 #include "string.h"
@@ -13,18 +11,15 @@
 typedef unsigned _ExtInt(BITS)  fp_t;
 typedef unsigned _ExtInt(DBITS) fpd_t;
 
-void mpn_init(fp_t *op){
-    *op = 0;
-}
+struct fp{
+    uint64_t v0[WORDS];
+};
 
-void mpn_init_set_str_base10(fp_t *op, char* str){
-    *op = 0;
-    
-}
+fp cp_prime;
 
-void mpn_init_set_str_base16(fp_t *op, char* str){
-    *op = 0;
-    
+void fp_init_set_ui(fp *A, const uint64_t UI){
+  fp_t ui = UI;
+  *(fp_t*)A->v0 = ui % *(const fp_t*)(cp_prime.v0);
 }
 
 void mpn_print(fp_t *op, std::string str){
@@ -44,21 +39,24 @@ void mpn_print(fp_t *op, std::string str){
     }
 }
 
+void fp_mul(fp *Ans,const fp *A,const fp *B){
+  #ifdef DEBUG_COST_A
+  cost_mul++;
+  #endif
+  fpd_t da = *(const fp_t*)A->v0;
+  fpd_t db = *(const fp_t*)B->v0;
+  *(fp_t*)Ans->v0 = *(fp_t*)(da * db) % *(fp_t*)cp_prime.v0;
+}
 
 int main()
 {
-    fp_t a;
-    mpn_init(&a);
-    mpn_print(&a, "fp_init(&a): ");
+    *(fp_t*)cp_prime.v0 = 9007199254740997;
 
-    a = 11111111111111;
-    a *= a;
-    a *= a;
-    a *= a;
-    a *= a;
-    a *= a;
-    a *= a;
-    mpn_print(&a, "fp_set_int(&a,11111111111111): ");
-    
-    return 0; 
+    fp a,b,c;
+    fp_init_set_ui(&a,1231532513251343221);
+    fp_init_set_ui(&b,2142163261264930543);
+    fp_init_set_ui(&c,0);
+    // fp_t ans = (a * b) % *(fp_t*)cp_prime.v0;
+    fp_mul(&c,&a,&b);
+    mpn_print((fp_t*)c.v0,"a * b % p");    
 }

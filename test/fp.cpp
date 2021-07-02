@@ -1,3 +1,5 @@
+#define TTT_INSTANCE_HERE
+
 #include "fp.h"
 
 typedef unsigned _ExtInt(BITS)  fp_t;
@@ -10,6 +12,10 @@ char* toCharPtr(std::string str){
     return res;
 }
 
+void fp_field_setup(){
+    *(fp_t*)cp_prime.v0 = 9007199254740997;
+}
+
 void fp_init(fp *A){
   *(fp_t*)A->v0 = 0;
 }
@@ -18,7 +24,8 @@ void fpd_init(fpd *A){
 }
 
 void fp_init_set_ui(fp *A,const uint64_t UI){
-  *(fp_t*)A->v0 = UI;
+  fp_t ui = UI;
+  *(fp_t*)A->v0 = ui % *(fp_t*)cp_prime.v0;
 }
 
 char* fp_get_str(const fp *A){
@@ -53,6 +60,40 @@ char* fpd_get_str(const fpd *A){
     res[2*DBWORDS+1] = '\0';
   }
   return res;
+}
+
+void fp_t_print(fp_t *op, std::string str){
+    std::cout << str ;
+    // printf("%s",str);
+
+    uint8_t buf[BWORDS];
+    memcpy(buf, op, sizeof(buf));
+    printf("0x");
+    if(buf[0]==0){
+        printf("0\n");
+    }else{
+        for(int i=BWORDS-1;i>=0;i--){
+        if(buf[i] != 0) printf("%x",buf[i]);
+        }
+        printf("\n");
+    }
+}
+
+void fpd_t_print(fp_t *op, std::string str){
+    std::cout << str ;
+    // printf("%s",str);
+
+    uint8_t buf[DBWORDS];
+    memcpy(buf, op, sizeof(buf));
+    printf("0x");
+    if(buf[0]==0){
+        printf("0\n");
+    }else{
+        for(int i=DBWORDS-1;i>=0;i--){
+        if(buf[i] != 0) printf("%x",buf[i]);
+        }
+        printf("\n");
+    }
 }
 
 void fp_print(const std::string str,const fp *A){
@@ -92,7 +133,7 @@ void fpd_println(const std::string str,const fpd *A){
 // }
 
 void fp_set(fp *ANS,const fp *A){
-  const fp_t& a = *(fp_t*)A;
+  const fp_t a = *(const fp_t*)A;
   *(fp_t*)ANS->v0 = a;
 }
 
@@ -105,7 +146,7 @@ void fp_set_mpz(fp *ANS,const mpz_t A){
 }
 
 void fpd_set(fpd *ANS,const fpd *A){
-  const fp_t& a = *(fp_t*)A;
+  const fp_t a = *(const fp_t*)A;
   *(fpd_t*)ANS->v0 = a;
 }
 
@@ -114,8 +155,8 @@ void fp_set_ui(fp *ANS,const uint64_t UI){
 }
 
 void fp_set_neg(fp *ANS,const fp *A){
-    const fp_t& a = *(fp_t*)A;
-   *(fp_t*)ANS->v0 = ((*(fp_t*)cp_prime.v0 - a ));
+    const fp_t a = *(const fp_t*)A->v0;
+   *(fp_t*)ANS->v0 = *(fp_t*)cp_prime.v0 - a ;
 }
 
 // void fp_set_neg_montgomery(fp *ANS,fp *A){
@@ -132,7 +173,7 @@ void fp_lshift_1(fp *ANS,const fp *A){
 }
 
 void fp_rshift_1(fp *ANS,const fp *A){
-    const fp_t& a = *(fp_t*)A;
+    const fp_t& a = *(fp_t*)A->v0;
    *(fp_t*)ANS->v0 = a>>1;
 }
 
@@ -143,13 +184,13 @@ void fp_rshift_1(fp *ANS,const fp *A){
 //   mpn_rshift(ANS->x0,buf,FPLIMB,1);
 // }
 
-void fp_set_random(fp *ANS,gmp_randstate_t state){
-  mpz_t tmp;
-  mpz_init(tmp);
-  mpz_urandomm(tmp,state,cp_prime_z);
-  fp_set_mpz(ANS,tmp);
-  mpz_clear(tmp);
-}
+// void fp_set_random(fp *ANS,gmp_randstate_t state){
+//   mpz_t tmp;
+//   mpz_init(tmp);
+//   mpz_urandomm(tmp,state,cp_prime_z);
+//   fp_set_mpz(ANS,tmp);
+//   mpz_clear(tmp);
+// }
 
 // void pre_montgomery(){
 //   mp_limb_t tmp1[FPLIMB+1],tmp2[FPLIMB2+2];
@@ -351,89 +392,89 @@ void fp_set_random(fp *ANS,gmp_randstate_t state){
 //   mpn_mod(ANS,tmp,FPLIMB2);
 // }
 
-// void fp_mod(fp *Ans,const fp *A){
-//   #ifdef DEBUG_COST_A
-//   cost_mod++;
-//   #endif
-//   const fp_t& a = *(fp_t*)A->v0;
-//   *(fp_t*)Ans->v0 = a %  *(fp_t*)cp_prime.v0;
-// }
+void fp_mod(fp *ANS,const fp *A){
+  #ifdef DEBUG_COST_A
+  cost_mod++;
+  #endif
+
+  const fp_t a = *(const fp_t*)A->v0;
+  *(fp_t*)ANS->v0 = a % *(fp_t*)cp_prime.v0;
+}
 
 void fp_mul(fp *Ans,const fp *A,const fp *B){
   #ifdef DEBUG_COST_A
   cost_mul++;
   #endif
-  const fpd_t& a = *(fpd_t*)A->v0;
-  const fpd_t& b = *(fpd_t*)B->v0;
+  fpd_t a = *(const fp_t*)A->v0;
+  fpd_t b = *(const fp_t*)B->v0;
+  fp_t c = *(fp_t*)(a * b);
 
-  *(fpd_t*)Ans->v0 = (a * b) % (fpd_t)cp_prime.v0;
-
+  // *(fp_t*)Ans->v0 = c % *(fp_t*)cp_prime.v0;
 }
 
-void fp_mul_nonmod(fpd *Ans,const fp *A,const fp *B){
-  #ifdef DEBUG_COST_A
-  cost_mul++;
-  #endif
-  const fpd_t& a = *(fpd_t*)A->v0;
-  const fpd_t& b = *(fpd_t*)B->v0;
-  *(fpd_t*)Ans->v0 = a * b;
-}
+// void fp_mul_nonmod(fpd *Ans,const fp *A,const fp *B){
+//   #ifdef DEBUG_COST_A
+//   cost_mul++;
+//   #endif
+//   const fpd_t& a = *(fpd_t*)A->v0;
+//   const fpd_t& b = *(fpd_t*)B->v0;
+//   *(fpd_t*)Ans->v0 = a * b;
+// }
 
-void fp_mul_ui(fp *Ans,const fp *A,const uint64_t UI){
-  #ifdef DEBUG_COST_A
-  cost_mul_ui++;
-  #endif
-  const fp_t& a = *(fp_t*)A->v0;
-  const fp_t& b = UI;
+// void fp_mul_ui(fp *Ans,const fp *A,const uint64_t UI){
+//   #ifdef DEBUG_COST_A
+//   cost_mul_ui++;
+//   #endif
+//   const fp_t& a = *(fp_t*)A->v0;
+//   const fp_t& b = UI;
 
+//   *(fp_t*)Ans->v0 = *(fpd_t*)(a * b) % *(fpd_t*)cp_prime.v0;
 
-  *(fp_t*)Ans->v0 = *(fpd_t*)(a * b) % *(fpd_t*)cp_prime.v0;
+// }
 
-}
+// void fp_mul_fp_t(fp *Ans,const fp *A,const fp_t *B){
+//   //   #ifdef DEBUG_COST_A
+//   //   cost_mul++;
+//   //   #endif
+//   const fp_t& a = *(fp_t*)A->v0;
+//   const fp_t b = *B;
+//   fp z;
+//   *(fp_t*)z.v0 = a * b;
+//   fp_mod(Ans, &z);
+// }
 
-void fp_mul_fp_t(fp *Ans,const fp *A,const fp_t *B){
-  //   #ifdef DEBUG_COST_A
-  //   cost_mul++;
-  //   #endif
-  const fp_t& a = *(fp_t*)A->v0;
-  const fp_t b = *B;
-  fp z;
-  *(fp_t*)z.v0 = a * b;
-  fp_mod(Ans, &z);
-}
+// void fp_sqr(fp *Ans,const fp *A){
+//   //   #ifdef DEBUG_COST_A
+//   //   cost_sqr++;
+//   //   #endif
+//   const fp_t& a = *(fp_t*)A->v0;
+//   fp z;
+//   *(fp_t*)z.v0 = a * a;
+//   fp_mod(Ans, &z);
+// }
 
-void fp_sqr(fp *Ans,const fp *A){
-  //   #ifdef DEBUG_COST_A
-  //   cost_sqr++;
-  //   #endif
-  const fp_t& a = *(fp_t*)A->v0;
-  fp z;
-  *(fp_t*)z.v0 = a * a;
-  fp_mod(Ans, &z);
-}
+// void fp_sqr_nonmod(fpd *Ans,const fp *A){
+//   //   #ifdef DEBUG_COST_A
+//   //   cost_sqr++;
+//   //   #endif
+//   const fp_t& a = *(fp_t*)A->v0;
+//   fpd z;
+//   *(fpd_t*)Ans->v0 = a * a;
+// }
 
-void fp_sqr_nonmod(fpd *Ans,const fp *A){
-  //   #ifdef DEBUG_COST_A
-  //   cost_sqr++;
-  //   #endif
-  const fp_t& a = *(fp_t*)A->v0;
-  fpd z;
-  *(fpd_t*)Ans->v0 = a * a;
-}
-
-void fp_add(fp *Ans,const fp *A,const fp *B){
-  #ifdef DEBUG_COST_A
-  cost_add++;
-  #endif
-  const fp_t& a = *(fp_t*)A->v0;
-  const fp_t& b = *(fp_t*)B->v0;
-  fp z;
-  *(fp_t*)z.v0 = a + b;
-  if (*(fp_t*)z.v0 >= *(fp_t*)cp_prime.v0) {
-    *(fp_t*)z.v0 -= *(fp_t*)cp_prime.v0;
-  }
-  *(fp_t*)Ans->v0 = *(fp_t*)z.v0;
-}
+// void fp_add(fp *Ans,const fp *A,const fp *B){
+//   #ifdef DEBUG_COST_A
+//   cost_add++;
+//   #endif
+//   const fp_t& a = *(fp_t*)A->v0;
+//   const fp_t& b = *(fp_t*)B->v0;
+//   fp z;
+//   *(fp_t*)z.v0 = a + b;
+//   if (*(fp_t*)z.v0 >= *(fp_t*)cp_prime.v0) {
+//     *(fp_t*)z.v0 -= *(fp_t*)cp_prime.v0;
+//   }
+//   *(fp_t*)Ans->v0 = *(fp_t*)z.v0;
+// }
 
 // void fp_add_nonmod_single(fp *ANS,fp *A,fp *B){
 //   #ifdef DEBUG_COST_A
@@ -449,48 +490,48 @@ void fp_add(fp *Ans,const fp *A,const fp *B){
 //   mpn_add_n(ANS->x0,A->x0,B->x0,FPLIMB2);
 // }
 
-void fp_add_ui(fp *Ans,const fp *A,const uint64_t UI){
-  #ifdef DEBUG_COST_A
-  cost_add_ui++;
-  #endif
-  const fp_t& a = *(fp_t*)A->v0;
-  const fp_t& b = UI;
-  fp z;
-  *(fp_t*)z.v0 = a + b;
-  if (*(fp_t*)z.v0 >= *(fp_t*)cp_prime.v0) {
-    *(fp_t*)z.v0 -= *(fp_t*)cp_prime.v0;
-  }
-  *(fp_t*)Ans->v0 = *(fp_t*)z.v0;
-}
+// void fp_add_ui(fp *Ans,const fp *A,const uint64_t UI){
+//   #ifdef DEBUG_COST_A
+//   cost_add_ui++;
+//   #endif
+//   const fp_t& a = *(fp_t*)A->v0;
+//   const fp_t& b = UI;
+//   fp z;
+//   *(fp_t*)z.v0 = a + b;
+//   if (*(fp_t*)z.v0 >= *(fp_t*)cp_prime.v0) {
+//     *(fp_t*)z.v0 -= *(fp_t*)cp_prime.v0;
+//   }
+//   *(fp_t*)Ans->v0 = *(fp_t*)z.v0;
+// }
 
-void fp_add_fp_t(fp *Ans,const fp *A,const fp_t *B){
-  #ifdef DEBUG_COST_A
-  cost_add++;
-  #endif
+// void fp_add_fp_t(fp *Ans,const fp *A,const fp_t *B){
+//   #ifdef DEBUG_COST_A
+//   cost_add++;
+//   #endif
 
-  const fp_t& a = *(fp_t*)A->v0;
-  const fp_t& b = *B;
-  fp z;
-  *(fp_t*)z.v0 = a + b;
-  if (*(fp_t*)z.v0 >= *(fp_t*)cp_prime.v0) {
-    *(fp_t*)z.v0 -= *(fp_t*)cp_prime.v0;
-  }
-  *(fp_t*)Ans->v0 = *(fp_t*)z.v0;
-}
+//   const fp_t& a = *(fp_t*)A->v0;
+//   const fp_t& b = *B;
+//   fp z;
+//   *(fp_t*)z.v0 = a + b;
+//   if (*(fp_t*)z.v0 >= *(fp_t*)cp_prime.v0) {
+//     *(fp_t*)z.v0 -= *(fp_t*)cp_prime.v0;
+//   }
+//   *(fp_t*)Ans->v0 = *(fp_t*)z.v0;
+// }
 
-void fp_sub(fp *Ans,const fp *A,const fp *B){
-  #ifdef DEBUG_COST_A
-  cost_sub++;
-  #endif
-  const fp_t& a = *(fp_t*)A->v0;
-  const fp_t& b = *(fp_t*)B->v0;
-  fp z;
-  *(fp_t*)z.v0 = a -b;
-  if (*(fp_t*)z.v0 < *(fp_t*)cp_zero.v0) {
-    *(fp_t*)z.v0 += *(fp_t*)cp_prime.v0;
-  }
-  *(fp_t*)Ans->v0 = *(fp_t*)z.v0;
-}
+// void fp_sub(fp *Ans,const fp *A,const fp *B){
+//   #ifdef DEBUG_COST_A
+//   cost_sub++;
+//   #endif
+//   const fp_t& a = *(fp_t*)A->v0;
+//   const fp_t& b = *(fp_t*)B->v0;
+//   fp z;
+//   *(fp_t*)z.v0 = a -b;
+//   if (*(fp_t*)z.v0 < *(fp_t*)cp_zero.v0) {
+//     *(fp_t*)z.v0 += *(fp_t*)cp_prime.v0;
+//   }
+//   *(fp_t*)Ans->v0 = *(fp_t*)z.v0;
+// }
 
 // void fp_sub_nonmod_single(fp *ANS,fp *A,fp *B){
 //   #ifdef DEBUG_COST_A
@@ -522,34 +563,35 @@ void fp_sub(fp *Ans,const fp *A,const fp *B){
 //     mpn_sub_n(ANS->x0,A->x0,B->x0,FPLIMB2);
 //   }
 // }
-void fp_sub_ui(fp *Ans,const fp *A,const uint64_t UI){
-  #ifdef DEBUG_COST_A
-  cost_sub_ui++;
-  #endif
-  const fp_t& a = *(fp_t*)A->v0;
-  const fp_t& b = UI;
-  fp z;
-  *(fp_t*)z.v0 = a - b;
-  if (*(fp_t*)z.v0 >= *(fp_t*)cp_zero.v0) {
-    *(fp_t*)z.v0 += *(fp_t*)cp_prime.v0;
-  }
-  *(fp_t*)Ans->v0 = *(fp_t*)z.v0;
-}
 
-void fp_sub_fp_t(fp *Ans,const fp *A,const fp_t *B){
-  #ifdef DEBUG_COST_A
-  cost_sub++;
-  #endif
+// void fp_sub_ui(fp *Ans,const fp *A,const uint64_t UI){
+//   #ifdef DEBUG_COST_A
+//   cost_sub_ui++;
+//   #endif
+//   const fp_t& a = *(fp_t*)A->v0;
+//   const fp_t& b = UI;
+//   fp z;
+//   *(fp_t*)z.v0 = a - b;
+//   if (*(fp_t*)z.v0 >= *(fp_t*)cp_zero.v0) {
+//     *(fp_t*)z.v0 += *(fp_t*)cp_prime.v0;
+//   }
+//   *(fp_t*)Ans->v0 = *(fp_t*)z.v0;
+// }
 
-  const fp_t& a = *(fp_t*)A->v0;
-  const fp_t& b = *B;
-  fp z;
-  *(fp_t*)z.v0 = a - b;
-  if (*(fp_t*)z.v0 < *(fp_t*)cp_zero.v0) {
-    *(fp_t*)z.v0 += *(fp_t*)cp_prime.v0;
-  }
-  *(fp_t*)Ans->v0 = *(fp_t*)z.v0;
-}
+// void fp_sub_fp_t(fp *Ans,const fp *A,const fp_t *B){
+//   #ifdef DEBUG_COST_A
+//   cost_sub++;
+//   #endif
+
+//   const fp_t& a = *(fp_t*)A->v0;
+//   const fp_t& b = *B;
+//   fp z;
+//   *(fp_t*)z.v0 = a - b;
+//   if (*(fp_t*)z.v0 < *(fp_t*)cp_zero.v0) {
+//     *(fp_t*)z.v0 += *(fp_t*)cp_prime.v0;
+//   }
+//   *(fp_t*)Ans->v0 = *(fp_t*)z.v0;
+// }
 
 //extgcd
 // void fp_inv(fp *ANS,fp *A){
