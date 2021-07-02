@@ -34,18 +34,51 @@ void fp_t_print(fp_t *op, std::string str){
     }
 }
 
+void fpd_t_print(fpd_t *op, std::string str){
+    std::cout << str ;
+    // printf("%s",str);
 
-void fp_t_mod(fp_t *ANS, const fp_t *A, const fp_t *P){
-    fp_t ans, a, p;
-    a = *(fp_t*)A;
-    fp_t_print(&a, "a");
-    p = *(fp_t*)P;
-    fp_t_print(&p, "p");
-    ans = 0;
-    fp_t_print(&ans, "ans");
-    a %= p;
-    *ANS = a;
-    fp_t_print(&a, "ans"); //code 70 with this line
+    uint8_t buf[DWORDS];
+    memcpy(buf, op, sizeof(buf));
+    printf("0x");
+    if(buf[0]==0){
+        printf("0\n");
+    }else{
+        for(int i=DWORDS-1;i>=0;i--){
+        if(buf[i] != 0) printf("%x",buf[i]);
+        }
+        printf("\n");
+    }
+}
+
+void fp_mul(fp* ANS, fp* A, fp* B){
+    fp_t c,p,res;
+    fpd_t a,b,dres;
+    a = *(fp_t*)A->v0;
+    b = *(fp_t*)B->v0;
+    dres = a*b;
+
+    // p = *(fp_t*)cp_prime.v0;
+    p=9007199254740997;
+    *(fp_t*)res = dres;
+    c = res % p;
+
+    *(fp_t*)ANS->v0 = c;
+}
+
+void fp_t_modtest(fp_t* ANS){
+    fp_t a,b,c,p;
+
+    a=1231532513251343221;
+    b=2142163261264930543;
+    c=0;
+    p=9007199254740997;
+    // *(fp_t*)c=0;
+    c = (a*b) % p;
+    fp_t_print(&c,"a * b % p:");    
+
+    *ANS = c;
+
 }
 
 void fp_init_set_ui(fp *A, const uint64_t UI){
@@ -76,7 +109,16 @@ int main()
     *(fp_t*)a.v0=1231532513251343221;
     *(fp_t*)b.v0=2142163261264930543;
     *(fp_t*)c.v0=0;
-    //*(fp_t*)c.v0= (*(fp_t*)a.v0 * *(fp_t*)b.v0 ) % *(fp_t*)cp_prime.v0;
-    fp_t_mod((fp_t*)c.v0, (fp_t*)a.v0, (fp_t*)cp_prime.v0);
-    fp_t_print((fp_t*)c.v0,"a * b % p");    
+    *(fp_t*)c.v0= (*(fp_t*)a.v0 * *(fp_t*)b.v0 ) % *(fp_t*)cp_prime.v0;
+    // fp_t_mod((fp_t*)c.v0, (fp_t*)a.v0, (fp_t*)cp_prime.v0);
+    fp_t_print((fp_t*)c.v0,"a * b % p ");  
+
+    printf("fp_t_mod\n");
+    fp_t ans;
+    fp_t_modtest(&ans);
+    fp_t_print(&ans,"a * b % p:");  
+
+    fp_mul(&c, &a,&b);
+    fp_t_print((fp_t*)c.v0,"a * b % p ");  
+
 }
