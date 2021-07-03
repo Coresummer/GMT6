@@ -19,7 +19,7 @@ void efp5_jacobian_init(efp5_jacobian_t *P){
   fp5_init(&P->z);
   P->infinity=1;
 }
-void efp5_printf(char *str,efp5_t *P){
+void efp5_printf(std::string str ,efp5_t *P){
   printf("%s",str);
   if(P->infinity==0){
     printf("(");
@@ -32,7 +32,7 @@ void efp5_printf(char *str,efp5_t *P){
   }
 }
 
-void efp5_println(char *str,efp5_t *P){
+void efp5_println(std::string str ,efp5_t *P){
   printf("%s",str);
   if(P->infinity==0){
     printf("(");
@@ -45,7 +45,7 @@ void efp5_println(char *str,efp5_t *P){
   }
 }
 
-void efp5_projective_printf(char *str,efp5_projective_t *P){
+void efp5_projective_printf(std::string str ,efp5_projective_t *P){
   printf("%s",str);
   if(P->infinity==0){
     printf("(");
@@ -60,7 +60,7 @@ void efp5_projective_printf(char *str,efp5_projective_t *P){
   }
 }
 
-void efp5_jacobian_printf(char *str,efp5_jacobian_t *P){
+void efp5_jacobian_printf(std::string str ,efp5_jacobian_t *P){
   printf("%s",str);
   if(P->infinity==0){
     printf("(");
@@ -75,7 +75,7 @@ void efp5_jacobian_printf(char *str,efp5_jacobian_t *P){
   }
 }
 
-void efp5_printf_montgomery(char *str,efp5_t *P){
+void efp5_printf_montgomery(std::string str ,efp5_t *P){
   printf("%s",str);
   if(P->infinity==0){
     printf("(");
@@ -88,22 +88,7 @@ void efp5_printf_montgomery(char *str,efp5_t *P){
   }
 }
 
-void efp5_jacobian_printf_montgomery(char *str,efp5_jacobian_t *P){
-  printf("%s",str);
-  if(P->infinity==0){
-    printf("(");
-    fp5_printf_montgomery("",&P->x);
-    printf(",");
-    fp5_printf_montgomery("",&P->y);
-    printf(",");
-    fp5_printf_montgomery("",&P->z);
-    printf(")");
-  }else{
-    printf("Infinity");
-  }
-}
-
-void efp5_projective_printf_montgomery(char *str,efp5_projective_t *P){
+void efp5_jacobian_printf_montgomery(std::string str ,efp5_jacobian_t *P){
   printf("%s",str);
   if(P->infinity==0){
     printf("(");
@@ -118,7 +103,22 @@ void efp5_projective_printf_montgomery(char *str,efp5_projective_t *P){
   }
 }
 
-void efp5_projective_printf_affine(char *str,efp5_projective_t *P){
+void efp5_projective_printf_montgomery(std::string str ,efp5_projective_t *P){
+  printf("%s",str);
+  if(P->infinity==0){
+    printf("(");
+    fp5_printf_montgomery("",&P->x);
+    printf(",");
+    fp5_printf_montgomery("",&P->y);
+    printf(",");
+    fp5_printf_montgomery("",&P->z);
+    printf(")");
+  }else{
+    printf("Infinity");
+  }
+}
+
+void efp5_projective_printf_affine(std::string str ,efp5_projective_t *P){
   static efp5_t out;
   efp5_projective_to_affine(&out,P);
   printf("%s",str);
@@ -133,7 +133,7 @@ void efp5_projective_printf_affine(char *str,efp5_projective_t *P){
   }
 }
 
-void efp5_projective_printf_affine_montgomery(char *str,efp5_projective_t *P){
+void efp5_projective_printf_affine_montgomery(std::string str ,efp5_projective_t *P){
   static efp5_t out;
   efp5_projective_to_affine_montgomery(&out,P);
   printf("%s",str);

@@ -4,10 +4,10 @@
 #include "mpn.h"
 
 void fp_init(fp_t *A);
-void fp_printf(char *str,fp_t *A);
-void fpd_printf(char *str,fpd_t *A);
-void fp_println(char *str,fp_t *A);
-void fp_printf_montgomery(char *str,fp_t *A);
+void fp_printf(std::string str ,fp_t *A);
+void fpd_printf(std::string str ,fpd_t *A);
+void fp_println(std::string str ,fp_t *A);
+void fp_printf_montgomery(std::string str ,fp_t *A);
 void fp_set(fp_t *ANS,fp_t *A);
 void fpd_set(fpd_t *ANS,fpd_t *A);
 void fp_set_ui(fp_t *ANS,unsigned long int UI);

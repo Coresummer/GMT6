@@ -5,24 +5,24 @@ void fp2_init(fp2_t *A){
   fp_init(&A->x1);
 }
 
-void fp2_printf(char *str,fp2_t *A){
-  gmp_printf("%s(",str);
+void fp2_printf(std::string str ,fp2_t *A){
+  gmp_printf("%s(",str.c_str());
   fp_printf("",&A->x0);
   gmp_printf(",");
   fp_printf("",&A->x1);
   gmp_printf(")\n");
 }
 
-void fp2_println(char *str,fp2_t *A){
-  gmp_printf("%s(",str);
+void fp2_println(std::string str ,fp2_t *A){
+  gmp_printf("%s(",str.c_str());
   fp_printf("",&A->x0);
   gmp_printf(",");
   fp_printf("",&A->x1);
   gmp_printf(")\n");
 }
 
-void fpd2_println(char *str,fpd2_t *A){
-  gmp_printf("%s(",str);
+void fpd2_println(std::string str ,fpd2_t *A){
+  gmp_printf("%s(",str.c_str());
   fpd_printf("",&A->x0);
   gmp_printf(",");
   fpd_printf("",&A->x1);
@@ -30,8 +30,8 @@ void fpd2_println(char *str,fpd2_t *A){
 
 }
 
-void fp2_printf_montgomery(char *str,fp2_t *A){
-  gmp_printf("%s(",str);
+void fp2_printf_montgomery(std::string str ,fp2_t *A){
+  gmp_printf("%s(",str.c_str());
   fp_printf_montgomery("",&A->x0);
   gmp_printf(",");
   fp_printf_montgomery("",&A->x1);
@@ -377,7 +377,7 @@ void fp2_frobenius_map_p1(fp2_t *ANS,fp2_t *A){
   fp_set_neg(&ANS->x1,&A->x1);
 }
 
-void fp2_mul_basis(fp2_t *ANS,fp2_t *A){
+void fp2_mul_base(fp2_t *ANS,fp2_t *A){
   static fp2_t tmp_A;
   fp2_set(&tmp_A,A);
 

@@ -39,6 +39,7 @@ int main(){
         mpz_tdiv_q_ui(t,t,2);
         mpz_tdiv_q_ui(R,R,2);
         mpz_mul_ui(i,i,2);
+        
     }
 
     // mpz_mul(rrp,p,pr);

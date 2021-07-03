@@ -4,10 +4,10 @@
 #include "fp.h"
 
 void fp2_init(fp2_t *A);
-void fp2_printf(char *str,fp2_t *A);
-void fp2_println(char *str,fp2_t *A);
-void fpd2_println(char *str,fpd2_t *A);
-void fp2_printf_montgomery(char *str,fp2_t *A);
+void fp2_printf(std::string str ,fp2_t *A);
+void fp2_println(std::string str ,fp2_t *A);
+void fpd2_println(std::string str ,fpd2_t *A);
+void fp2_printf_montgomery(std::string str ,fp2_t *A);
 void fp2_set(fp2_t *ANS,fp2_t *A);
 void fp2_set_ui(fp2_t *ANS,unsigned long int UI);
 void fp2_set_ui_ui(fp2_t *ANS,unsigned long int UI);
@@ -55,6 +55,6 @@ void fp2_frobenius_map_p1(fp2_t *ANS,fp2_t *A);
 void fp2_frobenius_map_p2(fp2_t *ANS,fp2_t *A);
 void fp2_frobenius_map_p3(fp2_t *ANS,fp2_t *A);
 
-void fp2_mul_basis(fp2_t *ANS,fp2_t *A);
+void fp2_mul_base(fp2_t *ANS,fp2_t *A);
 
 #endif

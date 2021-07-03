@@ -4,9 +4,9 @@
 #include "fp7.h"
 
 void fp14_init(fp14_t *A);
-void fp14_printf(char *str,fp14_t *A);
-void fp14_println(char *str,fp14_t *A);
-void fp14_printf_montgomery(char *str,fp14_t *A);
+void fp14_printf(std::string str ,fp14_t *A);
+void fp14_println(std::string str ,fp14_t *A);
+void fp14_printf_montgomery(std::string str ,fp14_t *A);
 void fp14_set(fp14_t *ANS,fp14_t *A);
 void fp14_set_ui(fp14_t *ANS,unsigned long int UI);
 void fp14_set_ui_ui(fp14_t *ANS,unsigned long int UI);

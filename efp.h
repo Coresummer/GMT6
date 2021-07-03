@@ -6,10 +6,10 @@
 void efp_init(efp_t *P);
 void efp_projective_init(efp_projective_t *P);
 void efp_jacobian_init(efp_jacobian_t *P);
-void efp_printf(char *str,efp_t *P);
-void efp_println(char *str,efp_t *P);
-void efp_projective_printf(char *str,efp_projective_t *P);
-void efp_jacobian_printf(char *str,efp_jacobian_t *P);
+void efp_printf(std::string str ,efp_t *P);
+void efp_println(std::string str ,efp_t *P);
+void efp_projective_printf(std::string str ,efp_projective_t *P);
+void efp_jacobian_printf(std::string str ,efp_jacobian_t *P);
 void efp_set(efp_t *ANS,efp_t *A);
 void efp_projective_set(efp_projective_t *ANS,efp_projective_t *A);
 void efp_jacobian_set(efp_jacobian_t *ANS,efp_jacobian_t *A);

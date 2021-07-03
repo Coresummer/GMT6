@@ -20,7 +20,7 @@ void efp_jacobian_init(efp_jacobian_t *P){
   P->infinity=1;
 }
 
-void efp_printf(char *str,efp_t *P){
+void efp_printf(std::string str ,efp_t *P){
   printf("%s",str);
   if(P->infinity==0){
     printf("(");
@@ -33,7 +33,7 @@ void efp_printf(char *str,efp_t *P){
   }
 }
 
-void efp_println(char *str,efp_t *P){
+void efp_println(std::string str ,efp_t *P){
   printf("%s",str);
   if(P->infinity==0){
     printf("(");
@@ -46,7 +46,7 @@ void efp_println(char *str,efp_t *P){
   }
 }
 
-void efp_projective_printf(char *str,efp_projective_t *P){
+void efp_projective_printf(std::string str ,efp_projective_t *P){
   printf("%s",str);
   if(P->infinity==0){
     printf("(");
@@ -61,7 +61,7 @@ void efp_projective_printf(char *str,efp_projective_t *P){
   }
 }
 
-void efp_jacobian_printf(char *str,efp_jacobian_t *P){
+void efp_jacobian_printf(std::string str ,efp_jacobian_t *P){
   printf("%s",str);
   if(P->infinity==0){
     printf("(");

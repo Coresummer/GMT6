@@ -1,24 +1,12 @@
-//まだできていない関数！！！
-/*fp5.c*/
-//fp5_mul_lazy_montgomery
-//fp5_mul_nonmod_montgomery
-//fp5_sqr_lazy_montgomery
-//fp5_inv_lazy_montgomery
-/*efp.c*/
-//efp_ecd_jacobian_lazy_montgomery
-//efp_eca_jacobian_lazy_montgomery
-//efp_eca_mixture_lazy_montgomery
-/*efp5.c*/
-//efp5_ecd_jacobian_lazy_montgomery
-//efp5_eca_jacobian_lazy_montgomery
-//efp5_eca_mixture_lazy_montgomery
+  
+#define TTT_INSTANCE_HERE
 
 #include "define.h"
 #include "count.h"
 #include "scalar.h"
 #include "mpn.h"
 #include "fp.h"
-#include "fp3.h"
+#include "fp2.h"
 #include "fp6.h"
 #include "test_fp.h"
 #include "efp.h"

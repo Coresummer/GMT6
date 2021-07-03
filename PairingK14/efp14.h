@@ -4,8 +4,8 @@
 #include "efp7.h"
 
 void efp14_init(efp14_t *P);
-void efp14_printf(char *str,efp14_t *P);
-void efp14_println(char *str,efp14_t *P);
+void efp14_printf(std::string str ,efp14_t *P);
+void efp14_println(std::string str ,efp14_t *P);
 void efp14_set(efp14_t *ANS,efp14_t *A);
 void efp14_set_ui(efp14_t *ANS,unsigned long int UI1,unsigned long int UI2);
 void efp14_set_mpn(efp14_t *ANS,mp_limb_t *A);

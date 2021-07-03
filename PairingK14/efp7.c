@@ -19,7 +19,7 @@ void efp7_jacobian_init(efp7_jacobian_t *P){
   fp7_init(&P->z);
   P->infinity=1;
 }
-void efp7_printf(char *str,efp7_t *P){
+void efp7_printf(std::string str ,efp7_t *P){
   printf("%s",str);
   if(P->infinity==0){
     printf("(");
@@ -32,7 +32,7 @@ void efp7_printf(char *str,efp7_t *P){
   }
 }
 
-void efp7_println(char *str,efp7_t *P){
+void efp7_println(std::string str ,efp7_t *P){
   printf("%s",str);
   if(P->infinity==0){
     printf("(");
@@ -45,7 +45,7 @@ void efp7_println(char *str,efp7_t *P){
   }
 }
 
-void efp7_projective_printf(char *str,efp7_projective_t *P){
+void efp7_projective_printf(std::string str ,efp7_projective_t *P){
   printf("%s",str);
   if(P->infinity==0){
     printf("(");
@@ -60,7 +60,7 @@ void efp7_projective_printf(char *str,efp7_projective_t *P){
   }
 }
 
-void efp7_jacobian_printf(char *str,efp7_jacobian_t *P){
+void efp7_jacobian_printf(std::string str ,efp7_jacobian_t *P){
   printf("%s",str);
   if(P->infinity==0){
     printf("(");
@@ -75,7 +75,7 @@ void efp7_jacobian_printf(char *str,efp7_jacobian_t *P){
   }
 }
 
-void efp7_printf_montgomery(char *str,efp7_t *P){
+void efp7_printf_montgomery(std::string str ,efp7_t *P){
   printf("%s",str);
   if(P->infinity==0){
     printf("(");
@@ -88,22 +88,7 @@ void efp7_printf_montgomery(char *str,efp7_t *P){
   }
 }
 
-void efp7_jacobian_printf_montgomery(char *str,efp7_jacobian_t *P){
-  printf("%s",str);
-  if(P->infinity==0){
-    printf("(");
-    fp7_printf_montgomery("",&P->x);
-    printf(",");
-    fp7_printf_montgomery("",&P->y);
-    printf(",");
-    fp7_printf_montgomery("",&P->z);
-    printf(")");
-  }else{
-    printf("Infinity");
-  }
-}
-
-void efp7_projective_printf_montgomery(char *str,efp7_projective_t *P){
+void efp7_jacobian_printf_montgomery(std::string str ,efp7_jacobian_t *P){
   printf("%s",str);
   if(P->infinity==0){
     printf("(");
@@ -118,7 +103,22 @@ void efp7_projective_printf_montgomery(char *str,efp7_projective_t *P){
   }
 }
 
-void efp7_projective_printf_affine(char *str,efp7_projective_t *P){
+void efp7_projective_printf_montgomery(std::string str ,efp7_projective_t *P){
+  printf("%s",str);
+  if(P->infinity==0){
+    printf("(");
+    fp7_printf_montgomery("",&P->x);
+    printf(",");
+    fp7_printf_montgomery("",&P->y);
+    printf(",");
+    fp7_printf_montgomery("",&P->z);
+    printf(")");
+  }else{
+    printf("Infinity");
+  }
+}
+
+void efp7_projective_printf_affine(std::string str ,efp7_projective_t *P){
   static efp7_t out;
   efp7_projective_to_affine(&out,P);
   printf("%s",str);
@@ -133,7 +133,7 @@ void efp7_projective_printf_affine(char *str,efp7_projective_t *P){
   }
 }
 
-void efp7_projective_printf_affine_montgomery(char *str,efp7_projective_t *P){
+void efp7_projective_printf_affine_montgomery(std::string str ,efp7_projective_t *P){
   static efp7_t out;
   efp7_projective_to_affine_montgomery(&out,P);
   printf("%s",str);
