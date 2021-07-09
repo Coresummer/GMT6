@@ -89,8 +89,8 @@ void check_pairing(){
 
   generate_g1(&P);
   generate_g2(&Q);
-  fp_set(&Q_dash.x.x0.x0,&Q.x.x0.x1);
-  fp_set(&Q_dash.y.x0.x0,&Q.y.x1.x1);
+  fp_set(&Q_dash.x.x0.x0,&Q.x.x2.x0);
+  fp_set(&Q_dash.y.x0.x0,&Q.y.x0.x1);
   Q_dash.infinity = 0;
 
   mpz_urandomm(a,state,prime_z);
