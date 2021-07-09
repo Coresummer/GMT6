@@ -8,8 +8,8 @@ void efp6_to_Jacefp(efp_jacobian_t *ANS,efp6_t *A){
 }
 
 void efp6_to_efp(efp_t *ANS,efp6_t *A){ 
-  fp_set(&ANS->x,&A->x.x0.x1);
-  fp_set(&ANS->y,&A->y.x1.x1);
+  fp_set(&ANS->x,&A->x.x2.x1);
+  fp_set(&ANS->y,&A->y.x0.x1);
   ANS->infinity = A->infinity;
 }
 
@@ -45,18 +45,18 @@ void ff_lttp(fp6_t *f, efp_jacobian_t *S, efp_t *P){
   fp_mul(&nextZ,&nextZ,&S->z);
 
   fp_sqr(&tmp1_fp,&S->z);
-  fp_mul(&tmp1_fp6.x1.x1,&nextZ,&tmp1_fp); //tmp1_fp = rambda_d
-  fp_mul_base_inv(&tmp1_fp6.x1.x1,&tmp1_fp6.x1.x1);
-  fp_mul(&tmp1_fp6.x1.x1,&tmp1_fp6.x1.x1,&P->y);
+  fp_mul(&tmp1_fp6.x0.x1,&nextZ,&tmp1_fp); //tmp1_fp = rambda_d
+  fp_mul_base_inv(&tmp1_fp6.x0.x1,&tmp1_fp6.x0.x1);
+  fp_mul(&tmp1_fp6.x0.x1,&tmp1_fp6.x0.x1,&P->y);
 
   fp_mul_ui(&tmp2_fp,&t1,2);
   fp_mul(&tmp3_fp,&t3,&S->x);
   fp_sub(&tmp1_fp6.x0.x0,&tmp3_fp,&tmp2_fp);
 
-  fp_mul(&tmp1_fp6.x0.x2,&t3,&P->x);
-  fp_mul(&tmp1_fp6.x0.x2,&tmp1_fp6.x0.x2,&tmp1_fp);
-  fp_set_neg(&tmp1_fp6.x0.x2,&tmp1_fp6.x0.x2);
-  fp_mul_base_inv(&tmp1_fp6.x0.x2,&tmp1_fp6.x0.x2);
+  fp_mul(&tmp1_fp6.x1.x1,&t3,&P->x);
+  fp_mul(&tmp1_fp6.x1.x1,&tmp1_fp6.x1.x1,&tmp1_fp);
+  fp_set_neg(&tmp1_fp6.x1.x1,&tmp1_fp6.x1.x1);
+  fp_mul_base_inv(&tmp1_fp6.x1.x1,&tmp1_fp6.x1.x1);
 
   fp6_mul_sparse_dbl(f,&tmp1_fp6,f);
 
@@ -106,17 +106,16 @@ void ff_ltqp(fp6_t *f, efp_jacobian_t *S, efp_t *Q,efp_t *P){
 
   fp_mul(&nextZ,&S->z,&t1);
 
-  fp_set(&tmp1_fp6.x1.x2,&nextZ);
-  fp_mul_base_inv(&tmp1_fp6.x1.x2,&tmp1_fp6.x1.x2);
-
-  fp_mul(&tmp1_fp6.x1.x2,&tmp1_fp6.x1.x2,&P->y);
+  fp_set(&tmp1_fp6.x2.x1,&nextZ);
+  fp_mul_base_inv(&tmp1_fp6.x2.x1,&tmp1_fp6.x2.x1);
+  fp_mul(&tmp1_fp6.x2.x1,&tmp1_fp6.x2.x1,&P->y);
 
   fp_mul(&tmp1_fp6.x0.x0,&t2,&P->x);
   fp_set_neg(&tmp1_fp6.x0.x0,&tmp1_fp6.x0.x0);
 
   fp_mul(&tmp1_fp,&t2,&Q->x);
   fp_mul(&tmp2_fp,&nextZ,&Q->y);
-  fp_sub(&tmp1_fp6.x0.x1,&tmp1_fp,&tmp2_fp);
+  fp_sub(&tmp1_fp6.x2.x0,&tmp1_fp,&tmp2_fp);
 
   fp6_mul_sparse_add(f,&tmp1_fp6,f);
   fp_set(&S->x,&nextX);
@@ -124,7 +123,7 @@ void ff_ltqp(fp6_t *f, efp_jacobian_t *S, efp_t *Q,efp_t *P){
   fp_set(&S->z,&nextZ);
 }
 
-void miller_ate(fp6_t *f,efp6_t *P,efp6_t *Q){
+void miller_opt_ate_proj(fp6_t *f,efp6_t *P,efp6_t *Q){
     static efp_t mapped_P,mapped_Q;
     static efp_jacobian_t S;
 

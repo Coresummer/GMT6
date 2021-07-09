@@ -118,10 +118,10 @@ void check_pairing(){
   //e([a]P,[b]Q) を求める
   efp6_scm(&aP,&P,a);
   efp6_scm(&bQ,&Q,b);
-  miller_ate(&f,&aP,&bQ);
+  miller_opt_ate_proj(&f,&aP,&bQ);
   final_exp(&e1,&f);
   //e(P,Q)^(a*b) を求める
-  miller_ate(&f,&P,&Q);
+  miller_opt_ate_proj(&f,&P,&Q);
   final_exp(&e2,&f);
   mpz_mul(ab,a,b);
   fp6_pow(&e2,&e2,ab);
@@ -153,7 +153,7 @@ void check_pairing_count(){
 
   printf("miller_ate count\n");
   count_start();
-  miller_ate(&f,&P,&Q);
+  miller_opt_ate_proj(&f,&P,&Q);
   count_printf();
   printf("---------------------------------\n");
 
@@ -185,7 +185,7 @@ void check_pairing_time(){
     fp_set_ui(&f.x0.x0,1);
 
     gettimeofday(&tv_start,NULL);
-    miller_ate(&f,&P,&Q);
+    miller_opt_ate_proj(&f,&P,&Q);
     gettimeofday(&tv_end,NULL);
     MILLER_ATE_6SPARSE_TIME+=timedifference_msec(tv_start,tv_end);
 
