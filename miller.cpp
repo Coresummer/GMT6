@@ -59,7 +59,7 @@ void ff_lttp(fp6_t *f, efp_jacobian_t *S, efp_t *P){
   fp_mul_base_inv(&tmp1_fp6.x1.x1,&tmp1_fp6.x1.x1);
 
   // fp6_mul_sparse_dbl(f,&tmp1_fp6,f); //Capable for further Karatsuba
-  fp6_mul(f,&tmp1_fp6,f);
+  fp6_mul(f,f,&tmp1_fp6);
 
   fp_set(&S->x,&nextX);
   fp_set(&S->y,&nextY);
@@ -107,7 +107,7 @@ void ff_ltqp(fp6_t *f, efp_jacobian_t *S, efp_t *Q,efp_t *P){
 
   fp_mul(&nextZ,&S->z,&t1);
 
-  fp_set(&tmp1_fp6.x2.x1,&nextZ);
+  fp_set(&tmp1_fp6.x2.x1,&nextZ); //merge with below!
   fp_mul_base_inv(&tmp1_fp6.x2.x1,&tmp1_fp6.x2.x1);
   fp_mul(&tmp1_fp6.x2.x1,&tmp1_fp6.x2.x1,&P->y);
 
@@ -119,7 +119,7 @@ void ff_ltqp(fp6_t *f, efp_jacobian_t *S, efp_t *Q,efp_t *P){
   fp_sub(&tmp1_fp6.x2.x0,&tmp1_fp,&tmp2_fp);
 
   // fp6_mul_sparse_add(f,&tmp1_fp6,f); //Capable for further Karatsuba
-  fp6_mul(f,&tmp1_fp6,f);
+  fp6_mul(f,f,&tmp1_fp6);
 
   fp_set(&S->x,&nextX);
   fp_set(&S->y,&nextY);

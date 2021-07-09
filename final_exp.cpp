@@ -1,4 +1,7 @@
 #include "final_exp.h"
+#include "fp6.h"
+#include <ELiPS/define.h>
+#include <cstdio>
 
 void final_exp(fp6_t *ANS,fp6_t *A){
   static fp6_t tmp1_fp6, tmp2_fp6,tmp3_fp6,tmp4_fp6,tmp5_fp6,tmp6_fp6,tmp7_fp6,tmp8_fp6,tmp9_fp6,tmp10_fp6,tmp11_fp6,tmp12_fp6;
@@ -62,5 +65,10 @@ void final_exp(fp6_t *ANS,fp6_t *A){
 
   fp6_mul(ANS,&tmp8_fp6,&tmp11_fp6);         //left * right = M^(3(-t0-x+3) + (p+t0-2)((9w^2+3w+1)(x-1)+9w^2+6w)(x-1)+9w^2+9w + 3) //M
 
-  //fp6_pow(ANS,ANS,four);//(p^3-1)(p+1)(p^2-p+1)/r //for debug
+  fp6_pow(&tmp8_fp6,A,fp6_total_r);//(p^3-1)(p+1)(p^2-p+1)/r //for debug
+  if(fp6_cmp(ANS, &tmp8_fp6)==0){
+    printf("equal\n");
+  }else{
+    printf("nooooooooooooooooooooooooooooooooooooooooop\n");
+  }
 }

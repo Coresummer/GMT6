@@ -7,7 +7,7 @@ void create_prt(){
   if(!mpz_probab_prime_p(prime_z,30))printf("Inputed p*(prime_z) is not a prime");
 
   mpz_set_str(order_z,"e0ffffffffffffc400000000000003ff10000000000000200000000000000001",16);
-  mpz_set_str(trace_z,"-e0ffffffffffffc400000000000003fe20000000000000400000000000000000",16);
+  mpz_set_str(trace_z,"-101770390931234937007371831919591261029326821356639893990345552768526322761728",10);
   const unsigned char* xai = reinterpret_cast<const unsigned char *>("efffffffffffffe00000000000000000");
   mpn_set_str(&X,xai,sizeof(char)*34,16); //ui(&X,1,319014718988379808906617884108577046528);
   mpn_set_mpz(prime,prime_z);
