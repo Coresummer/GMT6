@@ -7,8 +7,9 @@ void create_prt(){
   if(!mpz_probab_prime_p(prime_z,30))printf("Inputed p*(prime_z) is not a prime");
 
   mpz_set_str(order_z,"e0ffffffffffffc400000000000003ff10000000000000200000000000000001",16);
-  mpz_set_str(trace_z,"-101770390931234937007371831919591261029326821356639893990345552768526322761728",10);
-  mpn_set_str(&X,"efffffffffffffe00000000000000000",sizeof(char)*34,16); //ui(&X,1,319014718988379808906617884108577046528);
+  mpz_set_str(trace_z,"-e0ffffffffffffc400000000000003fe20000000000000400000000000000000",16);
+  const unsigned char* xai = reinterpret_cast<const unsigned char *>("efffffffffffffe00000000000000000");
+  mpn_set_str(&X,xai,sizeof(char)*34,16); //ui(&X,1,319014718988379808906617884108577046528);
   mpn_set_mpz(prime,prime_z);
   mpn_mul_n(prime2,prime,prime,FPLIMB);
 
@@ -24,8 +25,8 @@ void create_prt(){
   fp_inv(&base_c_inv,&base_c);
   gmp_printf("\nmodulo polynomial\n");
 
-  gmp_printf("fp3  = fp[alpha]/(alpha^2 -%Nu)\n",base_c.x0,FPLIMB);
-  gmp_printf("fp6 = fp3[beta]/(beta^3 -alpha)\n");
+  gmp_printf("fp2  = fp[alpha]/(alpha^2 -%Nu)\n",base_c.x0,FPLIMB);
+  gmp_printf("fp6 = fp2[beta]/(beta^3 -alpha)\n");
 
   fp_println("base_c     = ",&base_c);
   fp_println("base_c_inv = ",&base_c_inv);
@@ -34,43 +35,42 @@ void create_prt(){
 
 void check_base(){
   fp_t tmp;
-  fp3_t tmp2;
+  fp2_t tmp2;
   fp_init(&tmp);
-  fp3_init(&tmp2);
+  fp2_init(&tmp2);
   mpz_t expo;
   mpz_init(expo);
 
   //check base_c = QNR
   fp_set(&tmp,&base_c);
   mpz_sub_ui(expo,prime_z,1);
-  mpz_divexact_ui(expo,expo,3);
+  mpz_divexact_ui(expo,expo,2);
   fp_pow(&tmp,&base_c,expo);
-  if(fp_cmp_one(&tmp)==0) printf("error!!! c^((p-1)/3)==1\n\n");
+  if(fp_cmp_one(&tmp)==0) printf("error!!! c^((p-1)/2)==1\n\n");
 
-  mpz_set_ui(expo,3);
+  mpz_set_ui(expo,2);
   fp_pow(&tmp,&tmp,expo);
   // fp_println("c^(p-1) :",&tmp);
   if(fp_cmp_one(&tmp)!=0) printf("error!!! c^(p-1)!=1\n\n");
   
   //check base_c = QNR
   fp_set_ui(&tmp2.x1,1);
-  mpz_pow_ui(expo,prime_z,3);
+  mpz_pow_ui(expo,prime_z,2);
   mpz_sub_ui(expo,expo,1);
-  mpz_divexact_ui(expo,expo,2);
-  fp3_pow(&tmp2,&tmp2,expo);
-  fp3_println("fp3",&tmp2);
-  if(fp3_cmp_one(&tmp2)==0) printf("error!!! alpha^((p^3-1)/2)==1\n\n");
+  mpz_divexact_ui(expo,expo,3);
+  fp2_pow(&tmp2,&tmp2,expo);
+  fp2_println("fp2",&tmp2);
+  if(fp2_cmp_one(&tmp2)==0) printf("error!!! alpha^((p^3-1)/2)==1\n\n");
   
-  mpz_set_ui(expo,2);
-  fp3_pow(&tmp2,&tmp2,expo);
-  if(fp3_cmp_one(&tmp2)!=0) printf("error!!! alpha^(p^3-1)!=1\n\n");
+  mpz_set_ui(expo,3);
+  fp2_pow(&tmp2,&tmp2,expo);
+  if(fp2_cmp_one(&tmp2)!=0) printf("error!!! alpha^(p^3-1)!=1\n\n");
 
   fp_mul(&tmp,&base_c,&base_c_inv);
   //fp_println("base_c * base_c_inv = ",&tmp);
   if(fp_cmp_one(&tmp)!=0) printf("error!!! base_c * base_c_inv!=1\n\n");
 
   mpz_clear(expo);
-  printf("check_base is ok\n");
 }
 
 void frobenius_precalculation(){
@@ -184,7 +184,7 @@ void efpm_order(mpz_t *order,unsigned int m){
 
 void create_weil(){
   efpm_order(&efp_total,1);
-  efpm_order(&efp3_total,3);
+  efpm_order(&efp2_total,2);
   efpm_order(&efp6_total,6);
   mpz_t temp;
   mpz_init(temp);
@@ -237,7 +237,7 @@ void tmp_init(){
   mpz_init(trace_z);
 
   mpz_init(efp_total);
-  mpz_init(efp3_total);
+  mpz_init(efp2_total);
   mpz_init(efp6_total);
   mpz_init(fp6_total_r);
 

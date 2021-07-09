@@ -1,3 +1,4 @@
+#pragma once
 #ifndef EFP2_H
 #define EFP2_H
 

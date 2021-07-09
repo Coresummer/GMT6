@@ -3,6 +3,7 @@
 void fp6_init(fp6_t *A){
   fp2_init(&A->x0);
   fp2_init(&A->x1);
+  fp2_init(&A->x2);
 }
 
 void fp6_printf(std::string str ,fp6_t *A){
@@ -11,6 +12,8 @@ void fp6_printf(std::string str ,fp6_t *A){
   gmp_printf(",");
   fp2_printf("",&A->x1);
   gmp_printf(")");
+  fp2_printf("",&A->x2);
+  gmp_printf(")");
 }
 
 void fp6_println(std::string str ,fp6_t *A){
@@ -18,11 +21,13 @@ void fp6_println(std::string str ,fp6_t *A){
   fp2_printf("",&A->x0);
   gmp_printf(",");
   fp2_printf("",&A->x1);
+  gmp_printf(",");
+  fp2_printf("",&A->x2);
   gmp_printf(")\n");
 }
 
 // void fp6_printf_montgomery(std::string str ,fp6_t *A){
-//   gmp_printf("%s(",str);
+//   gmp_printf("%s(",str.c_str());
 //   fp2_printf_montgomery("",&A->x0);
 //   gmp_printf(",");
 //   fp2_printf_montgomery("",&A->x1);
@@ -34,26 +39,33 @@ void fp6_println(std::string str ,fp6_t *A){
 void fp6_set(fp6_t *ANS,fp6_t *A){
   fp2_set(&ANS->x0,&A->x0);
   fp2_set(&ANS->x1,&A->x1);
+  fp2_set(&ANS->x2,&A->x2);
+
 }
 
 void fp6_set_ui(fp6_t *ANS,unsigned long int UI){
   fp2_set_ui(&ANS->x0,UI);
   fp2_set_ui(&ANS->x1,0);
+  fp2_set_ui(&ANS->x2,0);
 }
 
 void fp6_set_ui_ui(fp6_t *ANS,unsigned long int UI){
   fp2_set_ui_ui(&ANS->x0,UI);
   fp2_set_ui_ui(&ANS->x1,UI);
+  fp2_set_ui_ui(&ANS->x2,UI);
 }
 
 void fp6_set_mpn(fp6_t *ANS,mp_limb_t *A){
   fp2_set_mpn(&ANS->x0,A);
   fp2_set_ui(&ANS->x1,0);
+  fp2_set_ui(&ANS->x2,0);
+
 }
 
 void fp6_set_neg(fp6_t *ANS,fp6_t *A){
   fp2_set_neg(&ANS->x0,&A->x0);
   fp2_set_neg(&ANS->x1,&A->x1);
+  fp2_set_neg(&ANS->x2,&A->x2);
 }
 
 // void fp6_to_montgomery(fp6_t *ANS,fp6_t *A){
@@ -72,6 +84,8 @@ void fp6_set_neg(fp6_t *ANS,fp6_t *A){
 void fp6_set_random(fp6_t *ANS,gmp_randstate_t state){
   fp2_set_random(&ANS->x0,state);
   fp2_set_random(&ANS->x1,state);
+  fp2_set_random(&ANS->x2,state);
+
 }
 
 void fp6_mul(fp6_t *ANS,fp6_t *A,fp6_t *B){
@@ -80,6 +94,7 @@ void fp6_mul(fp6_t *ANS,fp6_t *A,fp6_t *B){
   fp6_set(&tmp_B,B);
 
   static fp2_t tmp1_fp2,tmp2_fp2,tmp3_fp2,tmp4_fp2,tmp5_fp2,tmp6_fp2;
+  //(a+b)(d+e) = tmp4
   fp2_add(&tmp1_fp2,&tmp_A.x0,&tmp_A.x1);
   fp2_add(&tmp2_fp2,&tmp_B.x0,&tmp_B.x1);
   fp2_mul(&tmp4_fp2,&tmp1_fp2,&tmp2_fp2);
@@ -103,11 +118,11 @@ void fp6_mul(fp6_t *ANS,fp6_t *A,fp6_t *B){
 
   //x0 = ad + θ^3((a+c+b)(d+e+f)-(a+c)(d+f)-(a+b)(d+e)+ad)
   // = tmp1 + mul_base(tmp5-tmp6-tmp2-tmp4+)
-  fp2_sub(&ANS->x0,&tmp5_fp2,&tmp4_fp2);
-  fp2_sub(&ANS->x0,&ANS->x0,&tmp6_fp2);
-  fp2_add(&ANS->x0,&ANS->x0,&tmp1_fp2);
-  fp2_mul_base(&ANS->x0,&ANS->x0);
-  fp2_add(&ANS->x0,&ANS->x0,&tmp1_fp2);
+  fp2_sub(&ANS->x0,&tmp5_fp2,&tmp4_fp2);  //(a+b+c)(d+e+f) - (a+b)(d+e)
+  fp2_sub(&ANS->x0,&ANS->x0,&tmp6_fp2);   //(a+b+c)(d+e+f) - (a+b)(d+e) - (a+c)(d+f)
+  fp2_add(&ANS->x0,&ANS->x0,&tmp1_fp2);   //(a+b+c)(d+e+f) - (a+b)(d+e) - (a+c)(d+f) + ad
+  fp2_mul_base(&ANS->x0,&ANS->x0);        //
+  fp2_add(&ANS->x0,&ANS->x0,&tmp1_fp2);   //
 
   //x1 = (a+b)(d+e)-ad-be+cfθ^3
   fp2_sub(&ANS->x1,&tmp4_fp2,&tmp1_fp2);
@@ -118,6 +133,7 @@ void fp6_mul(fp6_t *ANS,fp6_t *A,fp6_t *B){
   //x2 = be+(a+c)(d+f)-ad-cf
   fp2_add(&ANS->x2,&tmp2_fp2,&tmp6_fp2);
   fp2_sub(&ANS->x2,&ANS->x2,&tmp1_fp2);
+  fp2_sub(&ANS->x2,&ANS->x2,&tmp3_fp2);
 }
 
 
@@ -187,11 +203,15 @@ void fp6_mul(fp6_t *ANS,fp6_t *A,fp6_t *B){
 void fp6_mul_ui(fp6_t *ANS,fp6_t *A,unsigned long int UI){
   fp2_mul_ui(&ANS->x0,&A->x0,UI);
   fp2_mul_ui(&ANS->x1,&A->x1,UI);
+  fp2_mul_ui(&ANS->x2,&A->x2,UI);
+
 }
 
 void fp6_mul_mpn(fp6_t *ANS,fp6_t *A,mp_limb_t *B){
   fp2_mul_mpn(&ANS->x0,&A->x0,B);
   fp2_mul_mpn(&ANS->x1,&A->x1,B);
+  fp2_mul_mpn(&ANS->x2,&A->x2,B);
+
 }
 
 void fp6_sqr(fp6_t *ANS,fp6_t *A){
@@ -199,17 +219,43 @@ void fp6_sqr(fp6_t *ANS,fp6_t *A){
   static fp6_t tmp_A;
   fp6_set(&tmp_A,A);
 
-  static fp2_t tmp1_fp2,tmp2_fp2,tmp3_fp2,tmp4_fp2,tmp5_fp2,tmp6_fp2,tmp7_fp2,tmp8_fp2,tmp9_fp2;
+  static fp2_t tmp1_fp2,tmp2_fp2,tmp3_fp2,tmp4_fp2,tmp5_fp2,tmp6_fp2;
+  fp2_add(&tmp1_fp2,&tmp_A.x0,&tmp_A.x1);
+  fp2_sqr(&tmp4_fp2,&tmp1_fp2);
 
-  fp2_sqr(&tmp1_fp2, &tmp_A.x0);  //a^2
-  fp2_sqr(&tmp2_fp2, &tmp_A.x1);  //b^2
-  fp2_mul_base(&tmp3_fp2, &tmp2_fp2);  //b^2@^2
-  fp2_add(&ANS->x0, &tmp1_fp2, &tmp3_fp2); //a^2+b^2@^
+  //(a+b+c)(d+e+f) = tmp5
+  fp2_add(&tmp1_fp2,&tmp1_fp2,&tmp_A.x2);
+  fp2_sqr(&tmp5_fp2,&tmp1_fp2);
 
-  fp2_add(&tmp3_fp2,&tmp_A.x0,&tmp_A.x1); //(a+b)
-  fp2_sqr(&tmp3_fp2, &tmp3_fp2);  //(a+b)^2
-  fp2_sub(&tmp3_fp2,&tmp3_fp2, &tmp1_fp2); //(a+b)^2 - a^2 
-  fp2_sub(&ANS->x1,&tmp3_fp2, &tmp2_fp2); //(a+b)^2 - a^2 - b^2 
+  //(a+c)(d+f) = tmp6
+  fp2_sub(&tmp1_fp2,&tmp1_fp2,&tmp_A.x1);
+  fp2_sqr(&tmp6_fp2,&tmp1_fp2);
+
+  //ad = tmp1
+  fp2_sqr(&tmp1_fp2,&tmp_A.x0);
+  //be = tmp2
+  fp2_sqr(&tmp2_fp2,&tmp_A.x1);
+  //cf = tmp3
+  fp2_sqr(&tmp3_fp2,&tmp_A.x2);
+
+  //x0 = ad + θ^3((a+c+b)(d+e+f)-(a+c)(d+f)-(a+b)(d+e)+ad)
+  // = tmp1 + mul_base(tmp5-tmp6-tmp2-tmp4+)
+  fp2_sub(&ANS->x0,&tmp5_fp2,&tmp4_fp2);
+  fp2_sub(&ANS->x0,&ANS->x0,&tmp6_fp2);
+  fp2_add(&ANS->x0,&ANS->x0,&tmp1_fp2);
+  fp2_mul_base(&ANS->x0,&ANS->x0);
+  fp2_add(&ANS->x0,&ANS->x0,&tmp1_fp2);
+
+  //x1 = (a+b)(b+e)-ad-be+cfθ^3
+  fp2_sub(&ANS->x1,&tmp4_fp2,&tmp1_fp2);
+  fp2_sub(&ANS->x1,&ANS->x1,&tmp2_fp2);
+  fp2_mul_base(&ANS->x2,&tmp3_fp2);
+  fp2_add(&ANS->x1,&ANS->x1,&ANS->x2);
+
+  //x2 = be+(a+c)(d+f)-ad-cf
+  fp2_add(&ANS->x2,&tmp2_fp2,&tmp6_fp2);
+  fp2_sub(&ANS->x2,&ANS->x2,&tmp1_fp2);
+  fp2_sub(&ANS->x2,&ANS->x2,&tmp3_fp2);
 }
 
 // void fp6_sqr_lazy_montgomery(fp6_t *ANS,fp6_t *A){
@@ -233,12 +279,15 @@ void fp6_sqr(fp6_t *ANS,fp6_t *A){
 void fp6_add(fp6_t *ANS,fp6_t *A,fp6_t *B){
   fp2_add(&ANS->x0,&A->x0,&B->x0);
   fp2_add(&ANS->x1,&A->x1,&B->x1);
+  fp2_add(&ANS->x2,&A->x2,&B->x2);
 
 }
 
 void fp6_add_lazy(fp6_t *ANS,fp6_t *A,fp6_t *B){
   fp2_add_nonmod_single(&ANS->x0,&A->x0,&B->x0);
   fp2_add_nonmod_single(&ANS->x1,&A->x1,&B->x1);
+  fp2_add_nonmod_single(&ANS->x2,&A->x2,&B->x2);
+
 }
 void fp6_add_fp(fp6_t *ANS,fp6_t *A,fp_t *B){
   fp6_set(ANS,A);
@@ -247,59 +296,90 @@ void fp6_add_fp(fp6_t *ANS,fp6_t *A,fp_t *B){
 void fp6_add_ui(fp6_t *ANS,fp6_t *A,unsigned long int UI){
   fp2_add_ui(&ANS->x0,&A->x0,UI);
   fp2_set(&ANS->x1,&A->x1);
+  fp2_set(&ANS->x2,&A->x2);
 }
 
 void fp6_add_ui_ui(fp6_t *ANS,fp6_t *A,unsigned long int UI){
   fp2_add_ui_ui(&ANS->x0,&A->x0,UI);
   fp2_add_ui_ui(&ANS->x1,&A->x1,UI);
+  fp2_add_ui_ui(&ANS->x2,&A->x2,UI);
 }
 
 void fp6_add_mpn(fp6_t *ANS,fp6_t *A,mp_limb_t *B){
   fp2_add_mpn(&ANS->x0,&A->x0,B);
   fp2_add_mpn(&ANS->x1,&A->x1,B);
+  fp2_add_mpn(&ANS->x2,&A->x2,B);
 
 }
 
 void fp6_sub(fp6_t *ANS,fp6_t *A,fp6_t *B){
   fp2_sub(&ANS->x0,&A->x0,&B->x0);
   fp2_sub(&ANS->x1,&A->x1,&B->x1);
+  fp2_sub(&ANS->x2,&A->x2,&B->x2);
 }
 
 void fp6_sub_lazy(fp6_t *ANS,fp6_t *A,fp6_t *B){
   fp2_sub_nonmod_single(&ANS->x0,&A->x0,&B->x0);
   fp2_sub_nonmod_single(&ANS->x1,&A->x1,&B->x1);
+  fp2_sub_nonmod_single(&ANS->x2,&A->x2,&B->x2);
+
 }
 
 void fp6_sub_ui(fp6_t *ANS,fp6_t *A,unsigned long int UI){
   fp2_sub_ui(&ANS->x0,&A->x0,UI);
   fp2_set(&ANS->x1,&A->x1);
+  fp2_set(&ANS->x2,&A->x2);
+
 }
 
 void fp6_sub_ui_ui(fp6_t *ANS,fp6_t *A,unsigned long int UI){
   fp2_sub_ui_ui(&ANS->x0,&A->x0,UI);
   fp2_sub_ui_ui(&ANS->x1,&A->x1,UI);
-
+  fp2_sub_ui_ui(&ANS->x2,&A->x2,UI);
 }
 
 void fp6_sub_mpn(fp6_t *ANS,fp6_t *A,mp_limb_t *B){
   fp2_sub_mpn(&ANS->x0,&A->x0,B);
   fp2_sub_mpn(&ANS->x1,&A->x1,B);
+  fp2_sub_mpn(&ANS->x2,&A->x2,B);
+
 }
 
 void fp6_inv(fp6_t *ANS,fp6_t *A){
-  static fp2_t tmp1_fp2,tmp2_fp2,tmp3_fp2,tmp4_fp2;
-  fp2_set(&tmp1_fp2,&A->x0);  //a
-  fp2_set_neg(&tmp2_fp2,&A->x1); //b
+  static fp2_t tmp1_fp2,tmp2_fp2,tmp3_fp2,tmp4_fp2,tmp5_fp2,tmp6_fp2,tmp7_fp2,tmp8_fp2;
 
-  fp2_sqr(&tmp3_fp2,&tmp1_fp2);  //a^2
-  fp2_mul(&tmp4_fp2,&tmp2_fp2,&A->x1);  //b^2*c
+  fp2_sqr(&tmp1_fp2,&A->x0);
+  fp2_sqr(&tmp2_fp2,&A->x1);
+  fp2_sqr(&tmp3_fp2,&A->x2);
+  
+  fp2_mul(&tmp4_fp2,&A->x1,&A->x2);
   fp2_mul_base(&tmp4_fp2,&tmp4_fp2);
-  fp2_add(&tmp3_fp2,&tmp3_fp2,&tmp4_fp2); //a^2 - b^2c //mabe need mul_base?
-
-  fp2_inv(&tmp3_fp2,&tmp3_fp2);  //  (a^2 - b^2c)^-1
-  fp2_mul(&ANS->x0,&tmp1_fp2,&tmp3_fp2); // a*(a^2- b^2c)^-1
-  fp2_mul(&ANS->x1,&tmp2_fp2,&tmp3_fp2); //-b*(a^2 - b^2c)^-1
-
+  fp2_sub(&tmp6_fp2,&tmp1_fp2,&tmp4_fp2);
+  
+  fp2_mul(&tmp4_fp2,&A->x0,&A->x1);
+  fp2_mul_base(&tmp7_fp2,&tmp3_fp2);
+  fp2_sub(&tmp7_fp2,&tmp7_fp2,&tmp4_fp2);
+  
+  fp2_mul(&tmp4_fp2,&A->x0,&A->x2);
+  fp2_sub(&tmp8_fp2,&tmp2_fp2,&tmp4_fp2);
+  
+  fp2_mul(&tmp1_fp2,&tmp1_fp2,&A->x0);
+  fp2_mul(&tmp3_fp2,&tmp3_fp2,&A->x2);
+  fp2_mul_base(&tmp3_fp2,&tmp3_fp2);
+  
+  fp2_add(&tmp5_fp2,&tmp4_fp2,&tmp4_fp2);
+  fp2_add(&tmp5_fp2,&tmp5_fp2,&tmp4_fp2);
+  fp2_sub(&tmp5_fp2,&tmp2_fp2,&tmp5_fp2);
+  fp2_mul(&tmp5_fp2,&tmp5_fp2,&A->x1);
+  fp2_add(&tmp5_fp2,&tmp5_fp2,&tmp3_fp2);
+  fp2_mul_base(&tmp5_fp2,&tmp5_fp2);
+  fp2_add(&tmp5_fp2,&tmp5_fp2,&tmp1_fp2);
+  
+  fp2_inv(&tmp5_fp2,&tmp5_fp2);
+  
+  fp2_mul(&ANS->x0,&tmp6_fp2,&tmp5_fp2);
+  fp2_mul(&ANS->x1,&tmp7_fp2,&tmp5_fp2);
+  fp2_mul(&ANS->x2,&tmp8_fp2,&tmp5_fp2);
 }
 
 // void fp6_inv_lazy_montgomery(fp6_t *ANS,fp6_t *A){
@@ -419,35 +499,35 @@ void fp6_pow(fp6_t *ANS,fp6_t *A,mpz_t scalar){
 }
 
 int  fp6_cmp(fp6_t *A,fp6_t *B){
-  if(fp2_cmp(&A->x0,&B->x0)==0 && fp2_cmp(&A->x1,&B->x1)==0){
+  if(fp2_cmp(&A->x0,&B->x0)==0 && fp2_cmp(&A->x1,&B->x1)==0 && fp2_cmp(&A->x2,&B->x2)==0){
     return 0;
   }
   return 1;
 }
 
 int  fp6_cmp_ui(fp6_t *A,unsigned long int UI){
-  if(fp2_cmp_ui(&A->x0,UI)==0 && fp2_cmp_ui(&A->x1,UI)==0){
+  if(fp2_cmp_ui(&A->x0,UI)==0 && fp2_cmp_ui(&A->x1,UI)==0&& fp2_cmp_ui(&A->x2,UI)==0){
     return 0;
   }
   return 1;
 }
 
 int  fp6_cmp_mpn(fp6_t *A,mp_limb_t *B){
-  if(fp2_cmp_mpn(&A->x0,B)==0 && fp2_cmp_mpn(&A->x1,B)==0){
+  if(fp2_cmp_mpn(&A->x0,B)==0 && fp2_cmp_mpn(&A->x1,B)==0 && fp2_cmp_mpn(&A->x2,B)==0){
     return 0;
   }
   return 1;
 }
 
 int  fp6_cmp_zero(fp6_t *A){
-  if(fp2_cmp_zero(&A->x0)==0 && fp2_cmp_zero(&A->x1)==0){
+  if(fp2_cmp_zero(&A->x0)==0 && fp2_cmp_zero(&A->x1)==0 && fp2_cmp_zero(&A->x2)==0){
     return 0;
   }
   return 1;
 }
 
 int  fp6_cmp_one(fp6_t *A){
-  if(fp2_cmp_one(&A->x0)==0 && fp2_cmp_zero(&A->x1)==0){
+  if(fp2_cmp_one(&A->x0)==0 && fp2_cmp_zero(&A->x1)==0 && fp2_cmp_zero(&A->x2)==0){
     return 0;
   }
   return 1;
@@ -474,32 +554,34 @@ int  fp6_cmp_one(fp6_t *A){
 
 void fp6_frobenius_map_p1(fp6_t *ANS,fp6_t *A){
   fp_set(&ANS->x0.x0,&A->x0.x0);
-  fp_mul(&ANS->x0.x1,&A->x0.x1,&frobenius_2_6);
-  fp_mul(&ANS->x0.x2,&A->x0.x2,&frobenius_4_6);
+  fp_set_neg(&ANS->x0.x1,&A->x0.x1);
 
   fp_mul(&ANS->x1.x0,&A->x1.x0,&frobenius_1_6);
-  fp_set_neg(&ANS->x1.x1,&A->x1.x1);
-  fp_mul(&ANS->x1.x2,&A->x1.x2,&frobenius_5_6);
+  fp_mul(&ANS->x1.x1,&A->x1.x1,&frobenius_4_6);
+
+  fp_mul(&ANS->x2.x0,&A->x2.x0,&frobenius_2_6);
+  fp_mul(&ANS->x2.x1,&A->x2.x1,&frobenius_5_6);
 }
 
 void fp6_frobenius_map_p2(fp6_t *ANS,fp6_t *A){ //not sure ...
   fp_set(&ANS->x0.x0,&A->x0.x0);
-  fp_mul(&ANS->x0.x1,&A->x0.x1,&frobenius_4_6);
-  fp_mul(&ANS->x0.x2,&A->x0.x2,&frobenius_2_6);
-
+  fp_set(&ANS->x0.x1,&A->x0.x1);
+  
   fp_mul(&ANS->x1.x0,&A->x1.x0,&frobenius_2_6);
-  fp_set(&ANS->x1.x1,&A->x1.x1);
-  fp_mul(&ANS->x1.x2,&A->x1.x2,&frobenius_4_6);
+  fp_mul(&ANS->x1.x1,&A->x1.x1,&frobenius_2_6);
+
+  fp_mul(&ANS->x2.x0,&A->x2.x0,&frobenius_4_6);
+  fp_mul(&ANS->x2.x1,&A->x2.x1,&frobenius_4_6);
 }
 
 void fp6_frobenius_map_p3(fp6_t *ANS,fp6_t *A){ //not sure ...
   fp_set(&ANS->x0.x0,&A->x0.x0);
-  fp_set(&ANS->x0.x1,&A->x0.x1);
-  fp_set(&ANS->x0.x2,&A->x0.x2);
+  fp_set_neg(&ANS->x0.x1,&A->x0.x1);
 
   fp_set_neg(&ANS->x1.x0,&A->x1.x0);
-  fp_set_neg(&ANS->x1.x1,&A->x1.x1);
-  fp_set_neg(&ANS->x1.x2,&A->x1.x2);
+  fp_set(&ANS->x1.x1,&A->x1.x1);
 
+  fp_set(&ANS->x2.x0,&A->x2.x0);
+  fp_set_neg(&ANS->x2.x1,&A->x2.x1);
 }
 

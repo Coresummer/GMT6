@@ -1,5 +1,4 @@
-  
-#define TTT_INSTANCE_HERE
+  #define TTT_INSTANCE_HERE
 
 #include "define.h"
 #include "count.h"
@@ -13,33 +12,12 @@
 #include "efp6.h"
 #include "test_efp.h"
 #include "create.h"
-#include "miller.h"
-#include "final_exp.h"
-#include "test_pairing.h"
+// #include "miller.h"
+// #include "final_exp.h"
+// #include "test_pairing.h"
 
 
 int main(){
-
-#ifdef SB49
-printf("Fp7_mul using School-Book\n\n");
-#endif
-
-#ifdef Mont22
-printf("Fp7_mul using Montgomery like Karatsuba\n\n");
-#endif
-
-#ifdef Karatsuba40
-printf("Fp7_mul using Karatsuba40\n\n");
-#endif
-
-#ifdef Karatsuba30
-printf("Fp7_mul using Karatsuba30\n\n");
-#endif
-
-#ifdef Karatsuba23
-printf("Fp7_mul using Karatsuba24\n\n");
-#endif
-
   tmp_init();
   create_prt();
   check_base();
@@ -53,22 +31,22 @@ printf("Fp7_mul using Karatsuba24\n\n");
   gmp_randseed_ui(state,(unsigned long int)time(NULL));
 
   //各関数の動作確認、コスト計算、時間計測など
-  // check_fp();
-  // check_fp3();
-  // check_fp6();
-  // check_fp3_count();
-  // check_fp6_count();
-  // check_fp_time();
+  check_fp();
+  check_fp2();
+  check_fp6();
+  check_fp2_count();
+  check_fp6_count();
+  check_fp_time();
 
-  // check_efp();
-  // check_efp3();
-  // check_efp6();
-  // check_g1_g2();
+  check_efp();
+  check_efp2();
+  check_efp6();
+  check_g1_g2();
 
   //SCM_func_check();//未完成
-  check_pairing();
-  check_pairing_count();
-  check_pairing_time();
+  // check_pairing();
+  // check_pairing_count();
+  // check_pairing_time();
 
   return 0;
 }

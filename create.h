@@ -1,7 +1,7 @@
+#pragma once
 #ifndef CREATE_H
 #define CREATE_H
 
-//#include "efp10.h"
 #include "efp6.h"
 
 void create_prt();

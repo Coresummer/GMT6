@@ -7,7 +7,7 @@ void efp10_init(efp10_t *P){
 }
 
 void efp10_printf(std::string str ,efp10_t *P){
-  printf("%s",str);
+  printf("%s",str.c_str());
   if(P->infinity==0){
     printf("(");
     fp10_printf("",&P->x);
@@ -20,7 +20,7 @@ void efp10_printf(std::string str ,efp10_t *P){
 }
 
 void efp10_println(std::string str ,efp10_t *P){
-  printf("%s",str);
+  printf("%s",str.c_str());
   if(P->infinity==0){
     printf("(");
     fp10_printf("",&P->x);

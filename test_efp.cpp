@@ -1,4 +1,5 @@
 #include "test_efp.h"
+#include "efp6.h"
 
 void check_efp(){
   printf("check_efp() 開始\n");
@@ -19,22 +20,22 @@ void check_efp(){
   printf("*********************************************************************************************\n\n");
 }
 
-void check_efp3(){
-  printf("check_efp3() 開始\n");
-  efp3_t P,ANS;
-  efp3_init(&P);
-  efp3_init(&ANS);
+void check_efp2(){
+  printf("check_efp2() 開始\n");
+  efp2_t P,ANS;
+  efp2_init(&P);
+  efp2_init(&ANS);
 
-  efp3_rational_point(&P);
-  efp3_println("P = ",&P);
+  efp2_rational_point(&P);
+  efp2_println("P = ",&P);
   printf("---------------------------------\n");
 
   printf("weil定理の確認\n");
-  efp3_scm(&ANS,&P,efp3_total);
-  efp3_println("[p^2 +1 -t2]P = ",&ANS);
+  efp2_scm(&ANS,&P,efp2_total);
+  efp2_println("[p^2 +1 -t2]P = ",&ANS);
   printf("---------------------------------\n");
 
-  efp3_println("P = ",&P);//Aが変わっていないことの確認
+  efp2_println("P = ",&P);//Aが変わっていないことの確認
 
   printf("*********************************************************************************************\n\n");
 }
@@ -46,10 +47,13 @@ void check_efp6(){
   efp6_init(&ANS);
   efp6_rational_point(&P);
   efp6_println("P = ",&P);
+  efp6_checkOnCurve(&P);
+
   printf("---------------------------------\n");
 
   printf("weil定理の確認\n");
   efp6_scm(&ANS,&P,efp6_total);
+  efp6_checkOnCurve(&ANS);
   efp6_println("[p^6 +1 -t6]P = ",&ANS);
   printf("---------------------------------\n");
 

@@ -1,4 +1,7 @@
 #include "efp6.h"
+#include "fp6.h"
+#include <ELiPS/define.h>
+#include <cstdio>
 
 void efp6_init(efp6_t *P){
   fp6_init(&P->x);
@@ -7,7 +10,7 @@ void efp6_init(efp6_t *P){
 }
 
 void efp6_printf(std::string str ,efp6_t *P){
-  printf("%s",str);
+  printf("%s",str.c_str());
   if(P->infinity==0){
     printf("(");
     fp6_printf("",&P->x);
@@ -20,7 +23,7 @@ void efp6_printf(std::string str ,efp6_t *P){
 }
 
 void efp6_println(std::string str ,efp6_t *P){
-  printf("%s",str);
+  printf("%s",str.c_str());
   if(P->infinity==0){
     printf("(");
     fp6_printf("",&P->x);
@@ -143,6 +146,7 @@ void efp6_ecd(efp6_t *ANS,efp6_t *P){
   fp6_add(&tmp3_fp6,&tmp2_fp6,&tmp2_fp6);
   fp6_add(&tmp2_fp6,&tmp2_fp6,&tmp3_fp6);
   //fp_add(&tmp2_fp6.x0.x0,&tmp2_fp6.x0.x0,&curve_a);
+
   //tmp3_fp = lambda
   fp6_mul(&tmp3_fp6,&tmp1_fp6,&tmp2_fp6);
 
@@ -231,4 +235,20 @@ void efp6_frobenius_map_p1(efp6_t *ANS,efp6_t *A){
   ANS->infinity=0;
   fp6_frobenius_map_p1(&ANS->x,&A->x);
   fp6_frobenius_map_p1(&ANS->y,&A->y);
+}
+
+void efp6_checkOnCurve(efp6_t *A){
+  static fp6_t tmp_left_fp6, tmp_right_fp6;
+  fp6_sqr(&tmp_left_fp6,&A->y);
+
+  fp6_sqr(&tmp_right_fp6,&A->x);
+  fp6_mul(&tmp_right_fp6,&tmp_right_fp6,&A->x);
+  // fp6_add_mpn(&tmp_right_fp6, &tmp_right_fp6, curve_b.x0);
+  fp_add(&tmp_right_fp6.x0.x0, &tmp_right_fp6.x0.x0, &curve_b);
+  if(fp6_cmp(&tmp_right_fp6, &tmp_left_fp6)==0){
+    printf("efp6 check on curve: On curve\n");
+  }else{
+    printf("efp6 check on curve: NOT On curve\n");
+  }
+
 }

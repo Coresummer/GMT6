@@ -4,6 +4,7 @@
 #else
     #define TTT_EXTERN extern
 #endif
+
 #ifndef DEFINE_H
 #define DEFINE_H
 
@@ -22,7 +23,7 @@
 #include <string>
 #include <iostream>
 
-// #define DEBUG_COST_A
+#define DEBUG_COST_A
 //#define DEBUG_ASSERT
 #define CHECK_PAIRING_TIME_LOOP 100000
 
@@ -80,8 +81,7 @@ typedef struct{
   fpd2_t x0,x1,x2;
 }fpd6_t;
 //tmp finite field
-mp_limb_t buf[FPLIMB];
-
+TTT_EXTERN mp_limb_t buf[FPLIMB];
 
 /*Elliptic Curve*/
 typedef struct{
@@ -144,7 +144,7 @@ TTT_EXTERN fp_t line_3sparse_x0;//3sparse乗算をするときに使う (xP^-3)*
 TTT_EXTERN fp_t line_5sparse_x0;//5sparse乗算をするときに使う (xP^-3)*(yP^2) を格納する
 TTT_EXTERN fp_t line_7sparse_x0;//7sparse乗算をするときに使う (xP^-3)*(yP^2) を格納する
 
-TTT_EXTERN mpz_t efp_total,efp3_total,efp6_total,fp6_total_r;//#efp,#efp5,#efp10,#efp7,#efp14
+TTT_EXTERN mpz_t efp_total,efp2_total,efp6_total,fp6_total_r;//#efp,#efp5,#efp10,#efp7,#efp14
 TTT_EXTERN mpz_t miller_loop_s;
 TTT_EXTERN mpz_t X_1_div2,X_1,X_2,X_2_1,four;//(kai +1)/2,(kai -1),(kai^2)をあらかじめ求めておく
 TTT_EXTERN mpz_t hardpart,hp_3w,three;

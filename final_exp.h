@@ -1,3 +1,4 @@
+#pragma once
 #ifndef FINAL_EXP_H
 #define FINAL_EXP_H
 

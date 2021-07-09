@@ -20,7 +20,7 @@ void efp5_jacobian_init(efp5_jacobian_t *P){
   P->infinity=1;
 }
 void efp5_printf(std::string str ,efp5_t *P){
-  printf("%s",str);
+  printf("%s",str.c_str());
   if(P->infinity==0){
     printf("(");
     fp5_printf("",&P->x);
@@ -33,7 +33,7 @@ void efp5_printf(std::string str ,efp5_t *P){
 }
 
 void efp5_println(std::string str ,efp5_t *P){
-  printf("%s",str);
+  printf("%s",str.c_str());
   if(P->infinity==0){
     printf("(");
     fp5_printf("",&P->x);
@@ -46,7 +46,7 @@ void efp5_println(std::string str ,efp5_t *P){
 }
 
 void efp5_projective_printf(std::string str ,efp5_projective_t *P){
-  printf("%s",str);
+  printf("%s",str.c_str());
   if(P->infinity==0){
     printf("(");
     fp5_printf("",&P->x);
@@ -61,7 +61,7 @@ void efp5_projective_printf(std::string str ,efp5_projective_t *P){
 }
 
 void efp5_jacobian_printf(std::string str ,efp5_jacobian_t *P){
-  printf("%s",str);
+  printf("%s",str.c_str());
   if(P->infinity==0){
     printf("(");
     fp5_printf("",&P->x);
@@ -76,7 +76,7 @@ void efp5_jacobian_printf(std::string str ,efp5_jacobian_t *P){
 }
 
 void efp5_printf_montgomery(std::string str ,efp5_t *P){
-  printf("%s",str);
+  printf("%s",str.c_str());
   if(P->infinity==0){
     printf("(");
     fp5_printf_montgomery("",&P->x);
@@ -89,7 +89,7 @@ void efp5_printf_montgomery(std::string str ,efp5_t *P){
 }
 
 void efp5_jacobian_printf_montgomery(std::string str ,efp5_jacobian_t *P){
-  printf("%s",str);
+  printf("%s",str.c_str());
   if(P->infinity==0){
     printf("(");
     fp5_printf_montgomery("",&P->x);
@@ -104,7 +104,7 @@ void efp5_jacobian_printf_montgomery(std::string str ,efp5_jacobian_t *P){
 }
 
 void efp5_projective_printf_montgomery(std::string str ,efp5_projective_t *P){
-  printf("%s",str);
+  printf("%s",str.c_str());
   if(P->infinity==0){
     printf("(");
     fp5_printf_montgomery("",&P->x);
@@ -121,7 +121,7 @@ void efp5_projective_printf_montgomery(std::string str ,efp5_projective_t *P){
 void efp5_projective_printf_affine(std::string str ,efp5_projective_t *P){
   static efp5_t out;
   efp5_projective_to_affine(&out,P);
-  printf("%s",str);
+  printf("%s",str.c_str());
   if(P->infinity==0){
     printf("(");
     fp5_printf("",&out.x);
@@ -136,7 +136,7 @@ void efp5_projective_printf_affine(std::string str ,efp5_projective_t *P){
 void efp5_projective_printf_affine_montgomery(std::string str ,efp5_projective_t *P){
   static efp5_t out;
   efp5_projective_to_affine_montgomery(&out,P);
-  printf("%s",str);
+  printf("%s",str.c_str());
   if(P->infinity==0){
     printf("(");
     fp5_printf_montgomery("",&out.x);

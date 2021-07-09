@@ -6,7 +6,7 @@ void fp14_init(fp14_t *A){
 }
 
 void fp14_printf(std::string str ,fp14_t *A){
-  gmp_printf("%s(",str);
+  gmp_printf("%s(",str.c_str());
   fp7_printf("",&A->x0);
   gmp_printf(",");
   fp7_printf("",&A->x1);
@@ -14,7 +14,7 @@ void fp14_printf(std::string str ,fp14_t *A){
 }
 
 void fp14_println(std::string str ,fp14_t *A){
-  gmp_printf("%s(",str);
+  gmp_printf("%s(",str.c_str());
   fp7_printf("",&A->x0);
   gmp_printf(",");
   fp7_printf("",&A->x1);
@@ -22,7 +22,7 @@ void fp14_println(std::string str ,fp14_t *A){
 }
 
 void fp14_printf_montgomery(std::string str ,fp14_t *A){
-  gmp_printf("%s(",str);
+  gmp_printf("%s(",str.c_str());
   fp7_printf_montgomery("",&A->x0);
   gmp_printf(",");
   fp7_printf_montgomery("",&A->x1);

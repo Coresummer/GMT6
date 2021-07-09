@@ -33,7 +33,7 @@ void mpn_set_mpz(mp_limb_t *ans,mpz_t a){
 	str = (char *)malloc(mpz_sizeinbase (a,10) + 2);
 	//gmp_printf("a=%Zd\n",a);
 	str = mpz_get_str(str,10,a);
-	// printf("str1=%s",str);
+	// printf("str1=%s",str.c_str());
 	mpn_set_char(ans,FPLIMB,str);
 
 	free(str);

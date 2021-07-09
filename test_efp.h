@@ -1,3 +1,4 @@
+#pragma once
 #ifndef TEST_EFP_H
 #define TEST_EFP_H
 
@@ -5,7 +6,7 @@
 #include "efp6.h"
 
 void check_efp();
-void check_efp3();
+void check_efp2();
 void check_efp6();
 void check_g1_g2();
 
