@@ -1,4 +1,5 @@
-  #define TTT_INSTANCE_HERE
+  #include <cstdio>
+#define TTT_INSTANCE_HERE
 
 #include "define.h"
 #include "count.h"
@@ -34,9 +35,9 @@ int main(){
   check_fp();
   check_fp2();
   check_fp6();
-  check_fp2_count();
-  check_fp6_count();
-  check_fp_time();
+  // check_fp2_count();
+  // check_fp6_count();
+  // check_fp_time();
 
   check_efp();
   check_efp2();
@@ -45,8 +46,7 @@ int main(){
 
   //SCM_func_check();//未完成
   check_pairing();
-  check_pairing_count();
-  check_pairing_time();
-
+  // check_pairing_count();
+  // check_pairing_time();
   return 0;
 }
