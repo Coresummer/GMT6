@@ -4,7 +4,7 @@ void mpn_init(mp_limb_t *a,mp_size_t size){
 	mpn_zero(a,size);
 }
 
-void mpn_set_char(mp_limb_t *ans,mp_size_t mp_size,char *str){
+void mpn_set_char(mp_limb_t *ans,mp_size_t mp_size,char *str ){
 	unsigned long int i,sizeL;
 	char *str_buf;
 	mp_size_t size;
@@ -28,12 +28,12 @@ void mpn_set_ui(mp_limb_t *ans,mp_size_t size,unsigned long int ui){
 }
 
 void mpn_set_mpz(mp_limb_t *ans,mpz_t a){
-	char *str;
+	char *str ;
 
 	str = (char *)malloc(mpz_sizeinbase (a,10) + 2);
 	//gmp_printf("a=%Zd\n",a);
 	str = mpz_get_str(str,10,a);
-	// printf("str1=%s",str);
+	// printf("str1=%s",str.c_str());
 	mpn_set_char(ans,FPLIMB,str);
 
 	free(str);
@@ -47,7 +47,7 @@ void mpn_mod(mp_limb_t *ans,mp_limb_t *a,mp_size_t size_a){
 	mpn_tdiv_qr(dumy,ans,0,a,size_a,prime,FPLIMB);
 }
 
-int mpn_cmp_char(mp_limb_t *a,char *str){
+int mpn_cmp_char(mp_limb_t *a,char *str ){
 	mp_limb_t buf[FPLIMB];
 	mp_size_t size;
 	size=FPLIMB;
@@ -97,19 +97,19 @@ void mpn_dbl(mp_limb_t *ans,mp_limb_t *a,mp_size_t size){
 	mpn_lshift(ans,a,size,1);
 }
 
-void mpn_add_char(mp_limb_t *ans,mp_limb_t *a,mp_size_t size,char *str){
+void mpn_add_char(mp_limb_t *ans,mp_limb_t *a,mp_size_t size,char *str ){
 	mp_limb_t buf[size];
 	mpn_set_char(buf,size,str);
 	mpn_add_n(ans,a,buf,size);
 }
 
-void mpn_sub_char(mp_limb_t *ans,mp_limb_t *a,mp_size_t size,char *str){
+void mpn_sub_char(mp_limb_t *ans,mp_limb_t *a,mp_size_t size,char *str ){
 	mp_limb_t buf[size];
 	mpn_set_char(buf,size,str);
 	mpn_sub_n(ans,a,buf,size);
 }
 
-void mpn_mul_char(mp_limb_t *ans,mp_limb_t *a,mp_size_t size,char *str){
+void mpn_mul_char(mp_limb_t *ans,mp_limb_t *a,mp_size_t size,char *str ){
 	mp_limb_t buf[size];
 	mpn_set_char(buf,size,str);
 	mpn_mul_n(ans,a,buf,size);
@@ -180,7 +180,7 @@ void mpn_pow(mp_limb_t *ans,mp_size_t ans_size,mp_limb_t *a,mp_size_t a_size,mp_
 	mpn_copyd(ans,Temp,ans_size);
 }
 
-void mpn_pow_ui(mp_limb_t *ans,mp_size_t ans_size,mp_limb_t *a,mp_size_t a_size,char *str){
+void mpn_pow_ui(mp_limb_t *ans,mp_size_t ans_size,mp_limb_t *a,mp_size_t a_size,char *str ){
 	mp_limb_t at[ans_size],Temp[2*ans_size],tmp[ans_size];
 	mp_limb_t bit[1],bit_copy[1],buf[1];
 	size_t bit_size;
@@ -230,7 +230,7 @@ void mpn_pow_ui(mp_limb_t *ans,mp_size_t ans_size,mp_limb_t *a,mp_size_t a_size,
 	mpn_copyd(ans,Temp,ans_size);
 }
 
-void mpn_tdiv_q_char(mp_limb_t *ans,mp_limb_t *a,mp_size_t size_a,char *str){
+void mpn_tdiv_q_char(mp_limb_t *ans,mp_limb_t *a,mp_size_t size_a,char *str ){
 	mp_limb_t buf[FPLIMB],dumy[FPLIMB];
 	mp_size_t size,buf_size;
 	size=FPLIMB;

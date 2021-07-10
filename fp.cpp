@@ -5,21 +5,21 @@ void fp_init(fp_t *A){
 }
 
 void fp_printf(std::string str,fp_t *A){
-  gmp_printf("%s%Nu",str,A->x0,FPLIMB);
+  gmp_printf("%s%Nu",str.c_str(),A->x0,FPLIMB);
 }
 
 void fpd_printf(std::string str,fpd_t *A){
-  gmp_printf("%s%Nu",str,A->x0,FPLIMB2);
+  gmp_printf("%s%Nu",str.c_str(),A->x0,FPLIMB2);
 }
 
 void fp_println(std::string str,fp_t *A){
-  gmp_printf("%s%Nu\n",str,A->x0,FPLIMB);
+  gmp_printf("%s%Nu\n",str.c_str(),A->x0,FPLIMB);
 }
 
 void fp_printf_montgomery(std::string str,fp_t *A){
   static fp_t out;
   fp_mod_montgomery(&out,A);
-  gmp_printf("%s%Nu",str,out.x0,FPLIMB);
+  gmp_printf("%s%Nu",str.c_str(),out.x0,FPLIMB);
 }
 
 void fp_set(fp_t *ANS,fp_t *A){

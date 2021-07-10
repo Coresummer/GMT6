@@ -6,7 +6,7 @@ void fp6_init(fp6_t *A){
 }
 
 void fp6_printf(std::string str,fp6_t *A){
-  gmp_printf("%s(",str);
+  gmp_printf("%s(",str.c_str());
   fp3_printf("",&A->x0);
   gmp_printf(",");
   fp3_printf("",&A->x1);
@@ -14,7 +14,7 @@ void fp6_printf(std::string str,fp6_t *A){
 }
 
 void fp6_println(std::string str,fp6_t *A){
-  gmp_printf("%s(",str);
+  gmp_printf("%s(",str.c_str());
   fp3_printf("",&A->x0);
   gmp_printf(",");
   fp3_printf("",&A->x1);
@@ -22,7 +22,7 @@ void fp6_println(std::string str,fp6_t *A){
 }
 
 // void fp6_printf_montgomery(std::string str,fp6_t *A){
-//   gmp_printf("%s(",str);
+//   gmp_printf("%s(",str.c_str());
 //   fp3_printf_montgomery("",&A->x0);
 //   gmp_printf(",");
 //   fp3_printf_montgomery("",&A->x1);

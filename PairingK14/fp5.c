@@ -9,7 +9,7 @@ void fp5_init(fp5_t *A){
 }
 
 void fp5_printf(std::string str,fp5_t *A){
-  gmp_printf("%s(",str);
+  gmp_printf("%s(",str.c_str());
   fp_printf("",&A->x0);
   gmp_printf(",");
   fp_printf("",&A->x1);
@@ -23,7 +23,7 @@ void fp5_printf(std::string str,fp5_t *A){
 }
 
 void fp5_println(std::string str,fp5_t *A){
-  gmp_printf("%s(",str);
+  gmp_printf("%s(",str.c_str());
   fp_printf("",&A->x0);
   gmp_printf(",");
   fp_printf("",&A->x1);
@@ -37,7 +37,7 @@ void fp5_println(std::string str,fp5_t *A){
 }
 
 void fpd5_println(std::string str,fpd5_t *A){
-  gmp_printf("%s(",str);
+  gmp_printf("%s(",str.c_str());
   fpd_printf("",&A->x0);
   gmp_printf(",");
   fpd_printf("",&A->x1);
@@ -51,7 +51,7 @@ void fpd5_println(std::string str,fpd5_t *A){
 }
 
 void fp5_printf_montgomery(std::string str,fp5_t *A){
-  gmp_printf("%s(",str);
+  gmp_printf("%s(",str.c_str());
   fp_printf_montgomery("",&A->x0);
   gmp_printf(",");
   fp_printf_montgomery("",&A->x1);
