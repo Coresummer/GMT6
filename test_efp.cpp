@@ -47,13 +47,13 @@ void check_efp6(){
   efp6_init(&ANS);
   efp6_rational_point(&P);
   efp6_println("P = ",&P);
-  efp6_checkOnCurve(&P);
+  // efp6_checkOnCurve(&P);
 
   printf("---------------------------------\n");
 
   printf("weil定理の確認\n");
   efp6_scm(&ANS,&P,efp6_total);
-  efp6_checkOnCurve(&ANS);
+  // efp6_checkOnCurve(&ANS);
   efp6_println("[p^6 +1 -t6]P = ",&ANS);
   printf("---------------------------------\n");
 

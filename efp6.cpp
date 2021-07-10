@@ -6,7 +6,7 @@
 void efp6_init(efp6_t *P){
   fp6_init(&P->x);
   fp6_init(&P->y);
-  P->infinity=1;
+  P->infinity=0;
 }
 
 void efp6_printf(std::string str ,efp6_t *P){

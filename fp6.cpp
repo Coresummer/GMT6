@@ -86,7 +86,6 @@ void fp6_set_random(fp6_t *ANS,gmp_randstate_t state){
   fp2_set_random(&ANS->x0,state);
   fp2_set_random(&ANS->x1,state);
   fp2_set_random(&ANS->x2,state);
-
 }
 
 void fp6_mul(fp6_t *ANS,fp6_t *A,fp6_t *B){
