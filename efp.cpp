@@ -3,21 +3,21 @@
 void efp_init(efp_t *P){
   fp_init(&P->x);
   fp_init(&P->y);
-  P->infinity=1;
+  P->infinity=0;
 }
 
 void efp_projective_init(efp_projective_t *P){
   fp_init(&P->x);
   fp_init(&P->y);
   fp_init(&P->z);
-  P->infinity=1;
+  P->infinity=0;
 }
 
 void efp_jacobian_init(efp_jacobian_t *P){
   fp_init(&P->x);
   fp_init(&P->y);
   fp_init(&P->z);
-  P->infinity=1;
+  P->infinity=0;
 }
 
 void efp_printf(std::string str,efp_t *P){
