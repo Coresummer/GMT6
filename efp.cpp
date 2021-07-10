@@ -110,12 +110,12 @@ void efp_affine_to_jacobian(efp_jacobian_t *ANS,efp_t *A){
   ANS->infinity=A->infinity;
 }
 
-void efp_affine_to_jacobian_montgomery(efp_jacobian_t *ANS,efp_t *A){
-  fp_set(&ANS->x,&A->x);
-  fp_set(&ANS->y,&A->y);
-  mpn_copyd(ANS->z.x0,RmodP,FPLIMB);
-  ANS->infinity=A->infinity;
-}
+// void efp_affine_to_jacobian_montgomery(efp_jacobian_t *ANS,efp_t *A){
+//   fp_set(&ANS->x,&A->x);
+//   fp_set(&ANS->y,&A->y);
+//   mpn_copyd(ANS->z.x0,RmodP,FPLIMB);
+//   ANS->infinity=A->infinity;
+// }
 
 void efp_projective_to_affine(efp_t *ANS,efp_projective_t *A){
   static fp_t Zi,Zt;
@@ -157,16 +157,16 @@ void efp_mix(efp_jacobian_t *ANS,efp_jacobian_t *A,fp_t *Zi){
   ANS->infinity=A->infinity;
 }
 
-void efp_mix_montgomery(efp_jacobian_t *ANS,efp_jacobian_t *A,fp_t *Zi){
-  static fp_t Zt;
-  fp_sqrmod_montgomery(&Zt,Zi);
-  fp_mulmod_montgomery(&ANS->x,&A->x,&Zt);
-  fp_mulmod_montgomery(&Zt,&Zt,Zi);
-  fp_mulmod_montgomery(&ANS->y,&A->y,&Zt);
-  //fp_set_ui(&ANS->z,1);
-  mpn_copyd(ANS->z.x0,RmodP,FPLIMB);
-  ANS->infinity=A->infinity;
-}
+// void efp_mix_montgomery(efp_jacobian_t *ANS,efp_jacobian_t *A,fp_t *Zi){
+//   static fp_t Zt;
+//   fp_sqrmod_montgomery(&Zt,Zi);
+//   fp_mulmod_montgomery(&ANS->x,&A->x,&Zt);
+//   fp_mulmod_montgomery(&Zt,&Zt,Zi);
+//   fp_mulmod_montgomery(&ANS->y,&A->y,&Zt);
+//   //fp_set_ui(&ANS->z,1);
+//   mpn_copyd(ANS->z.x0,RmodP,FPLIMB);
+//   ANS->infinity=A->infinity;
+// }
 
 void efp_to_montgomery(efp_t *ANS,efp_t *A){
   fp_to_montgomery(&ANS->x,&A->x);

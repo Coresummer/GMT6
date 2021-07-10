@@ -8,7 +8,7 @@ void fp3_init(fp3_t *A){
 }
 
 void fp3_printf(std::string str,fp3_t *A){
-  gmp_printf("%s(",str);
+  gmp_printf("%s(",str.c_str());
   fp_printf("",&A->x0);
   gmp_printf(",");
   fp_printf("",&A->x1);
@@ -18,7 +18,7 @@ void fp3_printf(std::string str,fp3_t *A){
 }
 
 void fp3_println(std::string str,fp3_t *A){
-  gmp_printf("%s(",str);
+  gmp_printf("%s(",str.c_str());
   fp_printf("",&A->x0);
   gmp_printf(",");
   fp_printf("",&A->x1);
@@ -28,7 +28,7 @@ void fp3_println(std::string str,fp3_t *A){
 }
 
 void fpd3_println(std::string str,fpd3_t *A){
-  gmp_printf("%s(",str);
+  gmp_printf("%s(",str.c_str());
   fpd_printf("",&A->x0);
   gmp_printf(",");
   fpd_printf("",&A->x1);
@@ -39,7 +39,7 @@ void fpd3_println(std::string str,fpd3_t *A){
 }
 
 void fp3_printf_montgomery(std::string str,fp3_t *A){
-  gmp_printf("%s(",str);
+  gmp_printf("%s(",str.c_str());
   fp_printf_montgomery("",&A->x0);
   gmp_printf(",");
   fp_printf_montgomery("",&A->x1);
@@ -95,12 +95,12 @@ void fp3_mod_montgomery(fp3_t *ANS,fp3_t *A){
 
 }
 
-void fp3_mod_montgomery_double(fp3_t *ANS,fpd3_t *A){
-  mpn_mod_montgomery(ANS->x0.x0,FPLIMB,A->x0.x0,FPLIMB2);
-  mpn_mod_montgomery(ANS->x1.x0,FPLIMB,A->x1.x0,FPLIMB2);
-  mpn_mod_montgomery(ANS->x2.x0,FPLIMB,A->x2.x0,FPLIMB2);
+// void fp3_mod_montgomery_double(fp3_t *ANS,fpd3_t *A){
+//   mpn_mod_montgomery(ANS->x0.x0,FPLIMB,A->x0.x0,FPLIMB2);
+//   mpn_mod_montgomery(ANS->x1.x0,FPLIMB,A->x1.x0,FPLIMB2);
+//   mpn_mod_montgomery(ANS->x2.x0,FPLIMB,A->x2.x0,FPLIMB2);
 
-}
+// }
 
 void fp3_lshift_1(fp3_t *ANS,fp3_t *A){
   fp_lshift_1(&ANS->x0,&A->x0);
@@ -400,12 +400,12 @@ void fp3_mul_mpn(fp3_t *ANS,fp3_t *A,mp_limb_t *B){
 
 }
 
-void fp3_mul_mpn_montgomery(fp3_t *ANS,fp3_t *A,mp_limb_t *B){
-  mpn_mulmod_montgomery(ANS->x0.x0,FPLIMB,A->x0.x0,FPLIMB,B,FPLIMB);
-  mpn_mulmod_montgomery(ANS->x1.x0,FPLIMB,A->x1.x0,FPLIMB,B,FPLIMB);
-  mpn_mulmod_montgomery(ANS->x2.x0,FPLIMB,A->x2.x0,FPLIMB,B,FPLIMB);
+// void fp3_mul_mpn_montgomery(fp3_t *ANS,fp3_t *A,mp_limb_t *B){
+//   mpn_mulmod_montgomery(ANS->x0.x0,FPLIMB,A->x0.x0,FPLIMB,B,FPLIMB);
+//   mpn_mulmod_montgomery(ANS->x1.x0,FPLIMB,A->x1.x0,FPLIMB,B,FPLIMB);
+//   mpn_mulmod_montgomery(ANS->x2.x0,FPLIMB,A->x2.x0,FPLIMB,B,FPLIMB);
 
-}
+// }
 
 void fp3_sqr(fp3_t *ANS,fp3_t *A){
   //3次のkaratusba

@@ -27,7 +27,7 @@ void create_prt(){
   fp_inv(&base_c_inv,&base_c);
   gmp_printf("\nmodulo polynomial\n");
 
-  gmp_printf("fp3  = fp[alpha]/(alpha^2 -%Nu)\n",base_c.x0,FPLIMB);
+  gmp_printf("fp3  = fp[alpha]/(alpha^2 -%Nu)\n",base_c,FPLIMB);
   gmp_printf("fp6 = fp3[beta]/(beta^3 -alpha)\n");
 
   fp_println("base_c     = ",&base_c);
