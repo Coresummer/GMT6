@@ -7,6 +7,7 @@
 
 //void SCM_func_check();
 void check_pairing();
+void check_pairing_static();
 void check_pairing_count();
 void check_pairing_time();
 

@@ -5,7 +5,7 @@
 #include "scalar.h"
 
 void mpn_init(mp_limb_t *a,mp_size_t size);
-void mpn_set_char(mp_limb_t *ans,mp_size_t mp_size,char *str);
+void mpn_set_char(mp_limb_t *ans,mp_size_t mp_size,const char *str);
 void mpn_set_ui(mp_limb_t *ans,mp_size_t size,unsigned long int ui);
 void mpn_set_mpz(mp_limb_t *ans,mpz_t a);
 void mpn_mod(mp_limb_t *ans,mp_limb_t *a,mp_size_t size_a);

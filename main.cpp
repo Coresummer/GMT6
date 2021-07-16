@@ -52,22 +52,22 @@ printf("Fp7_mul using Karatsuba24\n\n");
   gmp_randseed_ui(state,(unsigned long int)time(NULL));
 
   //各関数の動作確認、コスト計算、時間計測など
-  check_fp();
-  check_fp3();
-  check_fp6();
-  check_fp3_count();
-  check_fp6_count();
-  // check_fp_time();
+  // check_fp();
+  // check_fp3();
+  // check_fp6();
+  // check_fp3_count();
+  // check_fp6_count();
+  // // check_fp_time();
 
-  check_efp();
-  check_efp3();
-  check_efp6();
-  check_g1_g2();
+  // check_efp();
+  // check_efp3();
+  // check_efp6();
+  // check_g1_g2();
 
   //SCM_func_check();//未完成
-  check_pairing();
-  check_pairing_count();
-  check_pairing_time();
+  check_pairing_static();
+  // check_pairing_count();
+  // check_pairing_time();
 
   return 0;
 }

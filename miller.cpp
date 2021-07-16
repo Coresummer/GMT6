@@ -1,4 +1,5 @@
 #include "miller.h"
+#include "fp6.h"
 
 void efp6_to_Jacefp(efp_jacobian_t *ANS,efp6_t *A){ 
   fp_set(&ANS->x,&A->x.x0.x1);
@@ -57,7 +58,8 @@ void ff_lttp(fp6_t *f, efp_jacobian_t *S, efp_t *P){
   fp_mul(&tmp1_fp6.x0.x2,&tmp1_fp6.x0.x2,&tmp1_fp);
   fp_set_neg(&tmp1_fp6.x0.x2,&tmp1_fp6.x0.x2);
   fp_mul_base_inv(&tmp1_fp6.x0.x2,&tmp1_fp6.x0.x2);
-
+  fp6_println("lttp", &tmp1_fp6);
+  getchar();
   fp6_mul_sparse_dbl(f,&tmp1_fp6,f);
 
   fp_set(&S->x,&nextX);
@@ -117,7 +119,8 @@ void ff_ltqp(fp6_t *f, efp_jacobian_t *S, efp_t *Q,efp_t *P){
   fp_mul(&tmp1_fp,&t2,&Q->x);
   fp_mul(&tmp2_fp,&nextZ,&Q->y);
   fp_sub(&tmp1_fp6.x0.x1,&tmp1_fp,&tmp2_fp);
-
+  fp6_println("ltpq", &tmp1_fp6);
+  getchar();
   fp6_mul_sparse_add(f,&tmp1_fp6,f);
   fp_set(&S->x,&nextX);
   fp_set(&S->y,&nextY);

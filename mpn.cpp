@@ -4,7 +4,7 @@ void mpn_init(mp_limb_t *a,mp_size_t size){
 	mpn_zero(a,size);
 }
 
-void mpn_set_char(mp_limb_t *ans,mp_size_t mp_size,char *str ){
+void mpn_set_char(mp_limb_t *ans,mp_size_t mp_size,const char *str ){
 	unsigned long int i,sizeL;
 	char *str_buf;
 	mp_size_t size;
