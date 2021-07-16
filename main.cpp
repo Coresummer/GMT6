@@ -65,9 +65,10 @@ printf("Fp7_mul using Karatsuba24\n\n");
   // check_g1_g2();
 
   //SCM_func_check();//未完成
-  check_pairing_static();
+  // check_pairing_static();
+  check_pairing();
   // check_pairing_count();
-  // check_pairing_time();
+  check_pairing_time();
 
   return 0;
 }
