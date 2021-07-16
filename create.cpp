@@ -59,7 +59,7 @@ void check_base(){
   mpz_sub_ui(expo,expo,1);
   mpz_divexact_ui(expo,expo,3);
   fp2_pow(&tmp2,&tmp2,expo);
-  fp2_println("fp2",&tmp2);
+  // fp2_println("fp2",&tmp2);
   if(fp2_cmp_one(&tmp2)==0) printf("error!!! alpha^((p^3-1)/2)==1\n\n");
   
   mpz_set_ui(expo,3);

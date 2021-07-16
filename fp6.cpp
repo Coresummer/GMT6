@@ -138,55 +138,107 @@ void fp6_mul(fp6_t *ANS,fp6_t *A,fp6_t *B){
 
 
 void fp6_mul_sparse_add(fp6_t *ANS,fp6_t *A,fp6_t *B){  //?000?? * ??????
+
   static fp6_t tmp_A,tmp_B;
   fp6_set(&tmp_A,A);//?0 00 ?? a+b0+c0^2
   fp6_set(&tmp_B,B);//?? ?? ?? d+e0+f0^2
 
   static fp2_t tmp1_fp2,tmp2_fp2,tmp3_fp2,tmp4_fp2,tmp5_fp2,tmp6_fp2;
-  fp_mul(&ANS->x0.x0,&tmp_A.x0.x0,&tmp_B.x0.x0);
-  fp_mul(&ANS->x0.x1,&tmp_A.x0.x0,&tmp_B.x0.x1);
-  fp_mul(&ANS->x1.x0,&tmp_A.x0.x0,&tmp_B.x1.x0);
-  fp_mul(&ANS->x1.x1,&tmp_A.x0.x0,&tmp_B.x1.x1);
-  fp_mul(&ANS->x2.x0,&tmp_A.x0.x0,&tmp_B.x2.x0);
-  fp_mul(&ANS->x2.x1,&tmp_A.x0.x0,&tmp_B.x2.x1);
 
-  fp2_mul(&tmp1_fp2,&tmp_A.x2,&tmp_B.x0); //cd0^2
-  fp2_add(&ANS->x2,&ANS->x1,&tmp1_fp2);
+  // fp2_add(&tmp1_fp2,&tmp_A.x0,&tmp_A.x1);
+  //(a)(d+e)
+  fp2_add(&tmp2_fp2,&tmp_B.x0,&tmp_B.x1);
+  // fp2_mul(&tmp4_fp2,&tmp_A.x0,&tmp2_fp2);
+  fp_mul(&tmp4_fp2.x0,&tmp_A.x0.x0,&tmp2_fp2.x0);
+  fp_mul(&tmp4_fp2.x1,&tmp_A.x0.x0,&tmp2_fp2.x1);
 
-  fp2_mul(&tmp2_fp2,&tmp_A.x2,&tmp_B.x1); //ce0^3 = cebase
-  fp2_mul_base(&tmp2_fp2, &tmp2_fp2);
-  fp2_add(&ANS->x0,&ANS->x0,&tmp2_fp2);
+  //(a+c)(d+e+f) = tmp5
+  // fp2_add(&tmp1_fp2,&tmp_A.x0,&tmp_A.x2);
+  fp_add(&tmp1_fp2.x0,&tmp_A.x0.x0,&tmp_A.x2.x0);
+  fp_set(&tmp1_fp2.x1,&tmp_A.x2.x1);
+  fp2_add(&tmp2_fp2,&tmp2_fp2,&tmp_B.x2);
+  fp2_mul(&tmp5_fp2,&tmp1_fp2,&tmp2_fp2);
 
+  //(a+c)(d+f) = tmp6
+  fp2_sub(&tmp2_fp2,&tmp2_fp2,&tmp_B.x1);
+  fp2_mul(&tmp6_fp2,&tmp1_fp2,&tmp2_fp2);
+
+  //ad = tmp1
+  // fp2_mul(&tmp1_fp2,&tmp_A.x0,&tmp_B.x0);
+  fp_mul(&tmp1_fp2.x0,&tmp_A.x0.x0,&tmp_B.x0.x0);
+  fp_mul(&tmp1_fp2.x1,&tmp_A.x0.x0,&tmp_B.x0.x1);
+
+  //cf = tmp3
   fp2_mul(&tmp3_fp2,&tmp_A.x2,&tmp_B.x2);
-  fp2_mul_base(&tmp3_fp2, &tmp3_fp2);
-  fp2_add(&ANS->x1,&ANS->x1,&tmp3_fp2);
 
+  //x0 = ad + θ^3((a+c+b)(d+e+f)-(a+c)(d+f)-(a+b)(d+e)+ad)
+  // = tmp1 + mul_base(tmp5-tmp6-tmp2-tmp4+)
+  fp2_sub(&ANS->x0,&tmp5_fp2,&tmp4_fp2);  //(a+c)(d+e+f) - (a)(d+e)
+  fp2_sub(&ANS->x0,&ANS->x0,&tmp6_fp2);   //(a+c)(d+e+f) - (a)(d+e) - (a+c)(d+f)
+  fp2_add(&ANS->x0,&ANS->x0,&tmp1_fp2);   //(a+c)(d+e+f) - (a)(d+e) - (a+c)(d+f) + ad
+  fp2_mul_base(&ANS->x0,&ANS->x0);        //
+  fp2_add(&ANS->x0,&ANS->x0,&tmp1_fp2);   //
+
+  //x1 = (a+b)(d+e)-ad-be+cfθ^3
+  fp2_sub(&ANS->x1,&tmp4_fp2,&tmp1_fp2);
+  fp2_mul_base(&ANS->x2,&tmp3_fp2);
+  fp2_add(&ANS->x1,&ANS->x1,&ANS->x2);
+
+  //x2 = be+(a+c)(d+f)-ad-cf
+  fp2_sub(&ANS->x2,&tmp6_fp2,&tmp1_fp2);
+  fp2_sub(&ANS->x2,&ANS->x2,&tmp3_fp2);
 }
 
 void fp6_mul_sparse_dbl(fp6_t *ANS,fp6_t *A,fp6_t *B){  //??0?00 * ??????
   static fp6_t tmp_A,tmp_B;
   fp6_set(&tmp_A,A);//?? 0? 00
   fp6_set(&tmp_B,B);//??????
+  static fp2_t tmp1_fp2,tmp2_fp2,tmp3_fp2,tmp4_fp2,tmp5_fp2,tmp6_fp2;
+  //(a+b)(d+e) = tmp4
+  // fp2_add(&tmp1_fp2,&tmp_A.x0,&tmp_A.x1);
+  fp_set(&tmp1_fp2.x0,&tmp_A.x0.x0);
+  fp_add(&tmp1_fp2.x1,&tmp_A.x0.x1,&tmp_A.x1.x1);
+  fp2_add(&tmp2_fp2,&tmp_B.x0,&tmp_B.x1);
+  fp2_mul(&tmp4_fp2,&tmp1_fp2,&tmp2_fp2);
 
-  static fp_t tmp1_fp;
-  fp2_mul(&ANS->x0,&tmp_A.x0,&tmp_B.x0); //
-  fp2_mul(&ANS->x1,&tmp_A.x1,&tmp_B.x1); //
-  fp2_mul(&ANS->x2,&tmp_A.x2,&tmp_B.x2); //
+  //(a+b)(d+e+f) = tmp5
+  fp2_add(&tmp2_fp2,&tmp2_fp2,&tmp_B.x2);
+  fp2_mul(&tmp5_fp2,&tmp1_fp2,&tmp2_fp2);
 
-  fp_mul(&ANS->x0.x1,&tmp_A.x1.x1,&tmp_B.x0.x0);
-  fp_mul(&tmp1_fp,&tmp_A.x1.x1,&tmp_B.x0.x1);
-  fp_mul_base(&tmp1_fp, &tmp1_fp);
-  fp_add(&ANS->x0.x0,&ANS->x0.x0,&tmp1_fp);
+  //(a)(d+f) = tmp6
+  // fp2_sub(&tmp1_fp2,&tmp1_fp2,&tmp_A.x1);
+  fp2_sub(&tmp2_fp2,&tmp2_fp2,&tmp_B.x1);
+  fp2_mul(&tmp6_fp2,&tmp_A.x0,&tmp2_fp2);
 
-  fp_mul(&ANS->x1.x1,&tmp_A.x1.x1,&tmp_B.x1.x0);
-  fp_mul(&tmp1_fp,&tmp_A.x1.x1,&tmp_B.x1.x1);
-  fp_mul_base(&tmp1_fp, &tmp1_fp);
-  fp_add(&ANS->x1.x0,&ANS->x1.x0,&tmp1_fp);
+  //ad = tmp1
+  fp2_mul(&tmp1_fp2,&tmp_A.x0,&tmp_B.x0);
 
-  fp_mul(&ANS->x2.x1,&tmp_A.x1.x1,&tmp_B.x2.x0);
-  fp_mul(&tmp1_fp,&tmp_A.x1.x1,&tmp_B.x2.x1);
-  fp_mul_base(&tmp1_fp, &tmp1_fp);
-  fp_add(&ANS->x2.x0,&ANS->x2.x0,&tmp1_fp);
+  //be = tmp2
+  // fp2_mul(&tmp2_fp2,&tmp_A.x1,&tmp_B.x1);
+  fp_mul(&tmp2_fp2.x1,&tmp_A.x1.x1,&tmp_B.x1.x0);
+  fp_mul(&tmp2_fp2.x0,&tmp_A.x1.x1,&tmp_B.x1.x1);
+  fp_mul_base(&tmp2_fp2.x0,&tmp2_fp2.x0);
+
+  //x0 = ad + θ^3((a+b)(d+e+f)-(a)(d+f)-(a+b)(d+e)+ad)
+  // = tmp1 + mul_base(tmp5-tmp6-tmp2-tmp4+)
+  fp2_sub(&ANS->x0,&tmp5_fp2,&tmp4_fp2);  //(a+b)(d+e+f) - (a+b)(d+e)
+  fp2_sub(&ANS->x0,&ANS->x0,&tmp6_fp2);   //(a+b)(d+e+f) - (a+b)(d+e) - (a)(d+f)
+  fp2_add(&ANS->x0,&ANS->x0,&tmp1_fp2);   //(a+b)(d+e+f) - (a+b)(d+e) - (a)(d+f) + ad
+  fp2_mul_base(&ANS->x0,&ANS->x0);        //
+  fp2_add(&ANS->x0,&ANS->x0,&tmp1_fp2);   //
+
+  //x1 = (a+b)(d+e)-ad-be+cfθ^3
+  fp2_sub(&ANS->x1,&tmp4_fp2,&tmp1_fp2);
+  fp2_sub(&ANS->x1,&ANS->x1,&tmp2_fp2);
+  // fp2_mul_base(&ANS->x2,&tmp3_fp2);
+  // fp2_add(&ANS->x1,&ANS->x1,&ANS->x2);
+
+  //x2 = be+(a+c)(d+f)-ad-cf
+  fp2_add(&ANS->x2,&tmp2_fp2,&tmp6_fp2);
+  fp2_sub(&ANS->x2,&ANS->x2,&tmp1_fp2);
+  // fp2_sub(&ANS->x2,&ANS->x2,&tmp3_fp2);
+
+
 }
 
 // void fp6_mul_lazy_montgomery(fp6_t *ANS,fp6_t *A,fp6_t *B){

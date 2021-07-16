@@ -438,7 +438,7 @@ void efp_eca_jacobian_lazy_montgomery(efp_jacobian_t *ANS,efp_jacobian_t *P1,efp
   //ANS->z
   fp_mulmod_montgomery(&tmp1,&Pt1.z,&Pt2.z);
   fp_mulmod_montgomery(&ANS->z,&tmp1,&H);
-  //getchar();
+  // //getchar();
 }
 
 void efp_eca_mixture_lazy_montgomery(efp_jacobian_t *ANS,efp_jacobian_t *P1,efp_jacobian_t *P2){

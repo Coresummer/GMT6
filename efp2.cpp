@@ -531,7 +531,7 @@ void efp2_eca(efp2_t *ANS,efp2_t *P1,efp2_t *P2){
 //   //ANS->z
 //   fp2_mul_lazy_montgomery(&tmp1,&Pt1.z,&Pt2.z);
 //   fp2_mul_lazy_montgomery(&ANS->z,&tmp1,&H);
-//   //getchar();
+//   // //getchar();
 // }
 // void efp2_eca_mixture_lazy_montgomery(efp2_jacobian_t *ANS,efp2_jacobian_t *P1,efp2_jacobian_t *P2){
 //   static efp2_jacobian_t Pt1,Pt2;
