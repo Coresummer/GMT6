@@ -32,21 +32,34 @@ int main(){
   gmp_randseed_ui(state,(unsigned long int)time(NULL));
 
   //各関数の動作確認、コスト計算、時間計測など
-  check_fp();
-  check_fp2();
-  check_fp6();
+  // check_fp();
+  // check_fp2();
+  // check_fp6();
   // check_fp2_count();
   // check_fp6_count();
   // check_fp_time();
 
-  check_efp();
-  check_efp2();
-  check_efp6();
-  check_g1_g2();
+  // check_efp();
+  // check_efp2();
+  // check_efp6();
+  // check_g1_g2();
 
   //SCM_func_check();//未完成
-  check_pairing();
+  // check_pairing();
   // check_pairing_count();
   // check_pairing_time();
+
+  fp6_t ANS1,ANS2,A;
+
+  fp6_set_random(&A,state);
+  final_exp(&ANS1, &A);
+  fp6_pow(&ANS2, &A, fp6_total_r);
+
+  if(fp6_cmp(&ANS1, &ANS2)==0){
+    printf("equal");
+  }else{
+    printf("not equal");
+  }
+
   return 0;
 }
