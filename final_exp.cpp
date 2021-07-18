@@ -15,14 +15,14 @@ void final_exp(fp6_t *ANS,fp6_t *A){
 
   //Second part
 //L1
-  fp6_inv(&tmp2_fp6,ANS);                     //M^-1                                       //I
+  fp6_frobenius_map_p3(&tmp2_fp6,ANS);                     //M^-1                                       //I
   fp6_sqr(&tmp3_fp6,&tmp2_fp6);               //M^-2                                       //S
   
   // fp6_pow(&tmp4_fp6,ANS,X_z);                 //M^x                                        //128
   fp6_finalexpow_x_2NAF(&tmp4_fp6, ANS);
 
   fp6_mul(&tmp5_fp6,&tmp4_fp6,&tmp3_fp6);     //M^(x-2) = -t0/x                            //M
-  fp6_inv(&tmp6_fp6,&tmp5_fp6);               //M^(-x+2) = t0/x                            //I
+  fp6_frobenius_map_p3(&tmp6_fp6,&tmp5_fp6);               //M^(-x+2) = t0/x                            //I
   
   // fp6_pow(&tmp7_fp6,&tmp5_fp6,X_z);           //M^(x^2-2x) = -t0                           //128
   fp6_finalexpow_x_2NAF(&tmp7_fp6, &tmp5_fp6);
@@ -32,7 +32,7 @@ void final_exp(fp6_t *ANS,fp6_t *A){
   fp6_pow(&tmp8_fp6,&tmp8_fp6,three);         //M^3(x^2-3x+3)  //left                      //3 = 1M + 1S
 
   fp6_frobenius_map_p1(&tmp9_fp6,ANS);        //M^p                                        //p
-  fp6_inv(&tmp12_fp6,&tmp7_fp6);              //M^t0                                       //I
+  fp6_frobenius_map_p3(&tmp12_fp6,&tmp7_fp6);              //M^t0                                       //I
   fp6_mul(&tmp9_fp6,&tmp9_fp6,&tmp12_fp6);    //M^*(p+t0)                                  //M
   fp6_mul(&tmp9_fp6,&tmp9_fp6,&tmp3_fp6);     //M^*(p+t0-2) = M' right L1                  //M
 
