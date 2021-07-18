@@ -1,4 +1,5 @@
 #include "miller.h"
+#include "efp6.h"
 #include "fp.h"
 
 void efp6_to_Jacefp(efp_jacobian_t *ANS,efp6_t *A){ 
@@ -145,6 +146,40 @@ void miller_opt_ate_proj(fp6_t *f,efp6_t *P,efp6_t *Q){
       ff_lttp(f,&S,&mapped_P);
       if(mpz_tstbit(miller_loop_s,i)==1){
         ff_ltqp(f,&S,&mapped_Q,&mapped_P);
+      }
+    }
+}
+void miller_opt_ate_proj_2NAF(fp6_t *f,efp6_t *P,efp6_t *Q){
+    static efp_t mapped_P,mapped_Q,mapped_Q_neg;
+    static efp_jacobian_t S;
+
+    fp6_set_ui_ui(f,0);
+    fp_set_ui(&f->x0.x0,1);
+
+    fp_set(&mapped_P.x,&P->x.x0.x0);
+    fp_set(&mapped_P.y,&P->y.x0.x0);
+    mapped_P.infinity = 0;
+
+    efp6_to_efp(&mapped_Q,Q);//twist
+    efp6_to_Jacefp(&S,Q);
+    efp_set_neg(&mapped_Q_neg,&mapped_Q);
+
+    mp_bitcnt_t i;
+    for(i=(miller_loop_v.size() -2);i!=-1;i--){
+      switch(miller_loop_v[i]){
+        case 0:
+          ff_lttp(f,&S,&mapped_P);
+          break;
+        case 1:
+          ff_lttp(f,&S,&mapped_P);
+          ff_ltqp(f,&S,&mapped_Q,&mapped_P);
+          break;
+        case -1:
+          ff_lttp(f,&S,&mapped_P);
+          ff_ltqp(f,&S,&mapped_Q_neg,&mapped_P);
+          break;
+        default:
+            break;
       }
     }
 }

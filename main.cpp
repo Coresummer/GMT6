@@ -45,10 +45,10 @@ int main(){
   // check_g1_g2();
 
   //SCM_func_check();//未完成
-  check_pairing();
+  check_pairing_2NAF();
   // // check_pairing_static();
-  // check_pairing_count();
-  check_pairing_time();
+  check_pairing_count_2NAF();
+  check_pairing_time_2NAF();
 
   // fp6_t ANS1,ANS2,A,B;
   // fp6_init(&A);
