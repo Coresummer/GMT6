@@ -23,7 +23,7 @@
 #include <string>
 #include <iostream>
 
-// #define DEBUG_COST_A
+#define DEBUG_COST_A
 //#define DEBUG_ASSERT
 #define CHECK_PAIRING_TIME_LOOP 1000
 
@@ -146,7 +146,7 @@ TTT_EXTERN fp_t line_7sparse_x0;//7sparse乗算をするときに使う (xP^-3)*
 
 TTT_EXTERN mpz_t efp_total,efp2_total,efp6_total,fp6_total_r;//#efp,#efp5,#efp10,#efp7,#efp14
 TTT_EXTERN mpz_t miller_loop_s;
-TTT_EXTERN std::vector<int> miller_loop_v;
+TTT_EXTERN std::vector<int> miller_loop_v, finalexp_pow_x, finalexp_pow_x_1, finalexp_pow_3w;
 TTT_EXTERN mpz_t X_1_div2,X_1,X_2,X_2_1,four;//(kai +1)/2,(kai -1),(kai^2)をあらかじめ求めておく
 TTT_EXTERN mpz_t hardpart,hp_3w,three;
 //emb6

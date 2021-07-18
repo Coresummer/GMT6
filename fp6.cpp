@@ -558,6 +558,82 @@ void fp6_pow(fp6_t *ANS,fp6_t *A,mpz_t scalar){
   fp6_set(ANS,&tmp);
 }
 
+void fp6_finalexpow_x_2NAF(fp6_t *ANS,fp6_t *A){
+  static fp6_t tmp_A;
+  fp6_set(&tmp_A,A);
+
+  static fp6_t A_inv;
+  fp6_frobenius_map_p3(&A_inv, A);
+  fp6_set(ANS,&tmp_A);
+  for(int i=(finalexp_pow_x.size() -2);i!=-1;i--){
+    switch(finalexp_pow_x[i]){
+      case 0:
+        fp6_sqr(ANS, ANS);
+        break;
+      case 1:
+        fp6_sqr(ANS, ANS);
+        fp6_mul(ANS,ANS,&tmp_A);
+        break;
+      case -1:
+        fp6_sqr(ANS, ANS);
+        fp6_mul(ANS, ANS,&A_inv);
+        break;
+      default:
+          break;
+    }
+  }
+}
+void fp6_finalexpow_x_1_2NAF(fp6_t *ANS,fp6_t *A){
+  static fp6_t tmp_A;
+  fp6_set(&tmp_A,A);
+
+  static fp6_t A_inv;
+  fp6_frobenius_map_p3(&A_inv, A);
+  fp6_set(ANS,&tmp_A);
+  for(int i=(finalexp_pow_x_1.size() -2);i!=-1;i--){
+    switch(finalexp_pow_x_1[i]){
+      case 0:
+        fp6_sqr(ANS, ANS);
+        break;
+      case 1:
+        fp6_sqr(ANS, ANS);
+        fp6_mul(ANS,ANS,&tmp_A);
+        break;
+      case -1:
+        fp6_sqr(ANS, ANS);
+        fp6_mul(ANS, ANS,&A_inv);
+        break;
+      default:
+          break;
+    }
+  }
+}
+void fp6_finalexpow_3w_2NAF(fp6_t *ANS,fp6_t *A){
+    static fp6_t tmp_A;
+  fp6_set(&tmp_A,A);
+
+  static fp6_t A_inv;
+  fp6_frobenius_map_p3(&A_inv, A);
+  fp6_set(ANS,&tmp_A);
+  for(int i=(finalexp_pow_3w.size() -2);i!=-1;i--){
+    switch(finalexp_pow_3w[i]){
+      case 0:
+        fp6_sqr(ANS, ANS);
+        break;
+      case 1:
+        fp6_sqr(ANS, ANS);
+        fp6_mul(ANS,ANS,&tmp_A);
+        break;
+      case -1:
+        fp6_sqr(ANS, ANS);
+        fp6_mul(ANS, ANS,&A_inv);
+        break;
+      default:
+          break;
+    }
+  }
+}
+
 int  fp6_cmp(fp6_t *A,fp6_t *B){
   if(fp2_cmp(&A->x0,&B->x0)==0 && fp2_cmp(&A->x1,&B->x1)==0 && fp2_cmp(&A->x2,&B->x2)==0){
     return 0;

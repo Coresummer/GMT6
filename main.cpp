@@ -47,22 +47,38 @@ int main(){
   //SCM_func_check();//未完成
   check_pairing_2NAF();
   // // check_pairing_static();
-  check_pairing_count_2NAF();
+  // check_pairing_count_2NAF();
   check_pairing_time_2NAF();
 
-  // fp6_t ANS1,ANS2,A,B;
-  // fp6_init(&A);
-  // fp6_set_random(&A,state);
-  // fp6_init(&B);
-  // fp6_set_random(&B,state);
+  // efp6_t P,Q;
+  // fp6_t f,e,f_inv,f_p3;
+  // efp6_init(&P);
+  // efp6_init(&Q);
+  // fp6_init(&f);
+  // fp6_init(&e);
+  // fp6_init(&f_inv);
+  // fp6_init(&f_p3);
 
-  // fp_set_ui(&A.x1.x0,0);
-  // fp2_set_ui_ui(&A.x2, 0);
+  // generate_g1(&P);
+  // generate_g2(&Q);
 
-  // fp6_mul(&ANS1, &A, &B);
-  // fp6_mul_sparse_dbl(&ANS2, &A, &B);
-  
-  // if(fp6_cmp(&ANS1, &ANS2)==0)printf("equal\n");
+  // miller_opt_ate_proj_2NAF(&f,&P,&Q);
+  // printf("---------------------------------\n");
+
+  // fp6_frobenius_map_p3(&f,&f);
+  // fp6_inv(&f_inv,&f);
+  // fp6_mul(&f,&f,&f_inv);
+
+  // fp6_frobenius_map_p3(&f_p3,&f);
+
+  // fp6_mul(&f_p3, &f_p3, &f);
+
+  // fp6_println("(p^3-1)(p^3+1)", &f_p3);
+
+  // // final_exp(&e,&f);
+  // printf("---------------------------------\n");
+
+  // printf("*********************************************************************************************\n\n");
 
   return 0;
 }
