@@ -727,10 +727,6 @@ void fp_mul_base_inv(fp_t *ANS,fp_t *A){
   #endif
     fp_rshift_1(ANS,A);
   }else{
-  #ifdef DEBUG_COST_A
-  cost_mul_base++;
-  cost_mul--;
-  #endif
     fp_mul(ANS,A,&base_c_inv);
   }
 }

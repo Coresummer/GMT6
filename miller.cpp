@@ -32,7 +32,8 @@ void ff_lttp(fp6_t *f, efp_jacobian_t *S, efp_t *P){
   fp_lshift_1(&t2, &t2);          //t2 = 4*t1*X
 
   fp_sqr(&t3,&S->x);              //t3 = X^2
-  fp_mul_ui(&t3,&t3,3);           //t3 = 3*X^2
+  fp_lshift_1(&tmp1_fp, &t3);
+  fp_add(&t3,&t3,&tmp1_fp);
 
   fp_sqr(&nextX,&t3);             //nextX = t3^2
   fp_lshift_1(&tmp1_fp, &t2);     //tmp1 = 2*t2
