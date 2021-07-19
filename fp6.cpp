@@ -138,7 +138,7 @@ void fp6_mul(fp6_t *ANS,fp6_t *A,fp6_t *B){
 
 
 void fp6_mul_sparse_add(fp6_t *ANS,fp6_t *A,fp6_t *B){  //?000?? * ??????
-
+  //fp2_mul*3 fp_mul*4
   static fp6_t tmp_A,tmp_B;
   fp6_set(&tmp_A,A);//?0 00 ?? a+b0+c0^2
   fp6_set(&tmp_B,B);//?? ?? ?? d+e0+f0^2
@@ -190,6 +190,7 @@ void fp6_mul_sparse_add(fp6_t *ANS,fp6_t *A,fp6_t *B){  //?000?? * ??????
 }
 
 void fp6_mul_sparse_dbl(fp6_t *ANS,fp6_t *A,fp6_t *B){  //??0?00 * ??????
+  //fpmul*2 fp2mul*4
   static fp6_t tmp_A,tmp_B;
   fp6_set(&tmp_A,A);//?? 0? 00
   fp6_set(&tmp_B,B);//??????
