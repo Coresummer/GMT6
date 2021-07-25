@@ -1,4 +1,5 @@
 #include "fp2.h"
+#include "fp.h"
 
 void fp2_init(fp2_t *A){
   fp_init(&A->x0);
@@ -60,6 +61,11 @@ void fp2_set_mpn(fp2_t *ANS,mp_limb_t *A){
 
 void fp2_set_neg(fp2_t *ANS,fp2_t *A){
   fp_set_neg(&ANS->x0,&A->x0);
+  fp_set_neg(&ANS->x1,&A->x1);
+}
+
+void fp2_set_conj(fp2_t *ANS,fp2_t *A){
+  fp_set(&ANS->x0,&A->x0);
   fp_set_neg(&ANS->x1,&A->x1);
 }
 
@@ -131,7 +137,7 @@ void fp2_sqr(fp2_t *ANS,fp2_t *A){
   static fp2_t tmp_A;
   fp2_set(&tmp_A,A);
 
-  static fp_t tmp1_fp,tmp2_fp,tmp3_fp,tmp4_fp,tmp5_fp,tmp6_fp,tmp7_fp,tmp8_fp,tmp9_fp;
+  static fp_t tmp1_fp,tmp2_fp,tmp3_fp;
 
   fp_sqr(&tmp1_fp, &tmp_A.x0);  //a^2
   fp_sqr(&tmp2_fp, &tmp_A.x1);  //b^2
@@ -143,6 +149,25 @@ void fp2_sqr(fp2_t *ANS,fp2_t *A){
   fp_sub(&tmp3_fp,&tmp3_fp, &tmp1_fp); //(a+b)^2 - a^2 
   fp_sub(&ANS->x1,&tmp3_fp, &tmp2_fp); //(a+b)^2 - a^2 - b^2 
 
+}
+
+void fp2_sqr_final(fp2_t *ANS,fp2_t *A){
+  static fp2_t tmp_A;
+  fp2_set(&tmp_A,A);
+
+  static fp_t tmp1_fp,tmp2_fp,tmp3_fp;
+
+  fp_sqr(&tmp1_fp, &tmp_A.x0);  //a^2
+  fp_add(&tmp2_fp, &tmp_A.x0, &tmp_A.x1);  //(a+b)
+  fp_sqr(&tmp2_fp,&tmp2_fp);  //(a+b)^2
+
+  fp_sub_ui(&tmp3_fp,&tmp1_fp,1);//a^2-1
+  fp_add(&ANS->x0,&tmp3_fp,&tmp1_fp);//2a^2-1
+
+  fp_mul_base_inv(&tmp3_fp,&tmp3_fp);//(a^2-1)/2
+  
+  fp_sub(&ANS->x1,&tmp2_fp,&tmp1_fp);//(a+b)^2 - a^2
+  fp_sub(&ANS->x1,&ANS->x1, &tmp3_fp);//(a+b)^2 - a^2 - (a^2-1)/2
 }
 
 void fp2_add(fp2_t *ANS,fp2_t *A,fp2_t *B){
@@ -197,7 +222,7 @@ void fp2_sub_nonmod_double(fpd2_t *ANS,fpd2_t *A,fpd2_t *B){
   fp_sub_nonmod_double(&ANS->x0,&A->x0,&B->x0);
   fp_sub_nonmod_double(&ANS->x1,&A->x1,&B->x1);
 
-}
+;}
 
 void fp2_sub_ui(fp2_t *ANS,fp2_t *A,unsigned long int UI){
   fp_sub_ui(&ANS->x0,&A->x0,UI);

@@ -9,7 +9,7 @@ int main(){
     mpz_init_set(x_1,xai);
     mpz_sub_ui(x_1,x_1,1);
     
-    mpz_init_set_str(hp3w,"1811507161526425387769904",10);
+    mpz_init_set_str(hp3w,"111",10);//1811507161526425387769904
     mpz_init(hpw);
     mpz_divexact_ui(hpw,hp3w,3);
     vector<int> v,v2,v3,v4;

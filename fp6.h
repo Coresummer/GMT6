@@ -25,6 +25,7 @@ void fp6_mul_sparse_dbl(fp6_t *ANS,fp6_t *A,fp6_t *B);
 void fp6_mul_ui(fp6_t *ANS,fp6_t *A,unsigned long int UI);
 void fp6_mul_mpn(fp6_t *ANS,fp6_t *A,mp_limb_t *B);
 void fp6_sqr(fp6_t *ANS,fp6_t *A);
+void fp6_sqr_GS(fp6_t *ANS,fp6_t *A);
 void fp6_sqr_lazy_montgomery(fp6_t *ANS,fp6_t *A);
 void fp6_add(fp6_t *ANS,fp6_t *A,fp6_t *B);
 void fp6_add_lazy(fp6_t *ANS,fp6_t *A,fp6_t *B);
