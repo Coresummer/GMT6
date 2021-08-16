@@ -1,4 +1,5 @@
 #include "create.h"
+#include "define.h"
 #include "fp.h"
 
 void create_prt(){
@@ -22,7 +23,8 @@ void create_prt(){
   mpz_out_str(stdout,2,X_z);printf("\n");
   printf("trace (HW :%2ld)(binary) = ",mpz_popcount(trace_z));
   mpz_out_str(stdout,2,trace_z);printf("\n");
-  fp_set_ui(&base_c,2);
+  fp_set_ui(&base_c,1);
+  fp_set_neg(&base_c, &base_c);
   fp_inv(&base_c_inv,&base_c);
   gmp_printf("\nmodulo polynomial\n");
 
@@ -84,7 +86,6 @@ void frobenius_precalculation(){
   fp_init(&tmp);
   mpz_init(expo);
 
-  //tmp = c^((p-1)/14)
   mpz_sub_ui(expo,prime_z,1);
   mpz_divexact_ui(expo,expo,6);
 

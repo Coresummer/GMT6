@@ -99,33 +99,30 @@ void fp2_set_random(fp2_t *ANS,gmp_randstate_t state){
   fp_set_random(&ANS->x1,state);
 }
 
-void fp2_mul(fp2_t *ANS,fp2_t *A,fp2_t *B){ 
-  static fp2_t tmp_A,tmp_B;
-  fp2_set(&tmp_A,A);
-  fp2_set(&tmp_B,B);
+void fp2_mul_mpn(fp2_t *ANS, fp2_t *A, mp_limb_t *B) {
+  fp_mul_mpn(&ANS->x0, &A->x0, B);
+  fp_mul_mpn(&ANS->x1, &A->x1, B);
+}
 
-  static fp_t tmp1_fp,tmp2_fp,tmp3_fp,tmp4_fp,tmp5_fp;
-  fp_mul(&tmp1_fp,&tmp_A.x0,&tmp_B.x0); //ac
-  fp_mul(&tmp2_fp,&tmp_A.x1,&tmp_B.x1); //bd
-  fp_mul_base(&tmp3_fp, &tmp2_fp);  //ab+bdΘ^2
-  fp_add(&ANS->x0, &tmp1_fp, &tmp3_fp);  //ab+bdΘ^2
+void fp2_mul(fp2_t *ANS, fp2_t *A, fp2_t *B) {
+  static fp_t tmp1_fp, tmp2_fp, tmp3_fp, tmp4_fp;
 
-  fp_add(&tmp3_fp,&tmp_A.x0,&tmp_A.x1);//a+b
-  fp_add(&tmp4_fp,&tmp_B.x0,&tmp_B.x1);//c+d
-  fp_mul(&tmp5_fp,&tmp3_fp,&tmp4_fp); //(a+b)(c+d)
-  
-  fp_sub(&tmp3_fp,&tmp5_fp,&tmp1_fp);//(a+b)(c+d) - ac
-  fp_sub(&ANS->x1,&tmp3_fp,&tmp2_fp);//(a+b)(c+d) - ac -bd
-} 
+  //set
+  fp_mul(&tmp1_fp, &A->x0, &B->x0);  //a*c
+  fp_mul(&tmp2_fp, &A->x1, &B->x1);  //b*d
+  fp_add(&tmp3_fp, &A->x0, &A->x1);  //a+b
+  fp_add(&tmp4_fp, &B->x0, &B->x1);  //c+d
+  //x0
+  fp_sub(&ANS->x0, &tmp1_fp, &tmp2_fp);  //a*c+b*d*v
+  //x1
+  fp_mul(&ANS->x1, &tmp3_fp, &tmp4_fp);  //(a+b)(c+d)
+  fp_sub(&ANS->x1, &ANS->x1, &tmp1_fp);
+  fp_sub(&ANS->x1, &ANS->x1, &tmp2_fp);
+}
 
 void fp2_mul_ui(fp2_t *ANS,fp2_t *A,unsigned long int UI){
   fp_mul_ui(&ANS->x0,&A->x0,UI);
   fp_mul_ui(&ANS->x1,&A->x1,UI);
-}
-
-void fp2_mul_mpn(fp2_t *ANS,fp2_t *A,mp_limb_t *B){
-  fp_mul_mpn(&ANS->x0,&A->x0,B);
-  fp_mul_mpn(&ANS->x1,&A->x1,B);
 }
 
 void fp2_mul_mpn_montgomery(fp2_t *ANS,fp2_t *A,mp_limb_t *B){
@@ -133,22 +130,15 @@ void fp2_mul_mpn_montgomery(fp2_t *ANS,fp2_t *A,mp_limb_t *B){
   mpn_mulmod_montgomery(ANS->x1.x0,FPLIMB,A->x1.x0,FPLIMB,B,FPLIMB);
 }
 
-void fp2_sqr(fp2_t *ANS,fp2_t *A){
-  static fp2_t tmp_A;
-  fp2_set(&tmp_A,A);
-
-  static fp_t tmp1_fp,tmp2_fp,tmp3_fp;
-
-  fp_sqr(&tmp1_fp, &tmp_A.x0);  //a^2
-  fp_sqr(&tmp2_fp, &tmp_A.x1);  //b^2
-  fp_mul_base(&tmp3_fp, &tmp2_fp);  //b^2@^2
-  fp_add(&ANS->x0, &tmp1_fp, &tmp3_fp); //a^2+b^2@^
-
-  fp_add(&tmp3_fp,&tmp_A.x0,&tmp_A.x1); //(a+b)
-  fp_sqr(&tmp3_fp, &tmp3_fp);  //(a+b)^2
-  fp_sub(&tmp3_fp,&tmp3_fp, &tmp1_fp); //(a+b)^2 - a^2 
-  fp_sub(&ANS->x1,&tmp3_fp, &tmp2_fp); //(a+b)^2 - a^2 - b^2 
-
+void fp2_sqr(fp2_t *ANS, fp2_t *A) {
+  static fp_t tmp1_fp, tmp2_fp;
+  fp_add(&tmp1_fp, &A->x0, &A->x1);
+  fp_sub(&tmp2_fp, &A->x0, &A->x1);
+  //x1
+  fp_mul(&ANS->x1, &A->x0, &A->x1);
+  fp_add(&ANS->x1, &ANS->x1, &ANS->x1);
+  //x0
+  fp_mul(&ANS->x0, &tmp1_fp, &tmp2_fp);
 }
 
 void fp2_sqr_final(fp2_t *ANS,fp2_t *A){
@@ -396,16 +386,15 @@ int fp2_cmp_one(fp2_t *A){
   return 1;
 }
 
-
 void fp2_frobenius_map_p1(fp2_t *ANS,fp2_t *A){
   fp_set(&ANS->x0,&A->x0);
   fp_set_neg(&ANS->x1,&A->x1);
 }
 
 void fp2_mul_base(fp2_t *ANS,fp2_t *A){
-  static fp2_t tmp_A;
-  fp2_set(&tmp_A,A);
+  static fp_t tmp1_fp;
+  fp_set(&tmp1_fp, &A->x0);
 
-  fp_lshift_1(&ANS->x0,&tmp_A.x1);
-  fp_set(&ANS->x1,&tmp_A.x0);    //@^2 = 2
+  fp_sub(&ANS->x0, &tmp1_fp, &A->x1);
+  fp_add(&ANS->x1, &tmp1_fp, &A->x1);
 }

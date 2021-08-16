@@ -716,17 +716,15 @@ void fp_mul_base(fp_t *ANS,fp_t *A){
   // cost_mul--;
   #endif
   // fp_mul(ANS,A,&base_c);
-  fp_lshift_1(ANS,A);
+  fp_set_neg(ANS,A);
 }
 
 void fp_mul_base_inv(fp_t *ANS,fp_t *A){
-
-  if( __builtin_ctzl(A->x0[0]) >= 1){
   #ifdef DEBUG_COST_A
   cost_add++;
+  // cost_mul_base++;
+  // cost_mul--;
   #endif
-    fp_rshift_1(ANS,A);
-  }else{
-    fp_mul(ANS,A,&base_c_inv);
-  }
+  // fp_mul(ANS,A,&base_c);
+  fp_set_neg(ANS,A);
 }
