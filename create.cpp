@@ -1,6 +1,7 @@
 #include "create.h"
 #include "define.h"
 #include "fp.h"
+#include "fp2.h"
 #include "mpn.h"
 #include <gmp.h>
 
@@ -51,33 +52,31 @@ void check_base(){
   mpz_init(expo);
 
   //check base_c = QNR
-  fp_set(&tmp,&base_c);
   mpz_sub_ui(expo,prime_z,1);
   mpz_divexact_ui(expo,expo,2);
   fp_pow(&tmp,&base_c,expo);
   if(fp_cmp_one(&tmp)==0) printf("error!!! c^((p-1)/2)==1\n\n");
 
-  mpz_set_ui(expo,2);
-  fp_pow(&tmp,&tmp,expo);
-  // fp_println("c^(p-1) :",&tmp);
-  if(fp_cmp_one(&tmp)!=0) printf("error!!! c^(p-1)!=1\n\n");
+  mpz_sub_ui(expo,prime_z,1);
+  mpz_divexact_ui(expo,expo,3);
+  fp_pow(&tmp,&base_c,expo);
+  if(fp_cmp_one(&tmp)==0) printf("error!!! c^(p-1)/3==1\n\n");
   
-  //check base_c = QNR
-  fp_set_ui(&tmp2.x1,1);
-  mpz_pow_ui(expo,prime_z,2);
+  fp2_t base_fp2;
+  fp2_init(&base_fp2);
+  fp2_set_ui_ui(&base_fp2, 1);
+  mpz_mul(expo,prime_z,prime_z);
+  mpz_sub_ui(expo,expo,1);
+  mpz_divexact_ui(expo,expo,2);
+  fp2_pow(&base_fp2,&base_fp2,expo);
+  if(fp2_cmp_one(&base_fp2)==0) printf("error!!! c^(p=^2-1)/2==1\n\n");
+
+  fp2_set_ui_ui(&base_fp2, 1);
+  mpz_mul(expo,prime_z,prime_z);
   mpz_sub_ui(expo,expo,1);
   mpz_divexact_ui(expo,expo,3);
-  fp2_pow(&tmp2,&tmp2,expo);
-  // fp2_println("fp2",&tmp2);
-  if(fp2_cmp_one(&tmp2)==0) printf("error!!! alpha^((p^3-1)/2)==1\n\n");
-  
-  mpz_set_ui(expo,3);
-  fp2_pow(&tmp2,&tmp2,expo);
-  if(fp2_cmp_one(&tmp2)!=0) printf("error!!! alpha^(p^3-1)!=1\n\n");
-
-  fp_mul(&tmp,&base_c,&base_c_inv);
-  //fp_println("base_c * base_c_inv = ",&tmp);
-  if(fp_cmp_one(&tmp)!=0) printf("error!!! base_c * base_c_inv!=1\n\n");
+  fp2_pow(&base_fp2,&base_fp2,expo);
+  if(fp2_cmp_one(&base_fp2)==0) printf("error!!! c^(p=^2-1)/3==1\n\n");
 
   mpz_clear(expo);
 }
