@@ -1,5 +1,6 @@
 #include "test_efp.h"
 #include "efp6.h"
+#include <cstdio>
 
 void check_efp(){
   printf("check_efp() 開始\n");

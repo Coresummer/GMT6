@@ -273,12 +273,12 @@ void fp6_sqr(fp6_t *ANS,fp6_t *A){
   fp6_set(&tmp_A,A);
 //ELiPS sqr
   static fp2_t tmp1_fp2,tmp2_fp2,tmp3_fp2,tmp4_fp2,tmp5_fp2;
-  fp2_sqr(&tmp1_fp2,&A->x0);        //x0^2
-  fp2_sqr(&tmp4_fp2,&A->x2);        //x2^2
-  fp2_add(&tmp5_fp2,&A->x1,&A->x1);        //2x1
+  fp2_sqr(&tmp1_fp2,&A->x0);            //x0^2
+  fp2_sqr(&tmp4_fp2,&A->x2);            //x2^2
+  fp2_add(&tmp5_fp2,&A->x1,&A->x1);     //2x1
   fp2_mul(&tmp2_fp2,&tmp5_fp2,&A->x2);  //2x1x2
   fp2_mul(&tmp3_fp2,&A->x0,&tmp5_fp2);  //2x0x1
-  fp2_add(&tmp5_fp2,&A->x0,&A->x1);        //x0+x1+x2
+  fp2_add(&tmp5_fp2,&A->x0,&A->x1);     //x0+x1+x2
   fp2_add(&tmp5_fp2,&tmp5_fp2,&A->x2);
 
   //x0
@@ -696,28 +696,31 @@ int  fp6_cmp_one(fp6_t *A){
 //   return 0;
 // }
 
-void fp6_frobenius_map_p1(fp6_t *ANS,fp6_t *A){
-  fp_set(&ANS->x0.x0, &A->x0.x0);      //
-  fp_set_neg(&ANS->x0.x1, &A->x0.x1);  //
+void fp6_frobenius_map_p1(fp6_t *ANS,fp6_t *A){  
+  static fp6_t tmp_A;
+  fp6_set(&tmp_A, A);//not smart
 
-  fp_set_neg(&ANS->x1.x0, &A->x1.x0);
-  // fp_mul(&ANS->x1.x0,&ANS->x1.x0,&frobenius_1_6);
-  fp_set(&ANS->x1.x1, &A->x1.x1);
-  // fp2_mul_mpn(&ANS->x1, &ANS->x1,frobenius_1_6.x0);
-  fp_set(&ANS->x2.x0, &A->x2.x0);
-  fp_set_neg(&ANS->x2.x1, &A->x2.x1);
-  // fp_mul(&ANS->x2.x1,&ANS->x2.x1,&frobenius_5_6);
-  // fp2_mul_mpn(&ANS->x2, &ANS->x2, frobenius_5_6.x0);
+  fp_set(&ANS->x0.x0, &tmp_A.x0.x0);      //
+  fp_set_neg(&ANS->x0.x1, &tmp_A.x0.x1);  //
 
+  fp_mul(&ANS->x1.x0, &tmp_A.x1.x1,&frobenius_1_6);
+  fp_mul(&ANS->x1.x1,&tmp_A.x1.x0,&frobenius_1_6);
+
+  fp_mul(&ANS->x2.x0, &tmp_A.x2.x0,&frobenius_5_6);
+  fp_mul(&ANS->x2.x1, &tmp_A.x2.x1,&frobenius_5_6);
+  fp_set_neg(&ANS->x2.x0, &ANS->x2.x0);
 }
 
 void fp6_frobenius_map_p3(fp6_t *ANS,fp6_t *A){ //not sure ...
-  fp_set(&ANS->x0.x0,&A->x0.x0);
-  fp_set_neg(&ANS->x0.x1,&A->x0.x1);
+  static fp6_t tmp_A;
+  fp6_set(&tmp_A, A);//not smart
 
-  fp_set_neg(&ANS->x1.x0,&A->x1.x0);
-  fp_set(&ANS->x1.x1,&A->x1.x1);
+  fp_set(&ANS->x0.x0,&tmp_A.x0.x0);
+  fp_set_neg(&ANS->x0.x1,&tmp_A.x0.x1);
 
-  fp_set(&ANS->x2.x0,&A->x2.x0);
-  fp_set_neg(&ANS->x2.x1,&A->x2.x1);
+  fp_set(&ANS->x1.x1,&tmp_A.x1.x0);
+  fp_set(&ANS->x1.x0,&tmp_A.x1.x1);
+
+  fp_set_neg(&ANS->x2.x0,&tmp_A.x2.x0);
+  fp_set(&ANS->x2.x1,&tmp_A.x2.x1);
 }

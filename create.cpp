@@ -1,6 +1,8 @@
 #include "create.h"
 #include "define.h"
 #include "fp.h"
+#include "mpn.h"
+#include <gmp.h>
 
 void create_prt(){
   //c=22,HW=6
@@ -81,30 +83,43 @@ void check_base(){
 }
 
 void frobenius_precalculation(){
-  fp_t tmp;
-  mpz_t expo;
-  fp_init(&tmp);
-  mpz_init(expo);
+  // fp_t tmp;
+  // mpz_t expo;
+  // fp_init(&tmp);
+  // mpz_init(expo);
 
-  mpz_sub_ui(expo,prime_z,1);
-  mpz_divexact_ui(expo,expo,6);
+  // mpz_sub_ui(expo,prime_z,1);
+  // mpz_divexact_ui(expo,expo,6);
 
-  fp_pow(&tmp,&base_c,expo);
-  fp_set(&frobenius_1_6,&tmp);
-  fp_printf("\n1_6\n",&frobenius_1_6);
-  mpz_set_ui(expo,2);
-  fp_pow(&frobenius_2_6,&tmp,expo);
-  fp_printf("\n2_6\n",&frobenius_2_6);
+  // fp_pow(&tmp,&base_c,expo);
+  // fp_set(&frobenius_1_6,&tmp);
+  // fp_printf("\n1_6\n",&frobenius_1_6);
+  // mpz_set_ui(expo,2);
+  // fp_pow(&frobenius_2_6,&tmp,expo);
+  // fp_printf("\n2_6\n",&frobenius_2_6);
 
-  mpz_set_ui(expo,4);
-  fp_pow(&frobenius_4_6,&tmp,expo);
-  fp_printf("\n4_6\n",&frobenius_4_6);
+  // mpz_set_ui(expo,4);
+  // fp_pow(&frobenius_4_6,&tmp,expo);
+  // fp_printf("\n4_6\n",&frobenius_4_6);
 
-  mpz_set_ui(expo,5);
-  fp_pow(&frobenius_5_6,&tmp,expo);
-  fp_printf("\n5_6\n",&frobenius_5_6);
+  // mpz_set_ui(expo,5);
+  // fp_pow(&frobenius_5_6,&tmp,expo);
+  // fp_printf("\n5_6\n",&frobenius_5_6);
 
-  mpz_clear(expo);
+  // mpz_clear(expo);
+
+  mpz_t tmp;
+  mpz_init(tmp);
+
+  mpz_set_str(tmp,"9136195484878068897584962703470385519499723409351282388162550720360701696624451184582249548716600342748779168454775667460999439374522415169846995097713112623392162102872252583146358740033539385430381542",10);
+  mpn_set_mpz(frobenius_1_6.x0, tmp); 
+  fp_println("\n1_6\n",&frobenius_1_6);
+ 
+  mpz_set_str(tmp,"2193069672562997777387783590111890492995486022534576976228148494721010595179462157232095156431329741454482797361594851327386558570331073488459513428484187457803743586969558550973234947301832937397180900",10);
+  mpn_set_mpz(frobenius_5_6.x0, tmp);  
+  fp_println("\n5_6\n",&frobenius_5_6);
+
+  mpz_clear(tmp);
   printf("Frobenius precalculation is done\n");
 
 }
@@ -118,7 +133,6 @@ void curve_search(){
 
   fp_set_ui(&curve_b,1);
   fp_set_neg(&curve_b,&curve_b);
-
 
   // efp_t efp_P,efp_sP;
   // efp_init(&efp_P);

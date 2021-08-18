@@ -392,9 +392,34 @@ void fp2_frobenius_map_p1(fp2_t *ANS,fp2_t *A){
 }
 
 void fp2_mul_base(fp2_t *ANS,fp2_t *A){
+  // static fp2_t tmp_A;
+  // static fp_t tmp1_fp;
+  // fp2_set(&tmp_A,A);
+
+  // // fp_lshift_1(&tmp1_fp, &tmp_A.x0);
+  // // fp_lshift_1(&tmp1_fp, &tmp1_fp);  //4a
+  // // fp_lshift_1(&tmp1_fp, &tmp1_fp);  //4a
+
+  // fp_sub(&ANS->x0, &tmp1_fp, &A->x1); //4a - b
+
+  // // fp_lshift_1(&tmp1_fp, &tmp_A.x1);
+  // // fp_lshift_1(&tmp1_fp, &tmp1_fp);  //4b
+  // // fp_lshift_1(&tmp1_fp, &tmp1_fp);  //4b
+
+  // fp_add(&ANS->x1, &A->x0,&tmp1_fp); //a + 4b
+  
+  
   static fp_t tmp1_fp;
   fp_set(&tmp1_fp, &A->x0);
 
   fp_sub(&ANS->x0, &tmp1_fp, &A->x1);
   fp_add(&ANS->x1, &tmp1_fp, &A->x1);
+  // static fp2_t self;
+  // fp2_set(&self,ANS);
+  // fp2_lshift_1(ANS, ANS);
+  // fp2_add(ANS,ANS,&self);
+  // fp2_lshift_1(ANS, ANS);
+  // fp2_lshift_1(ANS, ANS);
+  // fp2_lshift_1(ANS, ANS);
+
 }

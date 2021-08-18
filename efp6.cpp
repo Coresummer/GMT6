@@ -110,7 +110,6 @@ void generate_g2(efp6_t *Q){
 
   mpz_t expo;
   mpz_init(expo);
-
   efp6_rational_point(&tmp_Q);
   mpz_pow_ui(expo,order_z,2);
   mpz_divexact(expo,efp6_total,expo);//(#efp6)/(r^2)
@@ -119,6 +118,7 @@ void generate_g2(efp6_t *Q){
 
   //(Φ-1)tmp_Q = Q となる有理点Qが特別な花びら上の有理点となる
   efp6_frobenius_map_p1(&frobenius_Q,&tmp_Q); //(Q^p) frobenius mapping confirmed
+  // efp6_println("in gen G2", &frobenius_Q);
   efp6_set_neg(&tmp_Q,&tmp_Q);//(-Q)
   efp6_eca(Q,&tmp_Q,&frobenius_Q);//Q^p - Q
   mpz_clear(expo);
