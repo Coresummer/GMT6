@@ -48,7 +48,7 @@ int main(){
   check_pairing_2NAF();
   // // check_pairing_static();
   check_pairing_count_2NAF();
-  // check_pairing_time_2NAF();
+  check_pairing_time_2NAF();
 
   // efp6_t P,Q;
   // fp6_t f,e,f_inv,f_p3;
