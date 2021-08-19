@@ -45,18 +45,7 @@
 
 #define scalar_t mpz_t
 
-/**************Multiplication Algorithm Option**************/
-#define Karatsuba23
-//Candidats:Mont22,SB49,Karatsuba40,Karatsuba30,Karatsuba23
-/***********************************************************/
-
-/**************Multiplication Algorithm Option**************/
-#define OriginalExp
-//Candidats:LoubnaExp, OriginalExp
-/***********************************************************/
-
 #define k6_X_length 128//////37??
-TTT_EXTERN int k6_X_binary[k6_X_length+1];  //CP-6
 
 /*Field*/
 typedef struct{
@@ -125,7 +114,8 @@ typedef struct{
 }efp6_jacobian_t;
 
 TTT_EXTERN gmp_randstate_t state;//for random
-TTT_EXTERN int cost_add,cost_add_ui,cost_sub,cost_sub_ui,cost_mul,cost_mul_ui,cost_mul_base,cost_sqr,cost_inv,cost_mod;
+TTT_EXTERN int cost_add,cost_add_ui,cost_sub,cost_sub_ui,cost_mul,cost_mul_ui,cost_mul_base,cost_sqr,cost_inv,cost_mod,cost_set_neg;
+TTT_EXTERN int cost_add_nonmod, cost_add_nonmod_double, cost_sub_nonmod, cost_sub_nonmod_double, cost_r1shift, cost_mod_nomal;
 TTT_EXTERN mpz_t X_z,prime_z,order_z,trace_z;
 TTT_EXTERN mp_limb_t X,prime[FPLIMB];
 TTT_EXTERN mp_limb_t prime2[FPLIMB2];
@@ -133,15 +123,7 @@ TTT_EXTERN fp_t base_c;//α^7=c, β^2=α となるように逐次拡大で拡大
 TTT_EXTERN fp_t base_c_inv;//α^7=c, β^2=α に出てくるcの逆元の計算結果
 
 TTT_EXTERN fp_t curve_b;
-TTT_EXTERN fp_t curve_b_twist_x3;//Type M twist_curve_bは(0,0,0,0,ac^-1,0)となる
-                      //Type D twist_curve_bは(0,0,0,0,ac^-1,0)となる
-TTT_EXTERN fp_t curve_b_3sparse_x3;//(ツイスト曲線の(az^-2))*(xP^4)*(yP^-4) を格納する
-TTT_EXTERN fp_t curve_b_5sparse_x3;//(ツイスト曲線の(az^-2))*(xP^4)*(yP^-4) を格納する
-TTT_EXTERN fp_t curve_b_7sparse_x3;//(ツイスト曲線の(az^-2))*(xP^4)*(yP^-4) を格納する
-
-TTT_EXTERN fp_t line_3sparse_x0;//3sparse乗算をするときに使う (xP^-3)*(yP^2) を格納する
-TTT_EXTERN fp_t line_5sparse_x0;//5sparse乗算をするときに使う (xP^-3)*(yP^2) を格納する
-TTT_EXTERN fp_t line_7sparse_x0;//7sparse乗算をするときに使う (xP^-3)*(yP^2) を格納する
+TTT_EXTERN mpz_t sqrt_power_z;
 
 TTT_EXTERN mpz_t efp_total,efp2_total,efp6_total,fp6_total_r;//#efp,#efp5,#efp10,#efp7,#efp14
 TTT_EXTERN mpz_t miller_loop_s;
@@ -160,6 +142,8 @@ TTT_EXTERN mp_limb_t R[FPLIMB],Ri[FPLIMB],R1[FPLIMB],RR[FPLIMB],Ni[FPLIMB];
 TTT_EXTERN int m;
 TTT_EXTERN mp_limb_t u[FPLIMB+1];
 TTT_EXTERN mp_limb_t N[FPLIMB2],R2[FPLIMB],R3[FPLIMB],RmodP[FPLIMB];
+TTT_EXTERN mp_limb_t Ni_neg;  //Ni_neg=-N^(-1)
+
 
 TTT_EXTERN struct timeval tv_start,tv_end;
 TTT_EXTERN float MILLER_ATE_4SPARSE_TIME;
@@ -167,5 +151,23 @@ TTT_EXTERN float MILLER_ATE_5SPARSE_TIME;
 TTT_EXTERN float MILLER_ATE_6SPARSE_TIME;
 TTT_EXTERN float MILLER_ATE_7SPARSE_TIME;
 TTT_EXTERN float FINAL_EXP_TIME;
+
+typedef struct {
+  int add;
+  int add_ui;
+  int add_nonmod;
+  int add_nonmod_double;
+  int sub;
+  int sub_ui;
+  int sub_nonmod;
+  int sub_nonmod_double;
+  int mul;
+  int set_neg;
+  int r1shift;
+  int sqr;
+  int inv;
+  int mod;
+  int mod_nomal;
+} cost;
 
 #endif

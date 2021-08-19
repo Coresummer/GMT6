@@ -1,14 +1,16 @@
-#include <cstdio>
 #define TTT_INSTANCE_HERE
 
+#include <cstdio>
+
 #include "define.h"
-#include "count.h"
+#include "./time.h"
 #include "scalar.h"
 #include "mpn.h"
 #include "fp.h"
 #include "fp2.h"
 #include "fp6.h"
-#include "test_fp.h"
+// #include "test_fp.h"
+#include "field_test.h"
 #include "efp.h"
 #include "efp6.h"
 #include "test_efp.h"
@@ -24,7 +26,7 @@ int main(){
   check_base();
   frobenius_precalculation();
   curve_search();
-  create_twist_curve();
+  // create_twist_curve();
   create_weil();
   printf("*********************************************************************************************\n\n");
   
@@ -32,12 +34,10 @@ int main(){
   gmp_randseed_ui(state,(unsigned long int)time(NULL));
 
   //各関数の動作確認、コスト計算、時間計測など
-  // check_fp();
-  // check_fp2();
-  // check_fp6();
-  // check_fp2_count();
-  // check_fp6_count();
-  // check_fp_time();
+
+  test_fp(CHECK_PAIRING_TIME_LOOP);
+  test_fp2(CHECK_PAIRING_TIME_LOOP);
+  test_fp6(CHECK_PAIRING_TIME_LOOP);
 
   // check_efp();
   // check_efp2();
@@ -45,24 +45,11 @@ int main(){
   // check_g1_g2();
 
   //SCM_func_check();//未完成
-  check_pairing_2NAF();
+  // check_pairing_2NAF();
   // // check_pairing_static();
-  check_pairing_count_2NAF();
+  // check_pairing_count_2NAF();
   // check_pairing_time_2NAF();
 
-  // efp6_t P,Q;
-  // fp6_t f,e,f_inv,f_p3;
-  // efp6_init(&P);
-  // efp6_init(&Q);
-  // fp6_init(&f);
-  // fp6_init(&e);
-  // fp6_init(&f_inv);
-  // fp6_init(&f_p3);
-
-  // generate_g1(&P);
-  // generate_g2(&Q);
-
-  // miller_opt_ate_proj_2NAF(&f,&P,&Q);
   // printf("---------------------------------\n");
 
 

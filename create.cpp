@@ -135,17 +135,17 @@ void curve_search(){
   printf("Elliptic curve search is done\n");
 }
 
-void create_twist_curve(){
-  //2次ツイスト曲線を求める(v in Fp7 がQNR)
-  //今回はv=BETA
-  //よって、y^2 = x^3 + b*α^(-2)x
-  //curve_b_twistは a*α^(-2)=(0,0,0,0,0,ac^-1,0)となる
-  fp_init(&curve_b_twist_x3);
-  fp_mul(&curve_b_twist_x3,&curve_b,&base_c_inv);////base_c=D Type  //base_c_inv=M Type
-  printf("curve_b_twist = (");
-  fp_printf("",&curve_b_twist_x3);
-  printf("0,0,0,0,0)\n");
-} 
+// void create_twist_curve(){
+//   //2次ツイスト曲線を求める(v in Fp7 がQNR)
+//   //今回はv=BETA
+//   //よって、y^2 = x^3 + b*α^(-2)x
+//   //curve_b_twistは a*α^(-2)=(0,0,0,0,0,ac^-1,0)となる
+//   fp_init(&curve_b_twist_x3);
+//   fp_mul(&curve_b_twist_x3,&curve_b,&base_c_inv);////base_c=D Type  //base_c_inv=M Type
+//   printf("curve_b_twist = (");
+//   fp_printf("",&curve_b_twist_x3);
+//   printf("0,0,0,0,0)\n");
+// } 
 
 void frobenius_trace(mpz_t *trace,unsigned int m){
   mpz_t t_m[33];

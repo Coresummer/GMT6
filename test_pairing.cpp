@@ -45,11 +45,11 @@ else  printf("[b]Q (plain) != [b]Q (GLV)\n\n");
 printf("---------------------------------\n");
 
 printf("SCM (plain)\n");
-count_start();
+cost_zero();
 efp7_SCM_twist(&efp7_bQ1,&efp7_Q,b);
 count_print();
 printf("SCM (GLV)\n");
-count_start();
+cost_zero();
 efp7_SCM_twist_GLV(&efp7_bQ2,&efp7_Q,b);
 count_print();
 
@@ -297,6 +297,7 @@ void check_pairing_static(){
 
 void check_pairing_count(){
   printf("check_pairing_count() 開始\n");
+  cost miller_cost, finalexp_cost, pairing_cost;
   efp6_t P,Q;
   fp6_t f,e;
   efp6_init(&P);
@@ -308,15 +309,17 @@ void check_pairing_count(){
   generate_g2(&Q);
 
   printf("miller_ate count\n");
-  count_start();
+  cost_zero();
   miller_opt_ate_proj(&f,&P,&Q);
-  count_printf();
+  cost_check(&miller_cost);
+  cost_printf("",&miller_cost,CHECK_PAIRING_TIME_LOOP);
   printf("---------------------------------\n");
 
   printf("final_exp() count\n");
-  count_start();
+  cost_zero();
   final_exp(&e,&f);
-  count_printf();
+  cost_check(&finalexp_cost);
+  cost_printf("",&finalexp_cost,CHECK_PAIRING_TIME_LOOP);
   printf("---------------------------------\n");
 
   printf("*********************************************************************************************\n\n");
@@ -324,6 +327,8 @@ void check_pairing_count(){
 
 void check_pairing_count_2NAF(){
   printf("check_pairing_count() 開始\n");
+  cost miller_cost, finalexp_cost, pairing_cost;
+
   efp6_t P,Q;
   fp6_t f,e;
   efp6_init(&P);
@@ -335,15 +340,17 @@ void check_pairing_count_2NAF(){
   generate_g2(&Q);
 
   printf("miller_ate count\n");
-  count_start();
+  cost_zero();
   miller_opt_ate_proj_2NAF(&f,&P,&Q);
-  count_printf();
+  cost_check(&miller_cost);
+  cost_printf("",&miller_cost,CHECK_PAIRING_TIME_LOOP);
   printf("---------------------------------\n");
 
   printf("final_exp() count\n");
-  count_start();
+  cost_zero();
   final_exp(&e,&f);
-  count_printf();
+  cost_check(&finalexp_cost);
+  cost_printf("",&finalexp_cost,CHECK_PAIRING_TIME_LOOP);
   printf("---------------------------------\n");
 
   printf("*********************************************************************************************\n\n");

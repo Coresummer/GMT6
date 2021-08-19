@@ -150,6 +150,7 @@ void Cp6NewHardPart(){
   Pp2 = Pp * Pp;
 
   
+  
 
 }
 

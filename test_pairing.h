@@ -2,9 +2,9 @@
 #ifndef TEST_PAIRING_H
 #define TEST_PAIRING_H
 
-#include "count.h"
+// #include "count.h"
 #include "final_exp.h"
-
+#include "./time.h"
 //void SCM_func_check();
 void check_pairing();
 void check_pairing_2NAF();
