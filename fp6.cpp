@@ -727,4 +727,3 @@ void fp6_frobenius_map_p3(fp6_t *ANS,fp6_t *A){ //not sure ...
   fp_set(&ANS->x2.x0,&A->x2.x0);
   fp_set_neg(&ANS->x2.x1,&A->x2.x1);
 }
-
