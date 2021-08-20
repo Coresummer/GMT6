@@ -1,4 +1,4 @@
-//g++ -g FE_hardpart.cpp -std=c++11 -Wall -O2 -march=native -lntl -pthread -lgmp
+//clang++ -g FE_hardpart.cpp -std=c++11 -Wall -O2 -march=native -lntl -pthread -lgmp
 
 #include <NTL/ZZXFactoring.h>
 #include <NTL/vec_ZZ.h>
@@ -10,7 +10,11 @@ using namespace std;
 using namespace NTL;
 
 int Base=0;
-ZZX P,R,t1[5],P2[9],R_Ans[7];
+ZZX P,R,T,t,t1[5],P2[9],R_Ans[7];
+
+ZZX Pp[5],Rr[5], Tt[5];
+ZZX Pp2[10];
+ZZX Pp3[15],Tt2[10], Tt3[15];
 
 ZZ hy,hy_2,x,p,tt,originalP, r,originalR;
 
@@ -53,6 +57,100 @@ int main(){
   //HardPart_k14();
 
   return 0;
+}
+
+void Cp6NewHardPart(){
+  cout << "Parameter CP6" << endl;
+  for(int i=0;i<5;i++){
+    Pp[i].SetLength(3);
+  }
+  for(int i=0;i<10;i++){
+    Pp2[i].SetLength(3);
+  }
+  for(int i=0;i<15;i++){
+    Pp3[i].SetLength(3);
+  }
+  for(int i=0;i<5;i++){
+    Rr[i].SetLength(3);
+  }
+  for(int i=0;i<5;i++){
+    Tt[i].SetLength(3);
+  }
+  for(int i=0;i<5;i++){
+    Tt2[i].SetLength(3);
+  }
+  for(int i=0;i<5;i++){
+    Tt3[i].SetLength(3);
+  }
+
+
+  Pp[0][2] = 9;
+  Pp[0][1] = 12;//12
+  Pp[0][0] = 4;//4
+
+  Pp[1][2] = -18;
+  Pp[1][1] = -12;
+  Pp[1][0] = 0; //0
+
+  Pp[2][2] = 27;
+  Pp[2][1] = 18;
+  Pp[2][0] = 16;//16
+
+  Pp[3][2] = -18;//-18
+  Pp[3][1] = -6;//-6
+  Pp[3][0] = -12;//-12
+
+  Pp[4][2] = 9; //9
+  Pp[4][1] = 6; //6
+  Pp[4][0] = 4; //4
+
+  //Rr
+
+  Rr[0][2] = 0;
+  Rr[0][1] = 0;//12
+  Rr[0][0] = 1;//4
+
+  Rr[1][2] = 0;
+  Rr[1][1] = 0;
+  Rr[1][0] = -1;
+
+  Rr[2][2] = 0;
+  Rr[2][1] = 0;
+  Rr[2][0] = 1;
+
+  Rr[3][2] = 0;
+  Rr[3][1] = 0;
+  Rr[3][0] = 0;
+
+  Rr[4][2] = 0;
+  Rr[4][1] = 0;
+  Rr[4][0] = 0;
+
+////Tt
+  Tt[0][2] = 0;
+  Tt[0][1] = 0;
+  Tt[0][0] = 1;
+
+  Tt[1][2] = 0;
+  Tt[1][1] = 0;
+  Tt[1][0] = 2;
+
+  Tt[2][2] = 0;
+  Tt[2][1] = 0;
+  Tt[2][0] = -1;
+
+  Tt[3][2] = 0;
+  Tt[3][1] = 0;
+  Tt[3][0] = 0;
+
+  Tt[4][2] = 0;
+  Tt[4][1] = 0;
+  Tt[4][0] = 0;
+
+  Pp2 = Pp * Pp;
+
+  
+
 }
 
 

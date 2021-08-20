@@ -26,28 +26,28 @@ void ff_lttp(fp6_t *f, efp_jacobian_t *S, efp_t *P){
   static fp6_t tmp1_fp6;
 
   fp_sqr(&t1,&S->y);              //t1 = Y^2
-  fp_lshift_1(&tmp2_fp,&t1);      //tmp2 = 2*t1
+  fp_l1shift(&tmp2_fp,&t1);      //tmp2 = 2*t1
 
   fp_mul(&t2,&tmp2_fp,&S->x);     //t2 = 2*t1*X
-  fp_lshift_1(&t2, &t2);          //t2 = 4*t1*X
+  fp_l1shift(&t2, &t2);          //t2 = 4*t1*X
 
   fp_sqr(&t3,&S->x);              //t3 = X^2
-  fp_lshift_1(&tmp1_fp, &t3);
+  fp_l1shift(&tmp1_fp, &t3);
   fp_add(&t3,&t3,&tmp1_fp);
 
   fp_sqr(&nextX,&t3);             //nextX = t3^2
-  fp_lshift_1(&tmp1_fp, &t2);     //tmp1 = 2*t2
+  fp_l1shift(&tmp1_fp, &t2);     //tmp1 = 2*t2
   fp_sub(&nextX,&nextX,&tmp1_fp); //nextX = t3^2 - 2*t2
 
   fp_sub(&nextY,&t2,&nextX);      //nextY = t2-nextX
   fp_mul(&nextY,&nextY,&t3);      //nextY = (t2-nextX)t3
 
   fp_sqr(&tmp1_fp,&tmp2_fp);      //tmp1 = tmp2^2 = 4t1^2
-  fp_lshift_1(&tmp1_fp,&tmp1_fp); //tmp1 = 8t1^2
+  fp_l1shift(&tmp1_fp,&tmp1_fp); //tmp1 = 8t1^2
 
   fp_sub(&nextY,&nextY,&tmp1_fp); //nextY = (t2-nextX)t3 - 8t1^2
 
-  fp_lshift_1(&nextZ,&S->y);      //nextZ = 2Y
+  fp_l1shift(&nextZ,&S->y);      //nextZ = 2Y
   fp_mul(&nextZ,&nextZ,&S->z);    //nextZ = 2YZ
 
   fp_sqr(&tmp1_fp,&S->z);         //tmp1 = Z^2
@@ -99,7 +99,7 @@ void ff_ltqp(fp6_t *f, efp_jacobian_t *S, efp_t *Q,efp_t *P){
 
   fp_sqr(&tmp1_fp,&t2);
   // fp_mul_ui(&tmp2_fp,&t5,2);
-  fp_lshift_1(&tmp2_fp, &t5);
+  fp_l1shift(&tmp2_fp, &t5);
   fp_add(&tmp2_fp,&tmp2_fp,&t4);
   fp_sub(&nextX,&tmp1_fp,&tmp2_fp);
   //X = t2^2 -(2t5+t4)

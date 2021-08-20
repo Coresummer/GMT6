@@ -11,8 +11,11 @@ void final_exp(fp6_t *ANS,fp6_t *A){
   fp6_mul(ANS,ANS,&tmp1_fp6);//(p^3-1)
 
   fp6_frobenius_map_p1(&tmp1_fp6,ANS);//(p^3-1)(p)
-  fp6_mul(ANS,ANS,&tmp1_fp6);                //(p^3-1)(p+1) = M
+  fp6_mul(ANS,ANS,&tmp1_fp6);         //(p^3-1)(p+1) = M
 
+  // fp6_inv(&tmp1_fp6,ANS);//M^-1
+  // fp6_frobenius_map_p1(ANS,ANS);//(p)
+  // fp6_mul(ANS,ANS,&tmp1_fp6);//(p-1)
   //Second part
 //L1
   fp6_frobenius_map_p3(&tmp2_fp6,ANS);                     //M^-1                                       //I
@@ -64,4 +67,7 @@ void final_exp(fp6_t *ANS,fp6_t *A){
   fp6_mul(&tmp11_fp6,&tmp11_fp6,&tmp12_fp6);  //M'^((9w^2+3w+1)(x-1)+9w^2+6w)(x-1) +(9w^2+3w) + (6w+3) //M
 
   fp6_mul(ANS,&tmp8_fp6,&tmp11_fp6);         //left * right = M^(3(-t0-x+3) + (p+t0-2)((9w^2+3w+1)(x-1)+9w^2+6w)(x-1)+9w^2+9w + 3) //M
+
+
+
 }

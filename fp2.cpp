@@ -85,8 +85,8 @@ void fp2_mod_montgomery_double(fp2_t *ANS,fpd2_t *A){
 }
 
 void fp2_lshift_1(fp2_t *ANS,fp2_t *A){
-  fp_lshift_1(&ANS->x0,&A->x0);
-  fp_lshift_1(&ANS->x1,&A->x1);
+  fp_l1shift(&ANS->x0,&A->x0);
+  fp_l1shift(&ANS->x1,&A->x1);
 }
 
 void fp2_hlv(fp2_t *ANS,fp2_t *A){
@@ -406,6 +406,6 @@ void fp2_mul_base(fp2_t *ANS,fp2_t *A){
   static fp2_t tmp_A;
   fp2_set(&tmp_A,A);
 
-  fp_lshift_1(&ANS->x0,&tmp_A.x1);
+  fp_l1shift(&ANS->x0,&tmp_A.x1);
   fp_set(&ANS->x1,&tmp_A.x0);    //@^2 = 2
 }

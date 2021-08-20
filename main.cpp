@@ -1,4 +1,4 @@
-  #include <cstdio>
+#include <cstdio>
 #define TTT_INSTANCE_HERE
 
 #include "define.h"
@@ -48,7 +48,7 @@ int main(){
   check_pairing_2NAF();
   // // check_pairing_static();
   check_pairing_count_2NAF();
-  check_pairing_time_2NAF();
+  // check_pairing_time_2NAF();
 
   // efp6_t P,Q;
   // fp6_t f,e,f_inv,f_p3;
@@ -65,20 +65,7 @@ int main(){
   // miller_opt_ate_proj_2NAF(&f,&P,&Q);
   // printf("---------------------------------\n");
 
-  // fp6_frobenius_map_p3(&f,&f);
-  // fp6_inv(&f_inv,&f);
-  // fp6_mul(&f,&f,&f_inv);
 
-  // fp6_frobenius_map_p3(&f_p3,&f);
-
-  // fp6_mul(&f_p3, &f_p3, &f);
-
-  // fp6_println("(p^3-1)(p^3+1)", &f_p3);
-
-  // // final_exp(&e,&f);
-  // printf("---------------------------------\n");
-
-  // printf("*********************************************************************************************\n\n");
 
   return 0;
 }

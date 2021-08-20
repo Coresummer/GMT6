@@ -256,7 +256,7 @@ void check_fp_time(){
     for(i=0;i<max;i++){
       fp_set(&A,&a[i]);
       fp_set(&B,&b[i]);
-      fp_lshift_1(&ANS,&A);
+      fp_l1shift(&ANS,&A);
     }
   }
   gettimeofday(&tv_end,NULL);

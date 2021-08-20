@@ -4,6 +4,8 @@ void fp_init(fp_t *A){
   mpn_zero(A->x0,FPLIMB);
 }
 
+void fpd_init(fpd_t *A) { mpn_zero(A->x0, FPLIMB2); }
+
 void fp_printf(std::string str ,fp_t *A){
   gmp_printf("%s%Nu",str.c_str(),A->x0,FPLIMB);
 }
@@ -20,6 +22,12 @@ void fp_printf_montgomery(std::string str ,fp_t *A){
   static fp_t out;
   fp_mod_montgomery(&out,A);
   gmp_printf("%s%Nu",str.c_str(),out.x0,FPLIMB);
+}
+
+void fp_println_montgomery(char *str, fp_t *A) {
+  static fp_t out;
+  fp_mod_montgomery(&out, A);
+  gmp_printf("%s%Nu\n", str, out.x0, FPLIMB);
 }
 
 void fp_set(fp_t *ANS,fp_t *A){
@@ -42,26 +50,96 @@ void fp_set_neg(fp_t *ANS,fp_t *A){
   #ifdef DEBUG_ASSERT
   assert(mpn_cmp(A->x0,prime,FPLIMB)>0)
   #endif
-  mpn_sub_n(ANS->x0,prime,A->x0,FPLIMB);
+  if (fp_cmp_zero(A) == 0) fp_set(ANS, A);
+  else mpn_sub_n(ANS->x0, prime, A->x0, FPLIMB);
 }
 
 void fp_set_neg_montgomery(fp_t *ANS,fp_t *A){
   #ifdef DEBUG_ASSERT
   assert(mpn_cmp(A->x0,prime,FPLIMB)>0)
   #endif
-  mpn_sub_n(ANS->x0,prime,A->x0,FPLIMB);
-  //fp_mod(ANS,ANS->x0,FPLIMB);
+  if (fp_cmp_zero(A) == 0) fp_set(ANS, A);
+  else mpn_sub_n(ANS->x0, prime, A->x0, FPLIMB);
+}
+
+void fp_lshift(fp_t *ANS, fp_t *A, unsigned long int UI) {
+  mpn_lshift(ANS->x0, A->x0, FPLIMB, UI);
+  fp_mod(ANS, ANS->x0, FPLIMB);
 }
 
 void fp_lshift_1(fp_t *ANS,fp_t *A){
+#ifdef DEBUG_COST_A
+  cost_add++;
+#endif
   mpn_lshift(ANS->x0,A->x0,FPLIMB,1);
   if(mpn_cmp(ANS->x0,prime,FPLIMB)>=0)  mpn_sub_n(ANS->x0,ANS->x0,prime,FPLIMB);
+}
+
+void fp_l1shift(fp_t *ANS, fp_t *A) {
+#ifdef DEBUG_COST_A
+  cost_add++;
+#endif
+  mpn_lshift(ANS->x0, A->x0, FPLIMB, 1);
+  if (mpn_cmp(ANS->x0, prime, FPLIMB) >= 0)mpn_sub_n(ANS->x0, ANS->x0, prime, FPLIMB);
 }
 
 void fp_rshift_1(fp_t *ANS,fp_t *A){
   mpn_rshift(ANS->x0,A->x0,FPLIMB,1);
   if(mpn_cmp(ANS->x0,prime,FPLIMB)>=0)  mpn_sub_n(ANS->x0,ANS->x0,prime,FPLIMB);
 }
+
+void fp_r1shift(fp_t *ANS, fp_t *A) {
+#ifdef DEBUG_COST_A
+  cost_add++;
+#endif
+  if (A->x0[0] & 1)
+    mpn_add_n(ANS->x0, A->x0, prime, FPLIMB);
+  else
+    mpn_copyd(ANS->x0, A->x0, FPLIMB);
+  mpn_rshift(ANS->x0, ANS->x0, FPLIMB, 1);
+}
+
+void fp_set_random(fp_t *ANS,gmp_randstate_t state){
+  mpz_t tmp;
+  mpz_init(tmp);
+  mpz_urandomm(tmp,state,prime_z);
+  mpn_set_mpz(ANS->x0,tmp);
+  mpz_clear(tmp);
+}
+
+// void pre_montgomery() {
+//   mp_limb_t tmp1[FPLIMB + 1], tmp2[FPLIMB2 + 2];
+//   mpz_t tmp_z;
+//   mpz_t R;
+//   mpz_t R3_z;
+//   mp_limb_t R2[FPLIMB2 + 2];
+
+//   mpz_init(tmp_z);
+//   mpz_init(R);
+//   mpz_init(R3_z);
+
+//   for (int i = 0; i < FPLIMB; i++)
+//     N[i] = prime[i];
+//   mpz_ui_pow_ui(R, 2, FPLIMB_BITS);
+//   mpz_invert(tmp_z, prime_z, R);
+//   mpz_sub(tmp_z, R, tmp_z);
+//   mpn_set_mpz(tmp1, tmp_z);
+//   Ni_neg = tmp1[0];
+
+//   mpn_set_mpz(tmp1, R);
+//   mpn_mod(tmp1, tmp1, FPLIMB + 1);
+//   mpn_copyd(RmodP, tmp1, FPLIMB);
+
+//   mpz_pow_ui(R3_z, R, 3);
+//   mpz_mod(R3_z, R3_z, prime_z);
+//   mpn_set_mpz(R3, R3_z);
+
+//   mpz_clear(tmp_z);
+//   mpz_clear(R);
+//   mpz_clear(R3_z);
+// }
+
+
 
 void fp_hlv(fp_t *ANS,fp_t *A){
   static mp_limb_t buf[FPLIMB];
@@ -70,39 +148,39 @@ void fp_hlv(fp_t *ANS,fp_t *A){
   mpn_rshift(ANS->x0,buf,FPLIMB,1);
 }
 
-void fp_set_random(fp_t *ANS,gmp_randstate_t state){
-  mpz_t tmp;
-  mpz_init(tmp);
+// void fp_mulmod_montgomery(fp_t *ANS, fp_t *A, fp_t *B) {
+// #ifdef DEBUG_COST_A
+//   cost_mul++;
+//   cost_mod++;
+// #endif
+//   static mp_limb_t T[FPLIMB2];
+//   mpn_zero(T, FPLIMB2);
 
-  mpz_urandomm(tmp,state,prime_z);
-  mpn_set_mpz(ANS->x0,tmp);
+//   mpn_mul_n(T, A->x0, B->x0, FPLIMB);
+//   for (int i = 0; i < FPLIMB; i++)
+//     T[i] = mpn_addmul_1(&T[i], prime, FPLIMB, T[i] * Ni_neg);
 
-  mpz_clear(tmp);
-}
+//   mpn_add_n(ANS->x0, T + FPLIMB, T, FPLIMB);
+//   if (mpn_cmp(ANS->x0, prime, FPLIMB) != -1)
+//     mpn_sub_n(ANS->x0, ANS->x0, prime, FPLIMB);
+// }
 
-void pre_montgomery(){
-  mp_limb_t tmp1[FPLIMB+1],tmp2[FPLIMB2+2];
-  mpz_t N2;
-  mpz_t NN;
-  mpz_init(N2);
-  mpz_init(NN);
-  mpz_ui_pow_ui(NN,2,FPLIMB_BITS);
-  mpz_invert(N2,prime_z,NN);
-  mpz_sub(N2,NN,N2);
-  mpn_set_mpz(u,N2);
-  mpn_zero(N,FPLIMB2);
-  for(int i=0;i<FPLIMB;i++){
-    N[i]=prime[i];
-  }
-  mpn_set_mpz(tmp1,NN);
-  mpn_mod(RmodP,tmp1,FPLIMB+1);
-  mpn_mul_n(tmp2,tmp1,tmp1,FPLIMB+1);
-  mpn_mod(R2,tmp2,FPLIMB2+2);
-  mpn_mul(tmp2,R2,FPLIMB,tmp1,FPLIMB+1);
-  mpn_mod(R3,tmp2,FPLIMB2+2);
-  mpz_clear(N2);
-  mpz_clear(NN);
-}
+// void fp_sqrmod_montgomery(fp_t *ANS, fp_t *A) {
+// #ifdef DEBUG_COST_A
+//   cost_sqr++;
+//   cost_mod++;
+// #endif
+//   static mp_limb_t T[FPLIMB2];
+//   mpn_zero(T, FPLIMB2);
+
+//   mpn_sqr(T, A->x0, FPLIMB);
+//   for (int i = 0; i < FPLIMB; i++)
+//     T[i] = mpn_addmul_1(&T[i], prime, FPLIMB, T[i] * Ni_neg);
+
+//   mpn_add_n(ANS->x0, T + FPLIMB, T, FPLIMB);
+//   if (mpn_cmp(ANS->x0, prime, FPLIMB) != -1)
+//     mpn_sub_n(ANS->x0, ANS->x0, prime, FPLIMB);
+// }
 
 void fp_mulmod_montgomery(fp_t *ANS,fp_t *A,fp_t *B){
   #ifdef DEBUG_COST_A
@@ -716,7 +794,7 @@ void fp_mul_base(fp_t *ANS,fp_t *A){
   // cost_mul--;
   #endif
   // fp_mul(ANS,A,&base_c);
-  fp_lshift_1(ANS,A);
+  fp_l1shift(ANS,A);
 }
 
 void fp_mul_base_inv(fp_t *ANS,fp_t *A){
@@ -725,7 +803,7 @@ void fp_mul_base_inv(fp_t *ANS,fp_t *A){
   #ifdef DEBUG_COST_A
   cost_add++;
   #endif
-    fp_rshift_1(ANS,A);
+    fp_r1shift(ANS,A);
   }else{
     fp_mul(ANS,A,&base_c_inv);
   }
