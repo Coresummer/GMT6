@@ -23,7 +23,10 @@
 #include <string>
 #include <iostream>
 
-#define DEBUG_COST_A
+#define ARCBIT 64  //64bit processor
+//#define ARCBIT 32 //32bit processor
+
+// #define DEBUG_COST_A
 //#define DEBUG_ASSERT
 #define CHECK_PAIRING_TIME_LOOP 10000
 
@@ -32,15 +35,15 @@
 /**********************************/
 
 #ifdef X64
-#define FPLIMB_BITS 512
+#define FPLIMB_BITS FPLIMB*ARCBIT
 #define FPLIMB 11 //
-#define FPLIMB2 22  //??
+#define FPLIMB2 FPLIMB*2  //??
 #endif
 
 #ifdef X32
-#define FPLIMB_BITS 512
-#define FPLIMB 12
-#define FPLIMB2 24
+#define FPLIMB_BITS FPLIMB* ARCBIT
+#define FPLIMB 22
+#define FPLIMB2 FPLIMB*2  //??
 #endif
 
 #define scalar_t mpz_t

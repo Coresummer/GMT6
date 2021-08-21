@@ -8,6 +8,7 @@ void fp6_init(fp6_t *A);
 void fp6_printf(std::string str ,fp6_t *A);
 void fp6_println(std::string str ,fp6_t *A);
 void fp6_printf_montgomery(std::string str ,fp6_t *A);
+void fp6_println_montgomery(std::string str, fp6_t *A);
 void fp6_set(fp6_t *ANS,fp6_t *A);
 void fp6_set_ui(fp6_t *ANS,unsigned long int UI);
 void fp6_set_ui_ui(fp6_t *ANS,unsigned long int UI);
@@ -44,6 +45,8 @@ void fp6_inv_lazy_montgomery(fp6_t *ANS,fp6_t *A);
 int fp6_legendre(fp6_t *A);
 void fp6_sqrt(fp6_t *ANS,fp6_t *A);
 void fp6_pow(fp6_t *ANS,fp6_t *A,mpz_t scalar);
+void fp6_pow_montgomery(fp6_t *ANS, fp6_t *A, mpz_t scalar);
+
 void fp6_finalexpow_x_2NAF(fp6_t *ANS,fp6_t *A);
 void fp6_finalexpow_x_1_2NAF(fp6_t *ANS,fp6_t *A);
 void fp6_finalexpow_3w_2NAF(fp6_t *ANS,fp6_t *A);

@@ -28,8 +28,8 @@ void fp6_println(std::string str ,fp6_t *A){
   gmp_printf(")\n");
 }
 
-void fp6_printf_montgomery(char *str, fp6_t *A) {
-  gmp_printf("%s(", str);
+void fp6_printf_montgomery(std::string str , fp6_t *A) {
+  gmp_printf("%s(", str.c_str());
   fp2_printf_montgomery("", &A->x0);
   gmp_printf(",");
   fp2_printf_montgomery("", &A->x1);
@@ -37,8 +37,8 @@ void fp6_printf_montgomery(char *str, fp6_t *A) {
   fp2_printf_montgomery("", &A->x2);
   gmp_printf(")");
 }
-void fp6_println_montgomery(char *str, fp6_t *A) {
-  gmp_printf("%s(", str);
+void fp6_println_montgomery(std::string str , fp6_t *A) {
+  gmp_printf("%s(", str.c_str());
   fp2_printf_montgomery("", &A->x0);
   gmp_printf(",");
   fp2_printf_montgomery("", &A->x1);
@@ -471,8 +471,9 @@ void fp6_sqr_lazy_montgomery(fp6_t *ANS, fp6_t *A) {
   fp6_set(&tmp_A,A);
 
   static fp2_t tmp1_fp2,tmp2_fp2,tmp3_fp2,tmp4_fp2,tmp5_fp2;
-  fp2_sqr_lazy(&tmp1_fp2,&A->x0);        //x0^2
-  fp2_sqr_lazy(&tmp4_fp2,&A->x2);        //x2^2
+  static fp2_t tmp1,tmp2,tmp3;
+  fp2_sqr_lazy_montgomery(&tmp1_fp2,&A->x0);        //x0^2
+  fp2_sqr_lazy_montgomery(&tmp4_fp2,&A->x2);        //x2^2
 
   fp2_add_nonmod_single(&tmp5_fp2,&A->x1,&A->x1);        //2x1
 
@@ -484,16 +485,25 @@ void fp6_sqr_lazy_montgomery(fp6_t *ANS, fp6_t *A) {
   fp2_sqr_lazy(&ANS->x2,&tmp5_fp2); //lazy montgomery?
 
   //x0
-  fp2_mul_base(&ANS->x0,&tmp2_fp2);
-  fp2_add(&ANS->x0,&ANS->x0,&tmp1_fp2);
+  fp2_mul_base_nonmod_single(&ANS->x0,&tmp2_fp2);
+  fp2_add_nonmod_single(&tmp1,&ANS->x0,&tmp1_fp2);
+  mpn_mod_montgomery(ANS->x0.x0.x0,FPLIMB,tmp1.x0.x0,FPLIMB);
+  mpn_mod_montgomery(ANS->x0.x1.x0,FPLIMB,tmp1.x1.x0,FPLIMB);
+
   //x1
-  fp2_mul_base(&ANS->x1,&tmp4_fp2);
-  fp2_add(&ANS->x1,&ANS->x1,&tmp3_fp2);
+  fp2_mul_base_nonmod_single(&ANS->x1,&tmp4_fp2);
+  fp2_add_nonmod_single(&tmp2,&ANS->x1,&tmp3_fp2);
+  mpn_mod_montgomery(ANS->x1.x0.x0,FPLIMB,tmp2.x0.x0,FPLIMB);
+  mpn_mod_montgomery(ANS->x1.x1.x0,FPLIMB,tmp2.x1.x0,FPLIMB);
+
   //x2
-  fp2_add(&tmp5_fp2,&tmp1_fp2,&tmp4_fp2);
-  fp2_add(&tmp5_fp2,&tmp5_fp2,&tmp2_fp2);
-  fp2_add(&tmp5_fp2,&tmp5_fp2,&tmp3_fp2);
-  fp2_sub(&ANS->x2,&ANS->x2,&tmp5_fp2);
+  fp2_add_nonmod_single(&tmp5_fp2,&tmp1_fp2,&tmp4_fp2);
+  fp2_add_nonmod_single(&tmp5_fp2,&tmp5_fp2,&tmp2_fp2);
+  fp2_add_nonmod_single(&tmp5_fp2,&tmp5_fp2,&tmp3_fp2);
+  fp2_sub_nonmod_single(&tmp3,&ANS->x2,&tmp5_fp2);
+  mpn_mod_montgomery(ANS->x2.x0.x0,FPLIMB,tmp3.x0.x0,FPLIMB);
+  mpn_mod_montgomery(ANS->x2.x1.x0,FPLIMB,tmp3.x1.x0,FPLIMB);
+
 }
 
 void fp6_sqr_GS(fp6_t *ANS,fp6_t *A){
@@ -861,6 +871,24 @@ void fp6_pow(fp6_t *ANS,fp6_t *A,mpz_t scalar){
     if(binary[i]=='1')  fp6_mul(&tmp,A,&tmp);
   }
   fp6_set(ANS,&tmp);
+}
+
+void fp6_pow_montgomery(fp6_t *ANS, fp6_t *A, mpz_t scalar) {
+  int length = (int)mpz_sizeinbase(scalar, 2);
+  char binary[length + 1];
+  mpz_get_str(binary, 2, scalar);
+  fp6_t tmp;
+  fp6_init(&tmp); // not need?
+
+  fp6_set(&tmp, A);
+
+  for (int i = 1; i < length; i++) {
+    fp6_sqr_lazy_montgomery(&tmp, &tmp);
+    if (binary[i] == '1') {
+      fp6_mul_lazy_montgomery(&tmp, A, &tmp);
+    }
+  }
+  fp6_set(ANS, &tmp);
 }
 
 void fp6_finalexpow_x_2NAF(fp6_t *ANS,fp6_t *A){

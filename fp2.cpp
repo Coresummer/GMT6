@@ -414,7 +414,6 @@ void fp2_inv_lazy(fp2_t *ANS, fp2_t *A) {
   fp_inv(&tmp3_fp,&tmp3_fp);  //  (a^2 - b^2c)^-1
   fp_mul(&ANS->x0,&tmp1_fp,&tmp3_fp); // a*(a^2- b^2c)^-1
   fp_mul(&ANS->x1,&tmp2_fp,&tmp3_fp); //-b*(a^2 - b^2c)^-1
-
 }
 
 void fp2_inv_lazy_montgomery(fp2_t *ANS, fp2_t *A) {
@@ -424,9 +423,11 @@ void fp2_inv_lazy_montgomery(fp2_t *ANS, fp2_t *A) {
   fp_set(&tmp1_fp, &A->x0);
   fp_set_neg(&tmp2_fp, &A->x1);
 
-  fp_sqrmod_montgomery(&tmp1, &tmp1_fp);
-  fp_mulmod_montgomery(&tmp2, &tmp2_fp, &A->x1);
-  fp_sub_nonmod_single(&tmp3, &tmp1, &tmp2);
+  fp_sqrmod_montgomery(&tmp1, &tmp1_fp); //a^2
+  fp_mulmod_montgomery(&tmp2, &tmp2_fp, &A->x1);//b^2
+  fp_mul_base_nonmod_sigle(&tmp2,&tmp2);//b^2*c
+  fp_add_nonmod_single(&tmp3, &tmp1, &tmp2);//a^2-b^2*c
+
   fp_inv_montgomery(&tmp3, &tmp3);
   fp_mulmod_montgomery(&ANS->x0, &tmp1_fp, &tmp3);
   fp_mulmod_montgomery(&ANS->x1, &tmp2_fp, &tmp3);
@@ -533,6 +534,24 @@ void fp2_pow(fp2_t *ANS,fp2_t *A,mpz_t scalar){
     if(binary[i]=='1')  fp2_mul(&tmp,A,&tmp);
   }
   fp2_set(ANS,&tmp);
+}
+
+void fp2_pow_montgomery(fp2_t *ANS, fp2_t *A, mpz_t scalar) {
+  int length = (int)mpz_sizeinbase(scalar, 2);
+  char binary[length + 1];
+  mpz_get_str(binary, 2, scalar);
+  fp2_t tmp;
+  fp2_init(&tmp); // not need?
+
+  fp2_set(&tmp, A);
+
+  for (int i = 1; i < length; i++) {
+    fp2_sqr_lazy_montgomery(&tmp, &tmp);
+    if (binary[i] == '1') {
+      fp2_mul_lazy_montgomery(&tmp, A, &tmp);
+    }
+  }
+  fp2_set(ANS, &tmp);
 }
 
 int fp2_cmp(fp2_t *A,fp2_t *B){

@@ -1,4 +1,5 @@
 #include "fp.h"
+#include <ELiPS/mpn.h>
 
 void fp_init(fp_t *A){
   mpn_zero(A->x0,FPLIMB);
@@ -74,6 +75,13 @@ void fp_l1shift(fp_t *ANS, fp_t *A) {
   if (mpn_cmp(ANS->x0, prime, FPLIMB) >= 0)mpn_sub_n(ANS->x0, ANS->x0, prime, FPLIMB);
 }
 
+void fp_l1shift_nonmod(fp_t *ANS, fp_t *A) {
+#ifdef DEBUG_COST_A
+  cost_add++;
+#endif
+  mpn_lshift(ANS->x0, A->x0, FPLIMB, 1);
+}
+
 void fp_l1shift_double(fpd_t *ANS, fpd_t *A) {
 #ifdef DEBUG_COST_A
   cost_add++;
@@ -115,7 +123,6 @@ void pre_montgomery() {
   mpz_t tmp_z;
   mpz_t R;
   mpz_t R3_z;
-  mp_limb_t R2[FPLIMB2 + 2];
 
   mpz_init(tmp_z);
   mpz_init(R);
@@ -132,7 +139,6 @@ void pre_montgomery() {
   mpn_set_mpz(tmp1, R);
   mpn_mod(tmp1, tmp1, FPLIMB + 1);
   mpn_copyd(RmodP, tmp1, FPLIMB);
-
   mpz_pow_ui(R3_z, R, 3);
   mpz_mod(R3_z, R3_z, prime_z);
   mpn_set_mpz(R3, R3_z);
@@ -552,7 +558,7 @@ void fp_pow_montgomery(fp_t *ANS, fp_t *A, mpz_t scalar) {
   fp_set(&tmp, A);
 
   for (int i = 1; i < length; i++) {
-    fp_mulmod_montgomery(&tmp, &tmp, &tmp);
+    fp_sqrmod_montgomery(&tmp, &tmp);
     if (binary[i] == '1') {
       fp_mulmod_montgomery(&tmp, A, &tmp);
     }
@@ -682,6 +688,15 @@ void fp_mul_base(fp_t *ANS,fp_t *A){
   #endif
   // fp_mul(ANS,A,&base_c);
   fp_l1shift(ANS,A);
+}
+
+void fp_mul_base_nonmod_sigle(fp_t *ANS,fp_t *A){
+  #ifdef DEBUG_COST_A
+  cost_add++;
+  // cost_mul_base++;
+  // cost_mul--;
+  #endif
+  fp_l1shift_nonmod(ANS,A);
 }
 
 void fp_mul_base_nonmod_double(fpd_t *ANS,fpd_t *A){

@@ -13,5 +13,8 @@ int test_fp6(int fp6_n);
 int test_field(int fp, int fp2, int fp6, int sqr);
 int test_fp_montgomery(int fp_n);
 
-void check_fp_montgomery(int loop);
+void check_fp_with_montgomery();
+void check_fp2_with_montgomery();
+void check_fp6_with_montgomery();
+
 #endif
