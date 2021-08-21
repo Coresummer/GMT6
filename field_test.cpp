@@ -1,4 +1,5 @@
 #include "field_test.h"
+#include "fp.h"
 /*----------------------------------------------------------------------------*/
 //test
 int test_fp(int fp_n) {
@@ -1001,7 +1002,7 @@ int test_fp_montgomery(int fp_n) {
   printf("fp rate\n");
   printf("fp add.        : %.7f\n", (add_time / fp_n) / (add_time / fp_n));
   printf("fp add nonmod. : %.7f\n", (add_nonmod_single / fp_n) / (add_time / fp_n));
-  printf("fp add double. : %.7f\n", (add_nonmod_double / fp_n) / (add_time / fp_n));
+  printf("fp add nonmod double. : %.7f\n", (add_nonmod_double / fp_n) / (add_time / fp_n));
 
   printf("fp sub. : %.7f\n", (sub_time / fp_n) / (add_time / fp_n));
   printf("fp sub nonmod. : %.7f\n", (sub_nonmod_single / fp_n) / (add_time / fp_n));
@@ -1015,4 +1016,29 @@ int test_fp_montgomery(int fp_n) {
   printf("fp mod montgomery. : %.7f[ms]\n", (mod_time / fp_n) / (add_time / fp_n));
 
   return 0;
+}
+
+void check_fp_montgomery(int loop){
+  printf("--------------------CHECK FP MONTGOMERY--------------------\n");
+  fp_t A,B,ANS;
+  fp_t Am,Bm,ANSm;
+
+  fp_init(&A);
+  fp_init(&B);
+  fp_init(&ANS);
+  fp_init(&Am);
+  fp_init(&Bm);
+  fp_init(&ANSm);
+
+  fp_set_random(&A,state);
+  fp_set_random(&B,state);
+  fp_mul(&ANS,&A,&B);
+  fp_println("\nRegular A*B:", &ANS);
+
+  fp_to_montgomery(&Am,&A);
+  fp_to_montgomery(&Bm,&B);
+  fp_mulmod_montgomery(&ANSm, &Am, &Bm);
+  
+  fp_println_montgomery("\nMontgomery mod A*B:", &ANSm);
+
 }

@@ -24,10 +24,10 @@ void fp_printf_montgomery(std::string str ,fp_t *A){
   gmp_printf("%s%Nu",str.c_str(),out.x0,FPLIMB);
 }
 
-void fp_println_montgomery(char *str, fp_t *A) {
+void fp_println_montgomery(std::string str , fp_t *A) {
   static fp_t out;
   fp_mod_montgomery(&out, A);
-  gmp_printf("%s%Nu\n", str, out.x0, FPLIMB);
+  gmp_printf("%s%Nu\n", str.c_str(), out.x0, FPLIMB);
 }
 
 void fp_set(fp_t *ANS,fp_t *A){

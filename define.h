@@ -34,7 +34,7 @@
 #ifdef X64
 #define FPLIMB_BITS 512
 #define FPLIMB 11 //
-#define FPLIMB2 23  //??
+#define FPLIMB2 22  //??
 #endif
 
 #ifdef X32
