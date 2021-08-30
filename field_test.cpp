@@ -1388,12 +1388,6 @@ void BENCH_miller_lazy_montgomery(int LOOP){
   CYBOZU_BENCH_C("ff_lttp_lazy_montgomery()", LOOP, ff_lttp_lazy_montgomery, &fm,&Sm,&mapped_Qm);
   fp6_println("ANS:", &f);
   fp6_println_montgomery("ANSm:", &fm);
-  fp_println("Sx: ", &S.x);
-  fp_println_montgomery("Smx:", &Sm.x);
-  fp_println("Sy: ", &S.y);
-  fp_println_montgomery("Smy:", &Sm.y);
-  fp_println("Sz: ", &S.z);
-  fp_println_montgomery("Smz:", &Sm.z);
   fp6_set_ui_ui(&f,0);
   fp_set_ui(&f.x0.x0,1);
   fp6_set_ui_ui(&fm,0);
@@ -1404,12 +1398,7 @@ void BENCH_miller_lazy_montgomery(int LOOP){
   CYBOZU_BENCH_C("ff_ltpq_lazy_montgomery()", LOOP, ff_ltqp_lazy_montgomery, &fm,&Sm,&mapped_Qm,&mapped_Pm);
   fp6_println("ANS:", &f);
   fp6_println_montgomery("ANSm:", &fm);
-  fp_println("Sx: ", &S.x);
-  fp_println_montgomery("Smx:", &Sm.x);
-  fp_println("Sy: ", &S.y);
-  fp_println_montgomery("Smy:", &Sm.y);
-  fp_println("Sz: ", &S.z);
-  fp_println_montgomery("Smz:", &Sm.z);
+  
   printf("============================================================================\n");
   printf("--------------------------------------Miller--------------------------------\n");
   printf("============================================================================\n");
@@ -1420,5 +1409,5 @@ void BENCH_miller_lazy_montgomery(int LOOP){
   CYBOZU_BENCH_C("miller_opt_ate_proj_2NAF_lazy_montgomery()", LOOP, miller_opt_ate_proj_2NAF_lazy_montgomery,&fm,&P,&Q);
   fp6_println_montgomery("ANSm:", &fm);
 
-  
+
 }

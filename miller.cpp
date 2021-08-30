@@ -5,6 +5,7 @@
 #include "fp2.h"
 #include "fp6.h"
 #include "mpn.h"
+#include <cstdio>
 
 void efp6_to_Jacefp(efp_jacobian_t *ANS,efp6_t *A){ 
   fp_set(&ANS->x,&A->x.x2.x0);
@@ -312,12 +313,6 @@ void miller_opt_ate_proj_2NAF(fp6_t *f,efp6_t *P,efp6_t *Q){
       switch(miller_loop_v[i]){
         case 0:
           ff_lttp(f,&S,&mapped_P);
-          if(i==(miller_loop_v.size() -4)){
-              printf("regular\n");
-              fp_println("Sx: ", &S.x);
-              fp_println("Sy: ", &S.y);
-              fp_println("Sz: ", &S.z);
-          }
           break;
         case 1:
           ff_lttp(f,&S,&mapped_P);
@@ -325,14 +320,9 @@ void miller_opt_ate_proj_2NAF(fp6_t *f,efp6_t *P,efp6_t *Q){
           // fp6_println("&f1", f);
           break;
         case -1:
-          if(i==(miller_loop_v.size() -5)){
-            fp_println_montgomery("Sx: ", &S.x);
-            fp_println_montgomery("Sy: ", &S.y);
-            fp_println_montgomery("Sz: ", &S.z);
-            printf("regular");
-          }
           ff_lttp(f,&S,&mapped_P);
           ff_ltqp(f,&S,&mapped_Q_neg,&mapped_P);
+
           break;
         default:
             break;
@@ -352,7 +342,7 @@ void miller_opt_ate_proj_2NAF_lazy_montgomery(fp6_t *f,efp6_t *P,efp6_t *Q){
     fp_to_montgomery(&mapped_P.y,&P->y.x0.x0);
     mapped_P.infinity = 0;
 
-    efp6_to_efp_montgomery(&mapped_Q,Q);//twist
+    efp6_to_efp(&mapped_Q,Q);//twist
     efp6_to_Jacefp_montgomery(&S,Q);
     efp_set_neg_montgomery(&mapped_Q_neg,&mapped_Q);//here
 
@@ -361,11 +351,6 @@ void miller_opt_ate_proj_2NAF_lazy_montgomery(fp6_t *f,efp6_t *P,efp6_t *Q){
       switch(miller_loop_v[i]){
         case 0:
           ff_lttp_lazy_montgomery(f,&S,&mapped_P);
-          if(i==(miller_loop_v.size() -4)){
-              fp_println_montgomery("Sx: ", &S.x);
-              fp_println_montgomery("Sy: ", &S.y);
-              fp_println_montgomery("Sz: ", &S.z);
-          }
           break;
         case 1:
           ff_lttp_lazy_montgomery(f,&S,&mapped_P);
@@ -373,13 +358,9 @@ void miller_opt_ate_proj_2NAF_lazy_montgomery(fp6_t *f,efp6_t *P,efp6_t *Q){
           // fp6_println_montgomery("&f1", f);
           break;
         case -1:
-          if(i==(miller_loop_v.size() -5)){
-            fp_println_montgomery("Sx: ", &S.x);
-            fp_println_montgomery("Sy: ", &S.y);
-            fp_println_montgomery("Sz: ", &S.z);
-          }
           ff_lttp_lazy_montgomery(f,&S,&mapped_P);
           ff_ltqp_lazy_montgomery(f,&S,&mapped_Q_neg,&mapped_P);
+
           break;
         default:
             break;

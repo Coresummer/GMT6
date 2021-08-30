@@ -52,7 +52,7 @@ int main(){
   // check_g1_g2();
 
   //SCM_func_check();//未完成
-  check_pairing_2NAF();
+  // check_pairing_2NAF();
   // // check_pairing_static();
   // check_pairing_count_2NAF();
   // check_pairing_time_2NAF();
