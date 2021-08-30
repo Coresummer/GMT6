@@ -1,7 +1,10 @@
+#include "fp2.h"
+#define CYBOZU_BENCH_USE_GETTIMEOFDAY
+#include <cybozu/benchmark.hpp>
+#include "miller.h"
 #include "field_test.h"
 #include "fp.h"
-#include <ELiPS/define.h>
-#include <ELiPS/fp.h>
+#include "define.h"
 #include <gmp.h>
 /*----------------------------------------------------------------------------*/
 //test
@@ -1237,4 +1240,185 @@ void check_fp6_with_montgomery(){
   fp6_println_montgomery("Am = ",&Am);
   printf("---------------------------------\n");
   printf("*********************************************************************************************\n\n");
+}
+
+void BENCH_fp2_fp6_mul_lazy_montgomery(int LOOP){
+  printf("============================================================================\n");
+  printf("-------------------------------fp, fp2, fp6 BENCHMARK-----------------------\n");
+  printf("============================================================================\n");
+
+  fp_t ANS_fp, ANSm_fp, A_fp,Am_fp ,B_fp,Bm_fp;
+  fp_init(&A_fp);
+  fp_init(&Am_fp);
+  fp_init(&B_fp);
+  fp_init(&Bm_fp);
+  fp_init(&ANS_fp);
+  fp_init(&ANSm_fp);
+
+  fp_set_random(&A_fp,state);
+  fp_to_montgomery(&Am_fp, &A_fp);
+  fp_set_random(&B_fp,state);
+  fp_to_montgomery(&Bm_fp, &B_fp);
+
+  CYBOZU_BENCH_C("fp_mul()", LOOP, fp_mul,&ANS_fp,&A_fp,&B_fp);
+  CYBOZU_BENCH_C("fp_mul_lazy_montgomery()", LOOP, fp_mulmod_montgomery, &ANSm_fp,&Am_fp,&Bm_fp);
+  fp_println("ANS:", &ANS_fp);
+  fp_println_montgomery("ANSm:", &ANSm_fp);
+
+  CYBOZU_BENCH_C("fp_sqr()", LOOP, fp_sqr,&ANS_fp,&A_fp);
+  CYBOZU_BENCH_C("fp_sqr_lazy_montgomery()", LOOP, fp_sqrmod_montgomery, &ANSm_fp,&Am_fp);
+  fp_println("ANS:", &ANS_fp);
+  fp_println_montgomery("ANSm:", &ANSm_fp);
+
+  fp2_t ANS_fp2, ANSm_fp2, A_fp2,Am_fp2 ,B_fp2,Bm_fp2;
+  fp2_init(&A_fp2);
+  fp2_init(&Am_fp2);
+  fp2_init(&B_fp2);
+  fp2_init(&Bm_fp2);
+  fp2_init(&ANS_fp2);
+  fp2_init(&ANSm_fp2);
+
+  fp2_set_random(&A_fp2,state);
+  fp2_to_montgomery(&Am_fp2, &A_fp2);
+  fp2_set_random(&B_fp2,state);
+  fp2_to_montgomery(&Bm_fp2, &B_fp2);
+
+  CYBOZU_BENCH_C("fp2_mul()", LOOP, fp2_mul,&ANS_fp2,&A_fp2,&B_fp2);
+  CYBOZU_BENCH_C("fp2_mul_lazy_montgomery()", LOOP, fp2_mul_lazy_montgomery, &ANSm_fp2,&Am_fp2,&Bm_fp2);
+  fp2_println("ANS:", &ANS_fp2);
+  fp2_println_montgomery("ANSm:", &ANSm_fp2);
+
+  CYBOZU_BENCH_C("fp2_sqr()", LOOP, fp2_sqr,&ANS_fp2,&A_fp2);
+  CYBOZU_BENCH_C("fp2_sqr_lazy_montgomery()", LOOP, fp2_sqr_lazy_montgomery, &ANSm_fp2,&Am_fp2);
+  fp2_println("ANS:", &ANS_fp2);
+  fp2_println_montgomery("ANSm:", &ANSm_fp2);
+
+
+  fp6_t ANS_fp6, ANSm_fp6, A_fp6,Am_fp6 ,B_fp6,Bm_fp6;
+  fp6_init(&A_fp6);
+  fp6_init(&Am_fp6);
+  fp6_init(&B_fp6);
+  fp6_init(&Bm_fp6);
+  fp6_init(&ANS_fp6);
+  fp6_init(&ANSm_fp6);
+
+  fp6_set_random(&A_fp6,state);
+  fp6_to_montgomery(&Am_fp6, &A_fp6);
+  fp6_set_random(&B_fp6,state);
+  fp6_to_montgomery(&Bm_fp6, &B_fp6);
+
+  CYBOZU_BENCH_C("fp6_mul()", LOOP, fp6_mul,&ANS_fp6,&A_fp6,&B_fp6);
+  CYBOZU_BENCH_C("fp6_mul_lazy_montgomery()", LOOP, fp6_mul_lazy_montgomery, &ANSm_fp6,&Am_fp6,&Bm_fp6);
+  fp6_println("ANS:", &ANS_fp6);
+  fp6_println_montgomery("ANSm:", &ANSm_fp6);
+
+  CYBOZU_BENCH_C("fp6_sqr()", LOOP, fp6_sqr,&ANS_fp6,&A_fp6);
+  CYBOZU_BENCH_C("fp6_sqr_lazy_montgomery()", LOOP, fp6_sqr_lazy_montgomery, &ANSm_fp6,&Am_fp6);
+  fp6_println("ANS:", &ANS_fp6);
+  fp6_println_montgomery("ANSm:", &ANSm_fp6);
+
+  CYBOZU_BENCH_C("fp6_mul_sparse_add()", LOOP, fp6_mul_sparse_add,&ANS_fp6,&A_fp6,&B_fp6);
+  CYBOZU_BENCH_C("fp6_mul_sparse_add_lazy_montgomery()", LOOP, fp6_mul_sparse_add_lazy_montgomery, &ANSm_fp6,&Am_fp6,&Bm_fp6);
+  fp6_println("ANS:", &ANS_fp6);
+  fp6_println_montgomery("ANSm:", &ANSm_fp6);
+
+  CYBOZU_BENCH_C("fp6_mul_sparse_dbl()", LOOP, fp6_mul_sparse_dbl,&ANS_fp6,&A_fp6,&B_fp6);
+  CYBOZU_BENCH_C("fp6_mul_sparse_dbl_lazy_montgomery()", LOOP, fp6_mul_sparse_dbl_lazy_montgomery, &ANSm_fp6,&Am_fp6,&Bm_fp6);
+  fp6_println("ANS:", &ANS_fp6);
+  fp6_println_montgomery("ANSm:", &ANSm_fp6);
+
+}
+
+void BENCH_miller_lazy_montgomery(int LOOP){
+  printf("============================================================================\n");
+  printf("--------------------------------------ltpq, lttp----------------------------\n");
+  printf("============================================================================\n");
+
+  efp6_t P,Q;
+  fp6_t f,e1,e2;
+  fp6_t fm,e1m,e2m;
+
+  mpz_t a,b,ab;
+  efp6_init(&P);
+  efp6_init(&Q);
+
+  fp6_init(&f);
+  fp6_init(&e1);
+  fp6_init(&e2);
+  fp6_init(&fm);
+  fp6_init(&e1m);
+  fp6_init(&e2m);
+  mpz_init(a);
+  mpz_init(b);
+  mpz_init(ab);
+
+  generate_g1(&P);
+  generate_g2(&Q);
+
+  static efp_t mapped_P,mapped_Q,mapped_Q_neg;
+  static efp_t mapped_Pm,mapped_Qm,mapped_Q_negm;
+  static efp_jacobian_t S;
+  static efp_jacobian_t Sm;
+//------------------Regular-----------------------
+  fp6_set_ui_ui(&f,0);
+  fp_set_ui(&f.x0.x0,1);
+
+  fp_set(&mapped_P.x,&P.x.x0.x0);
+  fp_set(&mapped_P.y,&P.y.x0.x0);
+  mapped_P.infinity = 0;
+
+  efp6_to_efp(&mapped_Q,&Q);//twist
+  efp6_to_Jacefp(&S,&Q);
+  efp_set_neg(&mapped_Q_neg,&mapped_Q);
+//------------------Montgomery-----------------------
+  fp6_set_ui_ui(&fm,0);
+  fp_set_ui(&fm.x0.x0,1);
+  fp_to_montgomery(&fm.x0.x0, &fm.x0.x0);
+
+  fp_to_montgomery(&mapped_Pm.x,&P.x.x0.x0);
+  fp_to_montgomery(&mapped_Pm.y,&P.y.x0.x0);
+  mapped_Pm.infinity = 0;
+
+  efp6_to_efp_montgomery(&mapped_Qm,&Q);//twist
+  efp6_to_Jacefp_montgomery(&Sm,&Q);
+  efp_set_neg_montgomery(&mapped_Q_negm,&mapped_Q);//here
+//-----------------------------------------
+
+  CYBOZU_BENCH_C("ff_lttp()", LOOP, ff_lttp,&f,&S,&mapped_Q);
+  CYBOZU_BENCH_C("ff_lttp_lazy_montgomery()", LOOP, ff_lttp_lazy_montgomery, &fm,&Sm,&mapped_Qm);
+  fp6_println("ANS:", &f);
+  fp6_println_montgomery("ANSm:", &fm);
+  fp_println("Sx: ", &S.x);
+  fp_println_montgomery("Smx:", &Sm.x);
+  fp_println("Sy: ", &S.y);
+  fp_println_montgomery("Smy:", &Sm.y);
+  fp_println("Sz: ", &S.z);
+  fp_println_montgomery("Smz:", &Sm.z);
+  fp6_set_ui_ui(&f,0);
+  fp_set_ui(&f.x0.x0,1);
+  fp6_set_ui_ui(&fm,0);
+  fp_set_ui(&fm.x0.x0,1);
+  fp_to_montgomery(&fm.x0.x0, &fm.x0.x0);
+
+  CYBOZU_BENCH_C("ff_ltpq()", LOOP, ff_ltqp,&f,&S,&mapped_Q,&mapped_P);
+  CYBOZU_BENCH_C("ff_ltpq_lazy_montgomery()", LOOP, ff_ltqp_lazy_montgomery, &fm,&Sm,&mapped_Qm,&mapped_Pm);
+  fp6_println("ANS:", &f);
+  fp6_println_montgomery("ANSm:", &fm);
+  fp_println("Sx: ", &S.x);
+  fp_println_montgomery("Smx:", &Sm.x);
+  fp_println("Sy: ", &S.y);
+  fp_println_montgomery("Smy:", &Sm.y);
+  fp_println("Sz: ", &S.z);
+  fp_println_montgomery("Smz:", &Sm.z);
+  printf("============================================================================\n");
+  printf("--------------------------------------Miller--------------------------------\n");
+  printf("============================================================================\n");
+
+
+  CYBOZU_BENCH_C("miller_opt_ate_proj_2NAF()", LOOP, miller_opt_ate_proj_2NAF,&f,&P,&Q);
+  fp6_println("ANS:", &f);
+  CYBOZU_BENCH_C("miller_opt_ate_proj_2NAF_lazy_montgomery()", LOOP, miller_opt_ate_proj_2NAF_lazy_montgomery,&fm,&P,&Q);
+  fp6_println_montgomery("ANSm:", &fm);
+
+  
 }

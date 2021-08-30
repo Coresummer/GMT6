@@ -17,4 +17,6 @@ void check_fp_with_montgomery();
 void check_fp2_with_montgomery();
 void check_fp6_with_montgomery();
 
+void BENCH_fp2_fp6_mul_lazy_montgomery(int LOOP);
+void BENCH_miller_lazy_montgomery(int LOOP);
 #endif

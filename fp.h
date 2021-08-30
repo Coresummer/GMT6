@@ -16,12 +16,15 @@ void fpd_set(fpd_t *ANS,fpd_t *A);
 void fp_set_ui(fp_t *ANS,unsigned long int UI);
 void fp_set_mpn(fp_t *ANS,mp_limb_t *A);
 void fp_set_neg(fp_t *ANS,fp_t *A);
+void fp_set_neg_montgomery(fp_t *ANS,fp_t *A);
 void fp_lshift(fp_t *ANS,fp_t *A, unsigned long int UI);
 void fp_l1shift(fp_t *ANS,fp_t *A);
-void fp_l1shift_nonmod(fp_t *ANS, fp_t *A);
+void fp_l1shift_nonmod_single(fp_t *ANS, fp_t *A);
+void fp_l1shift_nonmod_double(fp_t *ANS, fp_t *A);
 void fp_l1shift_single(fp_t *ANS,fp_t *A);
 void fp_l1shift_double(fpd_t *ANS,fpd_t *A);
 void fp_r1shift(fp_t *ANS, fp_t *A);
+void fp_r1shift_nonmod_single(fp_t *ANS, fp_t *A);
 void fp_hlv(fp_t *ANS,fp_t *A);
 void fp_set_random(fp_t *ANS,gmp_randstate_t state);
 void fp_set_random_montgomery(fp_t *ANS, gmp_randstate_t state);
@@ -73,8 +76,9 @@ void fp_lshift_ui_nonmod_double(fpd_t *ANS, fpd_t *A, int s);
 void fp_mul_base(fp_t *ANS,fp_t *A);
 
 void fp_mul_base_nonmod_sigle(fp_t *ANS,fp_t *A);
-void fp_mul_base_nonmod_double(fp_t *ANS,fp_t *A);
+void fp_mul_base_nonmod_double(fpd_t *ANS,fpd_t *A);
 
 void fp_mul_base_inv(fp_t *ANS,fp_t *A);
+void fp_mul_base_inv_single(fp_t *ANS,fp_t *A);
 
 #endif

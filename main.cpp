@@ -44,13 +44,15 @@ int main(){
   check_fp2_with_montgomery();
   check_fp6_with_montgomery();
 
+  // BENCH_fp2_fp6_mul_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
+  BENCH_miller_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
   // check_efp();
   // check_efp2();
   // check_efp6();
   // check_g1_g2();
 
   //SCM_func_check();//未完成
-  // check_pairing_2NAF();
+  check_pairing_2NAF();
   // // check_pairing_static();
   // check_pairing_count_2NAF();
   // check_pairing_time_2NAF();

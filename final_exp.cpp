@@ -1,6 +1,5 @@
 #include "final_exp.h"
 #include "fp6.h"
-#include <ELiPS/define.h>
 #include <cstdio>
 
 void final_exp(fp6_t *ANS,fp6_t *A){

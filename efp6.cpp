@@ -1,6 +1,5 @@
 #include "efp6.h"
 #include "fp6.h"
-#include <ELiPS/define.h>
 #include <cstdio>
 
 void efp6_init(efp6_t *P){

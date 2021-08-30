@@ -1,5 +1,5 @@
 #include "fp.h"
-#include <ELiPS/mpn.h>
+#include "mpn.h"
 
 void fp_init(fp_t *A){
   mpn_zero(A->x0,FPLIMB);
@@ -75,11 +75,17 @@ void fp_l1shift(fp_t *ANS, fp_t *A) {
   if (mpn_cmp(ANS->x0, prime, FPLIMB) >= 0)mpn_sub_n(ANS->x0, ANS->x0, prime, FPLIMB);
 }
 
-void fp_l1shift_nonmod(fp_t *ANS, fp_t *A) {
+void fp_l1shift_nonmod_single(fp_t *ANS, fp_t *A) {
 #ifdef DEBUG_COST_A
   cost_add++;
 #endif
   mpn_lshift(ANS->x0, A->x0, FPLIMB, 1);
+}
+void fp_l1shift_nonmod_double(fpd_t *ANS, fpd_t *A) {
+#ifdef DEBUG_COST_A
+  cost_add++;
+#endif
+  mpn_lshift(ANS->x0, A->x0, FPLIMB2, 1);
 }
 
 void fp_l1shift_double(fpd_t *ANS, fpd_t *A) {
@@ -99,6 +105,13 @@ void fp_r1shift(fp_t *ANS, fp_t *A) {
   else
     mpn_copyd(ANS->x0, A->x0, FPLIMB);
   mpn_rshift(ANS->x0, ANS->x0, FPLIMB, 1);
+}
+
+void fp_r1shift_nonmod_single(fp_t *ANS, fp_t *A) {
+#ifdef DEBUG_COST_A
+  cost_add++;
+#endif
+  mpn_rshift(ANS->x0, A->x0, FPLIMB, 1);
 }
 
 void fp_set_random(fp_t *ANS,gmp_randstate_t state){
@@ -696,7 +709,7 @@ void fp_mul_base_nonmod_sigle(fp_t *ANS,fp_t *A){
   // cost_mul_base++;
   // cost_mul--;
   #endif
-  fp_l1shift_nonmod(ANS,A);
+  fp_l1shift_nonmod_single(ANS,A);
 }
 
 void fp_mul_base_nonmod_double(fpd_t *ANS,fpd_t *A){
@@ -719,4 +732,18 @@ void fp_mul_base_inv(fp_t *ANS,fp_t *A){
   }else{
     fp_mul(ANS,A,&base_c_inv);
   }
+}
+
+void fp_mul_base_inv_single(fp_t *ANS,fp_t *A){
+  // #ifdef DEBUG_COST_A
+  // cost_add++;
+  // #endif
+  fp_r1shift(ANS,A);
+
+  // if( __builtin_ctzl(A->x0[0]) >= 1){
+
+  // }else{
+  //   fp_mulmod_montgomery(ANS,&tmp_A,&base_c_inv);
+  // }
+  // // fp_mulmod_montgomery(ANS,&tmp_A,&base_c_inv);
 }

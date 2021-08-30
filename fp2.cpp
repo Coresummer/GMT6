@@ -1,7 +1,6 @@
 #include "fp2.h"
 #include "fp.h"
 #include "mpn.h"
-#include <ELiPS/fp.h>
 
 void fp2_init(fp2_t *A){
   fp_init(&A->x0);
@@ -37,7 +36,7 @@ void fp2_printf_montgomery(std::string str, fp2_t *A) {
   fp_printf_montgomery("", &A->x0);
   gmp_printf(",");
   fp_printf_montgomery("", &A->x1);
-  gmp_printf(")");
+  gmp_printf(")\n");
 }
 
 void fp2_println_montgomery(std::string str, fp2_t *A) {
@@ -287,12 +286,13 @@ void fp2_sqr_nonmod_montgomery(fpd2_t *ANS, fp2_t *A) {
   fp_sqr_nonmod(&tmp1_fpd, &tmp_A.x0);  //a^2
   fp_sqr_nonmod(&tmp2_fpd, &tmp_A.x1);  //b^2
   fp_l1shift_double(&tmp3_fpd, &tmp2_fpd);  //b^2@^2
-  fp_add_nonmod_double(&tmp4_fpd, &tmp1_fpd, &tmp3_fpd); //a^2+b^2@^
+  fp_add_nonmod_double(&ANS->x0, &tmp1_fpd, &tmp3_fpd); //a^2+b^2@^
 
   fp_add_nonmod_single(&tmp3_fp,&tmp_A.x0,&tmp_A.x1); //(a+b)
   fp_sqr_nonmod(&tmp3_fpd, &tmp3_fp);  //(a+b)^2
   fp_sub_nonmod_double(&tmp3_fpd,&tmp3_fpd, &tmp1_fpd); //(a+b)^2 - a^2 
-  fp_sub_nonmod_double(&tmp4_fpd,&tmp3_fpd, &tmp2_fpd); //(a+b)^2 - a^2 - b^2 
+  fp_sub_nonmod_double(&ANS->x1,&tmp3_fpd, &tmp2_fpd); //(a+b)^2 - a^2 - b^2 
+
 }
 
 // void fp2_sqr_final(fp2_t *ANS,fp2_t *A){
