@@ -40,12 +40,14 @@ int main(){
   // test_fp2(CHECK_PAIRING_TIME_LOOP);
   // test_fp6(CHECK_PAIRING_TIME_LOOP);
 
-  check_fp_with_montgomery();
-  check_fp2_with_montgomery();
-  check_fp6_with_montgomery();
+  // check_fp_with_montgomery();
+  // check_fp2_with_montgomery();
+  // check_fp6_with_montgomery();
 
   // BENCH_fp2_fp6_mul_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
-  BENCH_miller_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
+  // BENCH_miller_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
+  // BENCH_finalexp_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
+  BENCH_Pairingn_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
   // check_efp();
   // check_efp2();
   // check_efp6();

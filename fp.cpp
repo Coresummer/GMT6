@@ -1,5 +1,6 @@
 #include "fp.h"
 #include "mpn.h"
+#include <gmp.h>
 
 void fp_init(fp_t *A){
   mpn_zero(A->x0,FPLIMB);
@@ -18,7 +19,9 @@ void fpd_printf(std::string str ,fpd_t *A){
 void fp_println(std::string str ,fp_t *A){
   gmp_printf("%s%Nu\n",str.c_str(),A->x0,FPLIMB);
 }
-
+void fpd_println(std::string str ,fpd_t *A){
+  gmp_printf("%s%Nu\n",str.c_str(),A->x0,FPLIMB2);
+}
 void fp_printf_montgomery(std::string str ,fp_t *A){
   static fp_t out;
   fp_mod_montgomery(&out,A);
@@ -32,6 +35,11 @@ void fp_println_montgomery(std::string str , fp_t *A) {
 }
 
 void fp_set(fp_t *ANS,fp_t *A){
+  mpn_copyd(ANS->x0,A->x0,FPLIMB);
+}
+
+void fp_set_fpd(fpd_t *ANS,fp_t *A){
+  mpn_zero(ANS->x0,FPLIMB2);
   mpn_copyd(ANS->x0,A->x0,FPLIMB);
 }
 
@@ -62,6 +70,15 @@ void fp_set_neg_montgomery(fp_t *ANS,fp_t *A){
   if (fp_cmp_zero(A) == 0) fp_set(ANS, A);
   else mpn_sub_n(ANS->x0, prime, A->x0, FPLIMB);
 }
+
+void fpd_set_neg_montgomery(fpd_t *ANS,fpd_t *A){
+  #ifdef DEBUG_ASSERT
+  assert(mpn_cmp(A->x0,prime,FPLIMB)>0)
+  #endif
+  if (fpd_cmp_zero(A) == 0) fpd_set(ANS, A);
+  else mpn_sub_n(ANS->x0, prime, A->x0, FPLIMB2);
+}
+
 void fp_lshift(fp_t *ANS, fp_t *A, unsigned long int UI) {
   mpn_lshift(ANS->x0, A->x0, FPLIMB, UI);
   fp_mod(ANS, ANS->x0, FPLIMB);
@@ -610,6 +627,13 @@ int fp_cmp_zero(fp_t *A) {
 
 int fp_cmp_one(fp_t *A) {
   if (!mpn_cmp_ui(A->x0, FPLIMB, 1))
+    return 0;
+  else
+    return 1;
+}
+
+int fpd_cmp_zero(fpd_t *A) {
+  if (!mpn_cmp_ui(A->x0, FPLIMB2, 0))
     return 0;
   else
     return 1;

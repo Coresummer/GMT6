@@ -82,14 +82,26 @@ void fp2_set_conj(fp2_t *ANS,fp2_t *A){
   fp_set_neg(&ANS->x1,&A->x1);
 }
 
+void fp2_set_conj_montgomery(fp2_t *ANS,fp2_t *A){
+  fp_set(&ANS->x0,&A->x0);
+  fp_set_neg_montgomery(&ANS->x1,&A->x1);
+}
+
+void fp2_set_conj_montgomery_fpd(fpd2_t *ANS,fp2_t *A){
+  static fpd_t temp;
+  fp_set_fpd(&ANS->x0,&A->x0);
+  fp_set_fpd(&temp,&A->x1);
+  fpd_set_neg_montgomery(&ANS->x1,&temp);
+}
+
 void fp2_to_montgomery(fp2_t *ANS,fp2_t *A){
   fp_to_montgomery(&ANS->x0,&A->x0);
   fp_to_montgomery(&ANS->x1,&A->x1);
 }
 
 void fp2_mod_montgomery(fp2_t *ANS,fp2_t *A){
-  fp_mod_montgomery(&ANS->x0,&A->x0);
-  fp_mod_montgomery(&ANS->x1,&A->x1);
+  mpn_mod_montgomery(ANS->x0.x0,FPLIMB,A->x0.x0,FPLIMB);
+  mpn_mod_montgomery(ANS->x1.x0,FPLIMB,A->x1.x0,FPLIMB);
 }
 
 void fp2_mod_montgomery_double(fp2_t *ANS,fpd2_t *A){
@@ -105,6 +117,18 @@ void fp2_l1shift(fp2_t *ANS, fp2_t *A) {
   fp_l1shift(&ANS->x0, &A->x0);
   fp_l1shift(&ANS->x1, &A->x1);
 }
+
+void fp2_l1shift_nonmod_single(fp2_t *ANS, fp2_t *A) {
+  fp_l1shift_nonmod_single(&ANS->x0, &A->x0);
+  fp_l1shift_nonmod_single(&ANS->x1, &A->x1);
+}
+
+void fp2_l1shift_nonmod_double(fpd2_t *ANS, fpd2_t *A) {
+  fp_l1shift_nonmod_double(&ANS->x0, &A->x0);
+  fp_l1shift_nonmod_double(&ANS->x1, &A->x1);
+}
+
+
 void fp2_r1shift(fp2_t *ANS, fp2_t *A) {
   fp_r1shift(&ANS->x0, &A->x0);
   fp_r1shift(&ANS->x1, &A->x1);

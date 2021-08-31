@@ -26,15 +26,15 @@
 #define ARCBIT 64  //64bit processor
 //#define ARCBIT 32 //32bit processor
 
-// #define DEBUG_COST_A
+//#define DEBUG_COST_A
 //#define DEBUG_ASSERT
-#define CHECK_PAIRING_TIME_LOOP 100000
+#define CHECK_PAIRING_TIME_LOOP 10000
 
 /**************Option**************/
 #define X64
 /**********************************/
 
-#ifdef X64
+#ifdef  X64
 #define FPLIMB_BITS FPLIMB*ARCBIT
 #define FPLIMB 11 //
 #define FPLIMB2 FPLIMB*2  //??
@@ -134,11 +134,9 @@ TTT_EXTERN std::vector<int> miller_loop_v, finalexp_pow_x, finalexp_pow_x_1, fin
 TTT_EXTERN mpz_t X_1_div2,X_1,X_2,X_2_1,four;//(kai +1)/2,(kai -1),(kai^2)をあらかじめ求めておく
 TTT_EXTERN mpz_t hardpart,hp_3w,three;
 //emb6
-TTT_EXTERN fp_t frobenius_1_6;//c^((p-1)/10)の計算結果
-TTT_EXTERN fp_t frobenius_2_6;//c^(2(p-1)/10)の計算結果
-//c^(3(p-1)/6) = c^((p-1)/2) = -1
-TTT_EXTERN fp_t frobenius_4_6;//c^(6(p-1)/10)の計算結果
-TTT_EXTERN fp_t frobenius_5_6;//c^(7(p-1)/2)の計算結果
+TTT_EXTERN fp_t frobenius_1_6,frobenius_2_6,frobenius_4_6,frobenius_5_6;//c^((p-1)/10)の計算結果
+TTT_EXTERN fp_t frobenius_1_6MR,frobenius_2_6MR,frobenius_4_6MR,frobenius_5_6MR;//c^((p-1)/10)の計算結果
+
 
 //montgomery
 TTT_EXTERN mp_limb_t R[FPLIMB],Ri[FPLIMB],R1[FPLIMB],RR[FPLIMB],Ni[FPLIMB];

@@ -1,4 +1,5 @@
 #include "fp2.h"
+#include "fp6.h"
 #define CYBOZU_BENCH_USE_GETTIMEOFDAY
 #include <cybozu/benchmark.hpp>
 #include "miller.h"
@@ -6,6 +7,7 @@
 #include "fp.h"
 #include "define.h"
 #include <gmp.h>
+#include "final_exp.h"
 /*----------------------------------------------------------------------------*/
 //test
 int test_fp(int fp_n) {
@@ -1398,7 +1400,7 @@ void BENCH_miller_lazy_montgomery(int LOOP){
   CYBOZU_BENCH_C("ff_ltpq_lazy_montgomery()", LOOP, ff_ltqp_lazy_montgomery, &fm,&Sm,&mapped_Qm,&mapped_Pm);
   fp6_println("ANS:", &f);
   fp6_println_montgomery("ANSm:", &fm);
-  
+
   printf("============================================================================\n");
   printf("--------------------------------------Miller--------------------------------\n");
   printf("============================================================================\n");
@@ -1408,6 +1410,151 @@ void BENCH_miller_lazy_montgomery(int LOOP){
   fp6_println("ANS:", &f);
   CYBOZU_BENCH_C("miller_opt_ate_proj_2NAF_lazy_montgomery()", LOOP, miller_opt_ate_proj_2NAF_lazy_montgomery,&fm,&P,&Q);
   fp6_println_montgomery("ANSm:", &fm);
+}
 
+void BENCH_finalexp_lazy_montgomery(int LOOP){
+  // fp_t rand;
+  // fpd_t randd;
+  // fp_init(&rand);
+  // fpd_init(&randd);
+  // fp_set_random(&rand, state);
+  // fp_println("rand: ",&rand);
+  // fp_set_fpd(&randd,&rand);
+  // fpd_println("randd:", &randd);
 
+  printf("********************CHECK Finalexp WITH MONTGOMERY*************************************************\n\n");
+  printf("check_finalexp_with_montogomery() start...\n");
+  fp6_t A, ANS;
+  fp6_t Am, ANSm;
+
+  fp6_init(&A);
+  fp6_init(&ANS);
+  fp6_init(&Am);
+  fp6_init(&ANSm);
+
+  fp6_set_random(&A, state);
+  fp6_to_montgomery(&Am, &A);
+
+  CYBOZU_BENCH_C("fp6_sqr_GS()", LOOP, fp6_sqr_GS,&ANS, &A);
+  CYBOZU_BENCH_C("fp6_sqr_GS_lazy_montgomery()", LOOP, fp6_sqr_GS_lazy_montgomery, &ANSm, &Am);
+
+  fp6_println("fp6_sqr_GS\n", &ANS);
+  fp6_println_montgomery("fp6_sqr_GS_lazy_montgomery\n", &ANSm);
+
+  CYBOZU_BENCH_C("fp6_finalexpow_x_2NAF()", LOOP, fp6_finalexpow_x_2NAF,&ANS, &A);
+  CYBOZU_BENCH_C("fp6_finalexpow_x_2NAF_lazy_montgomery()", LOOP, fp6_finalexpow_x_2NAF_lazy_montgomery, &ANSm, &Am);
+
+  fp6_println("fp6_finalexpow_x_2NAF\n", &ANS);
+  fp6_println_montgomery("fp6_finalexpow_x_2NAF_lazy_montgomery\n", &ANSm);
+
+  CYBOZU_BENCH_C("final_exp()", LOOP, final_exp,&ANS, &A);
+  CYBOZU_BENCH_C("final_exp_lazy_montgomery()", LOOP, final_exp_lazy_montgomery, &ANSm, &Am);
+
+  fp6_println("final_exp\n", &ANS);
+  fp6_println_montgomery("final_exp_lazy_montgomery\n", &ANSm);
+
+}
+
+void BENCH_Pairingn_lazy_montgomery(int LOOP){
+  printf("check_pairing() 開始\n");
+  efp6_t P,Q,aP,bQ,tmp1;
+  fp6_t f,e1,e2;
+  mpz_t a,b,ab;
+  efp6_init(&P);
+  efp6_init(&Q);
+
+  efp6_init(&aP);
+  efp6_init(&bQ);
+  efp6_init(&tmp1);
+  fp6_init(&f);
+  fp6_init(&e1);
+  fp6_init(&e2);
+  mpz_init(a);
+  mpz_init(b);
+  mpz_init(ab);
+
+  generate_g1(&P);
+  generate_g2(&Q);
+
+  mpz_urandomm(a,state,prime_z);
+  mpz_urandomm(b,state,prime_z);
+
+  #if 1
+  efp6_println("P = ",&P);
+  efp6_println("Q = ",&Q);
+
+  efp6_scm(&tmp1,&P,order_z);
+  efp6_println("[r]P = ",&tmp1);
+  efp6_scm(&tmp1,&Q,order_z);
+  efp6_println("[r]Q = ",&tmp1);
+
+  gmp_printf("a = %Zd\n",a);
+  gmp_printf("b = %Zd\n",b);
+  printf("---------------------------------\n");
+  #endif
+
+  printf("---------------------------------\n");
+  printf("check regular pairing()\n");
+  printf("---------------------------------\n");
+  //e([a]P,[b]Q) を求める
+  efp6_scm(&aP,&P,a);
+  efp6_scm(&bQ,&Q,b);
+  miller_opt_ate_proj_2NAF(&f,&aP,&bQ);
+  final_exp(&e1,&f);
+  //e(P,Q)^(a*b) を求める
+  miller_opt_ate_proj_2NAF(&f,&P,&Q);
+  final_exp(&e2,&f);
+  mpz_mul(ab,a,b);
+  fp6_pow(&e2,&e2,ab);
+  fp6_println("e([a]P,[b]Q) = ",&e1);
+  fp6_println("e(P,Q)^(a*b) = ",&e2);
+  if(fp6_cmp(&e1,&e2)==0)  {
+  printf("=====================================================\n");
+  printf("------------------bilinear!!-------------------------\n");
+  printf("=====================================================\n");
+  }else{
+    printf("e([a]P,[b]Q) != e(P,Q)^(a*b)\n\n");
+  }
+  printf("---------------------------------\n");
+  printf("check lazy montgomery pairing()\n");
+  printf("---------------------------------\n");
+  efp6_scm(&aP,&P,a);
+  efp6_scm(&bQ,&Q,b);
+  miller_opt_ate_proj_2NAF_lazy_montgomery(&f,&aP,&bQ);
+  final_exp_lazy_montgomery(&e1,&f);
+  //e(P,Q)^(a*b) を求める
+  miller_opt_ate_proj_2NAF_lazy_montgomery(&f,&P,&Q);
+  final_exp_lazy_montgomery(&e2,&f);
+  mpz_mul(ab,a,b);
+  fp6_pow_montgomery(&e2,&e2,ab);
+  fp6_println("e([a]P,[b]Q) = ",&e1);
+  fp6_println("e(P,Q)^(a*b) = ",&e2);
+  if(fp6_cmp(&e1,&e2)==0)  {
+  printf("=====================================================\n");
+  printf("------------------bilinear!!-------------------------\n");
+  printf("=====================================================\n");
+  }else{
+    printf("e([a]P,[b]Q) != e(P,Q)^(a*b)\n\n");
+  }
+  printf("---------------------------------\n");
+
+  printf("============================================================================\n");
+  printf("--------------------------------------Bench--------------------------------\n");
+  printf("============================================================================\n");
+
+  printf("---------------------------------\n");
+
+  CYBOZU_BENCH_C("miller_opt_ate_proj_2NAF()", LOOP, miller_opt_ate_proj_2NAF,&f,&P,&Q);
+  CYBOZU_BENCH_C("final_exp()", LOOP, final_exp,&e2, &e1);
+  printf("---------------------------------\n");
+
+  CYBOZU_BENCH_C("miller_opt_ate_proj_2NAF_lazy_montgomery()", LOOP, miller_opt_ate_proj_2NAF_lazy_montgomery,&f,&P,&Q);
+  CYBOZU_BENCH_C("final_exp_lazy_montgomery()", LOOP, final_exp_lazy_montgomery, &e2, &e1);
+  printf("---------------------------------\n");
+
+  mpz_clear(a);
+  mpz_clear(b);
+  mpz_clear(ab);
+
+  printf("*********************************************************************************************\n\n");
 }

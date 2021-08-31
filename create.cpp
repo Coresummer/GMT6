@@ -90,17 +90,21 @@ void frobenius_precalculation(){
 
   fp_pow(&tmp,&base_c,expo);
   fp_set(&frobenius_1_6,&tmp);
+  fp_to_montgomery(&frobenius_1_6MR, &frobenius_1_6);
   fp_printf("\n1_6\n",&frobenius_1_6);
   mpz_set_ui(expo,2);
   fp_pow(&frobenius_2_6,&tmp,expo);
+  fp_to_montgomery(&frobenius_2_6MR, &frobenius_2_6);
   fp_printf("\n2_6\n",&frobenius_2_6);
 
   mpz_set_ui(expo,4);
   fp_pow(&frobenius_4_6,&tmp,expo);
+  fp_to_montgomery(&frobenius_4_6MR, &frobenius_4_6);
   fp_printf("\n4_6\n",&frobenius_4_6);
 
   mpz_set_ui(expo,5);
   fp_pow(&frobenius_5_6,&tmp,expo);
+  fp_to_montgomery(&frobenius_5_6MR, &frobenius_5_6);
   fp_printf("\n5_6\n",&frobenius_5_6);
 
   mpz_clear(expo);
