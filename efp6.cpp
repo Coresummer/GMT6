@@ -222,7 +222,7 @@ void efp6_scm(efp6_t *ANS,efp6_t *P,mpz_t scalar){
   efp6_set(&Next_P,&Tmp_P);
   for(i=1;i<length;i++){
     efp6_ecd(&Next_P,&Next_P);
-    if(binary[i]=='1')  efp6_eca(&Next_P,&Next_P,&Tmp_P);
+    if(binary[i]=='1')  efp6_eca(&Next_P,&Next_P,&Tmp_P); 
   }
   efp6_set(ANS,&Next_P);
 }
@@ -245,6 +245,28 @@ void efp6_checkOnCurve(efp6_t *A){
   fp6_mul(&tmp_right_fp6,&tmp_right_fp6,&A->x);
   // fp6_add_mpn(&tmp_right_fp6, &tmp_right_fp6, curve_b.x0);
   fp_add(&tmp_right_fp6.x0.x0, &tmp_right_fp6.x0.x0, &curve_b);
+  if(fp6_cmp(&tmp_right_fp6, &tmp_left_fp6)==0){
+    printf("efp6 check on curve: On curve\n");
+  }else{
+    printf("efp6 check on curve: NOT On curve\n");
+  }
+
+}
+
+void efp6_checkOnTwsitCurve(efp6_t *A){
+  static fp_t twistedb;
+  static fp6_t tmp_left_fp6, tmp_right_fp6;
+  fp_set_ui(&twistedb,4);
+  // fp_set_neg(&twistedb,&twistedb);
+  // fp_inv(&twistedb,&twistedb);//-4^-1
+  // fp_mul(&twistedb,&twistedb,&curve_b);
+
+  fp6_sqr(&tmp_left_fp6,&A->y);
+
+  fp6_sqr(&tmp_right_fp6,&A->x);
+  fp6_mul(&tmp_right_fp6,&tmp_right_fp6,&A->x);
+  // fp6_add_mpn(&tmp_right_fp6, &tmp_right_fp6, curve_b.x0);
+  fp_add(&tmp_right_fp6.x0.x0, &tmp_right_fp6.x0.x0, &twistedb);
   if(fp6_cmp(&tmp_right_fp6, &tmp_left_fp6)==0){
     printf("efp6 check on curve: On curve\n");
   }else{

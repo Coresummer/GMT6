@@ -15,6 +15,7 @@ void fp_set_ui(fp_t *ANS,unsigned long int UI);
 void fp_set_mpn(fp_t *ANS,mp_limb_t *A);
 void fp_set_neg(fp_t *ANS,fp_t *A);
 void fp_lshift_1(fp_t *ANS,fp_t *A);
+void fp_rshift_1(fp_t *ANS,fp_t *A);
 void fp_hlv(fp_t *ANS,fp_t *A);
 void fp_set_random(fp_t *ANS,gmp_randstate_t state);
 void pre_montgomery();

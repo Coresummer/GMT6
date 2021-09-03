@@ -3,15 +3,21 @@
 #include "fp.h"
 
 void efp6_to_Jacefp(efp_jacobian_t *ANS,efp6_t *A){ 
-  fp_set(&ANS->x,&A->x.x2.x0);
-  fp_set(&ANS->y,&A->y.x0.x1);
+  fp_lshift_1(&ANS->x,&A->x.x1.x1);
+  fp_set_neg(&ANS->x, &ANS->x);
+  fp_lshift_1(&ANS->y,&A->y.x0.x1);
+  fp_set_neg(&ANS->y, &ANS->y);
+
   fp_set_ui(&ANS->z, 1);
   ANS->infinity = 0;
 }
 
 void efp6_to_efp(efp_t *ANS,efp6_t *A){ 
-  fp_set(&ANS->x,&A->x.x2.x0);
-  fp_set(&ANS->y,&A->y.x0.x1);
+  fp_lshift_1(&ANS->x,&A->x.x1.x1);
+  fp_set_neg(&ANS->x, &ANS->x);
+  fp_lshift_1(&ANS->y,&A->y.x0.x1);
+  fp_set_neg(&ANS->y, &ANS->y);
+
   ANS->infinity = A->infinity;
 }
 
@@ -49,7 +55,6 @@ void ff_lttp(fp6_t *f, efp_jacobian_t *S, efp_t *P){
 
   fp_lshift_1(&nextZ,&S->y);      //nextZ = 2Y
   fp_mul(&nextZ,&nextZ,&S->z);    //nextZ = 2YZ
-
   fp_sqr(&tmp1_fp,&S->z);         //tmp1 = Z^2
   fp_mul(&tmp1_fp6.x0.x1,&nextZ,&tmp1_fp);           // = nextZ*Z^2
   fp_mul_base_inv(&tmp1_fp6.x0.x1,&tmp1_fp6.x0.x1);  // = nextZ*Z^2*(2^-1)
@@ -60,8 +65,6 @@ void ff_lttp(fp6_t *f, efp_jacobian_t *S, efp_t *P){
 
   fp_mul(&tmp1_fp6.x1.x1,&t3,&P->x);                 // = t3*Px
   fp_mul(&tmp1_fp6.x1.x1,&tmp1_fp6.x1.x1,&tmp1_fp);  // = t3*Px*Z^2
-  fp_set_neg(&tmp1_fp6.x1.x1,&tmp1_fp6.x1.x1);       // = -t3*Px*Z^2
-  fp_mul_base_inv(&tmp1_fp6.x1.x1,&tmp1_fp6.x1.x1);  // = -t3*Px*Z^2*(2^-1)
 
   fp6_mul_sparse_dbl(f,&tmp1_fp6,f);        //Capable for further Karatsuba //update
 
@@ -123,7 +126,6 @@ void ff_ltqp(fp6_t *f, efp_jacobian_t *S, efp_t *Q,efp_t *P){
   fp_sub(&tmp1_fp6.x2.x0,&tmp1_fp,&tmp2_fp);
 
   fp6_mul_sparse_add(f,&tmp1_fp6,f); //Capable for further Karatsuba //update
-  // fp6_mul(f,f,&tmp1_fp6);
 
   fp_set(&S->x,&nextX);
   fp_set(&S->y,&nextY);

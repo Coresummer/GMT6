@@ -697,30 +697,23 @@ int  fp6_cmp_one(fp6_t *A){
 // }
 
 void fp6_frobenius_map_p1(fp6_t *ANS,fp6_t *A){  
-  static fp6_t tmp_A;
-  fp6_set(&tmp_A, A);//not smart
+  fp_set(&ANS->x0.x0,&A->x0.x0);
+  fp_set_neg(&ANS->x0.x1,&A->x0.x1);
 
-  fp_set(&ANS->x0.x0, &tmp_A.x0.x0);      //
-  fp_set_neg(&ANS->x0.x1, &tmp_A.x0.x1);  //
+  fp_mul(&ANS->x1.x0,&A->x1.x0,&frobenius_1_6);
+  fp_mul(&ANS->x1.x1,&A->x1.x1,&frobenius_4_6);
 
-  fp_mul(&ANS->x1.x0, &tmp_A.x1.x1,&frobenius_1_6);
-  fp_mul(&ANS->x1.x1,&tmp_A.x1.x0,&frobenius_1_6);
-
-  fp_mul(&ANS->x2.x0, &tmp_A.x2.x0,&frobenius_5_6);
-  fp_mul(&ANS->x2.x1, &tmp_A.x2.x1,&frobenius_5_6);
-  fp_set_neg(&ANS->x2.x0, &ANS->x2.x0);
+  fp_mul(&ANS->x2.x0,&A->x2.x0,&frobenius_2_6);
+  fp_mul(&ANS->x2.x1,&A->x2.x1,&frobenius_5_6);
 }
 
 void fp6_frobenius_map_p3(fp6_t *ANS,fp6_t *A){ //not sure ...
-  static fp6_t tmp_A;
-  fp6_set(&tmp_A, A);//not smart
+  fp_set(&ANS->x0.x0,&A->x0.x0);
+  fp_set_neg(&ANS->x0.x1,&A->x0.x1);
 
-  fp_set(&ANS->x0.x0,&tmp_A.x0.x0);
-  fp_set_neg(&ANS->x0.x1,&tmp_A.x0.x1);
+  fp_set_neg(&ANS->x1.x0,&A->x1.x0);
+  fp_set(&ANS->x1.x1,&A->x1.x1);
 
-  fp_set(&ANS->x1.x1,&tmp_A.x1.x0);
-  fp_set(&ANS->x1.x0,&tmp_A.x1.x1);
-
-  fp_set_neg(&ANS->x2.x0,&tmp_A.x2.x0);
-  fp_set(&ANS->x2.x1,&tmp_A.x2.x1);
+  fp_set(&ANS->x2.x0,&A->x2.x0);
+  fp_set_neg(&ANS->x2.x1,&A->x2.x1);
 }

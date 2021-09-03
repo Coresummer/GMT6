@@ -26,7 +26,7 @@ void create_prt(){
   mpz_out_str(stdout,2,X_z);printf("\n");
   printf("trace (HW :%2ld)(binary) = ",mpz_popcount(trace_z));
   mpz_out_str(stdout,2,trace_z);printf("\n");
-  fp_set_ui(&base_c,4);
+  fp_set_ui(&base_c,1);
   fp_set_neg(&base_c, &base_c);
   fp_inv(&base_c_inv,&base_c);
   gmp_printf("\nmodulo polynomial\n");
@@ -44,9 +44,12 @@ void create_prt(){
 }
 
 void check_base(){
-  fp_t tmp;
+  fp_t tmp,base_d;
   fp2_t tmp2;
   fp_init(&tmp);
+  fp_init(&base_d);
+  fp_set_ui(&base_d, 4);
+  fp_set_neg(&base_d, &base_d);
   fp2_init(&tmp2);
   mpz_t expo;
   mpz_init(expo);
@@ -61,7 +64,20 @@ void check_base(){
   mpz_divexact_ui(expo,expo,3);
   fp_pow(&tmp,&base_c,expo);
   if(fp_cmp_one(&tmp)==0) printf("error!!! c^(p-1)/3==1\n\n");
-  
+
+  // printf("lengendre(2)%d",fp_legendre(&base_d));
+
+  //check base_c = QNR
+  mpz_sub_ui(expo,prime_z,1);
+  mpz_divexact_ui(expo,expo,2);
+  fp_pow(&tmp,&base_d,expo);
+  if(fp_cmp_one(&tmp)==0) printf("error!!! -4^((p-1)/2)==1\n\n");
+
+  mpz_sub_ui(expo,prime_z,1);
+  mpz_divexact_ui(expo,expo,3);
+  fp_pow(&tmp,&base_d,expo);
+  if(fp_cmp_one(&tmp)==0) printf("error!!! -4^(p-1)/3==1\n\n");
+
   fp2_t base_fp2;
   fp2_init(&base_fp2);
   fp2_set_ui_ui(&base_fp2, 0);
@@ -71,7 +87,9 @@ void check_base(){
   mpz_sub_ui(expo,expo,1);
   mpz_divexact_ui(expo,expo,3);
   fp2_pow(&base_fp2,&base_fp2,expo);
-  if(fp2_cmp_one(&base_fp2)==0) printf("error!!! c^(p^3-1)/3==1\n\n");
+  if(fp2_cmp_one(&base_fp2)==0) printf("error!!! c^(p^2-1)/3==1\n\n");
+
+
 
   // fp2_set_ui_ui(&base_fp2, 1);
   // mpz_mul(expo,prime_z,prime_z);
@@ -84,44 +102,48 @@ void check_base(){
 }
 
 void frobenius_precalculation(){
-  // fp_t tmp;
-  // mpz_t expo;
-  // fp_init(&tmp);
-  // mpz_init(expo);
+  fp_t tmp;
+  fp_t base_d;
+  mpz_t expo;
+  fp_init(&tmp);
+  fp_init(&base_d);
+  fp_set_ui(&base_d,4);
+  fp_set_neg(&base_d,&base_d);
+  mpz_init(expo);
 
-  // mpz_sub_ui(expo,prime_z,1);
-  // mpz_divexact_ui(expo,expo,6);
+  mpz_sub_ui(expo,prime_z,1);
+  mpz_divexact_ui(expo,expo,6);
 
-  // fp_pow(&tmp,&base_c,expo);
-  // fp_set(&frobenius_1_6,&tmp);
-  // fp_printf("\n1_6\n",&frobenius_1_6);
-  // mpz_set_ui(expo,2);
-  // fp_pow(&frobenius_2_6,&tmp,expo);
-  // fp_printf("\n2_6\n",&frobenius_2_6);
+  fp_pow(&tmp,&base_d,expo);
+  fp_set(&frobenius_1_6,&tmp);
+  fp_printf("\n1_6\n",&frobenius_1_6);
+  mpz_set_ui(expo,2);
+  fp_pow(&frobenius_2_6,&tmp,expo);
+  fp_printf("\n2_6\n",&frobenius_2_6);
 
-  // mpz_set_ui(expo,4);
-  // fp_pow(&frobenius_4_6,&tmp,expo);
-  // fp_printf("\n4_6\n",&frobenius_4_6);
+  mpz_set_ui(expo,4);
+  fp_pow(&frobenius_4_6,&tmp,expo);
+  fp_printf("\n4_6\n",&frobenius_4_6);
 
-  // mpz_set_ui(expo,5);
-  // fp_pow(&frobenius_5_6,&tmp,expo);
-  // fp_printf("\n5_6\n",&frobenius_5_6);
+  mpz_set_ui(expo,5);
+  fp_pow(&frobenius_5_6,&tmp,expo);
+  fp_printf("\n5_6\n",&frobenius_5_6);
 
-  // mpz_clear(expo);
+  mpz_clear(expo);
 
-  mpz_t tmp;
-  mpz_init(tmp);
+  // mpz_t tmp;
+  // mpz_init(tmp);
 
-  mpz_set_str(tmp,"9136195484878068897584962703470385519499723409351282388162550720360701696624451184582249548716600342748779168454775667460999439374522415169846995097713112623392162102872252583146358740033539385430381542",10);
-  mpn_set_mpz(frobenius_1_6.x0, tmp); 
-  fp_println("\n1_6\n",&frobenius_1_6);
+  // mpz_set_str(tmp,"9136195484878068897584962703470385519499723409351282388162550720360701696624451184582249548716600342748779168454775667460999439374522415169846995097713112623392162102872252583146358740033539385430381542",10);
+  // mpn_set_mpz(frobenius_1_6.x0, tmp); 
+  // fp_println("\n1_6\n",&frobenius_1_6);
  
-  mpz_set_str(tmp,"2193069672562997777387783590111890492995486022534576976228148494721010595179462157232095156431329741454482797361594851327386558570331073488459513428484187457803743586969558550973234947301832937397180900",10);
-  mpn_set_mpz(frobenius_5_6.x0, tmp);  
-  fp_println("\n5_6\n",&frobenius_5_6);
+  // mpz_set_str(tmp,"2193069672562997777387783590111890492995486022534576976228148494721010595179462157232095156431329741454482797361594851327386558570331073488459513428484187457803743586969558550973234947301832937397180900",10);
+  // mpn_set_mpz(frobenius_5_6.x0, tmp);  
+  // fp_println("\n5_6\n",&frobenius_5_6);
 
-  mpz_clear(tmp);
-  printf("Frobenius precalculation is done\n");
+  // mpz_clear(tmp);
+  // printf("Frobenius precalculation is done\n");
 
 }
 

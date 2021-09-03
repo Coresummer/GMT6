@@ -20,4 +20,5 @@ void efp6_eca(efp6_t *ANS,efp6_t *P1,efp6_t *P2);
 void efp6_scm(efp6_t *ANS,efp6_t *P,mpz_t scalar);
 void efp6_frobenius_map_p1(efp6_t *ANS,efp6_t *A);
 void efp6_checkOnCurve(efp6_t *A);
+void efp6_checkOnTwsitCurve(efp6_t *A);
 #endif
