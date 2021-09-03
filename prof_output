@@ -1,0 +1,110 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  Ts/call  Ts/call  name    
+ 12.27      1.00     1.00                             fp_add(fp_t*, fp_t*, fp_t*)
+  9.00      1.73     0.73                             mpn_mod_montgomery(unsigned long*, long, unsigned long*, long)
+  7.52      2.34     0.61                             fp_sub(fp_t*, fp_t*, fp_t*)
+  7.28      2.93     0.59                             fp_l1shift(fp_t*, fp_t*)
+  6.23      3.43     0.51                             fp_set(fp_t*, fp_t*)
+  4.62      3.81     0.38                             fp2_set(fp2_t*, fp2_t*)
+  4.32      4.16     0.35                             mpn_set_ui(unsigned long*, long, unsigned long)
+  3.95      4.48     0.32                             fp_sub_nonmod_double(fpd_t*, fpd_t*, fpd_t*)
+  2.47      4.68     0.20                             fp_mod(fp_t*, unsigned long*, long)
+  2.40      4.87     0.20                             fp2_l1shift(fp2_t*, fp2_t*)
+  2.22      5.05     0.18                             fp2_add(fp2_t*, fp2_t*, fp2_t*)
+  1.97      5.21     0.16                             fp_add_nonmod_double(fpd_t*, fpd_t*, fpd_t*)
+  1.97      5.37     0.16                             fp2_sub(fp2_t*, fp2_t*, fp2_t*)
+  1.91      5.53     0.16                             fp2_sqr_lazy_montgomery(fp2_t*, fp2_t*)
+  1.79      5.67     0.15                             fp_sqr(fp_t*, fp_t*)
+  1.66      5.81     0.14                             fp_mul(fp_t*, fp_t*, fp_t*)
+  1.60      5.94     0.13                             fp_mulmod_montgomery(fp_t*, fp_t*, fp_t*)
+  1.48      6.06     0.12                             mpn_cmp_ui(unsigned long*, long, unsigned long)
+  1.42      6.17     0.12                             fp_add_nonmod_single(fp_t*, fp_t*, fp_t*)
+  1.36      6.28     0.11                             fp_sqrmod_montgomery(fp_t*, fp_t*)
+  1.29      6.39     0.11                             fp_mul_base(fp_t*, fp_t*)
+  1.11      6.48     0.09                             fp_sqr_nonmod(fpd_t*, fp_t*)
+  1.11      6.57     0.09                             fp2_sqr(fp2_t*, fp2_t*)
+  1.05      6.65     0.09                             fp2_set_conj(fp2_t*, fp2_t*)
+  1.05      6.74     0.09                             fp2_mul(fp2_t*, fp2_t*, fp2_t*)
+  0.99      6.82     0.08                             fp_cmp_zero(fp_t*)
+  0.99      6.90     0.08                             fp2_mul_base(fp2_t*, fp2_t*)
+  0.99      6.98     0.08                             fp2_add_nonmod_double(fpd2_t*, fpd2_t*, fpd2_t*)
+  0.92      7.05     0.08                             fp2_set_conj_montgomery(fp2_t*, fp2_t*)
+  0.86      7.12     0.07                             fp_mul_nonmod(fpd_t*, fp_t*, fp_t*)
+  0.80      7.19     0.07                             fp2_mul_nonmod_montgomery(fpd2_t*, fp2_t*, fp2_t*)
+  0.80      7.25     0.07                             fp_l1shift_double(fpd_t*, fpd_t*)
+  0.74      7.31     0.06                             fp_sub_nonmod_single(fp_t*, fp_t*, fp_t*)
+  0.74      7.37     0.06                             fp6_set(fp6_t*, fp6_t*)
+  0.62      7.42     0.05                             fp_set_neg(fp_t*, fp_t*)
+  0.55      7.47     0.05                             fp2_sqr_nonmod_montgomery(fpd2_t*, fp2_t*)
+  0.49      7.51     0.04                             fp6_sqr_GS_lazy_montgomery(fp6_t*, fp6_t*)
+  0.49      7.55     0.04                             fpd_set(fpd_t*, fpd_t*)
+  0.43      7.58     0.04                             fp_println_montgomery(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, fp_t*)
+  0.37      7.61     0.03                             fp6_sqr_GS(fp6_t*, fp6_t*)
+  0.37      7.64     0.03                             fp2_sub_nonmod_double(fpd2_t*, fpd2_t*, fpd2_t*)
+  0.37      7.67     0.03                             ff_lttp_lazy_montgomery(fp6_t*, efp_jacobian_t*, efp_t*)
+  0.37      7.70     0.03                             fp2_mul_base_nonmod_single(fp2_t*, fp2_t*)
+  0.37      7.73     0.03                             ff_lttp(fp6_t*, efp_jacobian_t*, efp_t*)
+  0.37      7.76     0.03                             std::vector<int, std::allocator<int> >::operator[](unsigned long)
+  0.25      7.78     0.02                             fp2_add_nonmod_single(fp2_t*, fp2_t*, fp2_t*)
+  0.25      7.80     0.02                             fp6_finalexpow_x_2NAF(fp6_t*, fp6_t*)
+  0.25      7.82     0.02                             fp_set_neg_montgomery(fp_t*, fp_t*)
+  0.25      7.84     0.02                             fp2_mul_mpn_montgomery(fp2_t*, fp2_t*, unsigned long*)
+  0.25      7.86     0.02                             fp2_mod_montgomery_double(fp2_t*, fpd2_t*)
+  0.25      7.88     0.02                             fp2_mul_base_nonmod_double(fpd2_t*, fpd2_t*)
+  0.25      7.90     0.02                             fp6_sqr(fp6_t*, fp6_t*)
+  0.25      7.92     0.02                             fpd2_set(fpd2_t*, fpd2_t*)
+  0.18      7.94     0.02                             fp2_lshift(fp2_t*, fp2_t*, unsigned long)
+  0.18      7.95     0.02                             fp_mul_mpn(fp_t*, fp_t*, unsigned long*)
+  0.18      7.97     0.02                             fp2_println_montgomery(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, fp2_t*)
+  0.18      7.98     0.02                             fp_mod_ui(fp_t*, unsigned long*, long, unsigned long)
+  0.12      7.99     0.01                             fp_add_mpn(fp_t*, fp_t*, unsigned long*)
+  0.12      8.00     0.01                             fp2_add_mpn(fp2_t*, fp2_t*, unsigned long*)
+  0.12      8.01     0.01                             fp2_set_neg(fp2_t*, fp2_t*)
+  0.12      8.02     0.01                             fp_mul_base_inv(fp_t*, fp_t*)
+  0.12      8.03     0.01                             fp6_mul_sparse_dbl(fp6_t*, fp6_t*, fp6_t*)
+  0.12      8.04     0.01                             fp6_finalexpow_3w_2NAF(fp6_t*, fp6_t*)
+  0.12      8.05     0.01                             fp6_sqr_lazy_montgomery(fp6_t*, fp6_t*)
+  0.12      8.06     0.01                             fp_l1shift_nonmod_single(fp_t*, fp_t*)
+  0.12      8.07     0.01                             fp6_mul_sparse_add_lazy_montgomery(fp6_t*, fp6_t*, fp6_t*)
+  0.12      8.08     0.01                             fp6_finalexpow_x_2NAF_lazy_montgomery(fp6_t*, fp6_t*)
+  0.12      8.09     0.01                             fp6_finalexpow_3w_2NAF_lazy_montgomery(fp6_t*, fp6_t*)
+  0.06      8.10     0.01                             fp2_set_random(fp2_t*, __gmp_randstate_struct*)
+  0.06      8.10     0.01                             fp2_mul_lazy_montgomery(fp2_t*, fp2_t*, fp2_t*)
+  0.06      8.11     0.01                             fp_l1shift_nonmod_double(fpd_t*, fpd_t*)
+  0.06      8.11     0.01                             fp_legendre_sqrt_montgomery(fp_t*, fp_t*)
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.

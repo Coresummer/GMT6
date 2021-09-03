@@ -21,22 +21,25 @@
 
 
 int main(){
+  gmp_randinit_default(state);
+  gmp_randseed_ui(state,(unsigned long int)time(NULL));
+
   tmp_init();
   create_prt();
   check_base();
+  pre_montgomery();
   frobenius_precalculation();
   curve_search();
   create_weil();
-  pre_montgomery();
+  
   printf("*********************************************************************************************\n\n");
   
-  gmp_randinit_default(state);
-  gmp_randseed_ui(state,(unsigned long int)time(NULL));
 
   //各関数の動作確認、コスト計算、時間計測など
   // test_fp_montgomery(CHECK_PAIRING_TIME_LOOP);
   // test_field(0, CHECK_PAIRING_TIME_LOOP, CHECK_PAIRING_TIME_LOOP, CHECK_PAIRING_TIME_LOOP);
   // test_fp(CHECK_PAIRING_TIME_LOOP);
+
   // test_fp2(CHECK_PAIRING_TIME_LOOP);
   // test_fp6(CHECK_PAIRING_TIME_LOOP);
 
@@ -59,7 +62,7 @@ int main(){
   // check_pairing_count_2NAF();
   // check_pairing_time_2NAF();
 
-  // printf("---------------------------------\n");
+  printf("*********************************************************************************************\n\n");
 
 
 

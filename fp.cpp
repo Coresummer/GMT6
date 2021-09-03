@@ -495,6 +495,7 @@ int fp_isCNR(fp_t *A) {
     return -1;
   }
 }
+
 void fp_sqrt(fp_t *ANS, fp_t *A) {
   fp_t x, y, t, k, n, tmp;
   fp_init(&x);
@@ -566,7 +567,6 @@ void fp_pow(fp_t *ANS, fp_t *A, mpz_t scalar) {
   mpz_get_str(binary, 2, scalar);
   fp_t tmp;
   fp_init(&tmp); // not need?
-
   fp_set(&tmp, A);
 
   for (i = 1; i < length; i++) {

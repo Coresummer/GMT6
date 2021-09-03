@@ -835,8 +835,8 @@ int test_fp_montgomery(int fp_n) {
       return 1;
     }
   }
-  printf("fp add.        : %.7f[ms]\n", add_time / fp_n);
-  printf("fp add nonmod. : %.7f[ms]\n", add_nonmod_single / fp_n);
+  printf("fp add.               : %.7f[ms]\n", add_time / fp_n);
+  printf("fp add nonmod single. : %.7f[ms]\n", add_nonmod_single / fp_n);
   printf("fp add nonmod double. : %.7f[ms]\n", add_nonmod_double / fp_n);
 
   // printf("------------------------------------------------------------------------------------\n");
@@ -911,7 +911,7 @@ int test_fp_montgomery(int fp_n) {
       return 1;
     }
   }
-  printf("fp sub.      : %.7f[ms]\n", sub_time / fp_n);
+  printf("fp sub.               : %.7f[ms]\n", sub_time / fp_n);
   printf("fp sub nonmod single. : %.7f[ms]\n", sub_nonmod_single / fp_n);
   printf("fp sub nonmod double. : %.7f[ms]\n", sub_nonmod_double / fp_n);
 
@@ -944,7 +944,7 @@ int test_fp_montgomery(int fp_n) {
   }
 
   printf("fp mulmod montgomery.      : %.6f[ms]\n", mul_time / fp_n);
-  printf("fp mul nonmod. : %.6f[ms]\n", mul_nonmod_time / fp_n);
+  printf("fp mul nonmod.             : %.6f[ms]\n", mul_nonmod_time / fp_n);
 
   printf("------------------------------------------------------------------------------------\n");
   printf("fp_sqr test\n");
@@ -973,7 +973,7 @@ int test_fp_montgomery(int fp_n) {
     // }
   }
   printf("fp sqrmod montgomery.      : %.6f[ms]\n", sqr_time / fp_n);
-  printf("fp sqr nonmod. : %.6f[ms]\n", sqr_nonmod / fp_n);
+  printf("fp sqr nonmod.             : %.6f[ms]\n", sqr_nonmod / fp_n);
 
   printf("------------------------------------------------------------------------------------\n");
   printf("fp_inv test\n");
@@ -991,7 +991,7 @@ int test_fp_montgomery(int fp_n) {
   printf("fp inv montgomery.      : %.6f[ms]\n", inv_time / fp_n);
 
   printf("------------------------------------------------------------------------------------\n");
-  printf("fp_inv test\n");
+  printf("fp_mod test\n");
   mod_time = 0;
   n = 1000;
   for (i = 0; i < fp_n; i++) {
@@ -1008,20 +1008,20 @@ int test_fp_montgomery(int fp_n) {
   printf("fp mod montgomery.      : %.6f[ms]\n", mod_time / fp_n);
 
   printf("fp rate\n");
-  printf("fp add.        : %.7f\n", (add_time / fp_n) / (add_time / fp_n));
-  printf("fp add nonmod. : %.7f\n", (add_nonmod_single / fp_n) / (add_time / fp_n));
+  printf("fp add.               : %.7f\n", (add_time / fp_n) / (add_time / fp_n));
+  printf("fp add nonmod.        : %.7f\n", (add_nonmod_single / fp_n) / (add_time / fp_n));
   printf("fp add nonmod double. : %.7f\n", (add_nonmod_double / fp_n) / (add_time / fp_n));
 
-  printf("fp sub. : %.7f\n", (sub_time / fp_n) / (add_time / fp_n));
-  printf("fp sub nonmod. : %.7f\n", (sub_nonmod_single / fp_n) / (add_time / fp_n));
-  printf("fp sub nonmod double. : %.7f\n", (sub_nonmod_single / fp_n) / (add_time / fp_n));
+  printf("fp sub.               : %.7f\n", (sub_time / fp_n) / (add_time / fp_n));
+  printf("fp sub nonmod.        : %.7f\n", (sub_nonmod_single / fp_n) / (add_time / fp_n));
+  printf("fp sub nonmod double. : %.7f\n", (sub_nonmod_double / fp_n) / (add_time / fp_n));
 
-  printf("fp mul mod. : %.7f\n", (mul_time / fp_n) / (add_time / fp_n));
-  printf("fp mul nonmod. : %.7f[ms]\n", (mul_nonmod_time / fp_n) / (add_time / fp_n));
-  printf("fp sqr mod. : %.7f[ms]\n", (sqr_time / fp_n) / (add_time / fp_n));
-  printf("fp sqr nonmod. : %.7f[ms]\n", (sqr_nonmod / fp_n) / (add_time / fp_n));
-  printf("fp inv. : %.7f[ms]\n", (inv_time / fp_n) / (add_time / fp_n));
-  printf("fp mod montgomery. : %.7f[ms]\n", (mod_time / fp_n) / (add_time / fp_n));
+  printf("fp mul mod.           : %.7f\n", (mul_time / fp_n) / (add_time / fp_n));
+  printf("fp mul nonmod.        : %.7f[ms]\n", (mul_nonmod_time / fp_n) / (add_time / fp_n));
+  printf("fp sqr mod.           : %.7f[ms]\n", (sqr_time / fp_n) / (add_time / fp_n));
+  printf("fp sqr nonmod.        : %.7f[ms]\n", (sqr_nonmod / fp_n) / (add_time / fp_n));
+  printf("fp inv montgomery.    : %.7f[ms]\n", (inv_time / fp_n) / (add_time / fp_n));
+  printf("fp mod montgomery.    : %.7f[ms]\n", (mod_time / fp_n) / (add_time / fp_n));
 
   return 0;
 }
@@ -1413,15 +1413,6 @@ void BENCH_miller_lazy_montgomery(int LOOP){
 }
 
 void BENCH_finalexp_lazy_montgomery(int LOOP){
-  // fp_t rand;
-  // fpd_t randd;
-  // fp_init(&rand);
-  // fpd_init(&randd);
-  // fp_set_random(&rand, state);
-  // fp_println("rand: ",&rand);
-  // fp_set_fpd(&randd,&rand);
-  // fpd_println("randd:", &randd);
-
   printf("********************CHECK Finalexp WITH MONTGOMERY*************************************************\n\n");
   printf("check_finalexp_with_montogomery() start...\n");
   fp6_t A, ANS;
@@ -1532,24 +1523,19 @@ void BENCH_Pairingn_lazy_montgomery(int LOOP){
   if(fp6_cmp(&e1,&e2)==0)  {
   printf("=====================================================\n");
   printf("------------------bilinear!!-------------------------\n");
-  printf("=====================================================\n");
+  printf("=====================================================\n\n\n");
   }else{
     printf("e([a]P,[b]Q) != e(P,Q)^(a*b)\n\n");
   }
-  printf("---------------------------------\n");
 
-  printf("============================================================================\n");
-  printf("--------------------------------------Bench--------------------------------\n");
-  printf("============================================================================\n");
-
-  printf("---------------------------------\n");
+  printf("--------Benching pairing()-------\n");
 
   CYBOZU_BENCH_C("miller_opt_ate_proj_2NAF()", LOOP, miller_opt_ate_proj_2NAF,&f,&P,&Q);
-  CYBOZU_BENCH_C("final_exp()", LOOP, final_exp,&e2, &e1);
+  CYBOZU_BENCH_C("final_exp()               ", LOOP, final_exp,&e2, &e1);
   printf("---------------------------------\n");
 
   CYBOZU_BENCH_C("miller_opt_ate_proj_2NAF_lazy_montgomery()", LOOP, miller_opt_ate_proj_2NAF_lazy_montgomery,&f,&P,&Q);
-  CYBOZU_BENCH_C("final_exp_lazy_montgomery()", LOOP, final_exp_lazy_montgomery, &e2, &e1);
+  CYBOZU_BENCH_C("final_exp_lazy_montgomery()               ", LOOP, final_exp_lazy_montgomery, &e2, &e1);
   printf("---------------------------------\n");
 
   mpz_clear(a);

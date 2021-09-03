@@ -135,7 +135,7 @@ void curve_search(){
   // }
 
   mpz_clear(s);
-  //fp_println("curve_a = ",&curve_a);
+
   printf("Elliptic curve search is done\n");
 }
 
