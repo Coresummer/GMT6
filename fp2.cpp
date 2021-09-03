@@ -680,17 +680,17 @@ void fp2_mul_base(fp2_t *ANS,fp2_t *A){
 }
 
 void fp2_mul_base_nonmod_single(fp2_t *ANS,fp2_t *A){
-  static fp2_t tmp_A;
-  fp2_set(&tmp_A,A);
+  static fp_t tmp_A;
+  fp_set(&tmp_A,&A->x0);
 
   fp_l1shift(&ANS->x0, &A->x1);
-  fp_set(&ANS->x1,&tmp_A.x0);    //@^2 = 2
+  fp_set(&ANS->x1,&tmp_A);    //@^2 = 2
 }
 
 void fp2_mul_base_nonmod_double(fpd2_t *ANS,fpd2_t *A){
-  static fpd2_t tmp_A;
-  fpd2_set(&tmp_A,A);
+  static fpd_t tmp_A;
+  fpd_set(&tmp_A,&A->x0);
 
-  fp_l1shift_double(&ANS->x0,&tmp_A.x1);
-  fpd_set(&ANS->x1,&tmp_A.x0);    //@^2 = 2
+  fp_l1shift_double(&ANS->x0,&A->x1);
+  fpd_set(&ANS->x1,&tmp_A);    //@^2 = 2
 }

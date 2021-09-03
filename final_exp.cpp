@@ -77,8 +77,7 @@ void final_exp_lazy_montgomery(fp6_t *ANS,fp6_t *A){
 //L1
   fp6_frobenius_map_p3_montgomery(&tmp2_fp6,ANS);                     //M^-1                                       //I
   fp6_sqr_GS_lazy_montgomery(&tmp3_fp6,&tmp2_fp6);               //M^-2                                       //S
-  //M^x                 
-  //128
+  //M^x                 //128
 
   fp6_finalexpow_x_2NAF_lazy_montgomery(&tmp4_fp6, ANS);
 

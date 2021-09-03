@@ -288,8 +288,7 @@ void mpn_tdiv_q_ui(mp_limb_t *ans,mp_limb_t *a,mp_size_t size_a,unsigned long in
 	mpn_tdiv_qr(ans,dumy,0,a,size_a,buf,1);
 }
 
-void mpn_mod_montgomery(mp_limb_t *ANS, mp_size_t ANS_size, mp_limb_t *A,
-                        mp_size_t A_size) {
+void mpn_mod_montgomery(mp_limb_t *ANS, mp_size_t ANS_size, mp_limb_t *A, mp_size_t A_size) {
 #ifdef DEBUG_COST_A
   cost_mod++;
 #endif

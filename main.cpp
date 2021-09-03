@@ -50,7 +50,7 @@ int main(){
   // BENCH_fp2_fp6_mul_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
   // BENCH_miller_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
   // BENCH_finalexp_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
-  BENCH_Pairingn_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
+  // BENCH_Pairingn_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
   // check_efp();
   // check_efp2();
   // check_efp6();
@@ -58,7 +58,8 @@ int main(){
 
   //SCM_func_check();//未完成
   // check_pairing_2NAF();
-  // // check_pairing_static();
+  // check_pairing_static();
+  check_pairing_count_2NAF_lazy_montgomery();
   // check_pairing_count_2NAF();
   // check_pairing_time_2NAF();
 
