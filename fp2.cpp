@@ -97,10 +97,17 @@ void fp2_set_conj_montgomery(fp2_t *ANS,fp2_t *A){
 
 void fp2_set_conj_montgomery_fpd(fpd2_t *ANS,fp2_t *A){
   static fpd_t temp;
+  static fp_t tmp;
+  mpn_zero(ANS->x0.x0,FPLIMB2);
+  mpn_zero(ANS->x1.x0,FPLIMB2);
+
   // fp_set(&ANS->x0,&A->x0);
   mpn_copyd(ANS->x0.x0,A->x0.x0,FPLIMB);
-  mpn_sub_n(temp.x0,prime, A->x1.x0, FPLIMB);
-  mpn_copyd(ANS->x1.x0,temp.x0,FPLIMB);
+  mpn_sub_n(tmp.x0 ,prime, A->x1.x0, FPLIMB);
+  mpn_copyd(ANS->x1.x0,tmp.x0,FPLIMB);
+
+  if (mpn_cmp(ANS->x0.x0, prime672, FPLIMB2) >= 0)mpn_sub_n(ANS->x0.x0, ANS->x0.x0, prime672, FPLIMB2);
+  if (mpn_cmp(ANS->x1.x0, prime672, FPLIMB2) >= 0)mpn_sub_n(ANS->x1.x0, ANS->x1.x0, prime672, FPLIMB2);
 
 }
 
@@ -304,6 +311,21 @@ void fp2_sqr_nonmod_montgomery(fpd2_t *ANS, fp2_t *A) {
   //x0
   fp_mul_nonmod(&ANS->x0, &tmp1_fp, &tmp2_fp);
 
+}
+
+void fp2_sqr_nonmod_montgomery2(fpd2_t *ANS, fp2_t *A) {
+
+  static fp_t tmp1_fp, tmp2_fp;
+  fp_add_nonmod_single(&tmp1_fp, &A->x0, &A->x1);
+  fp_sub_nonmod_single(&tmp2_fp, &A->x0, &A->x1);
+  //x1
+  fp_mul_nonmod(&ANS->x1, &A->x0, &A->x1);
+  fp_add_nonmod_double(&ANS->x1, &ANS->x1, &ANS->x1);
+  //x0
+  fp_mul_nonmod(&ANS->x0, &tmp1_fp, &tmp2_fp);
+
+  if (mpn_cmp(ANS->x0.x0, prime672, FPLIMB2) >= 0)mpn_sub_n(ANS->x0.x0, ANS->x0.x0, prime672, FPLIMB2);
+  if (mpn_cmp(ANS->x1.x0, prime672, FPLIMB2) >= 0)mpn_sub_n(ANS->x1.x0, ANS->x1.x0, prime672, FPLIMB2);
 }
 
 void fp2_add(fp2_t *ANS,fp2_t *A,fp2_t *B){
@@ -653,11 +675,16 @@ void fp2_mul_base_nonmod_single(fp2_t *ANS,fp2_t *A){
   fp_set_neg_montgomery(&tmp1_fp, &A->x1);
   fp_l1shift_nonmod_single(&ANS->x1, &A->x0);
   fp_l1shift_nonmod_single(&ANS->x0, &tmp1_fp);
+  if (mpn_cmp(ANS->x0.x0, prime, FPLIMB) >= 0)mpn_sub_n(ANS->x0.x0, ANS->x0.x0, prime, FPLIMB);
+  if (mpn_cmp(ANS->x1.x0, prime, FPLIMB) >= 0)mpn_sub_n(ANS->x1.x0, ANS->x1.x0, prime, FPLIMB);
+
 }
 
 void fp2_mul_base_nonmod_double(fpd2_t *ANS,fpd2_t *A){
   static fpd_t tmp1_fpd;
   static fp_t tmp;
+  static mp_limb_t buf[FPLIMB];
+
   // printf("A.x0 size: %lu\n",mpn_sizeinbase(A->x0.x0,FPLIMB2,2));
   // printf("A.x1 size: %lu\n",mpn_sizeinbase(A->x1.x0,FPLIMB2,2));
   // gmp_printf("%Nx\n",A->x1.x0,FPLIMB2);
@@ -667,4 +694,7 @@ void fp2_mul_base_nonmod_double(fpd2_t *ANS,fpd2_t *A){
   // gmp_printf("%Nx\n\n\n",tmp1_fpd.x0,FPLIMB2);
   fp_l1shift_nonmod_double(&ANS->x1, &A->x0);
   fp_l1shift_nonmod_double(&ANS->x0, &tmp1_fpd);
+  if (mpn_cmp(ANS->x0.x0, prime672, FPLIMB2) >= 0)mpn_sub_n(ANS->x0.x0, ANS->x0.x0, prime672, FPLIMB2);
+  if (mpn_cmp(ANS->x1.x0, prime672, FPLIMB2) >= 0)mpn_sub_n(ANS->x1.x0, ANS->x1.x0, prime672, FPLIMB2);
+
 }

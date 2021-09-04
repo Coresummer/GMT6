@@ -42,6 +42,7 @@ void fp2_sqr_final(fp2_t *ANS,fp2_t *A);
 void fp2_sqr_lazy(fp2_t *ANS,fp2_t *A);
 void fp2_sqr_lazy_montgomery(fp2_t *ANS,fp2_t *A);
 void fp2_sqr_nonmod_montgomery(fpd2_t *ANS, fp2_t *A);
+void fp2_sqr_nonmod_montgomery2(fpd2_t *ANS, fp2_t *A);
 void fp2_add(fp2_t *ANS,fp2_t *A,fp2_t *B);
 void fp2_add_double(fpd2_t *ANS,fpd2_t *A,fpd2_t *B);
 void fp2_add_nonmod_single(fp2_t *ANS,fp2_t *A,fp2_t *B);
