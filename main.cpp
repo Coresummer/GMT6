@@ -36,7 +36,7 @@ int main(){
   
 
   //各関数の動作確認、コスト計算、時間計測など
-  // test_fp_montgomery(CHECK_PAIRING_TIME_LOOP);
+  test_fp_montgomery(CHECK_PAIRING_TIME_LOOP);
   // test_field(0, CHECK_PAIRING_TIME_LOOP, CHECK_PAIRING_TIME_LOOP, CHECK_PAIRING_TIME_LOOP);
 
   // test_fp(CHECK_PAIRING_TIME_LOOP);
@@ -54,7 +54,7 @@ int main(){
   // BENCH_fp2_fp6_mul_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
   // BENCH_miller_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
   // BENCH_finalexp_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
-  BENCH_Pairingn_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
+  // BENCH_Pairingn_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
 
   //SCM_func_check();//未完成
   // check_pairing_2NAF();

@@ -645,74 +645,25 @@ void fp6_sqr_GS_lazy_montgomery2(fp6_t *ANS,fp6_t *A){
   fp2_sqr_nonmod_montgomery2(&tmp3_fpd2,&A->x2);        //x2^2
   fp2_mul_base_nonmod_double(&tmp3_fpd2,&tmp3_fpd2);   //root(base_c)x2^2
 
-  // printf("tmp1.x0 size: %lu\n",mpn_sizeinbase(tmp1_fpd2.x0.x0,FPLIMB2,2));
-  // printf("tmp1.x1 size: %lu\n",mpn_sizeinbase(tmp1_fpd2.x1.x0,FPLIMB2,2));
-  // printf("tmp2.x0 size: %lu\n",mpn_sizeinbase(tmp2_fpd2.x0.x0,FPLIMB2,2));
-  // printf("tmp2.x1 size: %lu\n",mpn_sizeinbase(tmp2_fpd2.x1.x0,FPLIMB2,2));
-  // printf("tmp3.x0 size: %lu\n",mpn_sizeinbase(tmp3_fpd2.x0.x0,FPLIMB2,2));
-  // printf("tmp3.x1 size: %lu\n",mpn_sizeinbase(tmp3_fpd2.x1.x0,FPLIMB2,2));
-  // printf("\n");
   fp2_set_conj_montgomery_fpd(&tmp4_fpd2, &A->x0); //a_
   fp2_set_conj_montgomery_fpd(&tmp5_fpd2, &A->x1); //b_
   fp2_set_conj_montgomery_fpd(&tmp6_fpd2, &A->x2); //c_
-
-  // printf("ctmp4_fpd2.x0 size: %lu\n",mpn_sizeinbase(tmp4_fpd2.x0.x0,FPLIMB2,2));
-  // printf("ctmp4_fpd2.x1 size: %lu\n",mpn_sizeinbase(tmp4_fpd2.x1.x0,FPLIMB2,2));
-  // printf("ctmp5_fpd2.x0 size: %lu\n",mpn_sizeinbase(tmp5_fpd2.x0.x0,FPLIMB2,2));
-  // printf("ctmp5_fpd2.x1 size: %lu\n",mpn_sizeinbase(tmp5_fpd2.x1.x0,FPLIMB2,2));
-  // printf("ctmp6_fpd2.x0 size: %lu\n",mpn_sizeinbase(tmp6_fpd2.x0.x0,FPLIMB2,2));
-  // printf("ctmp6_fpd2.x1 size: %lu\n",mpn_sizeinbase(tmp6_fpd2.x1.x0,FPLIMB2,2));
-  // printf("\n");
 
   fp2_sub_nonmod_double(&tmp4_fpd2,&tmp1_fpd2,&tmp4_fpd2); //a^2-a_
   fp2_add_nonmod_double(&tmp5_fpd2,&tmp3_fpd2,&tmp5_fpd2); //i*c^2+b_
   fp2_sub_nonmod_double(&tmp6_fpd2,&tmp2_fpd2,&tmp6_fpd2); //b^2-c_
 
-  // printf("ltmp4_fpd2.x0 size: %lu\n",mpn_sizeinbase(tmp4_fpd2.x0.x0,FPLIMB2,2));
-  // printf("ltmp4_fpd2.x1 size: %lu\n",mpn_sizeinbase(tmp4_fpd2.x1.x0,FPLIMB2,2));
-  // printf("ltmp5_fpd2.x0 size: %lu\n",mpn_sizeinbase(tmp5_fpd2.x0.x0,FPLIMB2,2));
-  // printf("ltmp5_fpd2.x1 size: %lu\n",mpn_sizeinbase(tmp5_fpd2.x1.x0,FPLIMB2,2));
-  // printf("ltmp6_fpd2.x0 size: %lu\n",mpn_sizeinbase(tmp6_fpd2.x0.x0,FPLIMB2,2));
-  // printf("ltmp6_fpd2.x1 size: %lu\n",mpn_sizeinbase(tmp6_fpd2.x1.x0,FPLIMB2,2));
-  // printf("\n");
-
   fp2_l1shift_nonmod_double(&tmp4_fpd2, &tmp4_fpd2); //2a^2-2a_
   fp2_l1shift_nonmod_double(&tmp5_fpd2, &tmp5_fpd2); //2i*c^2+2b_
   fp2_l1shift_nonmod_double(&tmp6_fpd2, &tmp6_fpd2); //2b^2-2c_
-
-  // printf("tmp4_fpd2.x0 size: %lu\n",mpn_sizeinbase(tmp4_fpd2.x0.x0,FPLIMB2,2));
-  // printf("tmp4_fpd2.x1 size: %lu\n",mpn_sizeinbase(tmp4_fpd2.x1.x0,FPLIMB2,2));
-  // printf("tmp5_fpd2.x0 size: %lu\n",mpn_sizeinbase(tmp5_fpd2.x0.x0,FPLIMB2,2));
-  // printf("tmp5_fpd2.x1 size: %lu\n",mpn_sizeinbase(tmp5_fpd2.x1.x0,FPLIMB2,2));
-  // printf("tmp6_fpd2.x0 size: %lu\n",mpn_sizeinbase(tmp6_fpd2.x0.x0,FPLIMB2,2));
-  // printf("tmp6_fpd2.x1 size: %lu\n",mpn_sizeinbase(tmp6_fpd2.x1.x0,FPLIMB2,2));
-  // printf("\n");
 
   fp2_add_nonmod_double(&tmp1,&tmp4_fpd2,&tmp1_fpd2);  //3a^2-2a_
   fp2_add_nonmod_double(&tmp2,&tmp5_fpd2,&tmp3_fpd2);  //3i*c^2+2b_
   fp2_add_nonmod_double(&tmp3,&tmp6_fpd2,&tmp2_fpd2);  //3b^2-2c_
 
-  // printf("tmp1.x0 size: %lu\n",mpn_sizeinbase(tmp1.x0.x0,FPLIMB2,2));
-  // printf("tmp1.x1 size: %lu\n",mpn_sizeinbase(tmp1.x1.x0,FPLIMB2,2));
-  // printf("tmp2.x0 size: %lu\n",mpn_sizeinbase(tmp2.x0.x0,FPLIMB2,2));
-  // printf("tmp2.x1 size: %lu\n",mpn_sizeinbase(tmp2.x1.x0,FPLIMB2,2));
-  // printf("tmp3.x0 size: %lu\n",mpn_sizeinbase(tmp3.x0.x0,FPLIMB2,2));
-  // printf("tmp3.x1 size: %lu\n",mpn_sizeinbase(tmp3.x1.x0,FPLIMB2,2));
-  // printf("\n");
-
-
   fp2_mod_montgomery_double(&ANS->x0, &tmp1);
   fp2_mod_montgomery_double(&ANS->x1, &tmp2);
   fp2_mod_montgomery_double(&ANS->x2, &tmp3);
-
-
-  // printf("ANS.x0 size: %lu\n",mpn_sizeinbase(ANS->x0.x0.x0,FPLIMB,2));
-  // printf("ANS.x1 size: %lu\n",mpn_sizeinbase(ANS->x0.x1.x0,FPLIMB,2));
-  // printf("ANS.x0 size: %lu\n",mpn_sizeinbase(ANS->x1.x0.x0,FPLIMB,2));
-  // printf("ANS.x1 size: %lu\n",mpn_sizeinbase(ANS->x1.x1.x0,FPLIMB,2));
-  // printf("ANS.x0 size: %lu\n",mpn_sizeinbase(ANS->x2.x0.x0,FPLIMB,2));
-  // printf("ANS.x1 size: %lu\n",mpn_sizeinbase(ANS->x2.x1.x0,FPLIMB,2));
-  // printf("here2\n\n\n"),getchar();
 
 }
 
