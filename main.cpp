@@ -50,7 +50,7 @@ int main(){
   // BENCH_fp2_fp6_mul_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
   // BENCH_miller_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
   // BENCH_finalexp_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
-  BENCH_Pairingn_lazy_montgomery2(CHECK_PAIRING_TIME_LOOP);
+  BENCH_Pairingn_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
   // check_efp();
   // check_efp2();
   // check_efp6();

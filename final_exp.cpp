@@ -64,7 +64,7 @@ void final_exp(fp6_t *ANS,fp6_t *A){
   fp6_mul(ANS,&tmp8_fp6,&tmp11_fp6);         //left * right = M^(3(-t0-x+3) + (p+t0-2)((9w^2+3w+1)(x-1)+9w^2+6w)(x-1)+9w^2+9w + 3) //M
 }
 
-void final_exp_lazy_montgomery(fp6_t *ANS,fp6_t *A){
+void final_exp_lazy_montgomery2(fp6_t *ANS,fp6_t *A){
   static fp6_t tmp1_fp6, tmp2_fp6,tmp3_fp6,tmp4_fp6,tmp5_fp6,tmp6_fp6,tmp7_fp6,tmp8_fp6,tmp9_fp6,tmp10_fp6,tmp11_fp6,tmp12_fp6;
 
   fp6_inv_lazy_montgomery(&tmp1_fp6,A);
@@ -126,7 +126,7 @@ void final_exp_lazy_montgomery(fp6_t *ANS,fp6_t *A){
   fp6_mul_lazy_montgomery(ANS,&tmp8_fp6,&tmp11_fp6);         //left * right = M^(3(-t0-x+3) + (p+t0-2)((9w^2+3w+1)(x-1)+9w^2+6w)(x-1)+9w^2+9w + 3) //M
 }
 
-void final_exp_lazy_montgomery2(fp6_t *ANS,fp6_t *A){
+void final_exp_lazy_montgomery(fp6_t *ANS,fp6_t *A){
   static fp6_t tmp1_fp6, tmp2_fp6,tmp3_fp6,tmp4_fp6,tmp5_fp6,tmp6_fp6,tmp7_fp6,tmp8_fp6,tmp9_fp6,tmp10_fp6,tmp11_fp6,tmp12_fp6;
 
   fp6_inv_lazy_montgomery(&tmp1_fp6,A);
