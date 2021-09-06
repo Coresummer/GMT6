@@ -26,7 +26,7 @@ void create_prt(){
   mpz_out_str(stdout,2,X_z);printf("\n");
   printf("trace (HW :%2ld)(binary) = ",mpz_popcount(trace_z));
   mpz_out_str(stdout,2,trace_z);printf("\n");
-  fp_set_ui(&base_c,1);
+  fp_set_ui(&base_c,4);
   fp_set_neg(&base_c, &base_c);
   fp_inv(&base_c_inv,&base_c);
   gmp_printf("\nmodulo polynomial\n");
@@ -64,19 +64,21 @@ void check_base(){
   
   fp2_t base_fp2;
   fp2_init(&base_fp2);
-  fp2_set_ui_ui(&base_fp2, 1);
-  mpz_mul(expo,prime_z,prime_z);
-  mpz_sub_ui(expo,expo,1);
-  mpz_divexact_ui(expo,expo,2);
-  fp2_pow(&base_fp2,&base_fp2,expo);
-  if(fp2_cmp_one(&base_fp2)==0) printf("error!!! c^(p=^2-1)/2==1\n\n");
-
-  fp2_set_ui_ui(&base_fp2, 1);
+  fp2_set_ui_ui(&base_fp2, 0);
+  fp_set_ui(&base_fp2.x1,2);
+  // fp_set_neg(&base_fp2.x1, &base_fp2.x1);
   mpz_mul(expo,prime_z,prime_z);
   mpz_sub_ui(expo,expo,1);
   mpz_divexact_ui(expo,expo,3);
   fp2_pow(&base_fp2,&base_fp2,expo);
-  if(fp2_cmp_one(&base_fp2)==0) printf("error!!! c^(p=^2-1)/3==1\n\n");
+  if(fp2_cmp_one(&base_fp2)==0) printf("error!!! c^(p^3-1)/3==1\n\n");
+
+  // fp2_set_ui_ui(&base_fp2, 1);
+  // mpz_mul(expo,prime_z,prime_z);
+  // mpz_sub_ui(expo,expo,1);
+  // mpz_divexact_ui(expo,expo,3);
+  // fp2_pow(&base_fp2,&base_fp2,expo);
+  // if(fp2_cmp_one(&base_fp2)==0) printf("error!!! c^(p=^2-1)/3==1\n\n");
 
   mpz_clear(expo);
 }

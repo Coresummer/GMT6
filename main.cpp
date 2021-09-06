@@ -35,21 +35,21 @@ int main(){
   //各関数の動作確認、コスト計算、時間計測など
   
   
-  // check_fp();
-  // check_fp2();
-  // check_fp6();
+  check_fp();
+  check_fp2();
+  check_fp6();
   // check_fp2_count();
   // check_fp6_count();
-  // // check_fp_time();
+  // check_fp_time();
 
-  // check_efp();
-  // check_efp2();
+  check_efp();
+  check_efp2();
   check_efp6();
   check_g1_g2();
 
   // check_pairing_2NAF();
   // // // check_pairing_static();
-  check_pairing_count_2NAF();
+  // check_pairing_count_2NAF();
   // check_pairing_time_2NAF();
 
   // printf("*********************************************************************************************\n\n");

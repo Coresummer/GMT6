@@ -410,10 +410,11 @@ void fp2_mul_base(fp2_t *ANS,fp2_t *A){
   
   
   static fp_t tmp1_fp;
-  fp_set(&tmp1_fp, &A->x0);
+  fp_set(&tmp1_fp, &A->x1);
 
-  fp_sub(&ANS->x0, &tmp1_fp, &A->x1);
-  fp_add(&ANS->x1, &tmp1_fp, &A->x1);
+  fp_lshift_1(&ANS->x1, &A->x0);
+  fp_lshift_1(&ANS->x0, &tmp1_fp);
+  fp_set_neg(&ANS->x0, &ANS->x0);
   // static fp2_t self;
   // fp2_set(&self,ANS);
   // fp2_lshift_1(ANS, ANS);
