@@ -206,6 +206,78 @@ void ff_lttp_lazy_montgomery(fp6_t *f, efp_jacobian_t *S, efp_t *P){
   fp_set(&S->z,&nextZ);
 }
 
+// void ff_lttp_lazy_montgomery2(fp6_t *f, efp_jacobian_t *S, efp_t *P){
+//   fp6_sqr_lazy_montgomery(f,f); //update
+//   static fp_t tmp1_fp, tmp2_fp,tmp3_fp;
+//   static fp_t A1_fp,A2_fp,A3_fp,B1_fp,B2_fp,C1_fp,D1_fp,D2_fp,E1_fp,E2_fp,F_fp,G_fp;
+//   static fp_t nextX,nextY,nextZ;
+
+//   static fp6_t tmp1_fp6;
+
+//   //
+//   fp_sqrmod_montgomery(&A1_fp, &S->x);
+//   fp_mulmod_montgomery(&A2_fp,&A1_fp, &S->x);
+//   fp_mulmod_montgomery(&A3_fp,&A2_fp, &S->x);
+  
+//   fp_sqrmod_montgomery(&B1_fp, &S->y);
+//   fp_sqrmod_montgomery(&B2_fp, &B1_fp);
+
+//   fp_sqrmod_montgomery(&C1_fp,&S->z);
+
+//   fp_add(&D1_fp,&S->x,&S->y);
+//   fp_sqrmod_montgomery(&D1_fp, &D1_fp);
+//   fp_sub_nonmod_single(&D1_fp,&D1_fp,&A1_fp);
+//   fp_sub_nonmod_single(&D1_fp,&D1_fp,&B1_fp);
+
+//   fp_mulmod_montgomery(&D2_fp, &D1_fp, &S->y);
+
+//   fp_add(&E1_fp,&S->z,&S->y);
+//   fp_sqrmod_montgomery(&E1_fp, &E1_fp);
+//   fp_sub_nonmod_single(&E1_fp,&E1_fp,&A1_fp);
+//   fp_sub_nonmod_single(&nextZ,&E1_fp,&C1_fp);
+//   //nextZ
+//   fp_mulmod_montgomery(&E2_fp, &E1_fp, &C1_fp);
+
+//   //nextX
+//   fp_add_nonmod_single(&nextX, &A3_fp, &A3_fp);
+//   fp_sub_nonmod_single(&nextX,&nextX,&D2_fp);    //2x^4-2xy^2
+//   fp_l1shift_nonmod_single(&nextX, &nextX);
+//   fp_l1shift_nonmod_single(&nextX, &nextX);      //8x^4 - 8xy^2
+//   fp_add_nonmod_single(&nextX, &nextX, &A3_fp);  //9x^4 - 8xy^2
+
+//   //nextY
+//   fp_add_nonmod_single(&nextY,&D2_fp,&D2_fp); //4xy^2
+//   fp_sub_nonmod_single(&nextY,&nextY,&nextX); //4xy^2 - (9x^4 - 8xy^2)
+//   fp_add_nonmod_single(&tmp1_fp,&A2_fp,&A2_fp);
+//   fp_add_nonmod_single(&tmp1_fp,&tmp1_fp,&A2_fp);
+//   fp_mulmod_montgomery(&nextY, &nextY, &tmp1_fp);
+//   fp_l1shift_nonmod_single(&tmp2_fp, &B2_fp);
+//   fp_l1shift_nonmod_single(&tmp2_fp, &B2_fp);
+//   fp_l1shift_nonmod_single(&tmp2_fp, &B2_fp);
+//   fp_sub_nonmod_single(&nextY, &nextY, &tmp2_fp);
+
+//   //rambraD
+//   fp_mulmod_montgomery(&tmp3_fp, &nextZ, &C1_fp);
+
+
+//   //0.0
+//   fp_sub_nonmod_single(&tmp1_fp6.x0.x0, &A2_fp, &B1_fp);
+//   fp_l1shift_nonmod_single(&tmp1_fp6.x0.x0, &tmp1_fp6.x0.x0);
+//   fp_add_nonmod_single(&tmp1_fp6.x0.x0, &tmp1_fp6.x0.x0, &A2_fp);
+
+//   //0.1
+//   fp_mulmod_montgomery(&tmp1_fp6.x0.x1,&tmp3_fp,&P->y);     // = nextZ*Z^2*(2^-1)*Py
+//   fp_mul_base_inv_single(&tmp1_fp6.x0.x1,&tmp1_fp6.x0.x1);  // = nextZ*Z^2*(2^-1)
+
+
+
+//   fp6_mul_sparse_dbl_lazy_montgomery(f,&tmp1_fp6,f);        //Capable for further Karatsuba //update
+
+//   fp_set(&S->x,&nextX);
+//   fp_set(&S->y,&nextY);
+//   fp_set(&S->z,&nextZ);
+// }
+
 //add line 
 void ff_ltqp_lazy_montgomery(fp6_t *f, efp_jacobian_t *S, efp_t *Q,efp_t *P){
   static fp_t tmp1_fp, tmp2_fp,tmp3_fp;

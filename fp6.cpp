@@ -747,7 +747,6 @@ void fp6_add_mpn(fp6_t *ANS,fp6_t *A,mp_limb_t *B){
   fp2_add_mpn(&ANS->x0,&A->x0,B);
   fp2_add_mpn(&ANS->x1,&A->x1,B);
   fp2_add_mpn(&ANS->x2,&A->x2,B);
-
 }
 
 void fp6_sub(fp6_t *ANS,fp6_t *A,fp6_t *B){
@@ -771,7 +770,6 @@ void fp6_sub_ui(fp6_t *ANS,fp6_t *A,unsigned long int UI){
   fp2_sub_ui(&ANS->x0,&A->x0,UI);
   fp2_set(&ANS->x1,&A->x1);
   fp2_set(&ANS->x2,&A->x2);
-
 }
 
 void fp6_sub_ui_ui(fp6_t *ANS,fp6_t *A,unsigned long int UI){
