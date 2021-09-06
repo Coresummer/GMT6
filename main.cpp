@@ -3,34 +3,34 @@
 #include <cstdio>
 
 #include "define.h"
-#include "./time.h"
-#include "scalar.h"
-#include "mpn.h"
+// #include "./time.h"
+// #include "scalar.h"
+// #include "mpn.h"
 #include "fp.h"
-#include "fp2.h"
-#include "fp6.h"
+// #include "fp2.h"
+// #include "fp6.h"
 // #include "test_fp.h"
-#include "field_test.h"
-#include "efp.h"
-#include "efp6.h"
-#include "test_efp.h"
-#include "create.h"
-#include "miller.h"
-#include "final_exp.h"
-#include "test_pairing.h"
+// #include "field_test.h"
+// #include "efp.h"
+// #include "efp6.h"
+// #include "test_efp.h"
+// #include "create.h"
+// #include "miller.h"
+// #include "final_exp.h"
+// #include "test_pairing.h"
 
 
 int main(){
-  gmp_randinit_default(state);
-  gmp_randseed_ui(state,(unsigned long int)time(NULL));
+  // gmp_randinit_default(state);
+  // gmp_randseed_ui(state,(unsigned long int)time(NULL));
 
-  tmp_init();
-  create_prt();
-  check_base();
-  pre_montgomery();
-  frobenius_precalculation();
-  curve_search();
-  create_weil();
+  // tmp_init();
+  // create_prt();
+  // check_base();
+  // pre_montgomery();
+  // frobenius_precalculation();
+  // curve_search();
+  // create_weil();
   
   printf("*********************************************************************************************\n\n");
   
@@ -59,13 +59,33 @@ int main(){
   //SCM_func_check();//未完成
   // check_pairing_2NAF();
   // check_pairing_static();
-  check_pairing_count_2NAF_lazy_montgomery();
+  // check_pairing_count_2NAF_lazy_montgomery();
   // check_pairing_count_2NAF();
   // check_pairing_time_2NAF();
 
   printf("*********************************************************************************************\n\n");
 
+  fp_t A;
+  fp_init(&A);
+  fp_println("Zero  :", &A);
+  fp_set_ui(&A,11);
+  fp_println("Eleven:", &A);
 
+  fp_t B;
+  fp_init(&B);
+  fp_println("Zero  :", &B);
+  fp_set_ui(&B,51);
+  fp_println("fiftyone:", &B);
+
+  fp_t C;
+  fp_init(&C);
+  C = A + B;
+  fp_println("C:", &C);
+  std::string prime_str = "9401ff90f28bffb0c610fb10bf9e0fefd59211629a7991563c5e468d43ec9cfe1549fd59c20ab5b9a7cda7f27a0067b8303eeb4b31555cf4f24050ed155555cd7fa7a5f8aaaaaaad47ede1a6aaaaaaaab69e6dcb";
+  fp_set_str(&C,prime_str);
+               //9401ff90f28bffb0c610fb10bf9e0fefd59211629a7991563c5e468d43ec9cfe1549fd59c20ab5b9a7cda7f27a0067b8303eeb4b31555cf4f24050ed155555cd
+  fp_println("C:", &C);
+  printf("*********************************************************************************************\n\n");
 
   return 0;
 }

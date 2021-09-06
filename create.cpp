@@ -1,33 +1,72 @@
+#include "define.h"
+#define TTT_INSTANCE_HERE
 #include "create.h"
 #include "fp.h"
 
+// void create_prt(){
+//   //c=22,HW=6
+//   mpz_set_str(X_z,"efffffffffffffe00000000000000000",16);
+//   mpz_set_str(prime_z,"9401ff90f28bffb0c610fb10bf9e0fefd59211629a7991563c5e468d43ec9cfe1549fd59c20ab5b9a7cda7f27a0067b8303eeb4b31555cf4f24050ed155555cd7fa7a5f8aaaaaaad47ede1a6aaaaaaaab69e6dcb",16);
+//   if(!mpz_probab_prime_p(prime_z,30))printf("Inputed p*(prime_z) is not a prime");
+
+//   mpz_set_str(order_z,"e0ffffffffffffc400000000000003ff10000000000000200000000000000001",16);
+//   mpz_set_str(trace_z,"-101770390931234937007371831919591261029326821356639893990345552768526322761728",10);
+//   const unsigned char* xai = reinterpret_cast<const unsigned char *>("efffffffffffffe00000000000000000");
+//   mpn_set_str(&X,xai,sizeof(char)*34,16); //ui(&X,1,319014718988379808906617884108577046528);
+//   mpn_set_mpz(prime,prime_z);
+//   mpn_mul_n(prime2,prime,prime,FPLIMB);
+
+//   gmp_printf("X     (%4dbit length) = %Zd\n",(int)mpz_sizeinbase(X_z,2),X_z);
+//   gmp_printf("prime (%4dbit length) = %Zd\n",(int)mpz_sizeinbase(prime_z,2),prime_z);
+//   gmp_printf("order (%4dbit length) = %Zd\n",(int)mpz_sizeinbase(order_z,2),order_z);
+//   gmp_printf("trace (%4dbit length) = %Zd\n",(int)mpz_sizeinbase(trace_z,2),trace_z);
+//   printf("X     (HW :%2ld)(binary) = ",mpz_popcount(X_z));
+//   mpz_out_str(stdout,2,X_z);printf("\n");
+//   printf("trace (HW :%2ld)(binary) = ",mpz_popcount(trace_z));
+//   mpz_out_str(stdout,2,trace_z);printf("\n");
+//   fp_set_ui(&base_c,2);
+//   fp_inv(&base_c_inv,&base_c);
+//   gmp_printf("\nmodulo polynomial\n");
+
+//   gmp_printf("fp2  = fp[alpha]/(alpha^2 -%Nu)\n",base_c.x0,FPLIMB);
+//   gmp_printf("fp6 = fp2[beta]/(beta^3 -alpha)\n");
+
+//   fp_println("base_c     = ",&base_c);
+//   fp_println("base_c_inv = ",&base_c_inv);
+//   printf("---------------------------------\n");
+//   miller_loop_v = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0};
+//   finalexp_pow_x = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 1};
+//   finalexp_pow_x_1 = {-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 1};
+//   finalexp_pow_3w = {0, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, -1, 0, 1, 0, -1, 0, 0, 0, 0, 0, 0, 0, -1, 0, 1};
+// }
+
 void create_prt(){
   //c=22,HW=6
-  mpz_set_str(X_z,"efffffffffffffe00000000000000000",16);
-  mpz_set_str(prime_z,"9401ff90f28bffb0c610fb10bf9e0fefd59211629a7991563c5e468d43ec9cfe1549fd59c20ab5b9a7cda7f27a0067b8303eeb4b31555cf4f24050ed155555cd7fa7a5f8aaaaaaad47ede1a6aaaaaaaab69e6dcb",16);
-  if(!mpz_probab_prime_p(prime_z,30))printf("Inputed p*(prime_z) is not a prime");
+  fp_set_str(&X,"efffffffffffffe00000000000000000");
+  fp_set_str(&prime,"9401ff90f28bffb0c610fb10bf9e0fefd59211629a7991563c5e468d43ec9cfe1549fd59c20ab5b9a7cda7f27a0067b8303eeb4b31555cf4f24050ed155555cd7fa7a5f8aaaaaaad47ede1a6aaaaaaaab69e6dcb");
+  // if(!mpz_probab_prime_p(prime_z,30))printf("Inputed p*(prime_z) is not a prime");
 
-  mpz_set_str(order_z,"e0ffffffffffffc400000000000003ff10000000000000200000000000000001",16);
-  mpz_set_str(trace_z,"-101770390931234937007371831919591261029326821356639893990345552768526322761728",10);
+  fp_set_str(&order,"e0ffffffffffffc400000000000003ff10000000000000200000000000000001");
+  fp_set_str(&trace,"e0ffffffffffffc400000000000003fe20000000000000400000000000000000"); //it an negative value
   const unsigned char* xai = reinterpret_cast<const unsigned char *>("efffffffffffffe00000000000000000");
-  mpn_set_str(&X,xai,sizeof(char)*34,16); //ui(&X,1,319014718988379808906617884108577046528);
-  mpn_set_mpz(prime,prime_z);
-  mpn_mul_n(prime2,prime,prime,FPLIMB);
+  // mpn_set_str(&X,xai,sizeof(char)*34,16); //ui(&X,1,319014718988379808906617884108577046528);
+  // mpn_set_mpz(prime,prime_z);
+  // mpn_mul_n(prime2,prime,prime,FPLIMB);
 
-  gmp_printf("X     (%4dbit length) = %Zd\n",(int)mpz_sizeinbase(X_z,2),X_z);
-  gmp_printf("prime (%4dbit length) = %Zd\n",(int)mpz_sizeinbase(prime_z,2),prime_z);
-  gmp_printf("order (%4dbit length) = %Zd\n",(int)mpz_sizeinbase(order_z,2),order_z);
-  gmp_printf("trace (%4dbit length) = %Zd\n",(int)mpz_sizeinbase(trace_z,2),trace_z);
-  printf("X     (HW :%2ld)(binary) = ",mpz_popcount(X_z));
-  mpz_out_str(stdout,2,X_z);printf("\n");
-  printf("trace (HW :%2ld)(binary) = ",mpz_popcount(trace_z));
-  mpz_out_str(stdout,2,trace_z);printf("\n");
+  fp_println("X                             = %Zd\n", &X);
+  fp_println("Prime                         = %Zd\n", &prime);
+  fp_println("Order                         = %Zd\n", &order);
+  fp_println("Trace                         = %Zd\n", &trace);
+
+  // printf("X     (HW :%2ld)(binary) = ",mpz_popcount(X_z));
+  // mpz_out_str(stdout,2,X_z);printf("\n");
+  // printf("trace (HW :%2ld)(binary) = ",mpz_popcount(trace_z));
+  // mpz_out_str(stdout,2,trace_z);printf("\n");
   fp_set_ui(&base_c,2);
   fp_inv(&base_c_inv,&base_c);
-  gmp_printf("\nmodulo polynomial\n");
 
-  gmp_printf("fp2  = fp[alpha]/(alpha^2 -%Nu)\n",base_c.x0,FPLIMB);
-  gmp_printf("fp6 = fp2[beta]/(beta^3 -alpha)\n");
+  fp_printf("fp2  = fp[alpha]/(alpha^2 -%Nu)",&base_c);
+  printf("fp6 = fp2[beta]/(beta^3 -alpha)");
 
   fp_println("base_c     = ",&base_c);
   fp_println("base_c_inv = ",&base_c_inv);
@@ -240,26 +279,34 @@ void create_weil(){
 }
 
 void tmp_init(){
-  mpz_init(X_z);
-  mpz_init(prime_z);
-  mpz_init(order_z);
-  mpz_init(trace_z);
+  // mpz_init(X_z);
+  // mpz_init(prime_z);
+  // mpz_init(order_z);
+  // mpz_init(trace_z);
 
-  mpz_init(efp_total);
-  mpz_init(efp2_total);
-  mpz_init(efp6_total);
-  mpz_init(fp6_total_r);
+  // mpz_init(efp_total);
+  // mpz_init(efp2_total);
+  // mpz_init(efp6_total);
+  // mpz_init(fp6_total_r);
 
-  mpz_init(miller_loop_s);
-  mpz_init(X_1_div2);
-  mpz_init(X_1);
-  mpz_init(X_2);
-  mpz_init(X_2_1);
-  mpz_init_set_ui(four,4);
+  // mpz_init(miller_loop_s);
+  // mpz_init(X_1_div2);
+  // mpz_init(X_1);
+  // mpz_init(X_2);
+  // mpz_init(X_2_1);
+  // mpz_init_set_ui(four,4);
 
-  mpz_init(hardpart);
-  mpz_init(hp_3w);
-  mpz_init_set_ui(four,4);
-  mpz_init_set_ui(three,3);
+  // mpz_init(hardpart);
+  // mpz_init(hp_3w);
+  // mpz_init_set_ui(four,4);
+  // mpz_init_set_ui(three,3);
+  
+  fp_init(&X);
+  fp_init(&prime);
+  fp_init(&order);
+  fp_init(&trace);
+  fp_init(&fp_t_one);
+  fp_set_ui(&fp_t_one,1);
+  fp_init(&fp_t_zero);
 
 }
