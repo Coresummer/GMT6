@@ -3,13 +3,13 @@
 
 void create_prt(){
   //c=22,HW=6
-  mpz_set_str(X_z,"efffffffffffffe00000000000000000",16);
-  mpz_set_str(prime_z,"9401ff90f28bffb0c610fb10bf9e0fefd59211629a7991563c5e468d43ec9cfe1549fd59c20ab5b9a7cda7f27a0067b8303eeb4b31555cf4f24050ed155555cd7fa7a5f8aaaaaaad47ede1a6aaaaaaaab69e6dcb",16);
+  mpz_set_str(X_z,"fffffffffffffff00000000000000000",16);
+  mpz_set_str(prime_z,"bfffffffff3fffdbfffdb0002a0002ee807fffff56d511854c7a74cbc4065ce25b360ebd3d7065deb71875a6e212cca55d4ef0475706ef5295ea44589eaef94b2e88b1fb3f402e0bfd7e303ffa00012ffff00002",16);
   if(!mpz_probab_prime_p(prime_z,30))printf("Inputed p*(prime_z) is not a prime");
 
-  mpz_set_str(order_z,"e0ffffffffffffc400000000000003ff10000000000000200000000000000001",16);
-  mpz_set_str(trace_z,"-101770390931234937007371831919591261029326821356639893990345552768526322761728",10);
-  const unsigned char* xai = reinterpret_cast<const unsigned char *>("efffffffffffffe00000000000000000");
+  mpz_set_str(order_z,"ffffffffffffffe000000000000000ff00000000000000100000000000000001",16);
+  mpz_set_str(trace_z,"ffffffffffffffe0000000000000010000000000000000000000000000000002",16);
+  const unsigned char* xai = reinterpret_cast<const unsigned char *>("fffffffffffffff00000000000000000");
   mpn_set_str(&X,xai,sizeof(char)*34,16); //ui(&X,1,319014718988379808906617884108577046528);
   mpn_set_mpz(prime,prime_z);
   mpn_mul_n(prime2,prime,prime,FPLIMB);
@@ -22,7 +22,8 @@ void create_prt(){
   mpz_out_str(stdout,2,X_z);printf("\n");
   printf("trace (HW :%2ld)(binary) = ",mpz_popcount(trace_z));
   mpz_out_str(stdout,2,trace_z);printf("\n");
-  fp_set_ui(&base_c,2);
+  fp_set_ui(&base_c,1);
+  fp_set_neg(&base_c, &base_c);
   fp_inv(&base_c_inv,&base_c);
   gmp_printf("\nmodulo polynomial\n");
 

@@ -5,11 +5,11 @@ using namespace std;
 
 int main(){
     mpz_t xai,hp3w,hpw,x_1,tmp;
-    mpz_init_set_str(xai,"efffffffffffffe00000000000000000",16);
+    mpz_init_set_str(xai,"0xfffffffffffffff00000000000000000",16);
     mpz_init_set(x_1,xai);
     mpz_sub_ui(x_1,x_1,1);
     
-    mpz_init_set_str(hp3w,"111",10);//1811507161526425387769904
+    mpz_init_set_str(hp3w,"0x17fffffffff40000bfffd",16);//1811507161526425387769904
     mpz_init(hpw);
     mpz_divexact_ui(hpw,hp3w,3);
     vector<int> v,v2,v3,v4;
