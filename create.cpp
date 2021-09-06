@@ -57,6 +57,15 @@ void check_base(){
   fp_pow(&tmp,&tmp,expo);
   // fp_println("c^(p-1) :",&tmp);
   if(fp_cmp_one(&tmp)!=0) printf("error!!! c^(p-1)!=1\n\n");
+
+  //check base_c = CNR
+  fp_set(&tmp,&base_c);
+  mpz_sub_ui(expo,prime_z,1);
+  mpz_divexact_ui(expo,expo,3);
+  fp_pow(&tmp,&base_c,expo);
+  if(fp_cmp_one(&tmp)==0) printf("error!!! c^((p-1)/3)==1\n\n");
+
+
   
   //check base_c = QNR
   fp_set_ui(&tmp2.x1,1);
