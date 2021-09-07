@@ -67,8 +67,8 @@ void ff_lttp(fp6_t *f, efp_jacobian_t *S, efp_t *P){
   fp_mul(&tmp1_fp6.x2.x0,&tmp1_fp6.x2.x0,&tmp1_fp);  // = t3*Px*Z^2
   fp_set_neg(&tmp1_fp6.x2.x0,&tmp1_fp6.x2.x0);
 
-  // fp6_mul_sparse_dbl(f,&tmp1_fp6,f);        //Capable for further Karatsuba //update
-  fp6_mul(f,&tmp1_fp6,f);
+  fp6_mul_sparse_dbl(f,&tmp1_fp6,f);        //Capable for further Karatsuba //update
+  // fp6_mul(f,&tmp1_fp6,f);
   fp_set(&S->x,&nextX);
   fp_set(&S->y,&nextY);
   fp_set(&S->z,&nextZ);
@@ -129,8 +129,8 @@ void ff_ltqp(fp6_t *f, efp_jacobian_t *S, efp_t *Q,efp_t *P){
   fp_mul(&tmp1_fp6.x1.x1,&tmp1_fp6.x1.x1,&base_d_inv);
   //mul base_d
 
-  // fp6_mul_sparse_add(f,&tmp1_fp6,f); //Capable for further Karatsuba //update
-  fp6_mul(f,&tmp1_fp6,f);
+  fp6_mul_sparse_add(f,&tmp1_fp6,f); //Capable for further Karatsuba //update
+  // fp6_mul(f,&tmp1_fp6,f);
   fp_set(&S->x,&nextX);
   fp_set(&S->y,&nextY);
   fp_set(&S->z,&nextZ);
