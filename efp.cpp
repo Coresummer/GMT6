@@ -1,4 +1,5 @@
 #include "efp.h"
+#include "fp.h"
 
 void efp_init(efp_t *P){
   fp_init(&P->x);
@@ -195,6 +196,13 @@ void efp_set_mpn(efp_t *ANS,mp_limb_t *A){
 void efp_set_neg(efp_t *ANS,efp_t *A){
   fp_set(&ANS->x,&A->x);
   fp_set_neg(&ANS->y,&A->y);
+  ANS->infinity=A->infinity;
+}
+
+void efp_set_neg_montgomery(efp_t *ANS,efp_t *A){
+  fp_to_montgomery(&ANS->x,&A->x);
+  fp_set_neg(&ANS->y,&A->y);
+  fp_to_montgomery(&ANS->y,&ANS->y);
   ANS->infinity=A->infinity;
 }
 

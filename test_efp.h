@@ -2,7 +2,7 @@
 #ifndef TEST_EFP_H
 #define TEST_EFP_H
 
-#include "count.h"
+// #include "count.h"
 #include "efp6.h"
 
 void check_efp();

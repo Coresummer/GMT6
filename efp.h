@@ -27,6 +27,7 @@ void efp_mod_montgomery(efp_t *ANS,efp_t *A);
 void efp_set_ui(efp_t *ANS,unsigned long int UI);
 void efp_set_mpn(efp_t *ANS,mp_limb_t *A);
 void efp_set_neg(efp_t *ANS,efp_t *A);
+void efp_set_neg_montgomery(efp_t *ANS,efp_t *A);
 void efp_projective_set_neg(efp_projective_t *ANS,efp_projective_t *A);
 void efp_jacobian_set_neg(efp_jacobian_t *ANS,efp_jacobian_t *A);
 int efp_cmp(efp_t *A,efp_t *B);

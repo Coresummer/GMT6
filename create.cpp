@@ -17,6 +17,7 @@ void create_prt(){
   mpn_set_str(&X,xai,sizeof(char)*34,16); //ui(&X,1,319014718988379808906617884108577046528);
   mpn_set_mpz(prime,prime_z);
   mpn_mul_n(prime2,prime,prime,FPLIMB);
+  mpn_lshift(prime672,prime,FPLIMB,671);
 
   gmp_printf("X     (%4dbit length) = %Zd\n",(int)mpz_sizeinbase(X_z,2),X_z);
   gmp_printf("prime (%4dbit length) = %Zd\n",(int)mpz_sizeinbase(prime_z,2),prime_z);
@@ -120,17 +121,21 @@ void frobenius_precalculation(){
 
   fp_pow(&tmp,&base_d,expo);
   fp_set(&frobenius_1_6,&tmp);
+  fp_to_montgomery(&frobenius_1_6MR, &frobenius_1_6);
   fp_printf("\n1_6\n",&frobenius_1_6);
   mpz_set_ui(expo,2);
   fp_pow(&frobenius_2_6,&tmp,expo);
+  fp_to_montgomery(&frobenius_2_6MR, &frobenius_2_6);
   fp_printf("\n2_6\n",&frobenius_2_6);
 
   mpz_set_ui(expo,4);
   fp_pow(&frobenius_4_6,&tmp,expo);
+  fp_to_montgomery(&frobenius_4_6MR, &frobenius_4_6);
   fp_printf("\n4_6\n",&frobenius_4_6);
 
   mpz_set_ui(expo,5);
   fp_pow(&frobenius_5_6,&tmp,expo);
+  fp_to_montgomery(&frobenius_5_6MR, &frobenius_5_6);
   fp_printf("\n5_6\n",&frobenius_5_6);
 
   mpz_clear(expo);
@@ -173,21 +178,21 @@ void curve_search(){
   // }
 
   mpz_clear(s);
-  //fp_println("curve_a = ",&curve_a);
+
   printf("Elliptic curve search is done\n");
 }
 
-void create_twist_curve(){
-  //2次ツイスト曲線を求める(v in Fp7 がQNR)
-  //今回はv=BETA
-  //よって、y^2 = x^3 + b*α^(-2)x
-  //curve_b_twistは a*α^(-2)=(0,0,0,0,0,ac^-1,0)となる
-  fp_init(&curve_b_twist_x3);
-  fp_mul(&curve_b_twist_x3,&curve_b,&base_c_inv);////base_c=D Type  //base_c_inv=M Type
-  printf("curve_b_twist = (");
-  fp_printf("",&curve_b_twist_x3);
-  printf("0,0,0,0,0)\n");
-} 
+// void create_twist_curve(){
+//   //2次ツイスト曲線を求める(v in Fp7 がQNR)
+//   //今回はv=BETA
+//   //よって、y^2 = x^3 + b*α^(-2)x
+//   //curve_b_twistは a*α^(-2)=(0,0,0,0,0,ac^-1,0)となる
+//   fp_init(&curve_b_twist_x3);
+//   fp_mul(&curve_b_twist_x3,&curve_b,&base_c_inv);////base_c=D Type  //base_c_inv=M Type
+//   printf("curve_b_twist = (");
+//   fp_printf("",&curve_b_twist_x3);
+//   printf("0,0,0,0,0)\n");
+// } 
 
 void frobenius_trace(mpz_t *trace,unsigned int m){
   mpz_t t_m[33];
