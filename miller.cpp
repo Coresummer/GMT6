@@ -57,17 +57,18 @@ void ff_lttp(fp6_t *f, efp_jacobian_t *S, efp_t *P){
   fp_mul(&nextZ,&nextZ,&S->z);    //nextZ = 2YZ
   fp_sqr(&tmp1_fp,&S->z);         //tmp1 = Z^2
   fp_mul(&tmp1_fp6.x0.x1,&nextZ,&tmp1_fp);           // = nextZ*Z^2
-  fp_mul_base_inv(&tmp1_fp6.x0.x1,&tmp1_fp6.x0.x1);  // = nextZ*Z^2*(2^-1)
-  fp_mul(&tmp1_fp6.x0.x1,&tmp1_fp6.x0.x1,&P->y);     // = nextZ*Z^2*(2^-1)*Py
+  fp_mul(&tmp1_fp6.x0.x1,&tmp1_fp6.x0.x1,&P->y);     // = nextZ*Z^2Py
+  fp_lshift_1(&tmp1_fp6.x0.x1,&tmp1_fp6.x0.x1);      // = 2*nextZ*Z^2Py
 
   fp_mul(&tmp3_fp,&t3,&S->x);                        //tmp3 = t3*X
   fp_sub(&tmp1_fp6.x0.x0,&tmp3_fp,&tmp2_fp);         // = t3*X - 2*t1
 
-  fp_mul(&tmp1_fp6.x1.x1,&t3,&P->x);                 // = t3*Px
-  fp_mul(&tmp1_fp6.x1.x1,&tmp1_fp6.x1.x1,&tmp1_fp);  // = t3*Px*Z^2
+  fp_mul(&tmp1_fp6.x2.x0,&t3,&P->x);                 // = t3*Px
+  fp_mul(&tmp1_fp6.x2.x0,&tmp1_fp6.x2.x0,&tmp1_fp);  // = t3*Px*Z^2
+  fp_set_neg(&tmp1_fp6.x2.x0,&tmp1_fp6.x2.x0);
 
-  fp6_mul_sparse_dbl(f,&tmp1_fp6,f);        //Capable for further Karatsuba //update
-
+  // fp6_mul_sparse_dbl(f,&tmp1_fp6,f);        //Capable for further Karatsuba //update
+  fp6_mul(f,&tmp1_fp6,f);
   fp_set(&S->x,&nextX);
   fp_set(&S->y,&nextY);
   fp_set(&S->z,&nextZ);
@@ -115,18 +116,21 @@ void ff_ltqp(fp6_t *f, efp_jacobian_t *S, efp_t *Q,efp_t *P){
 
   fp_mul(&nextZ,&S->z,&t1);
 
-  fp_mul_base_inv(&tmp1_fp6.x2.x1,&nextZ);
-  fp_mul(&tmp1_fp6.x2.x1,&tmp1_fp6.x2.x1,&P->y);
+  fp_mul(&tmp1_fp6.x1.x0,&nextZ,&P->y);
 
   fp_mul(&tmp1_fp6.x0.x0,&t2,&P->x);
   fp_set_neg(&tmp1_fp6.x0.x0,&tmp1_fp6.x0.x0);
 
   fp_mul(&tmp1_fp,&t2,&Q->x);
   fp_mul(&tmp2_fp,&nextZ,&Q->y);
-  fp_sub(&tmp1_fp6.x2.x0,&tmp1_fp,&tmp2_fp);
+  fp_sub(&tmp1_fp6.x1.x1,&tmp1_fp,&tmp2_fp);
 
-  fp6_mul_sparse_add(f,&tmp1_fp6,f); //Capable for further Karatsuba //update
+  fp_lshift_1(&tmp1_fp6.x1.x1,&tmp1_fp6.x1.x1);//*2
+  fp_mul(&tmp1_fp6.x1.x1,&tmp1_fp6.x1.x1,&base_d_inv);
+  //mul base_d
 
+  // fp6_mul_sparse_add(f,&tmp1_fp6,f); //Capable for further Karatsuba //update
+  fp6_mul(f,&tmp1_fp6,f);
   fp_set(&S->x,&nextX);
   fp_set(&S->y,&nextY);
   fp_set(&S->z,&nextZ);

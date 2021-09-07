@@ -47,33 +47,33 @@ int main(){
   // check_efp6();
   // check_g1_g2();
 
-  // check_pairing_2NAF();
+  check_pairing_2NAF();
   // // // check_pairing_static();
   // check_pairing_count_2NAF();
   // check_pairing_time_2NAF();
 
   // printf("*********************************************************************************************\n\n");
-  efp6_t P,Q, Q_dash,tmp1;
-  efp6_init(&Q);
-  efp6_init(&Q_dash);
-  efp6_init(&tmp1);
+  // efp6_t P,Q, Q_dash,tmp1;
+  // efp6_init(&Q);
+  // efp6_init(&Q_dash);
+  // efp6_init(&tmp1);
 
-  efp6_init(&P);
-  generate_g1(&P);
-  efp6_scm(&tmp1,&P,order_z);
-  efp6_println("[r]P = ",&tmp1);
-  generate_g2(&Q);
-  fp_lshift_1(&Q_dash.x.x0.x0,&Q.x.x1.x1);
-  fp_set_neg(&Q_dash.x.x0.x0, &Q_dash.x.x0.x0);
-  fp_lshift_1(&Q_dash.y.x0.x0,&Q.y.x0.x1);
-  fp_set_neg(&Q_dash.y.x0.x0, &Q_dash.y.x0.x0);
+  // efp6_init(&P);
+  // generate_g1(&P);
+  // efp6_scm(&tmp1,&P,order_z);
+  // efp6_println("[r]P = ",&tmp1);
+  // generate_g2(&Q);
+  // fp_lshift_1(&Q_dash.x.x0.x0,&Q.x.x1.x1);
+  // fp_set_neg(&Q_dash.x.x0.x0, &Q_dash.x.x0.x0);
+  // fp_lshift_1(&Q_dash.y.x0.x0,&Q.y.x0.x1);
+  // fp_set_neg(&Q_dash.y.x0.x0, &Q_dash.y.x0.x0);
 
 
-  Q_dash.infinity = 0;
-  efp6_checkOnTwsitCurve(&Q_dash);
+  // Q_dash.infinity = 0;
+  // efp6_checkOnTwsitCurve(&Q_dash);
 
-  efp6_scm(&tmp1,&Q_dash,order_z);
-  efp6_println("[r]Q' = ",&tmp1);
+  // efp6_scm(&tmp1,&Q_dash,order_z);
+  // efp6_println("[r]Q' = ",&tmp1);
 
 
   return 0;

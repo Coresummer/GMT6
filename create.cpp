@@ -29,6 +29,10 @@ void create_prt(){
   fp_set_ui(&base_c,1);
   fp_set_neg(&base_c, &base_c);
   fp_inv(&base_c_inv,&base_c);
+  fp_set_ui(&base_d,4);
+  fp_set_neg(&base_d, &base_d);
+  fp_inv(&base_d_inv,&base_d);
+
   gmp_printf("\nmodulo polynomial\n");
 
   gmp_printf("fp2  = fp[alpha]/(alpha^2 -%Nu)\n",base_c.x0,FPLIMB);
