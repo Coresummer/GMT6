@@ -94,8 +94,6 @@ void mpn_rshift_ext(mp_limb_t *ans,mp_limb_t *a,mp_size_t size,long int L){
 	mpn_rshift(ans,tmp,size,L);
 }
 
-
-
 void mpn_dbl(mp_limb_t *ans,mp_limb_t *a,mp_size_t size){
 	mpn_lshift(ans,a,size,1);
 }

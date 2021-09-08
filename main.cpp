@@ -1,4 +1,5 @@
 
+#include "field_test.h"
 #include <cstdio>
 #include <cstdint>
 #include <gmp.h>
@@ -35,11 +36,11 @@ int main(){
   // frobenius_precalculation();
   // curve_search();
   // create_weil();
-  std::string prime_str = "9401ff90f28bffb0c610fb10bf9e0fefd59211629a7991563c5e468d43ec9cfe1549fd59c20ab5b9a7cda7f27a0067b8303eeb4b31555cf4f24050ed155555cd7fa7a5f8aaaaaaad47ede1a6aaaaaaaab69e6dcb";
-  fp_set_str(&prime, prime_str);
-
 
   printf("*********************************************************************************************\n\n");
+  //check 
+  // check_fp();
+
 
   //各関数の動作確認、コスト計算、時間計測など
   // test_fp_montgomery(CHECK_PAIRING_TIME_LOOP);
@@ -70,20 +71,22 @@ int main(){
   // check_pairing_time_2NAF();
 
   printf("*********************************************************************************************\n\n");
+  //free space
 
-  fp_t A,B,C;
+  fp_t A;
   fp_init(&A);
-  fp_init(&B);
-  fp_init(&C);
 
-  fp_set_random(&A,state);
-  fp_set_random(&B,state);
-  fp_set_random(&C,state);
-  
+  fpd_t Ad;
+  fpd_init(&Ad);
+  fpd_println("Ad  = ",&Ad);
 
-  fp_println("A:", &A);
-  fp_println("B:", &B);
-  fp_println("C:", &C);
+  std::string Astr = "2f242c2746f32fef5b259f7a3fe970481c5db6af31ffb84700c7b1420f976e4bd050525f0b3785802ad3edf14c7435da60f41bafe0a0b9351a69c376f248bfdaaef2912ba2752874e58dea92299bc5adcca15649";
+  fp_set_str(&A, Astr);
+  fp_println("A   = ",&A);
+  uint64_t b = 0x41893731A9FBE8;
+
+  fp_mul_1(&Ad, &A, &b, 0);
+  fpd_println("Ad  = ",&Ad);
 
   printf("*********************************************************************************************\n\n");
 

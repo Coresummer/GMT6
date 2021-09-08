@@ -6,7 +6,6 @@
 
 #include "define.h"
 
-
 extern "C"{
     void fp_init(fp_t *A);
     void fpd_init(fpd_t *A);
@@ -17,9 +16,15 @@ extern "C"{
     void fp_printf_montgomery(std::string str ,fp_t *A);
     void fp_println_montgomery(std::string str ,fp_t *A);
     void fp_set(fp_t *ANS,fp_t *A);
+    void fp_set_ui(fp_t *ANS,unsigned long int UI);
+    void fpd_set(fpd_t *ANS,fpd_t *A);
+    void fpd_set_ui(fpd_t *ANS,unsigned long int UI);
+    void mpn_set_fp(mp_limb_t *ANS, fp_t *A);
+    void mpn_set_fpd(mp_limb_t *ANS, fpd_t *A);
+
     void fp_set_str(fp_t *A,std::string& str);
     void fp_set_fpd(fpd_t *ANS,fp_t *A);
-    void fpd_set(fpd_t *ANS,fpd_t *A);
+
     void fpd_set_neg_montgomery(fpd_t *ANS,fpd_t *A);
     void fp_set_ui(fp_t *ANS,unsigned long int UI);
     // void fp_set_mpn(fp_t *ANS,mp_limb_t *A);
@@ -45,14 +50,15 @@ extern "C"{
     // void fp_mod_montgomery(fp_t *ANS,fp_t *A);
     // void fp_to_montgomery(fp_t *ANS, fp_t *A);
     // void mpn_to_montgomery(mp_limb_t *ANS, mp_limb_t *A);
-    // void fp_mod(fp_t *ans, mp_limb_t *a, mp_size_t size_a);
-    // void fp_mul(fp_t *ANS,fp_t *A,fp_t *B);
+    void fp_mod(fp_t *ans, fpd_t *a);
+    void fp_mul_1(fpd_t *ANS, fp_t *A, uint64_t *B,int Bindex);
+    void fp_mul(fp_t *ANS,fp_t *A,fp_t *B);
     // void fp_mul_nonmod(fpd_t *ANS,fp_t *A,fp_t *B);
     // void fp_mul_montgomery(mp_limb_t *ANS,mp_size_t ANS_size,mp_limb_t *A,mp_size_t A_size);
     // void fp_mul_ui(fp_t *ANS,fp_t *A,unsigned long int UI);
     // void fp_mul_ui_nonmod_single(fp_t *ANS, fp_t *A, unsigned long int UI);
     // void fp_mul_mpn(fp_t *ANS,fp_t *A,mp_limb_t *B);
-    // void fp_sqr(fp_t *ANS,fp_t *A);
+    void fp_sqr(fp_t *ANS,fp_t *A);
     // void fp_sqr_nonmod(fpd_t *ANS,fp_t *A);
     // void fp_add(fp_t *ANS,fp_t *A,fp_t *B);
     void fp_add_nonmod_single(fp_t *ANS,fp_t *A,fp_t *B);
@@ -66,17 +72,17 @@ extern "C"{
     // void fp_sub_mpn(fp_t *ANS,fp_t *A,mp_limb_t *B);
     void fp_inv(fp_t *ANS,fp_t *A);
     void fp_inv_montgomery(fp_t *ANS,fp_t *A);
-    // int  fp_legendre(fp_t *A);
-    // void fp_sqrt(fp_t *ANS,fp_t *A);
-    // void fp_pow(fp_t *ANS,fp_t *A,mpz_t scalar);
+    int  fp_legendre(fp_t *A);
+    void fp_sqrt(fp_t *ANS,fp_t *A);
+    void fp_pow(fp_t *ANS,fp_t *A,mpz_t scalar);
     // void fp_pow_mpn(fp_t *ans,fp_t *a,mp_limb_t *r,mp_size_t n);
     // void fp_pow_montgomery(fp_t *ANS, fp_t *A, mpz_t scalar);
-    // int  fp_cmp(fp_t *A,fp_t *B);
-    // int  fp_cmp_ui(fp_t *A,unsigned long int UI);
-    // int  fp_cmp_mpn(fp_t *A,mp_limb_t *B);
+    int  fp_cmp(fp_t *A,fp_t *B);
     int  fp_cmp_zero(fp_t *A);
     int  fp_cmp_one(fp_t *A);
-    // int fpd_cmp_zero(fpd_t *A);
+    int  fpd_cmp_zero(fpd_t *A);
+    int  fpd_cmp_one(fpd_t *A);
+
     // int fp_montgomery_trick(fp_t *A_inv,fp_t *A,int n);
     // int fp_montgomery_trick_montgomery(fp_t *A_inv,fp_t *A,int n);
     // void fp_lshift_ui_nonmod_single(fp_t *ANS, fp_t *A, int s);

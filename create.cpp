@@ -3,7 +3,7 @@
 #define TTT_INSTANCE_HERE
 #include "create.h"
 #include "fp.h"
-
+#include "mpn.h"
 // void create_prt(){
 //   //c=22,HW=6
 //   mpz_set_str(X_z,"efffffffffffffe00000000000000000",16);
@@ -55,7 +55,7 @@ void create_prt(){
   fp_set_str(&trace,Trace_string); //it an negative value
   const unsigned char* xai = reinterpret_cast<const unsigned char *>("efffffffffffffe00000000000000000");
   // mpn_set_str(&X,xai,sizeof(char)*34,16); //ui(&X,1,319014718988379808906617884108577046528);
-  // mpn_set_mpz(prime,prime_z);
+  mpn_set_mpz(prime_mpn,prime_z);
   // mpn_mul_n(prime2,prime,prime,FPLIMB);
 
   fp_println("X                             =", &X);
@@ -63,15 +63,12 @@ void create_prt(){
   fp_println("Order                         =", &order);
   fp_println("Trace                         =", &trace);
 
-  // printf("X     (HW :%2ld)(binary) = ",mpz_popcount(X_z));
-  // mpz_out_str(stdout,2,X_z);printf("\n");
-  // printf("trace (HW :%2ld)(binary) = ",mpz_popcount(trace_z));
-  // mpz_out_str(stdout,2,trace_z);printf("\n");
   fp_set_ui(&base_c,2);
   fp_inv(&base_c_inv,&base_c);
 
-  fp_printf("fp2  = fp[alpha]/(alpha^2 -%Nu)",&base_c);
-  printf("fp6 = fp2[beta]/(beta^3 -alpha)");
+  fp_println("fp2  = fp[alpha]/(alpha^2 + 1)",&base_c);
+  printf("fp6 = fp2[beta]/(beta^3 -2alpha)\n");
+  printf("beta^6     = -4\n");
 
   fp_println("base_c     = ",&base_c);
   fp_println("base_c_inv = ",&base_c_inv);
@@ -313,5 +310,8 @@ void tmp_init(){
   fp_init(&fp_t_one);
   fp_set_ui(&fp_t_one,1);
   fp_init(&fp_t_zero);
-
+  fpd_init(&fpd_t_zero);
+  fpd_init(&fpd_t_one);
+  fpd_set_ui(&fpd_t_one,1);
+  fpd_init(&prime705);
 }

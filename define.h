@@ -117,12 +117,15 @@ extern "C"{
   TTT_EXTERN int cost_add_nonmod, cost_add_nonmod_double, cost_sub_nonmod, cost_sub_nonmod_double, cost_r1shift, cost_mod_nomal;
   TTT_EXTERN mpz_t X_z,prime_z,order_z,trace_z;
   TTT_EXTERN fp_t X,prime,order,trace;
+  TTT_EXTERN fpd_t prime705;
   TTT_EXTERN mp_limb_t X_mpn[FPLIMB],prime_mpn[FPLIMB],order_mpn[FPLIMB],trace_mpn[FPLIMB];
   // // TTT_EXTERN mp_limb_t X,prime[FPLIMB];
   // // TTT_EXTERN mp_limb_t prime2[FPLIMB2];
   TTT_EXTERN fp_t base_c;//α^7=c, β^2=α となるように逐次拡大で拡大体を構成する
   TTT_EXTERN fp_t base_c_inv;//α^7=c, β^2=α に出てくるcの逆元の計算結果
   TTT_EXTERN fp_t fp_t_zero, fp_t_one;
+  TTT_EXTERN fpd_t fpd_t_zero, fpd_t_one;
+
   // TTT_EXTERN fp_t curve_b;
   // TTT_EXTERN mpz_t sqrt_power_z;
 
@@ -145,11 +148,11 @@ extern "C"{
 
 
   TTT_EXTERN struct timeval tv_start,tv_end;
-  // TTT_EXTERN float MILLER_ATE_4SPARSE_TIME;
-  // TTT_EXTERN float MILLER_ATE_5SPARSE_TIME;
-  // TTT_EXTERN float MILLER_ATE_6SPARSE_TIME;
-  // TTT_EXTERN float MILLER_ATE_7SPARSE_TIME;
-  // TTT_EXTERN float FINAL_EXP_TIME;
+  TTT_EXTERN float MILLER_ATE_4SPARSE_TIME;
+  TTT_EXTERN float MILLER_ATE_5SPARSE_TIME;
+  TTT_EXTERN float MILLER_ATE_6SPARSE_TIME;
+  TTT_EXTERN float MILLER_ATE_7SPARSE_TIME;
+  TTT_EXTERN float FINAL_EXP_TIME;
 
   typedef struct {
     int add;
