@@ -1,6 +1,9 @@
 #include "fp6.h"
 #include "fp.h"
 #include "fp2.h"
+#include "mpn.h"
+#include <ELiPS/define.h>
+#include <cstdio>
 
 void fp6_init(fp6_t *A){
   fp2_init(&A->x0);
@@ -542,8 +545,9 @@ void fp6_sqr_lazy_montgomery(fp6_t *ANS, fp6_t *A) {
   fp2_add_nonmod_double(&tmp5_fpd2,&tmp1_fpd2,&tmp4_fpd2);
   fp2_add_nonmod_double(&tmp5_fpd2,&tmp5_fpd2,&tmp2_fpd2);
   fp2_add_nonmod_double(&tmp5_fpd2,&tmp5_fpd2,&tmp3_fpd2);
-  fp2_sub_nonmod_double(&tmp3,&tmp3,&tmp5_fpd2);
+  fp2_sub_double(&tmp3,&tmp3,&tmp5_fpd2);
   fp2_mod_montgomery_double(&ANS->x2, &tmp3);
+
 }
 
 void fp6_sqr_GS(fp6_t *ANS,fp6_t *A){
@@ -601,12 +605,12 @@ void fp6_sqr_GS_lazy(fp6_t *ANS,fp6_t *A){
   fp2_add(&ANS->x2,&tmp6_fp2,&tmp2_fp2);  //3b^2-2c_
 }
 
-void fp6_sqr_GS_lazy_montgomery(fp6_t *ANS,fp6_t *A){
+void fp6_sqr_GS_lazy_montgomery2(fp6_t *ANS,fp6_t *A){
   // static fp6_t tmp_A;
   // fp6_set(&tmp_A,A);
 //ELiPS sqr
   static fp2_t tmp1_fp2,tmp2_fp2,tmp3_fp2,tmp4_fp2,tmp5_fp2,tmp6_fp2;
-  
+ 
   fp2_sqr_lazy_montgomery(&tmp1_fp2,&A->x0);        //x0^2
   fp2_sqr_lazy_montgomery(&tmp2_fp2,&A->x1);        //x1^2
   fp2_sqr_lazy_montgomery(&tmp3_fp2,&A->x2);        //x2^2
@@ -616,17 +620,96 @@ void fp6_sqr_GS_lazy_montgomery(fp6_t *ANS,fp6_t *A){
   fp2_set_conj_montgomery(&tmp5_fp2, &A->x1); //b_
   fp2_set_conj_montgomery(&tmp6_fp2, &A->x2); //c_
 
-  fp2_sub(&tmp4_fp2,&tmp1_fp2,&tmp4_fp2); //a^2-a_
-  fp2_add(&tmp5_fp2,&tmp3_fp2,&tmp5_fp2); //i*c^2+b_
-  fp2_sub(&tmp6_fp2,&tmp2_fp2,&tmp6_fp2); //b^2-c_
+  fp2_sub_nonmod_single(&tmp4_fp2,&tmp1_fp2,&tmp4_fp2); //a^2-a_
+  fp2_add_nonmod_single(&tmp5_fp2,&tmp3_fp2,&tmp5_fp2); //i*c^2+b_
+  fp2_sub_nonmod_single(&tmp6_fp2,&tmp2_fp2,&tmp6_fp2); //b^2-c_
 
-  fp2_l1shift(&tmp4_fp2, &tmp4_fp2); //2a^2-2a_
-  fp2_l1shift(&tmp5_fp2, &tmp5_fp2); //2i*c^2+2b_
-  fp2_l1shift(&tmp6_fp2, &tmp6_fp2); //2b^2-2c_
+  fp2_l1shift_nonmod_single(&tmp4_fp2, &tmp4_fp2); //2a^2-2a_
+  fp2_l1shift_nonmod_single(&tmp5_fp2, &tmp5_fp2); //2i*c^2+2b_
+  fp2_l1shift_nonmod_single(&tmp6_fp2, &tmp6_fp2); //2b^2-2c_
 
-  fp2_add(&ANS->x0,&tmp4_fp2,&tmp1_fp2);  //3a^2-2a_
-  fp2_add(&ANS->x1,&tmp5_fp2,&tmp3_fp2);  //3i*c^2+2b_
-  fp2_add(&ANS->x2,&tmp6_fp2,&tmp2_fp2);  //3b^2-2c_
+  fp2_add_nonmod_single(&ANS->x0,&tmp4_fp2,&tmp1_fp2);  //3a^2-2a_
+  fp2_mod_montgomery(&ANS->x0, &ANS->x0);
+  fp2_add_nonmod_single(&ANS->x1,&tmp5_fp2,&tmp3_fp2);  //3i*c^2+2b_
+  fp2_mod_montgomery(&ANS->x1, &ANS->x1);
+  fp2_add_nonmod_single(&ANS->x2,&tmp6_fp2,&tmp2_fp2);  //3b^2-2c_
+  fp2_mod_montgomery(&ANS->x2, &ANS->x2);
+}
+
+void fp6_sqr_GS_lazy_montgomery (fp6_t *ANS,fp6_t *A){
+
+//ELiPS sqr
+  static fpd2_t tmp1_fpd2,tmp2_fpd2,tmp3_fpd2,tmp4_fpd2,tmp5_fpd2,tmp6_fpd2;
+  static fp2_t tmp1_fp2, tmp2_fp2,tmp3_fp2; 
+  static fpd2_t tmp1, tmp2, tmp3;
+
+  fp2_sqr_nonmod_montgomery(&tmp1_fpd2,&A->x0);        //x0^2
+  fp2_sqr_nonmod_montgomery(&tmp2_fpd2,&A->x1);        //x1^2
+  fp2_sqr_nonmod_montgomery(&tmp3_fpd2,&A->x2);        //x2^2
+  fp2_mul_base_nonmod_double(&tmp3_fpd2,&tmp3_fpd2);   //root(base_c)x2^2
+
+  printf("tmp1.x0 size: %lu\n",mpn_sizeinbase(tmp1_fpd2.x0.x0,FPLIMB2,2));
+  printf("tmp1.x1 size: %lu\n",mpn_sizeinbase(tmp1_fpd2.x1.x0,FPLIMB2,2));
+  printf("tmp2.x0 size: %lu\n",mpn_sizeinbase(tmp2_fpd2.x0.x0,FPLIMB2,2));
+  printf("tmp2.x1 size: %lu\n",mpn_sizeinbase(tmp2_fpd2.x1.x0,FPLIMB2,2));
+  printf("tmp3.x0 size: %lu\n",mpn_sizeinbase(tmp3_fpd2.x0.x0,FPLIMB2,2));
+  printf("tmp3.x1 size: %lu\n",mpn_sizeinbase(tmp3_fpd2.x1.x0,FPLIMB2,2));
+  printf("\n");
+  fp2_set_conj_montgomery_fpd(&tmp4_fpd2, &A->x0); //a_
+  fp2_set_conj_montgomery_fpd(&tmp5_fpd2, &A->x1); //b_
+  fp2_set_conj_montgomery_fpd(&tmp6_fpd2, &A->x2); //c_
+
+  printf("ctmp4_fpd2.x0 size: %lu\n",mpn_sizeinbase(tmp4_fpd2.x0.x0,FPLIMB2,2));
+  printf("ctmp4_fpd2.x1 size: %lu\n",mpn_sizeinbase(tmp4_fpd2.x1.x0,FPLIMB2,2));
+  printf("ctmp5_fpd2.x0 size: %lu\n",mpn_sizeinbase(tmp5_fpd2.x0.x0,FPLIMB2,2));
+  printf("ctmp5_fpd2.x1 size: %lu\n",mpn_sizeinbase(tmp5_fpd2.x1.x0,FPLIMB2,2));
+  printf("ctmp6_fpd2.x0 size: %lu\n",mpn_sizeinbase(tmp6_fpd2.x0.x0,FPLIMB2,2));
+  printf("ctmp6_fpd2.x1 size: %lu\n",mpn_sizeinbase(tmp6_fpd2.x1.x0,FPLIMB2,2));
+  printf("\n");
+
+  fp2_sub_double(&tmp4_fpd2,&tmp1_fpd2,&tmp4_fpd2); //a^2-a_
+  fp2_add_double(&tmp5_fpd2,&tmp3_fpd2,&tmp5_fpd2); //i*c^2+b_
+  fp2_sub_double(&tmp6_fpd2,&tmp2_fpd2,&tmp6_fpd2); //b^2-c_
+
+  printf("ltmp4_fpd2.x0 size: %lu\n",mpn_sizeinbase(tmp4_fpd2.x0.x0,FPLIMB2,2));
+  printf("ltmp4_fpd2.x1 size: %lu\n",mpn_sizeinbase(tmp4_fpd2.x1.x0,FPLIMB2,2));
+  printf("ltmp5_fpd2.x0 size: %lu\n",mpn_sizeinbase(tmp5_fpd2.x0.x0,FPLIMB2,2));
+  printf("ltmp5_fpd2.x1 size: %lu\n",mpn_sizeinbase(tmp5_fpd2.x1.x0,FPLIMB2,2));
+  printf("ltmp6_fpd2.x0 size: %lu\n",mpn_sizeinbase(tmp6_fpd2.x0.x0,FPLIMB2,2));
+  printf("ltmp6_fpd2.x1 size: %lu\n",mpn_sizeinbase(tmp6_fpd2.x1.x0,FPLIMB2,2));
+  printf("\n");
+
+  fp2_l1shift_nonmod_double(&tmp4_fpd2, &tmp4_fpd2); //2a^2-2a_
+  fp2_l1shift_nonmod_double(&tmp5_fpd2, &tmp5_fpd2); //2i*c^2+2b_
+  fp2_l1shift_nonmod_double(&tmp6_fpd2, &tmp6_fpd2); //2b^2-2c_
+
+  printf("tmp4_fpd2.x0 size: %lu\n",mpn_sizeinbase(tmp4_fpd2.x0.x0,FPLIMB2,2));
+  printf("tmp4_fpd2.x1 size: %lu\n",mpn_sizeinbase(tmp4_fpd2.x1.x0,FPLIMB2,2));
+  printf("tmp5_fpd2.x0 size: %lu\n",mpn_sizeinbase(tmp5_fpd2.x0.x0,FPLIMB2,2));
+  printf("tmp5_fpd2.x1 size: %lu\n",mpn_sizeinbase(tmp5_fpd2.x1.x0,FPLIMB2,2));
+  printf("tmp6_fpd2.x0 size: %lu\n",mpn_sizeinbase(tmp6_fpd2.x0.x0,FPLIMB2,2));
+  printf("tmp6_fpd2.x1 size: %lu\n",mpn_sizeinbase(tmp6_fpd2.x1.x0,FPLIMB2,2));
+
+  printf("\n");
+
+  fp2_add_double(&tmp1,&tmp4_fpd2,&tmp1_fpd2);  //3a^2-2a_
+  fp2_add_double(&tmp2,&tmp5_fpd2,&tmp3_fpd2);  //3i*c^2+2b_
+  fp2_add_double(&tmp3,&tmp6_fpd2,&tmp2_fpd2);  //3b^2-2c_
+
+  printf("tmp1.x0 size: %lu\n",mpn_sizeinbase(tmp1.x0.x0,FPLIMB2,2));
+  printf("tmp1.x1 size: %lu\n",mpn_sizeinbase(tmp1.x1.x0,FPLIMB2,2));
+  printf("tmp2.x0 size: %lu\n",mpn_sizeinbase(tmp2.x0.x0,FPLIMB2,2));
+  printf("tmp2.x1 size: %lu\n",mpn_sizeinbase(tmp2.x1.x0,FPLIMB2,2));
+  printf("tmp3.x0 size: %lu\n",mpn_sizeinbase(tmp3.x0.x0,FPLIMB2,2));
+  printf("tmp3.x1 size: %lu\n",mpn_sizeinbase(tmp3.x1.x0,FPLIMB2,2));
+  printf("\n");
+
+
+  fp2_mod_montgomery_double(&ANS->x0, &tmp1);
+  fp2_mod_montgomery_double(&ANS->x1, &tmp2);
+  fp2_mod_montgomery_double(&ANS->x2, &tmp3);
+  printf("here2\n\n\n"),getchar();
+
 }
 
 void fp6_add(fp6_t *ANS,fp6_t *A,fp6_t *B){

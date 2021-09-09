@@ -5,6 +5,7 @@
 #include "fp.h"
 
 void fp2_init(fp2_t *A);
+void fpd2_init(fpd2_t *A);
 void fp2_printf(std::string str ,fp2_t *A);
 void fp2_println(std::string str ,fp2_t *A);
 void fpd2_println(std::string str ,fpd2_t *A);
@@ -42,12 +43,14 @@ void fp2_sqr_lazy(fp2_t *ANS,fp2_t *A);
 void fp2_sqr_lazy_montgomery(fp2_t *ANS,fp2_t *A);
 void fp2_sqr_nonmod_montgomery(fpd2_t *ANS, fp2_t *A);
 void fp2_add(fp2_t *ANS,fp2_t *A,fp2_t *B);
+void fp2_add_double(fpd2_t *ANS,fpd2_t *A,fpd2_t *B);
 void fp2_add_nonmod_single(fp2_t *ANS,fp2_t *A,fp2_t *B);
 void fp2_add_nonmod_double(fpd2_t *ANS,fpd2_t *A,fpd2_t *B);
 void fp2_add_ui(fp2_t *ANS,fp2_t *A,unsigned long int UI);
 void fp2_add_ui_ui(fp2_t *ANS,fp2_t *A,unsigned long int UI);
 void fp2_add_mpn(fp2_t *ANS,fp2_t *A,mp_limb_t *B);
 void fp2_sub(fp2_t *ANS,fp2_t *A,fp2_t *B);
+void fp2_sub_double(fpd2_t *ANS,fpd2_t *A,fpd2_t *B);
 void fp2_sub_nonmod_single(fp2_t *ANS,fp2_t *A,fp2_t *B);
 void fp2_sub_nonmod_double(fpd2_t *ANS,fpd2_t *A,fpd2_t *B);
 void fp2_sub_ui(fp2_t *ANS,fp2_t *A,unsigned long int UI);

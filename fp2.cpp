@@ -1,12 +1,18 @@
 #include "fp2.h"
 #include "fp.h"
 #include "mpn.h"
+#include <ELiPS/define.h>
 #include <cstdio>
 #include <gmp.h>
 
 void fp2_init(fp2_t *A){
   fp_init(&A->x0);
   fp_init(&A->x1);
+}
+
+void fpd2_init(fpd2_t *A){
+  fpd_init(&A->x0);
+  fpd_init(&A->x0);
 }
 
 void fp2_printf(std::string str ,fp2_t *A){
@@ -91,9 +97,11 @@ void fp2_set_conj_montgomery(fp2_t *ANS,fp2_t *A){
 
 void fp2_set_conj_montgomery_fpd(fpd2_t *ANS,fp2_t *A){
   static fpd_t temp;
-  fp_set_fpd(&ANS->x0,&A->x0);
-  fp_set_fpd(&temp,&A->x1);
-  fpd_set_neg_montgomery(&ANS->x1,&temp);
+  // fp_set(&ANS->x0,&A->x0);
+  mpn_copyd(ANS->x0.x0,A->x0.x0,FPLIMB);
+  mpn_sub_n(temp.x0,prime, A->x1.x0, FPLIMB);
+  mpn_copyd(ANS->x1.x0,temp.x0,FPLIMB);
+
 }
 
 void fp2_to_montgomery(fp2_t *ANS,fp2_t *A){
@@ -304,6 +312,11 @@ void fp2_add(fp2_t *ANS,fp2_t *A,fp2_t *B){
 
 }
 
+void fp2_add_double(fpd2_t *ANS,fpd2_t *A,fpd2_t *B){
+  fp_add_double(&ANS->x0,&A->x0,&B->x0);
+  fp_add_double(&ANS->x1,&A->x1,&B->x1);
+}
+
 void fp2_add_nonmod_single(fp2_t *ANS,fp2_t *A,fp2_t *B){
   fp_add_nonmod_single(&ANS->x0,&A->x0,&B->x0);
   fp_add_nonmod_single(&ANS->x1,&A->x1,&B->x1);
@@ -313,7 +326,6 @@ void fp2_add_nonmod_single(fp2_t *ANS,fp2_t *A,fp2_t *B){
 void fp2_add_nonmod_double(fpd2_t *ANS,fpd2_t *A,fpd2_t *B){
   fp_add_nonmod_double(&ANS->x0,&A->x0,&B->x0);
   fp_add_nonmod_double(&ANS->x1,&A->x1,&B->x1);
-
 }
 
 void fp2_add_ui(fp2_t *ANS,fp2_t *A,unsigned long int UI){
@@ -338,6 +350,11 @@ void fp2_sub(fp2_t *ANS,fp2_t *A,fp2_t *B){
   fp_sub(&ANS->x0,&A->x0,&B->x0);
   fp_sub(&ANS->x1,&A->x1,&B->x1);
 
+}
+
+void fp2_sub_double(fpd2_t *ANS,fpd2_t *A,fpd2_t *B){
+  fp_sub_double(&ANS->x0,&A->x0,&B->x0);
+  fp_sub_double(&ANS->x1,&A->x1,&B->x1);
 }
 
 void fp2_sub_nonmod_single(fp2_t *ANS,fp2_t *A,fp2_t *B){
@@ -641,8 +658,13 @@ void fp2_mul_base_nonmod_single(fp2_t *ANS,fp2_t *A){
 void fp2_mul_base_nonmod_double(fpd2_t *ANS,fpd2_t *A){
   static fpd_t tmp1_fpd;
   static fp_t tmp;
-  mpn_sub_n(tmp1_fpd.x0,prime672,A->x1.x0,FPLIMB2);
-
+  // printf("A.x0 size: %lu\n",mpn_sizeinbase(A->x0.x0,FPLIMB2,2));
+  // printf("A.x1 size: %lu\n",mpn_sizeinbase(A->x1.x0,FPLIMB2,2));
+  // gmp_printf("%Nx\n",A->x1.x0,FPLIMB2);
+  // printf("p672 size: %lu\n",mpn_sizeinbase(prime672,FPLIMB2,2));
+  mpn_sub_n(tmp1_fpd.x0,prime672, A->x1.x0, FPLIMB2);
+  // printf("NEG size: %lu\n",mpn_sizeinbase(tmp1_fpd.x0,FPLIMB2,2));
+  // gmp_printf("%Nx\n\n\n",tmp1_fpd.x0,FPLIMB2);
   fp_l1shift_nonmod_double(&ANS->x1, &A->x0);
   fp_l1shift_nonmod_double(&ANS->x0, &tmp1_fpd);
 }

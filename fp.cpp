@@ -322,6 +322,15 @@ void fp_add(fp_t *ANS, fp_t *A, fp_t *B) {
     mpn_sub_n(ANS->x0, ANS->x0, prime, FPLIMB);
 }
 
+void fp_add_double(fpd_t *ANS, fpd_t *A, fpd_t *B) {
+#ifdef DEBUG_COST_A
+  cost_add++;
+#endif
+  mpn_add_n(ANS->x0, A->x0, B->x0, FPLIMB2);
+  if (mpn_cmp(ANS->x0, prime672, FPLIMB2) >= 0)mpn_sub_n(ANS->x0, ANS->x0, prime672, FPLIMB2);
+    //  printf("ANS->x0 size: %lu\n",mpn_sizeinbase(ANS->x0,FPLIMB2,2)),mpn_sub_n(ANS->x0, ANS->x0, prime672, FPLIMB2),printf("ANS->x0 size: %lu\n",mpn_sizeinbase(ANS->x0,FPLIMB2,2));
+}
+
 void fp_add_nonmod_single(fp_t *ANS, fp_t *A, fp_t *B) {
 #ifdef DEBUG_COST_A
   cost_add_nonmod++;
@@ -375,6 +384,20 @@ void fp_sub(fp_t *ANS, fp_t *A, fp_t *B) {
   }
 }
 
+void fp_sub_double(fpd_t *ANS, fpd_t *A, fpd_t *B) {
+#ifdef DEBUG_COST_A
+  cost_sub++;
+#endif
+  static mp_limb_t buf[FPLIMB];
+
+  if (mpn_cmp(A->x0, B->x0, FPLIMB2) < 0) {
+    mpn_sub_n(buf, A->x0, B->x0, FPLIMB2);
+    mpn_add_n(ANS->x0, prime672, buf, FPLIMB2);
+  } else {
+    mpn_sub_n(ANS->x0, A->x0, B->x0, FPLIMB2);
+  }
+}
+
 void fp_sub_nonmod_single(fp_t *ANS, fp_t *A, fp_t *B) {
 #ifdef DEBUG_COST_A
   cost_sub_nonmod++;
@@ -404,6 +427,7 @@ void fp_sub_nonmod_double(fpd_t *ANS, fpd_t *A, fpd_t *B) {
     mpn_sub_n(ANS->x0, A->x0, B->x0, FPLIMB2);
   }
 }
+
 void fp_sub_ui(fp_t *ANS, fp_t *A, unsigned long int UI) {
 #ifdef DEBUG_COST_A
   cost_sub_ui++;

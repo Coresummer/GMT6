@@ -50,11 +50,14 @@ void fp_mul_mpn(fp_t *ANS,fp_t *A,mp_limb_t *B);
 void fp_sqr(fp_t *ANS,fp_t *A);
 void fp_sqr_nonmod(fpd_t *ANS,fp_t *A);
 void fp_add(fp_t *ANS,fp_t *A,fp_t *B);
+
+void fp_add_double(fpd_t *ANS, fpd_t *A, fpd_t *B);
 void fp_add_nonmod_single(fp_t *ANS,fp_t *A,fp_t *B);
 void fp_add_nonmod_double(fpd_t *ANS,fpd_t *A,fpd_t *B);
 void fp_add_ui(fp_t *ANS,fp_t *A,unsigned long int UI);
 void fp_add_mpn(fp_t *ANS,fp_t *A,mp_limb_t *B);
 void fp_sub(fp_t *ANS,fp_t *A,fp_t *B);
+void fp_sub_double(fpd_t *ANS,fpd_t *A,fpd_t *B);
 void fp_sub_nonmod_single(fp_t *ANS,fp_t *A,fp_t *B);
 void fp_sub_nonmod_double(fpd_t *ANS,fpd_t *A,fpd_t *B);
 void fp_sub_ui(fp_t *ANS,fp_t *A,unsigned long int UI);
