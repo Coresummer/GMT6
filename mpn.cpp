@@ -1,3 +1,4 @@
+
 #include "mpn.h"
 
 void mpn_init(mp_limb_t *a,mp_size_t size){
@@ -44,7 +45,7 @@ void mpn_mod(mp_limb_t *ans,mp_limb_t *a,mp_size_t size_a){
 	cost_mod++;
 	#endif
 	mp_limb_t dumy[size_a];
-	mpn_tdiv_qr(dumy,ans,0,a,size_a,prime,FPLIMB);
+	mpn_tdiv_qr(dumy,ans,0,a,size_a,prime_mpn,FPLIMB);
 }
 
 int mpn_cmp_char(mp_limb_t *a,char *str ){
@@ -167,11 +168,11 @@ void mpn_mulmod_montgomery(mp_limb_t *ANS, mp_size_t ANS_size, mp_limb_t *A,
 
   mpn_mul(T, A, A_size, B, B_size);
   for (int i = 0; i < FPLIMB; i++)
-    T[i] = mpn_addmul_1(&T[i], prime, FPLIMB, T[i] * Ni_neg);
+    T[i] = mpn_addmul_1(&T[i], prime_mpn, FPLIMB, T[i] * Ni_neg);
 
   mpn_add_n(ANS, T + FPLIMB, T, FPLIMB);
-  if (mpn_cmp(ANS, prime, FPLIMB) != -1)
-    mpn_sub_n(ANS, ANS, prime, FPLIMB);
+  if (mpn_cmp(ANS, prime_mpn, FPLIMB) != -1)
+    mpn_sub_n(ANS, ANS, prime_mpn, FPLIMB);
 }
 
 void mpn_pow(mp_limb_t *ans,mp_size_t ans_size,mp_limb_t *a,mp_size_t a_size,mp_limb_t *r,mp_size_t n){
@@ -297,11 +298,11 @@ void mpn_mod_montgomery(mp_limb_t *ANS, mp_size_t ANS_size, mp_limb_t *A, mp_siz
 
   mpn_copyd(T, A, A_size);
   for (int i = 0; i < FPLIMB; i++)
-    T[i] = mpn_addmul_1(&T[i], prime, FPLIMB, T[i] * Ni_neg);
+    T[i] = mpn_addmul_1(&T[i], prime_mpn, FPLIMB, T[i] * Ni_neg);
 
   mpn_add_n(ANS, T + FPLIMB, T, FPLIMB);
-  while (mpn_cmp(ANS, prime, FPLIMB) != -1)
-    mpn_sub_n(ANS, ANS, prime, FPLIMB);
+  while (mpn_cmp(ANS, prime_mpn, FPLIMB) != -1)
+    mpn_sub_n(ANS, ANS, prime_mpn, FPLIMB);
 }
 
 void mpn_to_montgomery(mp_limb_t *ANS, mp_limb_t *A) {

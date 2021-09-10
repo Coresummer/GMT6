@@ -34,7 +34,7 @@ extern "C"{
     void fp_r1shift(fp_t *ANS, fp_t *A);
     void fp_r1shift_nonmod_single(fp_t *ANS, fp_t *A);
     void fp_hlv(fp_t *ANS,fp_t *A);
-    // void fp_set_random(fp_t *ANS,gmp_randstate_t state);
+    void fp_set_random(fp_t *ANS,gmp_randstate_t state);
     // void fp_set_random_montgomery(fp_t *ANS, gmp_randstate_t state);
     // void pre_montgomery();
     // void fp_mulmod_montgomery(fp_t *ANS,fp_t *A,fp_t *B);

@@ -1,11 +1,15 @@
-#define TTT_INSTANCE_HERE
 
 #include <cstdio>
+#include <cstdint>
+#include <gmp.h>
+#include <sys/types.h>
+#define TTT_INSTANCE_HERE
+
 
 #include "define.h"
 // #include "./time.h"
-// #include "scalar.h"
-// #include "mpn.h"
+#include "scalar.h"
+#include "mpn.h"
 #include "fp.h"
 // #include "fp2.h"
 // #include "fp6.h"
@@ -14,26 +18,28 @@
 // #include "efp.h"
 // #include "efp6.h"
 // #include "test_efp.h"
-// #include "create.h"
+#include "create.h"
 // #include "miller.h"
 // #include "final_exp.h"
 // #include "test_pairing.h"
 
 
 int main(){
-  // gmp_randinit_default(state);
-  // gmp_randseed_ui(state,(unsigned long int)time(NULL));
+  gmp_randinit_default(state);
+  gmp_randseed_ui(state,(unsigned long int)time(NULL));
 
-  // tmp_init();
-  // create_prt();
+  tmp_init();
+  create_prt();
   // check_base();
   // pre_montgomery();
   // frobenius_precalculation();
   // curve_search();
   // create_weil();
-  
+  std::string prime_str = "9401ff90f28bffb0c610fb10bf9e0fefd59211629a7991563c5e468d43ec9cfe1549fd59c20ab5b9a7cda7f27a0067b8303eeb4b31555cf4f24050ed155555cd7fa7a5f8aaaaaaad47ede1a6aaaaaaaab69e6dcb";
+  fp_set_str(&prime, prime_str);
+
+
   printf("*********************************************************************************************\n\n");
-  
 
   //各関数の動作確認、コスト計算、時間計測など
   // test_fp_montgomery(CHECK_PAIRING_TIME_LOOP);
@@ -65,26 +71,20 @@ int main(){
 
   printf("*********************************************************************************************\n\n");
 
-  fp_t A;
+  fp_t A,B,C;
   fp_init(&A);
-  fp_println("Zero  :", &A);
-  fp_set_ui(&A,11);
-  fp_println("Eleven:", &A);
-
-  fp_t B;
   fp_init(&B);
-  fp_println("Zero  :", &B);
-  fp_set_ui(&B,51);
-  fp_println("fiftyone:", &B);
-
-  fp_t C;
   fp_init(&C);
-  C = A + B;
+
+  fp_set_random(&A,state);
+  fp_set_random(&B,state);
+  fp_set_random(&C,state);
+  
+
+  fp_println("A:", &A);
+  fp_println("B:", &B);
   fp_println("C:", &C);
-  std::string prime_str = "9401ff90f28bffb0c610fb10bf9e0fefd59211629a7991563c5e468d43ec9cfe1549fd59c20ab5b9a7cda7f27a0067b8303eeb4b31555cf4f24050ed155555cd7fa7a5f8aaaaaaad47ede1a6aaaaaaaab69e6dcb";
-  fp_set_str(&C,prime_str);
-               //9401ff90f28bffb0c610fb10bf9e0fefd59211629a7991563c5e468d43ec9cfe1549fd59c20ab5b9a7cda7f27a0067b8303eeb4b31555cf4f24050ed155555cd
-  fp_println("C:", &C);
+
   printf("*********************************************************************************************\n\n");
 
   return 0;
