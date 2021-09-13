@@ -21,4 +21,5 @@ void BENCH_fp2_fp6_mul_lazy_montgomery(int LOOP);
 void BENCH_miller_lazy_montgomery(int LOOP);
 void BENCH_finalexp_lazy_montgomery(int LOOP);
 void BENCH_Pairingn_lazy_montgomery(int LOOP);
+void BENCH_Pairingn_lazy_montgomery2(int LOOP);
 #endif
