@@ -1,5 +1,3 @@
-//g++ -g FE_hardpart.cpp -std=c++11 -Wall -O2 -march=native -lntl -pthread -lgmp
-
 #include <NTL/ZZXFactoring.h>
 #include <NTL/vec_ZZ.h>
 #include <NTL/ZZ_pX.h>
@@ -55,49 +53,6 @@ int main(){
   return 0;
 }
 
-
-void SetupPrime_k10(){
-  cout << "Parameter k=10" << endl;
-  Base = 4;//pに割る4があるので、、、
-  P.SetLength(15);
-  R.SetLength(9);
-
-  P[14] = 1;
-  P[12] = -2;
-  P[10] = 1;
-  P[4] = 1;
-  P[2] = 2;
-  P[0] = 1;
-
-  R[8] = 1;
-  R[6] = -1;
-  R[4] = 1;
-  R[2] = -1;
-  R[0] = 1;
-}
-
-void SetupPrime_k14(){
-  cout << "Parameter k=14" << endl;
-  Base = 4;
-  P.SetLength(19);
-  R.SetLength(13);
-
-  P[18] = 1;
-  P[16] = -2;
-  P[14] = 1;
-  P[4] = 1;
-  P[2] = 2;
-  P[0] = 1;
-
-  R[12] = 1;
-  R[10] = -1;
-  R[8] = 1;
-  R[6] = -1;
-  R[4] = 1;
-  R[2] = -1;
-  R[0] = 1;
-}
-
 void SetupPrime_cp6(){
   // hy.SetSize(10000);
   // hy_2.SetSize(10000);
@@ -133,15 +88,15 @@ void SetupPrime_cp6(){
 
   t1[0][2] = 9;
   t1[0][1] = 12;//12
-  t1[0][0] = 16;//4
+  t1[0][0] = 4;//4
 
   t1[1][2] = -18;
   t1[1][1] = -12;
-  t1[1][0] = -24; //0
+  t1[1][0] = -12; //0
 
   t1[2][2] = 27;
   t1[2][1] = 18;
-  t1[2][0] = 28;//16
+  t1[2][0] = 16;//16
 
   t1[3][2] = -18;//-18
   t1[3][1] = -6;//-6
@@ -202,16 +157,17 @@ void SetupPrime_cp6(){
   // }
 
   for(int i=5;i>=2;i--){
+    R_Ans[i-2] = t1[i];
     t1[i-2] -= t1[i];
     t1[i-1] += t1[i];
-    R_Ans[i-2] = t1[i];
     t1[i] -= t1[i];
+
   }
     cout << endl << endl ;
 
   cout << "surplus" << endl;
   for(int i=0;i<5;i++){
-    cout << "P-" <<i<<":" << t1[i] << endl;
+    cout << "P-" << i <<":" << t1[i] << endl;
   }
   cout << endl << endl ;
 
@@ -222,83 +178,7 @@ void SetupPrime_cp6(){
 
 }
 
-void HardPart_k10(){
-  ZZX p[4],Top,Bottom,Res,Rem,temp1,temp2;
-  for(int i=0;i<4;i++)  p[i].SetLength(14*(i+1)+1);//P^(i+1)が収まるサイズあれば良いので、、、
-  Top.SetLength(14*4+1);
-  Bottom.SetLength(9);
-  Res.SetLength(14*4+1);
-  Rem.SetLength(14*4+1);
-  temp1.SetLength(14*4+1);
-  temp2.SetLength(14*4+1);
-
-  //setup p,r;
-  SetupPrime_k10();
-
-  p[0]=P;
-  for(int i=1;i<4;i++)  p[i]=p[i-1]*p[0];
-  for(int i=0;i<4;i++)  cout << "p^" << i+1 << " : " << p[i] << endl << endl;
-
-  //分数が出てくるとめんどくさいので、4^4をかける(その結果プレーンな最終べきと同じではないことに注意する！！)
-  Top = p[3] -p[2]*Base +p[1]*(int)pow(Base,2) -p[0]*(int)pow(Base,3) +(int)pow(Base,4);
-  Bottom = R;
-  cout << "Top : " << Top << endl << endl;
-  cout << "Bottom : " << Bottom << endl << endl;
-
-  DivRem(Res,Rem,Top,Bottom);
-  cout << "Deg=" << deg(Bottom) << endl;
-  cout << "Res" << Res << endl;
-  cout << "Rem" << Rem << endl << endl;
-
-  for(int i=2;i>=0;i--){
-    cout << "deg(Res) = " << deg(Res) << endl;
-    cout << "deg(p^" << i+1 << ") = " << deg(p[i]) << endl;
-    DivRem(Rem,temp2,Res,p[i]);
-    Res = temp2/Base;
-    cout << "Rem" << Rem << endl << endl;
-  }
-  cout << "p^0:" << temp2/Base << endl;
-}
-
-void HardPart_k14(){
-  ZZX p[6],Top,Bottom,Res,Rem,temp1,temp2;
-  for(int i=0;i<6;i++)  p[i].SetLength(140);
-  Top.SetLength(140);
-  Bottom.SetLength(13);
-  Res.SetLength(140);
-  Rem.SetLength(140);
-  temp1.SetLength(120);
-  temp2.SetLength(120);
-
-  //setup p,r;
-  SetupPrime_k14();
-
-  p[0] = P;
-  for(int i=1;i<6;i++)  p[i] = (p[i-1] * p[0]);
-  for(int i=0;i<6;i++)  cout << "p^" << i+1 << " : " << p[i] << endl << endl;
-
-  Top = p[5] - p[4]*Base + p[3]*(int)pow(Base,2) - p[2]*(int)pow(Base,3) + p[1]*(int)pow(Base,4) - p[0]*(int)pow(Base,5) + (int)pow(Base,6);
-  Bottom = R;
-  cout << "Top : " << Top << endl << endl;
-  cout << "Bottom : " << Bottom << endl << endl;
-
-  DivRem(Res,Rem,Top,Bottom);
-  cout << "Deg=" << deg(Bottom) << endl;
-  cout << "Res" << Res << endl;
-  cout << "Rem" << Rem << endl << endl;
-
-  for(int i=4;i>=0;i--){
-    cout << "deg(Res) = " << deg(Res) << endl;
-    cout << "deg(p^" << i+1 << ") = " << deg(p[i]) << endl;
-    DivRem(Rem,temp2,Res,p[i]);
-    Res = temp2/Base;
-    cout << "Rem" << Rem << endl << endl;
-  }
-
-  cout << "p^0:" << temp2/Base << endl;
-}
-
-void HardPart_cp6(){
+void HardPart_CP6(){
   ZZX p[6],Top,Bottom,Res,Rem,temp1,temp2;
   for(int i=0;i<6;i++)  p[i].SetLength(140);
   Top.SetLength(140);
