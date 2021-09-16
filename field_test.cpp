@@ -1539,9 +1539,9 @@ void BENCH_Pairingn_lazy_montgomery(int LOOP){
   }
 
   printf("--------Benching pairing()-------\n");
-  CYBOZU_BENCH_C("miller_opt_ate_proj_2NAF()", LOOP, miller_opt_ate_proj_2NAF,&f,&P,&Q);
-  CYBOZU_BENCH_C("final_exp()               ", LOOP, final_exp,&e2, &e1);
-  printf("---------------------------------\n");
+  // CYBOZU_BENCH_C("miller_opt_ate_proj_2NAF()", LOOP, miller_opt_ate_proj_2NAF,&f,&P,&Q);
+  // CYBOZU_BENCH_C("final_exp()               ", LOOP, final_exp,&e2, &e1);
+  // printf("---------------------------------\n");
 
   CYBOZU_BENCH_C("miller_opt_ate_proj_2NAF_lazy_montgomery()", LOOP, miller_opt_ate_proj_2NAF_lazy_montgomery,&f,&P,&Q);
   CYBOZU_BENCH_C("final_exp_lazy_montgomery()               ", LOOP, final_exp_lazy_montgomery, &e2, &e1);
