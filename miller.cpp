@@ -357,11 +357,11 @@ void miller_opt_ate_proj_2NAF_lazy_montgomery(fp6_t *f,efp6_t *P,efp6_t *Q){
         case 0:
           ff_lttp_lazy_montgomery(f,&S,&mapped_P);
           break;
-        case 1:
-          ff_lttp_lazy_montgomery(f,&S,&mapped_P);
-          ff_ltqp_lazy_montgomery(f,&S,&mapped_Q,&mapped_P);
-          // fp6_println_montgomery("&f1", f);
-          break;
+        // case 1:
+        //   ff_lttp_lazy_montgomery(f,&S,&mapped_P);
+        //   ff_ltqp_lazy_montgomery(f,&S,&mapped_Q,&mapped_P);
+        //   // fp6_println_montgomery("&f1", f);
+        //   break;
         case -1:
           ff_lttp_lazy_montgomery(f,&S,&mapped_P);
           ff_ltqp_lazy_montgomery(f,&S,&mapped_Q_neg,&mapped_P);

@@ -649,17 +649,17 @@ void fp6_sqr_GS_lazy_montgomery2(fp6_t *ANS,fp6_t *A){
   fp2_set_conj_montgomery_fpd(&tmp5_fpd2, &A->x1); //b_
   fp2_set_conj_montgomery_fpd(&tmp6_fpd2, &A->x2); //c_
 
-  fp2_sub_nonmod_double(&tmp4_fpd2,&tmp1_fpd2,&tmp4_fpd2); //a^2-a_
-  fp2_add_nonmod_double(&tmp5_fpd2,&tmp3_fpd2,&tmp5_fpd2); //i*c^2+b_
-  fp2_sub_nonmod_double(&tmp6_fpd2,&tmp2_fpd2,&tmp6_fpd2); //b^2-c_
+  fp2_sub_double(&tmp4_fpd2,&tmp1_fpd2,&tmp4_fpd2); //a^2-a_
+  fp2_add_double(&tmp5_fpd2,&tmp3_fpd2,&tmp5_fpd2); //i*c^2+b_
+  fp2_sub_double(&tmp6_fpd2,&tmp2_fpd2,&tmp6_fpd2); //b^2-c_
 
   fp2_l1shift_nonmod_double(&tmp4_fpd2, &tmp4_fpd2); //2a^2-2a_
   fp2_l1shift_nonmod_double(&tmp5_fpd2, &tmp5_fpd2); //2i*c^2+2b_
   fp2_l1shift_nonmod_double(&tmp6_fpd2, &tmp6_fpd2); //2b^2-2c_
 
-  fp2_add_nonmod_double(&tmp1,&tmp4_fpd2,&tmp1_fpd2);  //3a^2-2a_
-  fp2_add_nonmod_double(&tmp2,&tmp5_fpd2,&tmp3_fpd2);  //3i*c^2+2b_
-  fp2_add_nonmod_double(&tmp3,&tmp6_fpd2,&tmp2_fpd2);  //3b^2-2c_
+  fp2_add_double(&tmp1,&tmp4_fpd2,&tmp1_fpd2);  //3a^2-2a_
+  fp2_add_double(&tmp2,&tmp5_fpd2,&tmp3_fpd2);  //3i*c^2+2b_
+  fp2_add_double(&tmp3,&tmp6_fpd2,&tmp2_fpd2);  //3b^2-2c_
 
   fp2_mod_montgomery_double(&ANS->x0, &tmp1);
   fp2_mod_montgomery_double(&ANS->x1, &tmp2);
