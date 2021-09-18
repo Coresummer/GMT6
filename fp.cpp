@@ -324,6 +324,7 @@ void fp_mod(fp_t *ans, fpd_t *a) {//mod fpd to fp
   mpn_set_fpd(mp_a, a);
   mpn_tdiv_qr(dumy, mp_ans, 0, mp_a, FPLIMB2, prime_mpn, FPLIMB);
   fp_set_mpn(ans, mp_ans);
+  // *(fp_t*)ans = *(fp_t*)a % *(fp_t*)&prime;
 }
 
 void fp_mul_1(fpd_t *ANS, fp_t *A, uint64_t *B,int Bindex){ //

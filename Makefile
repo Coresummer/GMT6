@@ -1,4 +1,4 @@
-CXX = clang++-11
+CXX = clang++-12
 PROGRAM = CP6
 #OBJS   =  main.o  fp.o fp2.o fp6.o efp.o efp2.o efp6.o test_efp.o create.o miller.o final_exp.o test_pairing.o time.o
 #HEADER = define.h fp.h fp2.h fp6.h efp.h efp2.h efp6.h test_efp.h  create.h miller.h final_exp.h test_pairing.h time.h
