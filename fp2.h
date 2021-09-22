@@ -26,6 +26,7 @@ void fp2_mod_montgomery_double(fp2_t *ANS,fpd2_t *A);
 void fp2_r1shift(fp2_t *ANS, fp2_t *A);
 void fp2_lshift(fp2_t *ANS, fp2_t *A, unsigned long int UI);
 void fp2_l1shift(fp2_t *ANS, fp2_t *A);
+void fp2_l1shift_double(fpd2_t *ANS, fpd2_t *A);
 void fp2_l1shift_nonmod_single(fp2_t *ANS, fp2_t *A);
 void fp2_l1shift_nonmod_double(fpd2_t *ANS, fpd2_t *A);
 void fp2_hlv(fp2_t *ANS,fp2_t *A);

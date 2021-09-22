@@ -643,7 +643,25 @@ void fp6_sqr_GS_lazy_montgomery2(fp6_t *ANS,fp6_t *A){
   fp2_sqr_nonmod_montgomery2(&tmp1_fpd2,&A->x0);        //x0^2
   fp2_sqr_nonmod_montgomery2(&tmp2_fpd2,&A->x1);        //x1^2
   fp2_sqr_nonmod_montgomery2(&tmp3_fpd2,&A->x2);        //x2^2
+  gmp_printf("tmp1.x0: %d\n",mpn_sizeinbase(tmp1_fpd2.x0.x0,FPLIMB2,2));
+  gmp_printf("tmp1.x1: %d\n",mpn_sizeinbase(tmp1_fpd2.x1.x0,FPLIMB2,2));
+  
+  gmp_printf("tmp2.x0: %d\n",mpn_sizeinbase(tmp2_fpd2.x0.x0,FPLIMB2,2));
+  gmp_printf("tmp2.x1: %d\n",mpn_sizeinbase(tmp2_fpd2.x1.x0,FPLIMB2,2));
+  
+  gmp_printf("tmp3.x0: %d\n",mpn_sizeinbase(tmp3_fpd2.x0.x0,FPLIMB2,2));
+  gmp_printf("tmp3.x1: %d\n\n",mpn_sizeinbase(tmp3_fpd2.x1.x0,FPLIMB2,2));
+
   fp2_mul_base_nonmod_double(&tmp3_fpd2,&tmp3_fpd2);   //root(base_c)x2^2
+
+  gmp_printf("tmp1.x0: %d\n",mpn_sizeinbase(tmp1_fpd2.x0.x0,FPLIMB2,2));
+  gmp_printf("tmp1.x1: %d\n",mpn_sizeinbase(tmp1_fpd2.x1.x0,FPLIMB2,2));
+  
+  gmp_printf("tmp2.x0: %d\n",mpn_sizeinbase(tmp2_fpd2.x0.x0,FPLIMB2,2));
+  gmp_printf("tmp2.x1: %d\n",mpn_sizeinbase(tmp2_fpd2.x1.x0,FPLIMB2,2));
+  
+  gmp_printf("tmp3.x0: %d\n",mpn_sizeinbase(tmp3_fpd2.x0.x0,FPLIMB2,2));
+  gmp_printf("tmp3.x1: %d\n\n",mpn_sizeinbase(tmp3_fpd2.x1.x0,FPLIMB2,2));
 
   fp2_set_conj_montgomery_fpd(&tmp4_fpd2, &A->x0); //a_
   fp2_set_conj_montgomery_fpd(&tmp5_fpd2, &A->x1); //b_
@@ -653,13 +671,40 @@ void fp6_sqr_GS_lazy_montgomery2(fp6_t *ANS,fp6_t *A){
   fp2_add_double(&tmp5_fpd2,&tmp3_fpd2,&tmp5_fpd2); //i*c^2+b_
   fp2_sub_double(&tmp6_fpd2,&tmp2_fpd2,&tmp6_fpd2); //b^2-c_
 
-  fp2_l1shift_nonmod_double(&tmp4_fpd2, &tmp4_fpd2); //2a^2-2a_
-  fp2_l1shift_nonmod_double(&tmp5_fpd2, &tmp5_fpd2); //2i*c^2+2b_
-  fp2_l1shift_nonmod_double(&tmp6_fpd2, &tmp6_fpd2); //2b^2-2c_
+  gmp_printf("tmp4.x0: %d\n",mpn_sizeinbase(tmp4_fpd2.x0.x0,FPLIMB2,2));
+  gmp_printf("tmp4.x1: %d\n",mpn_sizeinbase(tmp4_fpd2.x1.x0,FPLIMB2,2));
+  
+  gmp_printf("tmp5.x0: %d\n",mpn_sizeinbase(tmp5_fpd2.x0.x0,FPLIMB2,2));
+  gmp_printf("tmp5.x1: %d\n",mpn_sizeinbase(tmp5_fpd2.x1.x0,FPLIMB2,2));
+  
+  gmp_printf("tmp6.x0: %d\n",mpn_sizeinbase(tmp6_fpd2.x0.x0,FPLIMB2,2));
+  gmp_printf("tmp6.x1: %d\n\n",mpn_sizeinbase(tmp6_fpd2.x1.x0,FPLIMB2,2));
 
-  fp2_add_double(&tmp1,&tmp4_fpd2,&tmp1_fpd2);  //3a^2-2a_
-  fp2_add_double(&tmp2,&tmp5_fpd2,&tmp3_fpd2);  //3i*c^2+2b_
-  fp2_add_double(&tmp3,&tmp6_fpd2,&tmp2_fpd2);  //3b^2-2c_
+  fp2_l1shift_double(&tmp4_fpd2, &tmp4_fpd2); //2a^2-2a_
+  fp2_l1shift_double(&tmp5_fpd2, &tmp5_fpd2); //2i*c^2+2b_
+  fp2_l1shift_double(&tmp6_fpd2, &tmp6_fpd2); //2b^2-2c_
+
+  gmp_printf("tmp4.x0: %d\n",mpn_sizeinbase(tmp4_fpd2.x0.x0,FPLIMB2,2));
+  gmp_printf("tmp4.x1: %d\n",mpn_sizeinbase(tmp4_fpd2.x1.x0,FPLIMB2,2));
+  
+  gmp_printf("tmp5.x0: %d\n",mpn_sizeinbase(tmp5_fpd2.x0.x0,FPLIMB2,2));
+  gmp_printf("tmp5.x1: %d\n",mpn_sizeinbase(tmp5_fpd2.x1.x0,FPLIMB2,2));
+  
+  gmp_printf("tmp6.x0: %d\n",mpn_sizeinbase(tmp6_fpd2.x0.x0,FPLIMB2,2));
+  gmp_printf("tmp6.x1: %d\n\n",mpn_sizeinbase(tmp6_fpd2.x1.x0,FPLIMB2,2));
+
+
+  fp2_add_nonmod_double(&tmp1,&tmp4_fpd2,&tmp1_fpd2);  //3a^2-2a_
+  fp2_add_nonmod_double(&tmp2,&tmp5_fpd2,&tmp3_fpd2);  //3i*c^2+2b_
+  fp2_add_nonmod_double(&tmp3,&tmp6_fpd2,&tmp2_fpd2);  //3b^2-2c_
+  gmp_printf("tmp1.x0: %d\n",mpn_sizeinbase(tmp1.x0.x0,FPLIMB2,2));
+  gmp_printf("tmp1.x1: %d\n",mpn_sizeinbase(tmp1.x1.x0,FPLIMB2,2));
+  
+  gmp_printf("tmp2.x0: %d\n",mpn_sizeinbase(tmp2.x0.x0,FPLIMB2,2));
+  gmp_printf("tmp2.x1: %d\n",mpn_sizeinbase(tmp2.x1.x0,FPLIMB2,2));
+  
+  gmp_printf("tmp3.x0: %d\n",mpn_sizeinbase(tmp3.x0.x0,FPLIMB2,2));
+  gmp_printf("tmp3.x1: %d\n\n",mpn_sizeinbase(tmp3.x1.x0,FPLIMB2,2));
 
   fp2_mod_montgomery_double(&ANS->x0, &tmp1);
   fp2_mod_montgomery_double(&ANS->x1, &tmp2);
@@ -1075,6 +1120,35 @@ void fp6_finalexpow_x_2NAF_lazy_montgomery(fp6_t *ANS,fp6_t *A){
     }
   }
 }
+
+void fp6_finalexpow_x_2NAF_lazy_montgomery2(fp6_t *ANS,fp6_t *A){
+  static fp6_t tmp_A;
+  fp6_set(&tmp_A,A);
+
+  static fp6_t A_inv;
+
+  fp6_frobenius_map_p3_montgomery(&A_inv, A);
+
+  fp6_set(ANS,&tmp_A);
+  for(int i=(finalexp_pow_x.size()-2);i!=-1;i--){
+    switch(finalexp_pow_x[i]){
+      case 0:
+        fp6_sqr_GS_lazy_montgomery2(ANS, ANS);
+        break;
+      case 1:
+        fp6_sqr_GS_lazy_montgomery2(ANS, ANS);
+        fp6_mul_lazy_montgomery(ANS,ANS,&tmp_A);
+        break;
+      case -1:
+        fp6_sqr_GS_lazy_montgomery2(ANS, ANS);
+        fp6_mul_lazy_montgomery(ANS, ANS,&A_inv);
+        break;
+      default:
+        break;
+    }
+  }
+}
+
 
 void fp6_finalexpow_x_1_2NAF_lazy_montgomery(fp6_t *ANS,fp6_t *A){
   static fp6_t tmp_A;

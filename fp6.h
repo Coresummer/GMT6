@@ -32,6 +32,8 @@ void fp6_sqr(fp6_t *ANS,fp6_t *A);
 void fp6_sqr_lazy(fp6_t *ANS, fp6_t *A);
 void fp6_sqr_GS(fp6_t *ANS,fp6_t *A);
 void fp6_sqr_GS_lazy_montgomery(fp6_t *ANS,fp6_t *A);
+void fp6_sqr_GS_lazy_montgomery2(fp6_t *ANS,fp6_t *A);
+
 void fp6_sqr_lazy_montgomery(fp6_t *ANS,fp6_t *A);
 void fp6_add(fp6_t *ANS,fp6_t *A,fp6_t *B);
 void fp6_add_lazy(fp6_t *ANS,fp6_t *A,fp6_t *B);
@@ -54,6 +56,7 @@ void fp6_finalexpow_x_2NAF(fp6_t *ANS,fp6_t *A);
 void fp6_finalexpow_x_1_2NAF(fp6_t *ANS,fp6_t *A);
 void fp6_finalexpow_3w_2NAF(fp6_t *ANS,fp6_t *A);
 void fp6_finalexpow_x_2NAF_lazy_montgomery(fp6_t *ANS,fp6_t *A);
+void fp6_finalexpow_x_2NAF_lazy_montgomery2(fp6_t *ANS,fp6_t *A);
 void fp6_finalexpow_x_1_2NAF_lazy_montgomery(fp6_t *ANS,fp6_t *A);
 void fp6_finalexpow_3w_2NAF_lazy_montgomery(fp6_t *ANS,fp6_t *A);
 int  fp6_cmp(fp6_t *A,fp6_t *B);

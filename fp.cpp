@@ -112,7 +112,7 @@ void fp_l1shift_double(fpd_t *ANS, fpd_t *A) {
   cost_add++;
 #endif
   mpn_lshift(ANS->x0, A->x0, FPLIMB2, 1);
-  if (mpn_cmp(ANS->x0, prime, FPLIMB2) >= 0)mpn_sub_n(ANS->x0, ANS->x0, prime, FPLIMB2);
+  if (mpn_cmp(ANS->x0, prime672, FPLIMB2) >= 0)mpn_sub_n(ANS->x0, ANS->x0, prime672, FPLIMB2);
 }
 
 void fp_r1shift(fp_t *ANS, fp_t *A) {
