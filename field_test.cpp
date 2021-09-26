@@ -1448,13 +1448,13 @@ void BENCH_GS_sqr_lazy_montgomery(int LOOP){
   fp6_println_montgomery("fp6_sqr_GS_lazy_montgomery\n", &ANSm);
   fp6_println_montgomery("fp6_sqr_GS_lazy_montgomery2\n", &ANSm2);
 
-  // CYBOZU_BENCH_C("fp6_finalexpow_x_2NAF()", LOOP, fp6_finalexpow_x_2NAF,&ANS, &A);
-  // CYBOZU_BENCH_C("fp6_finalexpow_x_2NAF_lazy_montgomery()", LOOP, fp6_finalexpow_x_2NAF_lazy_montgomery, &ANSm, &Am);
-  // CYBOZU_BENCH_C("fp6_finalexpow_x_2NAF_lazy_montgomery2()", LOOP, fp6_finalexpow_x_2NAF_lazy_montgomery2, &ANSm2, &Am2);
+  CYBOZU_BENCH_C("fp6_finalexpow_x_2NAF()", LOOP, fp6_finalexpow_x_2NAF,&ANS, &A);
+  CYBOZU_BENCH_C("fp6_finalexpow_x_2NAF_lazy_montgomery()", LOOP, fp6_finalexpow_x_2NAF_lazy_montgomery, &ANSm, &Am);
+  CYBOZU_BENCH_C("fp6_finalexpow_x_2NAF_lazy_montgomery2()", LOOP, fp6_finalexpow_x_2NAF_lazy_montgomery2, &ANSm2, &Am2);
 
-  // fp6_println("fp6_finalexpow_x_2NAF\n", &ANS);
-  // fp6_println_montgomery("fp6_finalexpow_x_2NAF_lazy_montgomery\n", &ANSm);
-  // fp6_println_montgomery("fp6_finalexpow_x_2NAF_lazy_montgomery2\n", &ANSm2);
+  fp6_println("fp6_finalexpow_x_2NAF\n", &ANS);
+  fp6_println_montgomery("fp6_finalexpow_x_2NAF_lazy_montgomery\n", &ANSm);
+  fp6_println_montgomery("fp6_finalexpow_x_2NAF_lazy_montgomery2\n", &ANSm2);
 }
 
 

@@ -26,9 +26,9 @@
 #define ARCBIT 64  //64bit processor
 //#define ARCBIT 32 //32bit processor
 
-// #define DEBUG_COST_A
+//#define DEBUG_COST_A
 //#define DEBUG_ASSERT
-#define CHECK_PAIRING_TIME_LOOP 1//000000
+#define CHECK_PAIRING_TIME_LOOP 10000//000000
 
 /**************Option**************/
 #define X64
@@ -121,7 +121,7 @@ TTT_EXTERN int cost_add,cost_add_ui,cost_sub,cost_sub_ui,cost_mul,cost_mul_ui,co
 TTT_EXTERN int cost_add_nonmod, cost_add_nonmod_double, cost_sub_nonmod, cost_sub_nonmod_double, cost_r1shift, cost_mod_nomal;
 TTT_EXTERN mpz_t X_z,prime_z,order_z,trace_z;
 TTT_EXTERN mp_limb_t X,prime[FPLIMB];
-TTT_EXTERN mp_limb_t prime2[FPLIMB2],prime672[FPLIMB2];
+TTT_EXTERN mp_limb_t prime2[FPLIMB2],prime705[FPLIMB2],prime672[FPLIMB2];
 TTT_EXTERN fp_t base_c,base_d;//α^7=c, β^2=α となるように逐次拡大で拡大体を構成する
 TTT_EXTERN fp_t base_c_inv,base_d_inv,base_d_inv_montgomery;//α^7=c, β^2=α に出てくるcの逆元の計算結果
 

@@ -631,6 +631,7 @@ void fp6_sqr_GS_lazy_montgomery(fp6_t *ANS,fp6_t *A){
   fp2_add(&ANS->x0,&tmp4_fp2,&tmp1_fp2);  //3a^2-2a_
   fp2_add(&ANS->x1,&tmp5_fp2,&tmp3_fp2);  //3i*c^2+2b_
   fp2_add(&ANS->x2,&tmp6_fp2,&tmp2_fp2);  //3b^2-2c_
+
 }
 
 void fp6_sqr_GS_lazy_montgomery2(fp6_t *ANS,fp6_t *A){
@@ -640,28 +641,10 @@ void fp6_sqr_GS_lazy_montgomery2(fp6_t *ANS,fp6_t *A){
   static fp2_t tmp1_fp2, tmp2_fp2,tmp3_fp2; 
   static fpd2_t tmp1, tmp2, tmp3;
 
-  fp2_sqr_nonmod_montgomery2(&tmp1_fpd2,&A->x0);        //x0^2
-  fp2_sqr_nonmod_montgomery2(&tmp2_fpd2,&A->x1);        //x1^2
-  fp2_sqr_nonmod_montgomery2(&tmp3_fpd2,&A->x2);        //x2^2
-  gmp_printf("tmp1.x0: %d\n",mpn_sizeinbase(tmp1_fpd2.x0.x0,FPLIMB2,2));
-  gmp_printf("tmp1.x1: %d\n",mpn_sizeinbase(tmp1_fpd2.x1.x0,FPLIMB2,2));
-  
-  gmp_printf("tmp2.x0: %d\n",mpn_sizeinbase(tmp2_fpd2.x0.x0,FPLIMB2,2));
-  gmp_printf("tmp2.x1: %d\n",mpn_sizeinbase(tmp2_fpd2.x1.x0,FPLIMB2,2));
-  
-  gmp_printf("tmp3.x0: %d\n",mpn_sizeinbase(tmp3_fpd2.x0.x0,FPLIMB2,2));
-  gmp_printf("tmp3.x1: %d\n\n",mpn_sizeinbase(tmp3_fpd2.x1.x0,FPLIMB2,2));
-
+  fp2_sqr_nonmod_montgomery(&tmp1_fpd2,&A->x0);        //x0^2
+  fp2_sqr_nonmod_montgomery(&tmp2_fpd2,&A->x1);        //x1^2
+  fp2_sqr_nonmod_montgomery(&tmp3_fpd2,&A->x2);        //x2^2
   fp2_mul_base_nonmod_double(&tmp3_fpd2,&tmp3_fpd2);   //root(base_c)x2^2
-
-  gmp_printf("tmp1.x0: %d\n",mpn_sizeinbase(tmp1_fpd2.x0.x0,FPLIMB2,2));
-  gmp_printf("tmp1.x1: %d\n",mpn_sizeinbase(tmp1_fpd2.x1.x0,FPLIMB2,2));
-  
-  gmp_printf("tmp2.x0: %d\n",mpn_sizeinbase(tmp2_fpd2.x0.x0,FPLIMB2,2));
-  gmp_printf("tmp2.x1: %d\n",mpn_sizeinbase(tmp2_fpd2.x1.x0,FPLIMB2,2));
-  
-  gmp_printf("tmp3.x0: %d\n",mpn_sizeinbase(tmp3_fpd2.x0.x0,FPLIMB2,2));
-  gmp_printf("tmp3.x1: %d\n\n",mpn_sizeinbase(tmp3_fpd2.x1.x0,FPLIMB2,2));
 
   fp2_set_conj_montgomery_fpd(&tmp4_fpd2, &A->x0); //a_
   fp2_set_conj_montgomery_fpd(&tmp5_fpd2, &A->x1); //b_
@@ -671,40 +654,13 @@ void fp6_sqr_GS_lazy_montgomery2(fp6_t *ANS,fp6_t *A){
   fp2_add_double(&tmp5_fpd2,&tmp3_fpd2,&tmp5_fpd2); //i*c^2+b_
   fp2_sub_double(&tmp6_fpd2,&tmp2_fpd2,&tmp6_fpd2); //b^2-c_
 
-  gmp_printf("tmp4.x0: %d\n",mpn_sizeinbase(tmp4_fpd2.x0.x0,FPLIMB2,2));
-  gmp_printf("tmp4.x1: %d\n",mpn_sizeinbase(tmp4_fpd2.x1.x0,FPLIMB2,2));
-  
-  gmp_printf("tmp5.x0: %d\n",mpn_sizeinbase(tmp5_fpd2.x0.x0,FPLIMB2,2));
-  gmp_printf("tmp5.x1: %d\n",mpn_sizeinbase(tmp5_fpd2.x1.x0,FPLIMB2,2));
-  
-  gmp_printf("tmp6.x0: %d\n",mpn_sizeinbase(tmp6_fpd2.x0.x0,FPLIMB2,2));
-  gmp_printf("tmp6.x1: %d\n\n",mpn_sizeinbase(tmp6_fpd2.x1.x0,FPLIMB2,2));
-
   fp2_l1shift_double(&tmp4_fpd2, &tmp4_fpd2); //2a^2-2a_
   fp2_l1shift_double(&tmp5_fpd2, &tmp5_fpd2); //2i*c^2+2b_
   fp2_l1shift_double(&tmp6_fpd2, &tmp6_fpd2); //2b^2-2c_
 
-  gmp_printf("tmp4.x0: %d\n",mpn_sizeinbase(tmp4_fpd2.x0.x0,FPLIMB2,2));
-  gmp_printf("tmp4.x1: %d\n",mpn_sizeinbase(tmp4_fpd2.x1.x0,FPLIMB2,2));
-  
-  gmp_printf("tmp5.x0: %d\n",mpn_sizeinbase(tmp5_fpd2.x0.x0,FPLIMB2,2));
-  gmp_printf("tmp5.x1: %d\n",mpn_sizeinbase(tmp5_fpd2.x1.x0,FPLIMB2,2));
-  
-  gmp_printf("tmp6.x0: %d\n",mpn_sizeinbase(tmp6_fpd2.x0.x0,FPLIMB2,2));
-  gmp_printf("tmp6.x1: %d\n\n",mpn_sizeinbase(tmp6_fpd2.x1.x0,FPLIMB2,2));
-
-
-  fp2_add_nonmod_double(&tmp1,&tmp4_fpd2,&tmp1_fpd2);  //3a^2-2a_
-  fp2_add_nonmod_double(&tmp2,&tmp5_fpd2,&tmp3_fpd2);  //3i*c^2+2b_
-  fp2_add_nonmod_double(&tmp3,&tmp6_fpd2,&tmp2_fpd2);  //3b^2-2c_
-  gmp_printf("tmp1.x0: %d\n",mpn_sizeinbase(tmp1.x0.x0,FPLIMB2,2));
-  gmp_printf("tmp1.x1: %d\n",mpn_sizeinbase(tmp1.x1.x0,FPLIMB2,2));
-  
-  gmp_printf("tmp2.x0: %d\n",mpn_sizeinbase(tmp2.x0.x0,FPLIMB2,2));
-  gmp_printf("tmp2.x1: %d\n",mpn_sizeinbase(tmp2.x1.x0,FPLIMB2,2));
-  
-  gmp_printf("tmp3.x0: %d\n",mpn_sizeinbase(tmp3.x0.x0,FPLIMB2,2));
-  gmp_printf("tmp3.x1: %d\n\n",mpn_sizeinbase(tmp3.x1.x0,FPLIMB2,2));
+  fp2_add_double(&tmp1,&tmp4_fpd2,&tmp1_fpd2);  //3a^2-2a_
+  fp2_add_double(&tmp2,&tmp5_fpd2,&tmp3_fpd2);  //3i*c^2+2b_
+  fp2_add_double(&tmp3,&tmp6_fpd2,&tmp2_fpd2);  //3b^2-2c_
 
   fp2_mod_montgomery_double(&ANS->x0, &tmp1);
   fp2_mod_montgomery_double(&ANS->x1, &tmp2);

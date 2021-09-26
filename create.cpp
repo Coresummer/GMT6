@@ -17,10 +17,12 @@ void create_prt(){
   mpn_set_str(&X,xai,sizeof(char)*34,16); //ui(&X,1,319014718988379808906617884108577046528);
   mpn_set_mpz(prime,prime_z);
   mpn_mul_n(prime2,prime,prime,FPLIMB);
-
-  mpn_copyd(&prime672[11],prime,FPLIMB);
-  mpn_lshift(prime672,prime672,FPLIMB2,1);
+  mpn_copyd(&prime672[10],prime,FPLIMB);
+  mpn_lshift(prime672,prime672,FPLIMB2,31);
   gmp_printf("%Nx\n Size %d\n\n",prime672,FPLIMB2,mpn_sizeinbase(prime672,FPLIMB2,2));
+  mpn_copyd(&prime705[11],prime,FPLIMB);
+  mpn_lshift(prime705,prime705,FPLIMB2,1);
+  gmp_printf("%Nx\n Size %d\n\n",prime705,FPLIMB2,mpn_sizeinbase(prime705,FPLIMB2,2));
 
   gmp_printf("X     (%4dbit length) = %Zd\n",(int)mpz_sizeinbase(X_z,2),X_z);
   gmp_printf("prime (%4dbit length) = %Zd\n",(int)mpz_sizeinbase(prime_z,2),prime_z);
