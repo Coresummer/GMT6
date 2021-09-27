@@ -2,6 +2,7 @@
 #include "field_test.h"
 #include <cstdio>
 #include <cstdint>
+#include <cybozu/benchmark.hpp>
 #include <gmp.h>
 #include <sys/types.h>
 
@@ -40,17 +41,6 @@ int main(){
   //check 
   // check_fp();
 
-  fp_t A,C;
-  fpd_t B;
-  fp_init(&A);
-  fp_init(&C);
-  fpd_init(&B);
-
-  fp_set_random(&A, state);
-  fp_set_random(&C, state);
-
-  B = A % A;
-  fpd_println("B = ",&B);
   //各関数の動作確認、コスト計算、時間計測など
   // test_fp_montgomery(CHECK_PAIRING_TIME_LOOP);
   // test_field(0, CHECK_PAIRING_TIME_LOOP, CHECK_PAIRING_TIME_LOOP, CHECK_PAIRING_TIME_LOOP);
@@ -97,7 +87,37 @@ int main(){
   // fp_mul_1(&Ad, &A, &b, 0);
   // fpd_println("Ad  = ",&Ad);
 
-  printf("*********************************************************************************************\n\n");
+  // printf("*********************************************************************************************\n\n");
+  // //play ground
+  // std::string p_str = "9401ff90f28bffb0c610fb10bf9e0fefd59211629a7991563c5e468d43ec9cfe1549fd59c20ab5b9a7cda7f27a0067b8303eeb4b31555cf4f24050ed155555cd7fa7a5f8aaaaaaad47ede1a6aaaaaaaab69e6dcb";
+
+  // mpz_t Am, Bm, ANSm,pm;
+  // mpz_init_set_str(Am,A_str.c_str(),16);
+  // mpz_init_set_str(Bm,B_str.c_str(),16);
+  // mpz_init_set_str(pm,p_str.c_str(),16);
+  // mpz_init(ANSm);
+  // gmp_printf("A         =%Zx\n",Am);
+  // gmp_printf("B         =%Zx\n",Bm);
+
+  // mpz_mul(ANSm,Am,Bm);
+  // gmp_printf("ANSm :%Zx\n",ANSm);
+  // mpz_mod(ANSm,ANSm,pm);
+  // gmp_printf("ANSm mod p :%Zx\n",ANSm);
+  std::string A_str = "8ddcf3e7e8fd717d123a52a7f60f471fe37c1655cff5fdc302adec6fe31e0264b05dddb096b7535d7b6ecf8c8d5f9332906eed2d57cf6c6691679a79ad9048b91e0e3092fa8d8d3b9bb357737bfc9fb87e40a69d";
+  std::string B_str = "7767269ad9c48e31369f8e6f495f197b05201db32de425ca0d9338cb6d3b1ae28f3e8bb63b282109f79506ac9e2ef1e46ffbcefb421b864dbf83518a47676f755a90d7d40bc37bc7b8fa86676c41981bf92e024f";
+
+  fp_t A, B;
+  fpd_t ANS;
+  fp_init(&A);
+  fp_init(&B);
+  fpd_init(&ANS);
+  // fp_set_random(&A,state);
+  fp_set_str(&A,A_str);
+  fp_set_str(&B,B_str);
+  fp_mul_nonmod(&ANS,&B,&A);
+
+  CYBOZU_BENCH_C("fp_mul_nonmod()", CHECK_PAIRING_TIME_LOOP, fp_mul_nonmod,&ANS,&A,&B);
+  fpd_println("A*B= ",&ANS);
 
   return 0;
 }

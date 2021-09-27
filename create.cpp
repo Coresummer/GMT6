@@ -56,6 +56,7 @@ void create_prt(){
   const unsigned char* xai = reinterpret_cast<const unsigned char *>("efffffffffffffe00000000000000000");
   // mpn_set_str(&X,xai,sizeof(char)*34,16); //ui(&X,1,319014718988379808906617884108577046528);
   mpn_set_mpz(prime_mpn,prime_z);
+  gmp_printf("prime_mpn: %Nx\n", prime_mpn,FPLIMB);
   // mpn_mul_n(prime2,prime,prime,FPLIMB);
 
   fp_println("X                             =", &X);

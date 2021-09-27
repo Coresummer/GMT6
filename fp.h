@@ -23,6 +23,8 @@ extern "C"{
     void mpn_set_fpd(mp_limb_t *ANS, fpd_t *A);
 
     void fp_set_str(fp_t *A,std::string& str);
+    void fpd_set_str(fpd_t *A,std::string& str);
+
     void fp_set_fpd(fpd_t *ANS,fp_t *A);
 
     void fpd_set_neg_montgomery(fpd_t *ANS,fpd_t *A);
@@ -53,7 +55,7 @@ extern "C"{
     void fp_mod(fp_t *ans, fpd_t *a);
     void fp_mul_1(fpd_t *ANS, fp_t *A, uint64_t *B,int Bindex);
     void fp_mul(fp_t *ANS,fp_t *A,fp_t *B);
-    // void fp_mul_nonmod(fpd_t *ANS,fp_t *A,fp_t *B);
+    void fp_mul_nonmod(fpd_t *ANS,fp_t *A,fp_t *B);
     // void fp_mul_montgomery(mp_limb_t *ANS,mp_size_t ANS_size,mp_limb_t *A,mp_size_t A_size);
     // void fp_mul_ui(fp_t *ANS,fp_t *A,unsigned long int UI);
     // void fp_mul_ui_nonmod_single(fp_t *ANS, fp_t *A, unsigned long int UI);

@@ -19,7 +19,6 @@ void check_fp(){
   fp_init(&ANS);
   fp_set_random(&A,state);
   fp_println("A        = ",&A);
-
   fp_inv(&ANS,&A);
   fp_println("A^-1     = ",&ANS);
   fp_mul(&ANS,&ANS,&A);

@@ -127,6 +127,22 @@ void fp_set_str(fp_t *A, std::string& str){//here
   }else{
     printf("fp_set_str error: input string too big.\n");
   }
+}
+
+void fpd_set_str(fpd_t *A, std::string& str){//here
+  //when str is odd number, padding 0 to the head
+  uint8_t *p = (uint8_t*)A;
+  *(fp_t*)p = 0;
+  if(str.length() < FPLIMB2*ARCBIT) {
+    if(str.length() %2 ==1)str.insert(0, "0");
+    int strMaxIndex = str.length()/2;
+    for (int i = 0; i < strMaxIndex ; i++) {
+      if(i>=FPLIMB2*ARCBIT) break;
+      p[i] = (uint8_t)std::strtol(str.substr(2*(strMaxIndex-i-1),2).c_str(), NULL, 16);
+    }
+  }else{
+    printf("fp_set_str error: input string too big.\n");
+  }
 
 }
 
@@ -328,47 +344,16 @@ void fp_mod(fp_t *ans, fpd_t *a) {//mod fpd to fp
 }
 
 void fp_mul_1(fpd_t *ANS, fp_t *A, uint64_t *B,int Bindex){ //
-    uint32_t *a = (uint32_t*)A;
-    uint64_t *ans = (uint64_t*)ANS;
-    uint64_t tmpans[3];
-    uint32_t LB = (uint32_t)*B; //Autocast
-    uint32_t MB = *B >> 32;
-    printf("LB = %08x\n",LB);
-    printf("MB = %08x\n",MB);
-    for (int i=0;i<FPLIMB;i++){  //
-        printf("LBa[i*2]   = %08x\n",a[i*2]);
-        printf("MBa[1+i*2] = %08x\n",a[1+i*2]);
 
-        //32bit karatsuba
-        //bd
-        tmpans[2] = (uint64_t)a[1+i*2] * (uint64_t)MB;
-        //ac
-        tmpans[0] = (uint64_t)a[i*2] * (uint64_t)LB;
-        //(a+b)(c+d)
-        uint32_t ab,cd;
-        ab = a[i*2] + a[1+i*2];
-        cd = MB + LB;
-        tmpans[1] = (uint64_t)ab * (uint64_t)cd;
-        tmpans[1] -= tmpans[2];
-        tmpans[1] -= tmpans[0];
-
-        ans[Bindex+i] += tmpans[0];     //LSB
-        ans[Bindex+(i+1)] += tmpans[1]; //Middle
-        ans[Bindex+(i+2)] += tmpans[2]; //MSB
-        fpd_println("ANS = ",ANS);
-        printf("\n");
-    }
-    
 }
 
 void fp_mul(fp_t *ANS, fp_t *A, fp_t *B) {
 #ifdef DEBUG_COST_A
   cost_mul++;
 #endif
-
   fpd_t tmp_ans;
   fpd_init(&tmp_ans);
-  *(fpd_t*)&tmp_ans = *(fp_t*)A *  *(fp_t*)B;
+  tmp_ans = fpd_t(*A) * fpd_t(*B);
   fp_mod(ANS, &tmp_ans);
 }
 
@@ -386,8 +371,8 @@ void fp_mul_nonmod(fpd_t *ANS, fp_t *A, fp_t *B) {
 #ifdef DEBUG_COST_A
   cost_mul++;
 #endif
-  *(fpd_t*)ANS = *(fp_t*)A *  *(fp_t*)B;
-}
+  *ANS = fpd_t(*A) * fpd_t(*B);
+  }
 
 void fp_sqr_nonmod(fpd_t *ANS, fp_t *A) {
 #ifdef DEBUG_COST_A
@@ -451,13 +436,14 @@ void fp_inv(fp_t *ANS, fp_t *A) {
 
   mpn_set_fp(mpn_A,A);
   mpn_set_fp(prime_tmp,&prime);
+  
   mpn_zero(sp,FPLIMB);
 
-  mpn_add_n(buf, mpn_A, prime_tmp, FPLIMB);
+  mpn_add_n(buf, mpn_A, prime_mpn, FPLIMB);
   mpn_gcdext(gp, sp, &buf_size, buf, FPLIMB, prime_tmp, FPLIMB);
 
   if (buf_size < 0) {
-    mpn_sub_n(mpn_ANS, prime_tmp, sp, FPLIMB);
+    mpn_sub_n(mpn_ANS, prime_mpn, sp, FPLIMB);
   } else {
     mpn_copyd(mpn_ANS, sp, FPLIMB);
   }
