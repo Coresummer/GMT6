@@ -57,12 +57,12 @@ extern "C"{
     void fp_mul(fp_t *ANS,fp_t *A,fp_t *B);
     void fp_mul_nonmod(fpd_t *ANS,fp_t *A,fp_t *B);
     // void fp_mul_montgomery(mp_limb_t *ANS,mp_size_t ANS_size,mp_limb_t *A,mp_size_t A_size);
-    // void fp_mul_ui(fp_t *ANS,fp_t *A,unsigned long int UI);
-    // void fp_mul_ui_nonmod_single(fp_t *ANS, fp_t *A, unsigned long int UI);
+    void fp_mul_ui(fp_t *ANS,fp_t *A,unsigned long int UI);
+    void fp_mul_ui_nonmod_single(fp_t *ANS, fp_t *A, unsigned long int UI);
     // void fp_mul_mpn(fp_t *ANS,fp_t *A,mp_limb_t *B);
     void fp_sqr(fp_t *ANS,fp_t *A);
     // void fp_sqr_nonmod(fpd_t *ANS,fp_t *A);
-    // void fp_add(fp_t *ANS,fp_t *A,fp_t *B);
+    void fp_add(fp_t *ANS,fp_t *A,fp_t *B);
     void fp_add_nonmod_single(fp_t *ANS,fp_t *A,fp_t *B);
     void fp_add_nonmod_double(fpd_t *ANS,fpd_t *A,fpd_t *B);
     void fp_add_ui(fp_t *ANS,fp_t *A,unsigned long int UI);
@@ -90,12 +90,12 @@ extern "C"{
     // void fp_lshift_ui_nonmod_single(fp_t *ANS, fp_t *A, int s);
     // void fp_lshift_ui_nonmod_double(fpd_t *ANS, fpd_t *A, int s);
 
-    // void fp_mul_base(fp_t *ANS,fp_t *A);
+    void fp_mul_base(fp_t *ANS,fp_t *A);
 
     // void fp_mul_base_nonmod_sigle(fp_t *ANS,fp_t *A);
     // void fp_mul_base_nonmod_double(fpd_t *ANS,fpd_t *A);
 
-    // void fp_mul_base_inv(fp_t *ANS,fp_t *A);
+    void fp_mul_base_inv(fp_t *ANS,fp_t *A);
     // void fp_mul_base_inv_single(fp_t *ANS,fp_t *A);
 
 #endif

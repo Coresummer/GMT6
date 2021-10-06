@@ -363,7 +363,7 @@ void fp_sqr(fp_t *ANS, fp_t *A) {
 #endif
   fpd_t tmp_ans;
   fpd_init(&tmp_ans);
-  *(fpd_t*)ANS = *(fp_t*)A *  *(fp_t*)A;
+  tmp_ans = fpd_t(*A)  * fpd_t(*A);
   fp_mod(ANS, &tmp_ans);
 }
 
@@ -579,8 +579,11 @@ void fp_pow(fp_t *ANS, fp_t *A, mpz_t scalar) {
 
   for (i = 1; i < length; i++) {
     fp_mul(&tmp, &tmp, &tmp);
+    // fp_printf("sqr", &tmp);
     if (binary[i] == '1') {
       fp_mul(&tmp, A, &tmp);
+      // fp_printf("mul", &tmp);
+
     }
   }
   fp_set(ANS, &tmp);
@@ -611,6 +614,14 @@ int fp_cmp(fp_t *A, fp_t *B) {
   else
     return 1;
 }
+
+int fp_cmp_ui(fp_t *ANS,fp_t *A,unsigned long int UI) {
+  if (*(fp_t *)A == fp_t(UI))
+    return 0;
+  else
+    return 1;
+}
+
 
 int fp_cmp_zero(fp_t *A) {
   if (*(fp_t *)A == fp_t_zero )
@@ -718,15 +729,15 @@ int fpd_cmp_one(fp_t *A) {
 //   return 1;
 // }
 
-// void fp_mul_base(fp_t *ANS,fp_t *A){
-//   #ifdef DEBUG_COST_A
-//   cost_add++;
-//   // cost_mul_base++;
-//   // cost_mul--;
-//   #endif
-//   // fp_mul(ANS,A,&base_c);
-//   fp_l1shift(ANS,A);
-// }
+void fp_mul_base(fp_t *ANS,fp_t *A){
+  #ifdef DEBUG_COST_A
+  cost_add++;
+  // cost_mul_base++;
+  // cost_mul--;
+  #endif
+  // fp_mul(ANS,A,&base_c);
+  fp_l1shift(ANS,A);
+}
 
 // void fp_mul_base_nonmod_sigle(fp_t *ANS,fp_t *A){
 //   #ifdef DEBUG_COST_A
@@ -747,17 +758,17 @@ int fpd_cmp_one(fp_t *A) {
 //   fp_l1shift_double(ANS,A);
 // }
 
-// void fp_mul_base_inv(fp_t *ANS,fp_t *A){
+void fp_mul_base_inv(fp_t *ANS,fp_t *A){
 
-//   if( __builtin_ctzl(A->x0[0]) >= 1){
-//   #ifdef DEBUG_COST_A
-//   cost_add++;
-//   #endif
-//     fp_r1shift(ANS,A);
-//   }else{
-//     fp_mul(ANS,A,&base_c_inv);
-//   }
-// }
+  // if( __builtin_ctzl(A->x0[0]) >= 1){
+  // #ifdef DEBUG_COST_A
+  // cost_add++;
+  // #endif
+  //   fp_r1shift(ANS,A);
+  // }else{
+    fp_mul(ANS,A,&base_c_inv);
+  // }
+}
 
 // void fp_mul_base_inv_single(fp_t *ANS,fp_t *A){
 //   // #ifdef DEBUG_COST_A

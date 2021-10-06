@@ -24,18 +24,22 @@ void check_fp(){
   fp_mul(&ANS,&ANS,&A);
   fp_println("A * A^-1 = ",&ANS);
   printf("---------------------------------\n");
-  getchar();
+
   printf("check square root algorithm\n");
   int flag=fp_legendre(&A);
   printf("fp_legendre(A) = %d\n",flag);
   if(flag==1){
     fp_sqrt(&ANS,&A);
     fp_println("fp_sqrt(A) = ",&ANS);
+
     fp_sqr(&ANS,&ANS);
+
     if(fp_cmp(&ANS,&A)==0){
       printf("(fp_sqrt(A))^2 = A\n\n");
     }
     else  printf("(fp_sqrt(A))^2 != A\n\n");
+    fp_println("A = ",&A);
+
   }
   printf("---------------------------------\n");
 
