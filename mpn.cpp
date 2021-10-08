@@ -154,24 +154,24 @@ void mpn_invert(mp_limb_t *ANS,mp_limb_t *A,mp_limb_t *p){
 	mpn_mod(ANS,tmp,FPLIMB);
 }
 
-void mpn_mulmod_montgomery(mp_limb_t *ANS, mp_size_t ANS_size, mp_limb_t *A,
-                           mp_size_t A_size, mp_limb_t *B, mp_size_t B_size) {
-#ifdef DEBUG_COST_A
-  cost_mul++;
-  cost_mod++;
-#endif
+// void mpn_mulmod_montgomery(mp_limb_t *ANS, mp_size_t ANS_size, mp_limb_t *A,
+//                            mp_size_t A_size, mp_limb_t *B, mp_size_t B_size) {
+// #ifdef DEBUG_COST_A
+//   cost_mul++;
+//   cost_mod++;
+// #endif
 
-  static mp_limb_t T[FPLIMB2];
-  mpn_zero(T, FPLIMB2);
+//   static mp_limb_t T[FPLIMB2];
+//   mpn_zero(T, FPLIMB2);
 
-  mpn_mul(T, A, A_size, B, B_size);
-  for (int i = 0; i < FPLIMB; i++)
-    T[i] = mpn_addmul_1(&T[i], prime_mpn, FPLIMB, T[i] * Ni_neg);
+//   mpn_mul(T, A, A_size, B, B_size);
+//   for (int i = 0; i < FPLIMB; i++)
+//     T[i] = mpn_addmul_1(&T[i], prime_mpn, FPLIMB, T[i] * Ni_neg);
 
-  mpn_add_n(ANS, T + FPLIMB, T, FPLIMB);
-  if (mpn_cmp(ANS, prime_mpn, FPLIMB) != -1)
-    mpn_sub_n(ANS, ANS, prime_mpn, FPLIMB);
-}
+//   mpn_add_n(ANS, T + FPLIMB, T, FPLIMB);
+//   if (mpn_cmp(ANS, prime_mpn, FPLIMB) != -1)
+//     mpn_sub_n(ANS, ANS, prime_mpn, FPLIMB);
+// }
 
 void mpn_pow(mp_limb_t *ans,mp_size_t ans_size,mp_limb_t *a,mp_size_t a_size,mp_limb_t *r,mp_size_t n){
 	mp_limb_t at[ans_size],Temp[2*ans_size],tmp[ans_size];
@@ -287,21 +287,22 @@ void mpn_tdiv_q_ui(mp_limb_t *ans,mp_limb_t *a,mp_size_t size_a,unsigned long in
 	mpn_tdiv_qr(ans,dumy,0,a,size_a,buf,1);
 }
 
-void mpn_mod_montgomery(mp_limb_t *ANS, mp_size_t ANS_size, mp_limb_t *A, mp_size_t A_size) {
-#ifdef DEBUG_COST_A
-  cost_mod++;
-#endif
-  static mp_limb_t T[FPLIMB2];
-  mpn_zero(T, FPLIMB2);
+//montgomery Reduction
+// void mpn_mod_montgomery(mp_limb_t *ANS, mp_size_t ANS_size, mp_limb_t *A, mp_size_t A_size) {
+// #ifdef DEBUG_COST_A
+//   cost_mod++;
+// #endif
+//   static mp_limb_t T[FPLIMB2];
+//   mpn_zero(T, FPLIMB2);
 
-  mpn_copyd(T, A, A_size);
-  for (int i = 0; i < FPLIMB; i++)
-    T[i] = mpn_addmul_1(&T[i], prime_mpn, FPLIMB, T[i] * Ni_neg);
+//   mpn_copyd(T, A, A_size);
+//   for (int i = 0; i < FPLIMB; i++)
+//     T[i] = mpn_addmul_1(&T[i], prime_mpn, FPLIMB, T[i] * Ni_neg);
 
-  mpn_add_n(ANS, T + FPLIMB, T, FPLIMB);
-  while (mpn_cmp(ANS, prime_mpn, FPLIMB) != -1)
-    mpn_sub_n(ANS, ANS, prime_mpn, FPLIMB);
-}
+//   mpn_add_n(ANS, T + FPLIMB, T, FPLIMB);
+//   while (mpn_cmp(ANS, prime_mpn, FPLIMB) != -1)
+//     mpn_sub_n(ANS, ANS, prime_mpn, FPLIMB);
+// }
 
 void mpn_to_montgomery(mp_limb_t *ANS, mp_limb_t *A) {
 #ifdef DEBUG_COST_A

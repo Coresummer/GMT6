@@ -1,4 +1,5 @@
 #pragma once
+#include <sys/types.h>
 #ifdef TTT_INSTANCE_HERE
     #define TTT_EXTERN
 #else
@@ -22,6 +23,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include "./libmcl/mcl.h"
 
 extern "C"{
   #define ARCBIT 64  //64bit processor
@@ -130,21 +132,21 @@ extern "C"{
   // TTT_EXTERN mpz_t sqrt_power_z;
 
   TTT_EXTERN mpz_t efp_total,efp2_total,efp6_total,fp6_total_r;//#efp,#efp5,#efp10,#efp7,#efp14
-  // // TTT_EXTERN mpz_t miller_loop_s;
+  TTT_EXTERN mpz_t miller_loop_s;
   TTT_EXTERN std::vector<int> miller_loop_v, finalexp_pow_x, finalexp_pow_x_1, finalexp_pow_3w;
-  // // TTT_EXTERN mpz_t X_1_div2,X_1,X_2,X_2_1,four;//(kai +1)/2,(kai -1),(kai^2)をあらかじめ求めておく
-  // // TTT_EXTERN mpz_t hardpart,hp_3w,three;
+  TTT_EXTERN mpz_t X_1_div2,X_1,X_2,X_2_1,four;//(kai +1)/2,(kai -1),(kai^2)をあらかじめ求めておく
+  TTT_EXTERN mpz_t hardpart,hp_3w,three;
   // //emb6
-  // TTT_EXTERN fp_t frobenius_1_6,frobenius_2_6,frobenius_4_6,frobenius_5_6;//c^((p-1)/10)の計算結果
-  // TTT_EXTERN fp_t frobenius_1_6MR,frobenius_2_6MR,frobenius_4_6MR,frobenius_5_6MR;//c^((p-1)/10)の計算結果
+  TTT_EXTERN fp_t frobenius_1_6,frobenius_2_6,frobenius_4_6,frobenius_5_6;//c^((p-1)/10)の計算結果
+  TTT_EXTERN fp_t frobenius_1_6MR,frobenius_2_6MR,frobenius_4_6MR,frobenius_5_6MR;//c^((p-1)/10)の計算結果
 
 
   // // //montgomery
-  TTT_EXTERN mp_limb_t R[FPLIMB],Ri[FPLIMB],R1[FPLIMB],RR[FPLIMB],Ni[FPLIMB];
+  TTT_EXTERN fp_t R[FPLIMB],Ri[FPLIMB],R1[FPLIMB],RR[FPLIMB],Ni[FPLIMB];
   TTT_EXTERN int m;
-  TTT_EXTERN mp_limb_t u[FPLIMB+1];
-  TTT_EXTERN mp_limb_t N[FPLIMB2],R2[FPLIMB],R3[FPLIMB],RmodP[FPLIMB];
-  TTT_EXTERN mp_limb_t Ni_neg;  //Ni_neg=-N^(-1)
+  TTT_EXTERN fp_t u[FPLIMB+1];
+  TTT_EXTERN uint64_t N[FPLIMB2],R2[FPLIMB],R3[FPLIMB],RmodP[FPLIMB];
+  TTT_EXTERN fp_t Ni_neg;  //Ni_neg=-N^(-1)
 
 
   TTT_EXTERN struct timeval tv_start,tv_end;

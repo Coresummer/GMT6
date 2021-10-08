@@ -7,14 +7,14 @@ HEADER =  define.h scalar.h mpn.h fp.h create.h field_test.h
 CFLAGS= -O2 -march=native
 
 $(PROGRAM): $(OBJS)
-	$(CXX) -g -o $(PROGRAM) $(OBJS) $(CFLAGS) -lstdc++ -lgmp
+	$(CXX) -g -o $(PROGRAM) $(OBJS) $(CFLAGS) -lstdc++ -lgmp ./libmcl/libmcl.a
 
 #サフィックスルールの適応対象の拡張子の定義
 .SUFFIXES: .c .o
 
 #c言語のソースファイルから拡張子が.oのファイルを作成する
 .c.o:
-	$(CXX) -I -c $(CFLAGS) $< 
+	$(CXX) -I -c $(CFLAGS) ./libmcl/libmcl.a $< 
 	# -std=c99
 
 .SUFFIXES: .c .o
