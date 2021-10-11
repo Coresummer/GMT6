@@ -1,3 +1,4 @@
+MCL_DIR?=../mcl
 CXX = clang++-12
 PROGRAM = CP6
 #OBJS =   main.o count.o scalar.o mpn.o fp.o fp7.o fp14.o test_fp.o efp.o efp7.o efp14.o test_efp.o create.o miller.o final_exp.o test_pairing.o
@@ -11,7 +12,7 @@ $(PROGRAM): $(OBJS)
 #サフィックスルールの適応対象の拡張子の定義
 .SUFFIXES: .c .o
 
-CFLAGS+=-Ofast -fPIC -g -DNDEBUG -I ../mcl/include -I ../mcl/src
+CFLAGS+=-Ofast -fPIC -g -DNDEBUG -I $(MCL_DIR)/include -I $(MCL_DIR)/src
 #c言語のソースファイルから拡張子が.oのファイルを作成する
 .c.o:
 	$(CC) -c $< $(CFLAGS)
