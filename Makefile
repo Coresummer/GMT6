@@ -27,4 +27,4 @@ $(OBJS): $(HEADER)
 #不要なファイル削除用(コマンド:make clean)
 .PHONY: clean
 clean:
-	rm -f $(PROGRAM) $(OBJS)
+	rm -f $(PROGRAM) *.o
