@@ -1,12 +1,13 @@
 
-#include "field_test.h"
+
+
+#define TTT_INSTANCE_HERE
+// #include "field_test.h"
 #include <cstdio>
 #include <cstdint>
 #include <cybozu/benchmark.hpp>
 #include <gmp.h>
 #include <sys/types.h>
-
-#define TTT_INSTANCE_HERE
 #include "define.h"
 // #include "./time.h"
 #include "scalar.h"
@@ -26,17 +27,16 @@
 
 
 int main(){
+  mcl_init();
   gmp_randinit_default(state);
   gmp_randseed_ui(state,(unsigned long int)time(NULL));
-
   tmp_init();
   create_prt();
-  mcl_init();
   // check_base();
   pre_montgomery();
-  frobenius_precalculation();
+  // frobenius_precalculation();
   // curve_search();
-  create_weil();
+  // create_weil();
 
   printf("*********************************************************************************************\n\n");
   //check 
@@ -50,7 +50,7 @@ int main(){
   // test_fp2(CHECK_PAIRING_TIME_LOOP);
   // test_fp6(CHECK_PAIRING_TIME_LOOP);
 
-  check_fp_with_montgomery();
+  // check_fp_with_montgomery();
   // check_fp2_with_montgomery();
   // check_fp6_with_montgomery();
 
@@ -63,7 +63,6 @@ int main(){
   // check_efp6();
   // check_g1_g2();
 
-  //SCM_func_check();//未完成
   // check_pairing_2NAF();
   // check_pairing_static();
   // check_pairing_count_2NAF_lazy_montgomery();
@@ -73,5 +72,23 @@ int main(){
   printf("*********************************************************************************************\n\n");
   //free space
 
+  fp_t A1,A2;
+  fpd_t ANS1,ANS2;
+  fp_init(&A1);
+  fp_init(&A2);
+
+  fpd_init(&ANS1);
+  fpd_init(&ANS2);
+
+  uint64_t B = 0x33;
+  fp_set_random(&A1, state);
+  fp_set(&A2, &A1);
+  fp_println("A:", &A1);
+
+
+  fp_mul11_1((uint64_t*)&ANS1, (uint64_t*)&A1, &B);
+  fpd_println("ANS1: ", &ANS1);
+  fp_mul11_1_asm((uint64_t*)&ANS2, (uint64_t*)&A2, &B);
+  fpd_println("ANS2: ", &ANS2);
   return 0;
 }

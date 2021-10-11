@@ -53,7 +53,8 @@ extern "C"{
     void fp_to_montgomery(fp_t *ANS, fp_t *A);
     void mpn_to_montgomery(mp_limb_t *ANS, mp_limb_t *A);
     void fp_mod(fp_t *ans, fpd_t *a);
-    void fp_mul_1(fpd_t *ANS, fp_t *A, uint64_t *B,int Bindex);
+    void fp_mul11_1(uint64_t *ANS, uint64_t *A, uint64_t *B);
+    void fp_mul11_1_asm(uint64_t *ANS, uint64_t *A, uint64_t *B);
     void fp_mul(fp_t *ANS,fp_t *A,fp_t *B);
     void fp_mul_nonmod(fpd_t *ANS,fp_t *A,fp_t *B);
     void fp_mul_montgomery(mp_limb_t *ANS,mp_size_t ANS_size,mp_limb_t *A,mp_size_t A_size);

@@ -62,17 +62,17 @@ void fpd_println(std::string str ,fpd_t *A){
     printf("\n");
 }
 
-void fp_printf_montgomery(std::string str ,fp_t *A){
-  static fp_t out;
-  fp_mod_montgomery(&out,A);
-  fp_printf(str, &out);
-}
+// void fp_printf_montgomery(std::string str ,fp_t *A){
+//   static fp_t out;
+//   fp_mod_montgomery(&out,A);
+//   fp_printf(str, &out);
+// }
 
-void fp_println_montgomery(std::string str , fp_t *A) {
-  static fp_t out;
-  fp_mod_montgomery(&out, A);
-  fp_println(str, &out);
-}
+// void fp_println_montgomery(std::string str , fp_t *A) {
+//   static fp_t out;
+//   fp_mod_montgomery(&out, A);
+//   fp_println(str, &out);
+// }
 
 void fp_set(fp_t *ANS,fp_t *A){
  const fp_t a = *(const fp_t*)A;
@@ -318,20 +318,20 @@ void fp_sqrmod_montgomery(fp_t *ANS, fp_t *A) {
 
 }
 
-void fp_mod_montgomery(fp_t *ANS, fp_t *A) {
-#ifdef DEBUG_COST_A
-  cost_mod++;
-#endif
-  static fpd_t T;
-  fpd_init(&T);
+// void fp_mod_montgomery(fp_t *ANS, fp_t *A) {
+// #ifdef DEBUG_COST_A
+//   cost_mod++;
+// #endif
+//   static fpd_t T;
+//   fpd_init(&T);
 
-  mpn_copyd(T, A->x0, FPLIMB);
-  for (int i = 0; i < FPLIMB; i++)T[i] = mpn_addmul_1(&T[i], prime, FPLIMB, T[i] * Ni_neg);
+//   mpn_copyd(T, A->x0, FPLIMB);
+//   for (int i = 0; i < FPLIMB; i++)T[i] = mpn_addmul_1(&T[i], prime, FPLIMB, T[i] * Ni_neg);
 
-  mpn_add_n(ANS->x0, T + FPLIMB, T, FPLIMB);
-  if (mpn_cmp(ANS->x0, prime, FPLIMB) != -1)mpn_sub_n(ANS->x0, ANS->x0, prime, FPLIMB);
+//   mpn_add_n(ANS->x0, T + FPLIMB, T, FPLIMB);
+//   if (mpn_cmp(ANS->x0, prime, FPLIMB) != -1)mpn_sub_n(ANS->x0, ANS->x0, prime, FPLIMB);
 
-}
+// }
 
 void fp_to_montgomery(fp_t *ANS, fp_t *A) {
 #ifdef DEBUG_COST_A
@@ -361,8 +361,111 @@ void fp_mod(fp_t *ans, fpd_t *a) {//mod fpd to fp
   // *(fp_t*)ans = *(fp_t*)a % *(fp_t*)&prime;
 }
 
-void fp_mul_1(fpd_t *ANS, fp_t *A, uint64_t *B,int Bindex){ //
+void fp_mul11_1(uint64_t *ANS, uint64_t *A, uint64_t *B){
+    const fp_t& x = *(const fp_t*)A;
+    fpd_t z = fpd_t(x) * fpd_t(B);
+    *(fpd_t*)ANS = z;
+}
 
+void fp_mul11_1_asm(uint64_t *ANS, uint64_t *A, uint64_t *B){ //
+  __asm__ __volatile__(
+    ".intel_syntax noprefix\n"
+        "push    rbp;\n"
+        "push    r15;\n"
+        "push    r14;\n"
+        "push    r13;\n"
+        "push    r12;\n"
+        "push    rbx;\n"
+
+        "mov     rax, rdx;\n"
+        "mulx    rbp, r11, qword ptr [rsi + 48];\n"
+        "mulx    rcx, r10, qword ptr [rsi + 56];\n"
+        "mulx    rbx, r15, qword ptr [rsi + 32];\n"
+        "add     r10, rbp;\n"
+        "adc     rcx, 0;\n"
+        "mulx    r12, r9, qword ptr [rsi + 40];\n"
+        "add     r9, rbx;\n"
+        "adc     r12, r11;\n"
+        "mulx    rbx, r8, qword ptr [rsi + 16];\n"
+        "adc     r10, 0;\n"
+        "adc     rcx, 0;\n"
+        "mulx    r11, r13, qword ptr [rsi + 24];\n"
+        "setb    r14b;\n"
+        "add     r13, rbx;\n"
+        "mulx    rbx, rdx, qword ptr [rsi];\n"
+        "mov     qword ptr [rsp - 8], rdx        # 8-byte Spill;\n"
+        "adc     r11, 0;\n"
+        "mov     rdx, rax;\n"
+        "mulx    rdx, rbp, qword ptr [rsi + 8];\n"
+        "add     rbp, rbx;\n"
+        "mov     qword ptr [rsp - 16], rbp       # 8-byte Spill;\n"
+        "movzx   r14d, r14b;\n"
+        "adc     rdx, r8;\n"
+        "mov     qword ptr [rsp - 24], rdx       # 8-byte Spill;\n"
+        "adc     r13, 0;\n"
+        "adc     r11, r15;\n"
+        "adc     r9, 0;\n"
+        "adc     r12, 0;\n"
+        "adc     r10, 0;\n"
+        "adc     rcx, 0;\n"
+        "mov     rdx, rax;\n"
+        "mulx    r15, rdx, qword ptr [rsi + 80];\n"
+        "mov     qword ptr [rsp - 32], rdx;\n"
+        "adc     r14, 0;\n"
+        "setb    byte ptr [rsp - 33];\n"
+        "xor     edx, edx;\n"
+        "mulx    rbx, rbp, rax;\n"
+        "add     rbp, r15;\n"
+        "adc     rbx, 0;\n"
+        "mov     rdx, rax;\n"
+        "mulx    r8, r15, qword ptr [rsi + 64];\n"
+        "mulx    rax, rdx, qword ptr [rsi + 72];\n"
+        "add     rdx, r8;\n"
+        "adc     rax, qword ptr [rsp - 32];\n"
+        "adc     rbp, 0;\n"
+        "adc     rbx, 0;\n"
+        "setb    sil;\n"
+        "add     r15, rcx;\n"
+        "adc     rdx, r14;\n"
+        "movzx   ecx, byte ptr [rsp - 33];\n"
+        "adc     rax, rcx;\n"
+        "mov     rcx, qword ptr [rsp - 8];\n"
+        "mov     qword ptr [rdi], rcx;\n"
+        "mov     rcx, qword ptr [rsp - 16];\n"
+        "mov     qword ptr [rdi + 8], rcx;\n"
+        "mov     rcx, qword ptr [rsp - 24];\n"
+        "mov     qword ptr [rdi + 16], rcx;\n"
+        "mov     qword ptr [rdi + 24], r13;\n"
+        "mov     qword ptr [rdi + 32], r11;\n"
+        "mov     qword ptr [rdi + 40], r9;\n"
+        "mov     qword ptr [rdi + 48], r12;\n"
+        "mov     qword ptr [rdi + 56], r10;\n"
+        "mov     qword ptr [rdi + 64], r15;\n"
+        "mov     qword ptr [rdi + 72], rdx;\n"
+        "mov     qword ptr [rdi + 80], rax;\n"
+        "adc     rbp, 0;\n"
+        "mov     qword ptr [rdi + 88], rbp;\n"
+        "adc     rbx, 0;\n"
+        "mov     qword ptr [rdi + 96], rbx;\n"
+        "movzx   eax, sil;\n"
+        "adc     rax, 0;\n"
+        "mov     qword ptr [rdi + 104], rax;\n"
+        "setb    al;\n"
+        "movzx   eax, al;\n"
+        "vxorps  xmm0, xmm0, xmm0;\n"
+        "vmovups xmmword ptr [rdi + 160], xmm0;\n"
+        "mov     qword ptr [rdi + 112], rax;\n"
+        "vmovups xmmword ptr [rdi + 144], xmm0;\n"
+        "vmovups xmmword ptr [rdi + 128], xmm0;\n"
+        "mov     qword ptr [rdi + 120], 0;\n"
+        "pop     rbx;\n"
+        "pop     r12;\n"
+        "pop     r13;\n"
+        "pop     r14;\n"
+        "pop     r15;\n"
+        "pop     rbp;\n"
+        "ret"
+  );
 }
 
 void fp_mul(fp_t *ANS, fp_t *A, fp_t *B) {
