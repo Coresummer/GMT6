@@ -9,11 +9,13 @@ HEADER = define.h scalar.h mpn.h fp.h fp2.h fp6.h efp.h efp2.h efp6.h test_efp.h
 $(PROGRAM): $(OBJS)
 	$(CXX) -fPIC -g -pg -o $(PROGRAM) $(OBJS) -Ofast -march=native -lgmp -lstdc++
 	#-fsanitize=address
+
 #サフィックスルールの適応対象の拡張子の定義
 .SUFFIXES: .c .o
 
 CFLAGS+=-Ofast -fPIC -g -DNDEBUG -I $(MCL_DIR)/include -I $(MCL_DIR)/src
 #c言語のソースファイルから拡張子が.oのファイルを作成する
+
 .c.o:
 	$(CC) -c $< $(CFLAGS)
 .cpp.o:
