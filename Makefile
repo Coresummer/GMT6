@@ -6,15 +6,15 @@ OBJS   =  main.o scalar.o mpn.o fp.o fp2.o fp6.o efp.o efp2.o efp6.o test_efp.o 
 HEADER = define.h scalar.h mpn.h fp.h fp2.h fp6.h efp.h efp2.h efp6.h test_efp.h field_test.h create.h miller.h final_exp.h test_pairing.h time.h
 
 $(PROGRAM): $(OBJS)
-	$(CXX) -fPIC -g -pg -o $(PROGRAM) $(OBJS) -Ofast -march=native -lgmp -lstdc++ ./libmcl/libmcl.a 
-	#-fsanitize=address
+	$(CXX) -fPIC -g -pg -o $(PROGRAM) $(OBJS) -Ofast -march=native -lgmp -lstdc++ ./libmcl/libmcl.a -fsanitize=address
+	#
 #サフィックスルールの適応対象の拡張子の定義
 .SUFFIXES: .c .o
 
 #c言語のソースファイルから拡張子が.oのファイルを作成する
-.c.o:
-	$(CXX) -g -I -c -fPIC -Ofast ./libmcl/libmcl.a  $< 
-	# -std=c99 -fsanitize=address
+.cpp.o:
+	$(CXX) -g -c -fPIC -Ofast -fsanitize=address -I ./libmcl/libmcl.a  $< 
+	# -std=c99 
 #ヘッダファイルの依存関係(ヘッダファイルが変わったらすべてコンパイルし直す)
 $(OBJS): $(HEADER)
 
