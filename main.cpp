@@ -1,3 +1,4 @@
+#include "libmcl/mcl.h"
 #define TTT_INSTANCE_HERE
 
 #include <cstdio>
@@ -21,9 +22,10 @@
 
 
 int main(){
+  mcl_init();
+
   gmp_randinit_default(state);
   gmp_randseed_ui(state,(unsigned long int)time(NULL));
-
   tmp_init();
   create_prt();
   check_base();
@@ -31,7 +33,7 @@ int main(){
   frobenius_precalculation();
   curve_search();
   create_weil();
-  
+
   printf("*********************************************************************************************\n\n");
   
 
@@ -47,10 +49,10 @@ int main(){
   // check_fp2_with_montgomery();
   // check_fp6_with_montgomery();
 
-  // BENCH_fp2_fp6_mul_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
+  BENCH_fp2_fp6_mul_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
   // BENCH_miller_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
   // BENCH_finalexp_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
-  BENCH_Pairingn_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
+  // BENCH_Pairingn_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
   // check_efp();
   // check_efp2();
   // check_efp6();

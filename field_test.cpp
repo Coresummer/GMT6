@@ -1,5 +1,6 @@
 #include "fp2.h"
 #include "fp6.h"
+#include <cstdio>
 #define CYBOZU_BENCH_USE_GETTIMEOFDAY
 #include <cybozu/benchmark.hpp>
 #include "miller.h"
@@ -1256,7 +1257,6 @@ void BENCH_fp2_fp6_mul_lazy_montgomery(int LOOP){
   fp_init(&Bm_fp);
   fp_init(&ANS_fp);
   fp_init(&ANSm_fp);
-
   fp_set_random(&A_fp,state);
   fp_to_montgomery(&Am_fp, &A_fp);
   fp_set_random(&B_fp,state);

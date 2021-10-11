@@ -1,5 +1,7 @@
 #include "fp.h"
+#include "libmcl/mcl.h"
 #include "mpn.h"
+#include <cstdint>
 #include <gmp.h>
 
 void fp_init(fp_t *A){
@@ -184,16 +186,18 @@ void fp_mulmod_montgomery(fp_t *ANS, fp_t *A, fp_t *B) {
   cost_mul++;
   cost_mod++;
 #endif
-  static mp_limb_t T[FPLIMB2];
-  mpn_zero(T, FPLIMB2);
+  // static mp_limb_t T[FPLIMB2];
+  // mpn_zero(T, FPLIMB2);
 
-  mpn_mul_n(T, A->x0, B->x0, FPLIMB);
-  for (int i = 0; i < FPLIMB; i++)
-    T[i] = mpn_addmul_1(&T[i], prime, FPLIMB, T[i] * Ni_neg);
+  // mpn_mul_n(T, A->x0, B->x0, FPLIMB);
+  // for (int i = 0; i < FPLIMB; i++)
+  //   T[i] = mpn_addmul_1(&T[i], prime, FPLIMB, T[i] * Ni_neg);
 
-  mpn_add_n(ANS->x0, T + FPLIMB, T, FPLIMB);
-  if (mpn_cmp(ANS->x0, prime, FPLIMB) != -1)
-    mpn_sub_n(ANS->x0, ANS->x0, prime, FPLIMB);
+  // mpn_add_n(ANS->x0, T + FPLIMB, T, FPLIMB);
+  // if (mpn_cmp(ANS->x0, prime, FPLIMB) != -1)
+  //   mpn_sub_n(ANS->x0, ANS->x0, prime, FPLIMB);
+    
+  mcl_mont((uint64_t *)ANS, (uint64_t *)A,(uint64_t *)B);
 }
 
 void fp_sqrmod_montgomery(fp_t *ANS, fp_t *A) {
@@ -201,16 +205,18 @@ void fp_sqrmod_montgomery(fp_t *ANS, fp_t *A) {
   cost_sqr++;
   cost_mod++;
 #endif
-  static mp_limb_t T[FPLIMB2];
-  mpn_zero(T, FPLIMB2);
+  // static mp_limb_t T[FPLIMB2];
+  // mpn_zero(T, FPLIMB2);
 
-  mpn_sqr(T, A->x0, FPLIMB);
-  for (int i = 0; i < FPLIMB; i++)
-    T[i] = mpn_addmul_1(&T[i], prime, FPLIMB, T[i] * Ni_neg);
+  // mpn_sqr(T, A->x0, FPLIMB);
+  // for (int i = 0; i < FPLIMB; i++)
+  //   T[i] = mpn_addmul_1(&T[i], prime, FPLIMB, T[i] * Ni_neg);
 
-  mpn_add_n(ANS->x0, T + FPLIMB, T, FPLIMB);
-  if (mpn_cmp(ANS->x0, prime, FPLIMB) != -1)
-    mpn_sub_n(ANS->x0, ANS->x0, prime, FPLIMB);
+  // mpn_add_n(ANS->x0, T + FPLIMB, T, FPLIMB);
+  // if (mpn_cmp(ANS->x0, prime, FPLIMB) != -1)
+  //   mpn_sub_n(ANS->x0, ANS->x0, prime, FPLIMB);
+  mcl_mont((uint64_t *)ANS, (uint64_t *)A,(uint64_t *)A);
+
 }
 
 void fp_mod_montgomery(fp_t *ANS, fp_t *A) {
