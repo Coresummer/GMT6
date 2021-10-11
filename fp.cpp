@@ -1,5 +1,5 @@
 #include "fp.h"
-#include "libmcl/mcl.h"
+#include "mcl.h"
 #include "mpn.h"
 #include <cstdint>
 #include <gmp.h>
@@ -197,7 +197,7 @@ void fp_mulmod_montgomery(fp_t *ANS, fp_t *A, fp_t *B) {
   // if (mpn_cmp(ANS->x0, prime, FPLIMB) != -1)
   //   mpn_sub_n(ANS->x0, ANS->x0, prime, FPLIMB);
     
-  mcl_mont((uint64_t *)ANS, (uint64_t *)A,(uint64_t *)B);
+  mcl_mont(&ANS->x0[0], &A->x0[0], &B->x0[0]);
 }
 
 void fp_sqrmod_montgomery(fp_t *ANS, fp_t *A) {

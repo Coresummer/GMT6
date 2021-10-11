@@ -22,7 +22,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include "./libmcl/mcl.h"
+#include "./mcl.h"
 
 
 #define ARCBIT 64  //64bit processor
