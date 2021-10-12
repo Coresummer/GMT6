@@ -218,8 +218,7 @@ void fp_sqrmod_montgomery(fp_t *ANS, fp_t *A) {
   // mpn_add_n(ANS->x0, T + FPLIMB, T, FPLIMB);
   // if (mpn_cmp(ANS->x0, prime, FPLIMB) != -1)
   //   mpn_sub_n(ANS->x0, ANS->x0, prime, FPLIMB);
-  mcl_mont((uint64_t *)ANS->x0, (uint64_t *)A->x0,(uint64_t *)A->x0);
-
+  mcl_mont(ANS->x0, A->x0, A->x0);
 }
 
 void fp_mod_montgomery(fp_t *ANS, fp_t *A) {
