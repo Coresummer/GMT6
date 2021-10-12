@@ -1,4 +1,5 @@
 #include "fp.h"
+// #include "libmcl/mcl.h"
 #include "mcl.h"
 #include "mpn.h"
 #include <cstdint>
@@ -198,9 +199,7 @@ void fp_mulmod_montgomery(fp_t *ANS, fp_t *A, fp_t *B) {
   //   mpn_sub_n(ANS->x0, ANS->x0, prime, FPLIMB);
     
 
-  mcl_mont(&ANS->x0[0], &A->x0[0], &B->x0[0]);
-
-
+  mcl_mont(ANS->x0,A->x0, B->x0);
 }
 
 void fp_sqrmod_montgomery(fp_t *ANS, fp_t *A) {
@@ -280,7 +279,8 @@ void fp_mul_nonmod(fpd_t *ANS, fp_t *A, fp_t *B) {
 #ifdef DEBUG_COST_A
   cost_mul++;
 #endif
-  mpn_mul_n(ANS->x0, A->x0, B->x0, FPLIMB);
+  // mpn_mul_n(ANS->x0, A->x0, B->x0, FPLIMB);
+  mcl_mulPre(ANS->x0, A->x0, B->x0);
 }
 
 void fp_mul_ui(fp_t *ANS, fp_t *A, unsigned long int UI) {
@@ -314,7 +314,9 @@ void fp_sqr_nonmod(fpd_t *ANS, fp_t *A) {
 #ifdef DEBUG_COST_A
   cost_sqr++;
 #endif
-  mpn_sqr(ANS->x0, A->x0, FPLIMB);
+  // mpn_sqr(ANS->x0, A->x0, FPLIMB);
+  mcl_mulPre(ANS->x0, A->x0, A->x0);
+
 }
 
 void fp_add(fp_t *ANS, fp_t *A, fp_t *B) {
