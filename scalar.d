@@ -1,7 +1,5 @@
-scalar.o: scalar.cpp scalar.h define.h mcl.h
+scalar.o: scalar.cpp scalar.h define.h
 
 scalar.h:
 
 define.h:
-
-mcl.h:

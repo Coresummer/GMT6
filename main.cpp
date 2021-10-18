@@ -1,3 +1,4 @@
+#include "mcl.h"
 #define TTT_INSTANCE_HERE
 
 #include <cstdio>
@@ -21,6 +22,8 @@
 
 
 int main(){
+  mcl_init();
+
   gmp_randinit_default(state);
   gmp_randseed_ui(state,(unsigned long int)time(NULL));
 
@@ -52,15 +55,15 @@ int main(){
   // check_fp6_with_montgomery();
 
   // BENCH_fp2_fp6_mul_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
-  // BENCH_miller_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
   // BENCH_GS_sqr_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
-  // BENCH_finalexp_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
-  // BENCH_Pairingn_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
-
+  // BENCH_miller_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
+  BENCH_finalexp_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
+  // BENCH_Pairing_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
+  
   //SCM_func_check();//未完成
   // check_pairing_2NAF();
   // check_pairing_static();
-  check_pairing_count_2NAF_lazy_montgomery();
+  // check_pairing_count_2NAF_lazy_montgomery();
   // check_pairing_count_2NAF();
   // check_pairing_time_2NAF();
 

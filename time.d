@@ -1,7 +1,5 @@
-time.o: time.cpp time.h define.h mcl.h
+time.o: time.cpp time.h define.h
 
 time.h:
 
 define.h:
-
-mcl.h:

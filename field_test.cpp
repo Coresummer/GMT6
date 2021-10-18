@@ -1492,7 +1492,7 @@ void BENCH_finalexp_lazy_montgomery(int LOOP){
 
 }
 
-void BENCH_Pairingn_lazy_montgomery(int LOOP){
+void BENCH_Pairing_lazy_montgomery(int LOOP){
   printf("check_pairing() 開始\n");
   efp6_t P,Q,aP,bQ,tmp1;
   fp6_t f,e1,e2;

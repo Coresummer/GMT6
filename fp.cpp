@@ -1,5 +1,6 @@
 #include "fp.h"
 #include "mpn.h"
+#include "mcl.h"
 #include <gmp.h>
 
 void fp_init(fp_t *A){
@@ -188,16 +189,17 @@ void fp_mulmod_montgomery(fp_t *ANS, fp_t *A, fp_t *B) {
   cost_mul++;
   cost_mod++;
 #endif
-  static mp_limb_t T[FPLIMB2];
-  mpn_zero(T, FPLIMB2);
+  // static mp_limb_t T[FPLIMB2];
+  // mpn_zero(T, FPLIMB2);
 
-  mpn_mul_n(T, A->x0, B->x0, FPLIMB);
-  for (int i = 0; i < FPLIMB; i++)
-    T[i] = mpn_addmul_1(&T[i], prime, FPLIMB, T[i] * Ni_neg);
+  // mpn_mul_n(T, A->x0, B->x0, FPLIMB);
+  // for (int i = 0; i < FPLIMB; i++)
+  //   T[i] = mpn_addmul_1(&T[i], prime, FPLIMB, T[i] * Ni_neg);
 
-  mpn_add_n(ANS->x0, T + FPLIMB, T, FPLIMB);
+  // mpn_add_n(ANS->x0, T + FPLIMB, T, FPLIMB);
   // if (mpn_cmp(ANS->x0, prime, FPLIMB) != -1)
   //   mpn_sub_n(ANS->x0, ANS->x0, prime, FPLIMB);
+  mcl_mont(ANS->x0,A->x0, B->x0);
 }
 
 void fp_sqrmod_montgomery(fp_t *ANS, fp_t *A) {
@@ -205,16 +207,18 @@ void fp_sqrmod_montgomery(fp_t *ANS, fp_t *A) {
   cost_sqr++;
   cost_mod++;
 #endif
-  static mp_limb_t T[FPLIMB2];
-  mpn_zero(T, FPLIMB2);
+  // static mp_limb_t T[FPLIMB2];
+  // mpn_zero(T, FPLIMB2);
 
-  mpn_sqr(T, A->x0, FPLIMB);
-  for (int i = 0; i < FPLIMB; i++)
-    T[i] = mpn_addmul_1(&T[i], prime, FPLIMB, T[i] * Ni_neg);
+  // mpn_sqr(T, A->x0, FPLIMB);
+  // for (int i = 0; i < FPLIMB; i++)
+  //   T[i] = mpn_addmul_1(&T[i], prime, FPLIMB, T[i] * Ni_neg);
 
-  mpn_add_n(ANS->x0, T + FPLIMB, T, FPLIMB);
+  // mpn_add_n(ANS->x0, T + FPLIMB, T, FPLIMB);
   // if (mpn_cmp(ANS->x0, prime, FPLIMB) != -1)
   //   mpn_sub_n(ANS->x0, ANS->x0, prime, FPLIMB);
+  mcl_mont(ANS->x0,A->x0, A->x0);
+
 }
 
 void fp_mod_montgomery(fp_t *ANS, fp_t *A) {
@@ -276,7 +280,8 @@ void fp_mul_nonmod(fpd_t *ANS, fp_t *A, fp_t *B) {
 #ifdef DEBUG_COST_A
   cost_mul++;
 #endif
-  mpn_mul_n(ANS->x0, A->x0, B->x0, FPLIMB);
+  // mpn_mul_n(ANS->x0, A->x0, B->x0, FPLIMB);
+  mcl_mulPre(ANS->x0, A->x0, B->x0);
 }
 
 void fp_mul_ui(fp_t *ANS, fp_t *A, unsigned long int UI) {
@@ -310,7 +315,8 @@ void fp_sqr_nonmod(fpd_t *ANS, fp_t *A) {
 #ifdef DEBUG_COST_A
   cost_sqr++;
 #endif
-  mpn_sqr(ANS->x0, A->x0, FPLIMB);
+  // mpn_sqr(ANS->x0, A->x0, FPLIMB);
+  mcl_mulPre(ANS->x0, A->x0, A->x0);
 }
 
 void fp_add(fp_t *ANS, fp_t *A, fp_t *B) {
