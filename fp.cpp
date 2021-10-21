@@ -367,7 +367,7 @@ void fp_mul11_1(uint64_t *ANS, uint64_t *A, uint64_t *B){
     *(fpd_t*)ANS = z;
 }
 
-void fp_mul11_1_asm(uint64_t *ANS, uint64_t *A, uint64_t *B){ //
+void fp_mul11_1_asm(uint64_t *ANS, uint64_t *A, uint64_t B){ //A[11] B[1]
   __asm__ __volatile__(
     ".intel_syntax noprefix\n"
         "push    rbp;\n"

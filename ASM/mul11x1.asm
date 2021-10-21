@@ -5,7 +5,6 @@ mul1(unsigned long*, unsigned long const*, unsigned long):                      
         push    r13
         push    r12
         push    rbx
-        ;evac callee-saves
         mov     rax, rdx
         mulx    rbp, r11, qword ptr [rsi + 48]
         mulx    rcx, r10, qword ptr [rsi + 56]
