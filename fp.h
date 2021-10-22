@@ -5,6 +5,7 @@
 #define TTT_INSTANCE_HERE
 
 #include "define.h"
+// #include "mul.h"
 
 extern "C"{
     void fp_init(fp_t *A);
@@ -56,6 +57,7 @@ extern "C"{
     void fp_mul11_1(uint64_t *ANS, uint64_t *A, uint64_t B);
     void fp_mul11_1_asm(uint64_t *ANS, uint64_t *A, uint64_t B);
     void fp_mul11_1_add_asm(uint64_t *ANS, uint64_t *A, uint64_t B);
+
     void fp_mul(fp_t *ANS,fp_t *A,fp_t *B);
     void fp_mul_nonmod(fpd_t *ANS,fp_t *A,fp_t *B);
     void fp_mul_nonmod_asm(fpd_t *ANS,fp_t *A,fp_t *B);
