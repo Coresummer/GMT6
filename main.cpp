@@ -80,7 +80,7 @@ int main(){
   fpd_init(&ANS1);
   fpd_init(&ANS2);
 
-  uint64_t B = 0x33;
+  uint64_t B = 0x334512351;
   // fp_set_random(&A1, state);
   std::string str = "7132031ec392544bf25be4b471619971903fa24451f1d1b06e10241ba99d6bd94c607b234d2324c850a60d84081c252ee5921d1dc762bae64f3252ead5b2e6c438752c3491bdeb7f5a992e246176847d8c4f91d7";
   fp_set_str(&A1,str);
@@ -88,11 +88,17 @@ int main(){
   fp_println("A:", &A1);
 
 
-  fp_mul11_1((uint64_t*)&ANS1, (uint64_t*)&A1, B);
-  fpd_println("ANS1: ", &ANS1);
-  memset(&ANS2, 0, sizeof(ANS2));
-  fp_mul11_1_asm((uint64_t*)&ANS2, (uint64_t*)&A2, B);
+  // fp_mul11_1((uint64_t*)&ANS1, (uint64_t*)&A1, B);
+  // fpd_println("ANS1: ", &ANS1);
+  // memset(&ANS2, 0, sizeof(ANS2));
+  // fp_mul11_1_asm((uint64_t*)&ANS2, (uint64_t*)&A2, B);
+  // fpd_println("ANS2: ", &ANS2);
 
+  fp_mul_nonmod(&ANS1, &A1, &A2);
+  fpd_println("ANS1: ", &ANS1);
+  fp_mul_nonmod_asm(&ANS2, &A1, &A2);
   fpd_println("ANS2: ", &ANS2);
+
+
   return 0;
 }

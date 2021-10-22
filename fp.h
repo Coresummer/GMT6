@@ -55,8 +55,10 @@ extern "C"{
     void fp_mod(fp_t *ans, fpd_t *a);
     void fp_mul11_1(uint64_t *ANS, uint64_t *A, uint64_t B);
     void fp_mul11_1_asm(uint64_t *ANS, uint64_t *A, uint64_t B);
+    void fp_mul11_1_add_asm(uint64_t *ANS, uint64_t *A, uint64_t B);
     void fp_mul(fp_t *ANS,fp_t *A,fp_t *B);
     void fp_mul_nonmod(fpd_t *ANS,fp_t *A,fp_t *B);
+    void fp_mul_nonmod_asm(fpd_t *ANS,fp_t *A,fp_t *B);
     void fp_mul_montgomery(mp_limb_t *ANS,mp_size_t ANS_size,mp_limb_t *A,mp_size_t A_size);
     void fp_mul_ui(fp_t *ANS,fp_t *A,unsigned long int UI);
     void fp_mul_ui_nonmod_single(fp_t *ANS, fp_t *A, unsigned long int UI);

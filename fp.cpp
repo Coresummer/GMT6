@@ -370,102 +370,6 @@ void fp_mul11_1(uint64_t *ANS, uint64_t *A, uint64_t B){
 void fp_mul11_1_asm(uint64_t *ANS, uint64_t *A, uint64_t B){ //A[11] B[1]
   __asm__ __volatile__(
     ".intel_syntax noprefix\n"
-        // "push    rbp;\n"
-        // "push    r15;\n"
-        // "push    r14;\n"
-        // "push    r13;\n"
-        // "push    r12;\n"
-        // "push    rbx;\n"
-
-        // "mov     rax, rdx;\n"
-        // "mulx    rbp, r11, qword ptr [rsi + 48];\n"
-        // "mulx    rcx, r10, qword ptr [rsi + 56];\n"
-        // "mulx    rbx, r15, qword ptr [rsi + 32];\n"
-        // "add     r10, rbp;\n"
-        // "adc     rcx, 0;\n"
-        // "mulx    r12, r9, qword ptr [rsi + 40];\n"
-        // "add     r9, rbx;\n"
-        // "adc     r12, r11;\n"
-        // "mulx    rbx, r8, qword ptr [rsi + 16];\n"
-        // "adc     r10, 0;\n"
-        // "adc     rcx, 0;\n"
-        // "mulx    r11, r13, qword ptr [rsi + 24];\n"
-        // "setb    r14b;\n"
-        // "add     r13, rbx;\n"
-        // "mulx    rbx, rdx, qword ptr [rsi];\n"
-        // "mov     qword ptr [rsp - 8], rdx        # 8-byte Spill;\n"
-        // "adc     r11, 0;\n"
-        // "mov     rdx, rax;\n"
-        // "mulx    rdx, rbp, qword ptr [rsi + 8];\n"
-        // "add     rbp, rbx;\n"
-        // "mov     qword ptr [rsp - 16], rbp       # 8-byte Spill;\n"
-        // "movzx   r14d, r14b;\n"
-        // "adc     rdx, r8;\n"
-        // "mov     qword ptr [rsp - 24], rdx       # 8-byte Spill;\n"
-        // "adc     r13, 0;\n"
-        // "adc     r11, r15;\n"
-        // "adc     r9, 0;\n"
-        // "adc     r12, 0;\n"
-        // "adc     r10, 0;\n"
-        // "adc     rcx, 0;\n"
-        // "mov     rdx, rax;\n"
-        // "mulx    r15, rdx, qword ptr [rsi + 80];\n"
-        // "mov     qword ptr [rsp - 32], rdx;\n"
-        // "adc     r14, 0;\n"
-        // "setb    byte ptr [rsp - 33];\n"
-        // "xor     edx, edx;\n"
-        // "mulx    rbx, rbp, rax;\n"
-        // "add     rbp, r15;\n"
-        // "adc     rbx, 0;\n"
-        // "mov     rdx, rax;\n"
-        // "mulx    r8, r15, qword ptr [rsi + 64];\n"
-        // "mulx    rax, rdx, qword ptr [rsi + 72];\n"
-        // "add     rdx, r8;\n"
-        // "adc     rax, qword ptr [rsp - 32];\n"
-        // "adc     rbp, 0;\n"
-        // "adc     rbx, 0;\n"
-        // "setb    sil;\n"
-        // "add     r15, rcx;\n"
-        // "adc     rdx, r14;\n"
-        // "movzx   ecx, byte ptr [rsp - 33];\n"
-        // "adc     rax, rcx;\n"
-        // "mov     rcx, qword ptr [rsp - 8];\n"
-        // "mov     qword ptr [rdi], rcx;\n"
-        // "mov     rcx, qword ptr [rsp - 16];\n"
-        // "mov     qword ptr [rdi + 8], rcx;\n"
-        // "mov     rcx, qword ptr [rsp - 24];\n"
-        // "mov     qword ptr [rdi + 16], rcx;\n"
-        // "mov     qword ptr [rdi + 24], r13;\n"
-        // "mov     qword ptr [rdi + 32], r11;\n"
-        // "mov     qword ptr [rdi + 40], r9;\n"
-        // "mov     qword ptr [rdi + 48], r12;\n"
-        // "mov     qword ptr [rdi + 56], r10;\n"
-        // "mov     qword ptr [rdi + 64], r15;\n"
-        // "mov     qword ptr [rdi + 72], rdx;\n"
-        // "mov     qword ptr [rdi + 80], rax;\n"
-        // "adc     rbp, 0;\n"
-        // "mov     qword ptr [rdi + 88], rbp;\n"
-        // "adc     rbx, 0;\n"
-        // "mov     qword ptr [rdi + 96], rbx;\n"
-        // "movzx   eax, sil;\n"
-        // "adc     rax, 0;\n"
-        // "mov     qword ptr [rdi + 104], rax;\n"
-        // "setb    al;\n"
-        // "movzx   eax, al;\n"
-        // "vxorps  xmm0, xmm0, xmm0;\n"
-        // "vmovups xmmword ptr [rdi + 160], xmm0;\n"
-        // "mov     qword ptr [rdi + 112], rax;\n"
-        // "vmovups xmmword ptr [rdi + 144], xmm0;\n"
-        // "vmovups xmmword ptr [rdi + 128], xmm0;\n"
-        // "mov     qword ptr [rdi + 120], 0;\n"
-        // "pop     rbx;\n"
-        // "pop     r12;\n"
-        // "pop     r13;\n"
-        // "pop     r14;\n"
-        // "pop     r15;\n"
-        // "pop     rbp;\n"
-        // "ret"
-
         "mulx    r8,  r9,  qword ptr   [rsi]\n"    //mulx
         "mov     qword ptr [rdi], r9\n"             //[rdi]    = [0]*[B]:L
         "mulx    r10, r11, qword ptr [rsi + 8]\n"   //mulx
@@ -521,6 +425,53 @@ void fp_mul11_1_asm(uint64_t *ANS, uint64_t *A, uint64_t B){ //A[11] B[1]
   );
 }
 
+void fp_mul11_1_add_asm(uint64_t *ANS, uint64_t *A, uint64_t B){ //A[11] B[1]
+  __asm__ __volatile__(
+    ".intel_syntax noprefix\n"
+        "mulx    r8,  r9,  qword ptr   [rsi]\n"    //mulx
+        "add     qword ptr [rdi], r9\n"             //[rdi]    = [0]*[B]:L
+        "mulx    r10, r11, qword ptr [rsi + 8]\n"   //mulx
+        "adc     r8,  r11\n"                        //[0]*[B]:H + [1]*[B]:L carry goes to [rdi+16]
+        "adc     qword ptr [rdi + 8], r8\n"         //[rdi+ 8] = [0]*[B]:H + [1]*[B]:L
+
+        "mulx    r8,   r9, qword ptr   [rsi + 16]\n"//mulx
+        "adc     r9,   r10                       \n"//[1]*[B]:H + [2]*[B]:L carry goes to [rdi+24]
+        "adc     qword ptr [rdi + 16], r9        \n"//[rdi+16] = [1]*[B]:H + [2]*[B]:L
+        "mulx    r10, r11, qword ptr [rsi + 24]  \n"//mulx
+        "adc     r11,   r8                       \n"//[2]*[B]:H + [3]*[B]:L carry goes to [rdi+32]
+        "adc     qword ptr [rdi + 24], r11       \n"//[rdi+24] = [2]*[B]:H + [3]*[B]:L
+
+        "mulx    r8,   r9, qword ptr   [rsi + 32]\n"//mulx
+        "adc     r9,   r10                       \n"//[3]*[B]:H + [4]*[B]:L carry goes to [rdi+40]
+        "adc     qword ptr [rdi + 32], r9        \n"//[rdi+24] = [3]*[B]:H + [4]*[B]:L
+        "mulx    r10, r11, qword ptr [rsi + 40]  \n"//mulx
+        "adc     r11,   r8                       \n"//[4]*[B]:H + [5]*[B]:L carry goes to [rdi+48]
+        "adc     qword ptr [rdi + 40], r11       \n"//[rdi+32] = [4]*[B]:H + [5]*[B]:L
+
+        "mulx    r8,   r9, qword ptr   [rsi + 48]\n"//mulx
+        "adc     r9,   r10                       \n"//[5]*[B]:H + [6]*[B]:L carry goes to [rdi+56]
+        "adc     qword ptr [rdi + 48], r9        \n"//[rdi+40] = [5]*[B]:H + [6]*[B]:L
+        "mulx    r10, r11, qword ptr [rsi + 56]  \n"//mulx
+        "adc     r11,   r8                       \n"//[6]*[B]:H + [7]*[B]:L carry goes to [rdi+64]
+        "adc     qword ptr [rdi + 56], r11       \n"//[rdi+48] = [6]*[B]:H + [7]*[B]:L
+
+        "mulx    r8,   r9, qword ptr   [rsi + 64]\n"//mulx
+        "adc     r9,   r10                       \n"//[7]*[B]:H + [8]*[B]:L carry goes to [rdi+72]
+        "adc     qword ptr [rdi + 64], r9        \n"//[rdi+40] = [7]*[B]:H + [8]*[B]:L
+        "mulx    r10, r11, qword ptr [rsi + 72]  \n"//mulx
+        "adc     r11,   r8                       \n"//[8]*[B]:H + [9]*[B]:L carry goes to [rdi+80]
+        "adc     qword ptr [rdi + 72], r11       \n"//[rdi+48] = [8]*[B]:H + [9]*[B]:L
+
+        "mulx    r8,   r9, qword ptr   [rsi + 80]\n"//mulx
+        "adc     r9,   r10                       \n"//[9]*[B]:H + [10]*[B]:L carry goes to [rdi+88]
+        "adc     qword ptr [rdi + 80], r9\n"        //[rdi+40] = [9]*[B]:H + [10]*[B]:L
+        "adc     r8 ,0\n"
+        "mov     qword ptr [rdi + 88], r8\n"       //[rdi+48] = [10]*[B]:H + carry
+
+        "ret\n"
+  );
+}
+
 void fp_mul(fp_t *ANS, fp_t *A, fp_t *B) {
 #ifdef DEBUG_COST_A
   cost_mul++;
@@ -547,7 +498,32 @@ void fp_mul_nonmod(fpd_t *ANS, fp_t *A, fp_t *B) {
   cost_mul++;
 #endif
   *ANS = fpd_t(*A) * fpd_t(*B);
-  }
+}
+
+
+void fp_mul_nonmod_asm(fpd_t *ANS, fp_t *A, fp_t *B) {
+#ifdef DEBUG_COST_A
+  cost_mul++;
+#endif
+  uint64_t* ans = (uint64_t*)ANS;
+  uint64_t* a = (uint64_t*)A;
+  uint64_t* b = (uint64_t*)B;
+
+  fp_mul11_1_asm(&ans[0], a, b[0]);
+  // for(int i=1;i<FPLIMB;i++){
+  // }
+  fp_mul11_1_add_asm(&ans[1], a, b[1]);
+  fp_mul11_1_add_asm(&ans[2], a, b[2]);
+  fp_mul11_1_add_asm(&ans[3], a, b[3]);
+  fp_mul11_1_add_asm(&ans[4], a, b[4]);
+  fp_mul11_1_add_asm(&ans[5], a, b[5]);
+  fp_mul11_1_add_asm(&ans[6], a, b[6]);
+  fp_mul11_1_add_asm(&ans[7], a, b[7]);
+  fp_mul11_1_add_asm(&ans[8], a, b[8]);
+  fp_mul11_1_add_asm(&ans[9], a, b[9]);
+  fp_mul11_1_add_asm(&ans[10], a, b[10]);
+
+}
 
 void fp_sqr_nonmod(fpd_t *ANS, fp_t *A) {
 #ifdef DEBUG_COST_A
