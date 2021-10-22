@@ -1,6 +1,4 @@
 
-
-
 #include <cstring>
 #define TTT_INSTANCE_HERE
 // #include "field_test.h"
@@ -25,6 +23,7 @@
 // #include "miller.h"
 // #include "final_exp.h"
 // #include "test_pairing.h"
+#include "libmcl/mcl.h"
 
 
 int main(){
@@ -89,10 +88,10 @@ int main(){
   fp_println("A:", &A1);
 
 
-  // fp_mul11_1((uint64_t*)&ANS1, (uint64_t*)&A1, &B);
-  // fpd_println("ANS1: ", &ANS1);
+  fp_mul11_1((uint64_t*)&ANS1, (uint64_t*)&A1, B);
+  fpd_println("ANS1: ", &ANS1);
   memset(&ANS2, 0, sizeof(ANS2));
-  fp_mul11_1_asm((uint64_t*)&ANS2, (uint64_t*)&A2, &B);
+  fp_mul11_1_asm((uint64_t*)&ANS2, (uint64_t*)&A2, B);
 
   fpd_println("ANS2: ", &ANS2);
   return 0;
