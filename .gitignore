@@ -2,5 +2,5 @@
 *.out
 CP6
 .vscode
-.d
+*.d
 core
