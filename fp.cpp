@@ -512,9 +512,20 @@ void fp_mul_nonmod_asm(fpd_t *ANS, fp_t *A, fp_t *B) {
   uint64_t* b = (uint64_t*)B;
 
   fp_mul11_1_asm(&ans[0], a, b[0]);
-  for(int i=1;i<FPLIMB;i++){
-      fp_mul11_1_add_asm(&ans[i], a, b[i]);
-  }
+  // for(int i=1;i<FPLIMB;i++){
+  //     fp_mul11_1_add_asm(&ans[i], a, b[i]);
+  // }
+  fp_mul11_1_add_asm(&ans[1], a, b[1]);
+  fp_mul11_1_add_asm(&ans[2], a, b[2]);
+  fp_mul11_1_add_asm(&ans[3], a, b[3]);
+  fp_mul11_1_add_asm(&ans[4], a, b[4]);
+  fp_mul11_1_add_asm(&ans[5], a, b[5]);
+  fp_mul11_1_add_asm(&ans[6], a, b[6]);
+  fp_mul11_1_add_asm(&ans[7], a, b[7]);
+  fp_mul11_1_add_asm(&ans[8], a, b[8]);
+  fp_mul11_1_add_asm(&ans[9], a, b[9]);
+  fp_mul11_1_add_asm(&ans[10], a, b[10]);
+
 }
 
 void fp_sqr_nonmod(fpd_t *ANS, fp_t *A) {
