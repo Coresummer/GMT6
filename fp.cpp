@@ -361,11 +361,13 @@ void fp_mod(fp_t *ans, fpd_t *a) {//mod fpd to fp
   // *(fp_t*)ans = *(fp_t*)a % *(fp_t*)&prime;
 }
 
+#if 0
 void fp_mul11_1(uint64_t *ANS, uint64_t *A, uint64_t B){
     const fp_t& x = *(const fp_t*)A;
     fpd_t z = fpd_t(x) * fpd_t(B);
     *(fpd_t*)ANS = z;
 }
+#endif
 
 // void fp_mul11_1_asm(uint64_t *ANS, uint64_t *A, uint64_t B){ //A[11] B[1]
 //   __asm__ __volatile__(

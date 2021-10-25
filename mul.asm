@@ -1,8 +1,7 @@
-global add
+global fp_mul11_1_asm
+global fp_mul11_1_add_asm
 
-section .data
-
-section .text
+segment .text
 
 fp_mul11_1_asm:
         mulx    r8,  r9,  qword    [rsi]     ;mulx
