@@ -38,6 +38,7 @@ int main(){
 
   printf("*********************************************************************************************\n\n");
   
+  check_Fundamental_mul(CHECK_PAIRING_TIME_LOOP);
 
   //各関数の動作確認、コスト計算、時間計測など
   // test_fp_montgomery(CHECK_PAIRING_TIME_LOOP);
@@ -63,12 +64,11 @@ int main(){
   //SCM_func_check();//未完成
   // check_pairing_2NAF();
   // check_pairing_static();
-  check_pairing_count_2NAF_lazy_montgomery();
+  // check_pairing_count_2NAF_lazy_montgomery();
   // check_pairing_count_2NAF();
   // check_pairing_time_2NAF();
 
   printf("*********************************************************************************************\n\n");
-
 
 
   return 0;

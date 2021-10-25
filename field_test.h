@@ -6,6 +6,7 @@
 // #include "count.h"
 #include "fp6.h"
 #include "./time.h"
+void check_Fundamental_mul(int LOOP);
 
 int test_fp(int fp_n);
 int test_fp2(int fp2_n);

@@ -1,5 +1,6 @@
 #include "fp2.h"
 #include "fp6.h"
+#include "mpn.h"
 #include <cstdio>
 #define CYBOZU_BENCH_USE_GETTIMEOFDAY
 #include <cybozu/benchmark.hpp>
@@ -11,6 +12,42 @@
 #include "final_exp.h"
 /*----------------------------------------------------------------------------*/
 //test
+
+void check_Fundamental_mul(int LOOP){
+  printf("check_mul() 開始\n");
+  mpz_t a1,a2;
+  mpz_init_set_str(a1,"778e23bc068d41130ce86ba264b855628c5bdf1f0c25681e45f75f37e85e9bb512a826dbff1b5b2782af0ff748e80a378b7987c87630ef11aed255b5abc03daeb0a42c5cca30954539e5e8083103926ed070550b",16);
+  mpz_init_set_str(a2,"715a27630b1ec82b3e03c2510cd9e29cb1bbe953fdb811695a8c05f5a22c7a1af78d7b1b8b98bf24c751b262363616e800815341029239363a4ebc5bde3c3d13918231b96a942ba4b5fe0bfeace0772d97c47678",16);
+
+  fp_t A1,A2;
+  fpd_t ANS1,ANS2;
+
+  fp_init(&A1);
+  fp_init(&A2);
+  fpd_init(&ANS1);
+  fpd_init(&ANS2);
+
+  mp_limb_t aa1[FPLIMB], aa2[FPLIMB];
+  mpn_zero(aa1,FPLIMB);
+  mpn_zero(aa2,FPLIMB);
+  mpn_set_mpz(aa1, a1);
+  mpn_set_mpz(aa2, a2);
+
+  fp_set_mpn(&A1, aa1);
+  fp_set_mpn(&A2, aa2);
+
+  fp_println("A1: ", &A1);
+  fp_println("A2: ", &A2);
+
+  CYBOZU_BENCH_C("mcl mul()  :", LOOP, fp_mul_nonmod ,&ANS1 ,&A1 ,&A2);
+  fpd_println("ANS1: ", &ANS1);
+
+  mpz_clear(a1);
+  mpz_clear(a2);
+  printf("*********************************************************************************************\n\n");
+}
+
+
 int test_fp(int fp_n) {
   int i, j, n = 0;
   float add_time = 0, add_lazy_time = 0;
