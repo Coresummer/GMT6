@@ -30,7 +30,7 @@ extern "C"{
 
   // #define DEBUG_COST_A
   //#define DEBUG_ASSERT
-  #define CHECK_PAIRING_TIME_LOOP 1
+  #define CHECK_PAIRING_TIME_LOOP 1000000000
 
   /**************Option**************/
   #define X64

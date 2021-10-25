@@ -15,7 +15,7 @@
 extern "C"{
 //check
 void check_fp();
-
+void check_Fundamental_mul(int LOOP);
 //test
 int test_fp(int fp_n);
 int test_fp2(int fp2_n);
