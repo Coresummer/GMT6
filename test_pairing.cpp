@@ -120,10 +120,10 @@ void check_pairing(){
   //e([a]P,[b]Q) を求める
   efp6_scm(&aP,&P,a);
   efp6_scm(&bQ,&Q,b);
-  miller_opt_ate_proj(&f,&aP,&bQ);
+  miller_opt_ate_jac(&f,&aP,&bQ);
   final_exp(&e1,&f);
   //e(P,Q)^(a*b) を求める
-  miller_opt_ate_proj(&f,&P,&Q);
+  miller_opt_ate_jac(&f,&P,&Q);
   final_exp(&e2,&f);
   mpz_mul(ab,a,b);
   fp6_pow(&e2,&e2,ab);
@@ -193,10 +193,10 @@ void check_pairing_2NAF(){
   //e([a]P,[b]Q) を求める
   efp6_scm(&aP,&P,a);
   efp6_scm(&bQ,&Q,b);
-  miller_opt_ate_proj_2NAF(&f,&aP,&bQ);
+  miller_opt_ate_jac_2NAF(&f,&aP,&bQ);
   final_exp(&e1,&f);
   //e(P,Q)^(a*b) を求める
-  miller_opt_ate_proj_2NAF(&f,&P,&Q);
+  miller_opt_ate_jac_2NAF(&f,&P,&Q);
   final_exp(&e2,&f);
   mpz_mul(ab,a,b);
   fp6_pow(&e2,&e2,ab);
@@ -276,10 +276,10 @@ void check_pairing_static(){
   //e([a]P,[b]Q) を求める
   efp6_scm(&aP,&P,a);
   efp6_scm(&bQ,&Q,b);
-  miller_opt_ate_proj(&f1,&aP,&bQ);
+  miller_opt_ate_jac(&f1,&aP,&bQ);
   final_exp(&e1,&f1);
   //e(P,Q)^(a*b) を求める
-  miller_opt_ate_proj(&f2,&P,&Q);
+  miller_opt_ate_jac(&f2,&P,&Q);
   final_exp(&e2,&f2);
   mpz_mul(ab,a,b);
   fp6_pow(&e2,&e2,ab);
@@ -314,7 +314,7 @@ void check_pairing_count(){
 
   printf("miller_ate count\n");
   cost_zero();
-  miller_opt_ate_proj(&f,&P,&Q);
+  miller_opt_ate_jac(&f,&P,&Q);
   cost_check(&miller_cost);
   cost_printf("",&miller_cost,CHECK_PAIRING_TIME_LOOP);
   printf("---------------------------------\n");
@@ -345,7 +345,7 @@ void check_pairing_count_2NAF(){
 
   printf("miller_ate count\n");
   cost_zero();
-  miller_opt_ate_proj_2NAF(&f,&P,&Q);
+  miller_opt_ate_jac_2NAF(&f,&P,&Q);
   cost_check(&miller_cost);
   cost_printf("",&miller_cost,CHECK_PAIRING_TIME_LOOP);
   printf("---------------------------------\n");
@@ -376,7 +376,7 @@ void check_pairing_count_2NAF_lazy_montgomery(){
 
   printf("miller_ate_lazy_montgomery count\n");
   cost_zero();
-  miller_opt_ate_proj_2NAF_lazy_montgomery(&f,&P,&Q);
+  miller_opt_ate_jac_2NAF_lazy_montgomery(&f,&P,&Q);
   cost_check(&miller_cost);
   cost_printf("",&miller_cost,CHECK_PAIRING_TIME_LOOP);
   printf("---------------------------------\n");
@@ -411,7 +411,7 @@ void check_pairing_time(){
     fp_set_ui(&f.x0.x0,1);
 
     gettimeofday(&tv_start,NULL);
-    miller_opt_ate_proj(&f,&P,&Q);
+    miller_opt_ate_jac(&f,&P,&Q);
     gettimeofday(&tv_end,NULL);
     MILLER_ATE_6SPARSE_TIME+=timedifference_msec(tv_start,tv_end);
 
@@ -447,7 +447,7 @@ void check_pairing_time_2NAF(){
     fp_set_ui(&f.x0.x0,1);
 
     gettimeofday(&tv_start,NULL);
-    miller_opt_ate_proj_2NAF(&f,&P,&Q);
+    miller_opt_ate_jac_2NAF(&f,&P,&Q);
     gettimeofday(&tv_end,NULL);
     MILLER_ATE_6SPARSE_TIME+=timedifference_msec(tv_start,tv_end);
 
@@ -483,7 +483,7 @@ void check_pairing_time_2NAF_lazy_montgomery(){
     fp_set_ui(&f.x0.x0,1);
 
     gettimeofday(&tv_start,NULL);
-    miller_opt_ate_proj_2NAF_lazy_montgomery(&f,&P,&Q);
+    miller_opt_ate_jac_2NAF_lazy_montgomery(&f,&P,&Q);
     gettimeofday(&tv_end,NULL);
     MILLER_ATE_6SPARSE_TIME+=timedifference_msec(tv_start,tv_end);
 

@@ -5,13 +5,14 @@
 extern "C" {
 #endif
 
-int mcl_init();
+// pStr [in] hex string such as 0x94...
+int mcl_init(const char *pStr);
 
 typedef void (*void3u)(uint64_t *z, const uint64_t *x, const uint64_t *y);
-// N = 11
-// z[N*2] = x[N] * y[N]
+// n = 9 or 11
+// z[n*2] = x[n] * y[n]
 extern void3u mcl_mulPre;
-// z[N] = Montgomery(x[N], y[N]);
+// z[n] = Montgomery(x[n], y[n]);
 extern void3u mcl_mont;
 
 #ifdef __cplusplus

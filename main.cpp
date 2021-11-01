@@ -22,8 +22,9 @@
 
 
 int main(){
-  mcl_init();
-
+  // mcl_init();
+  const char *pStr = "0x9401ff90f28bffb0c610fb10bf9e0fefd59211629a7991563c5e468d43ec9cfe1549fd59c20ab5b9a7cda7f27a0067b8303eeb4b31555cf4f24050ed155555cd7fa7a5f8aaaaaaad47ede1a6aaaaaaaab69e6dcb";
+  mcl_init(pStr);
   gmp_randinit_default(state);
   gmp_randseed_ui(state,(unsigned long int)time(NULL));
 
@@ -57,7 +58,8 @@ int main(){
   // BENCH_fp2_fp6_mul_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
   // BENCH_GS_sqr_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
   // BENCH_miller_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
-  BENCH_finalexp_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
+  BENCH_miller_coordinate(CHECK_PAIRING_TIME_LOOP);
+  // BENCH_finalexp_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
   // BENCH_Pairing_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
   
   //SCM_func_check();//未完成
