@@ -157,6 +157,7 @@ void ff_lttp_proj(fp6_t *f, efp_jacobian_t *U, efp_t *S){
 
   //------------------------------------
   fp_sub(&tmp1_fp6.x0.x0,&tmpD_fp,&tmpB_fp);            //L0.0 = D-B
+  
 //------------------------------------
   fp_l1shift(&tmp1_fp6.x2.x0,&tmpA_fp);             // L1.0 = 3A
   fp_add(&tmp1_fp6.x2.x0,&tmp1_fp6.x2.x0,&tmpA_fp); // L1.0 = 3A
