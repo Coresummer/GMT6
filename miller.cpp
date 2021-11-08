@@ -111,7 +111,6 @@ void ff_lttp_proj(fp6_t *f, efp_jacobian_t *U, efp_t *S){
   static fp_t tmp1_fp,tmp2_fp;
   static fp6_t tmp1_fp6;
 
-
   fp_sqr(&tmpA_fp,&U->x);              //A = X^2
   fp_sqr(&tmpB_fp,&U->y);              //B = Y^2
   fp_sqr(&tmpC_fp,&U->z);              //C = Z^2
@@ -150,14 +149,13 @@ void ff_lttp_proj(fp6_t *f, efp_jacobian_t *U, efp_t *S){
   fp_mul(&nextZ, &nextZ,&tmpF_fp);   //Z3 = 4BF
 
   //------------------------------------
-  // fp_set_neg(&tmp1_fp6.x0.x1, &tmpF_fp);                // L0.1 = -F
   fp_mul(&tmp1_fp6.x0.x1,&tmpF_fp,&S->y);        // = L0.1 * S.y
   fp_l1shift(&tmp1_fp6.x0.x1,&tmp1_fp6.x0.x1);
-  // fp_set_neg(&tmp1_fp6.x0.x1, &tmp1_fp6.x0.x1);
-
   //------------------------------------
-  fp_sub(&tmp1_fp6.x0.x0,&tmpD_fp,&tmpB_fp);            //L0.0 = D-B
-  
+  fp_mul(&tmp1_fp,&tmpA_fp,&U->x);
+  fp_sub(&tmp1_fp6.x0.x0,&tmp1_fp,&tmpB_fp);        //L0.0 = AX-B
+  fp_l1shift(&tmp1_fp6.x0.x0, &tmp1_fp6.x0.x0);     //L0.0 = 2(AX-B)
+  fp_add(&tmp1_fp6.x0.x0, &tmp1_fp6.x0.x0,&tmp1_fp);//L0.0 = 3AX-2B
 //------------------------------------
   fp_l1shift(&tmp1_fp6.x2.x0,&tmpA_fp);             // L1.0 = 3A
   fp_add(&tmp1_fp6.x2.x0,&tmp1_fp6.x2.x0,&tmpA_fp); // L1.0 = 3A
@@ -171,7 +169,6 @@ void ff_lttp_proj(fp6_t *f, efp_jacobian_t *U, efp_t *S){
   fp_set(&U->z,&nextZ);
   // efp_proj_w1_2_checkOnCurve_Twist(S);
 }
-
 
 //add line 
 void ff_ltqp(fp6_t *f, efp_jacobian_t *S, efp_t *Q,efp_t *P){
@@ -229,7 +226,7 @@ void ff_ltqp(fp6_t *f, efp_jacobian_t *S, efp_t *Q,efp_t *P){
   //mul base_d
 
   fp6_mul_sparse_add(f,&tmp1_fp6,f); //Capable for further Karatsuba //update
-  // fp6_mul(f,&tmp1_fp6,f);
+
   fp_set(&S->x,&nextX);
   fp_set(&S->y,&nextY);
   fp_set(&S->z,&nextZ);
