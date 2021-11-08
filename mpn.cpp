@@ -64,7 +64,7 @@ int mpn_cmp_ui(mp_limb_t *a,mp_size_t size,unsigned long int ui){
 }
 
 int mpn_chk_limb(mp_limb_t *a,mp_size_t sizeA,mp_size_t sizeB){
-	static int i=0;
+	int i=0;
 	for(i=0;i<sizeB-sizeA;i++){
 		if(a[sizeA+i]!=0)return 0;
 	}
@@ -162,7 +162,7 @@ void mpn_mulmod_montgomery(mp_limb_t *ANS, mp_size_t ANS_size, mp_limb_t *A,
   cost_mod++;
 #endif
 
-  static mp_limb_t T[FPLIMB2];
+  mp_limb_t T[FPLIMB2];
   mpn_zero(T, FPLIMB2);
 
   mpn_mul(T, A, A_size, B, B_size);
@@ -292,7 +292,7 @@ void mpn_mod_montgomery(mp_limb_t *ANS, mp_size_t ANS_size, mp_limb_t *A, mp_siz
 #ifdef DEBUG_COST_A
   cost_mod++;
 #endif
-  static mp_limb_t T[FPLIMB2];
+  mp_limb_t T[FPLIMB2];
   mpn_zero(T, FPLIMB2);
 
   mpn_copyd(T, A, A_size);
@@ -309,8 +309,8 @@ void mpn_to_montgomery(mp_limb_t *ANS, mp_limb_t *A) {
   // cost_mod++;
   cost_mod_nomal++;
 #endif
-  static int i;
-  static mp_limb_t tmp[FPLIMB2];
+  int i;
+  mp_limb_t tmp[FPLIMB2];
   mpn_zero(tmp, FPLIMB2);
   for (i = FPLIMB; i < FPLIMB2; i++)
     tmp[i] = A[i - FPLIMB];
