@@ -30,7 +30,7 @@
 //#define DEBUG_ASSERT
 #define CHECK_PAIRING_TIME_LOOP 100000
 
-/**************Option**************/
+// **************Option**************/
 #define X64
 /**********************************/
 

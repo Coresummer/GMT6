@@ -1406,9 +1406,9 @@ void BENCH_miller_lazy_montgomery(int LOOP){
   printf("============================================================================\n");
 
 
-  CYBOZU_BENCH_C("miller_opt_ate_proj_2NAF()", LOOP, miller_opt_ate_proj_2NAF,&f,&P,&Q);
+  CYBOZU_BENCH_C("miller_opt_ate_jac_2NAF()", LOOP, miller_opt_ate_jac_2NAF,&f,&P,&Q);
   fp6_println("ANS:", &f);
-  CYBOZU_BENCH_C("miller_opt_ate_proj_2NAF_lazy_montgomery()", LOOP, miller_opt_ate_proj_2NAF_lazy_montgomery,&fm,&P,&Q);
+  CYBOZU_BENCH_C("miller_opt_ate_jac_2NAF_lazy_montgomery()", LOOP, miller_opt_ate_jac_2NAF_lazy_montgomery,&fm,&P,&Q);
   fp6_println_montgomery("ANSm:", &fm);
 }
 
@@ -1490,10 +1490,10 @@ void BENCH_Pairingn_lazy_montgomery(int LOOP){
   //e([a]P,[b]Q) を求める
   efp6_scm(&aP,&P,a);
   efp6_scm(&bQ,&Q,b);
-  miller_opt_ate_proj_2NAF(&f,&aP,&bQ);
+  miller_opt_ate_jac_2NAF(&f,&aP,&bQ);
   final_exp(&e1,&f);
   //e(P,Q)^(a*b) を求める
-  miller_opt_ate_proj_2NAF(&f,&P,&Q);
+  miller_opt_ate_jac_2NAF(&f,&P,&Q);
   final_exp(&e2,&f);
   mpz_mul(ab,a,b);
   fp6_pow(&e2,&e2,ab);
@@ -1511,10 +1511,10 @@ void BENCH_Pairingn_lazy_montgomery(int LOOP){
   printf("---------------------------------\n");
   efp6_scm(&aP,&P,a);
   efp6_scm(&bQ,&Q,b);
-  miller_opt_ate_proj_2NAF_lazy_montgomery(&f,&aP,&bQ);
+  miller_opt_ate_jac_2NAF_lazy_montgomery(&f,&aP,&bQ);
   final_exp_lazy_montgomery(&e1,&f);
   //e(P,Q)^(a*b) を求める
-  miller_opt_ate_proj_2NAF_lazy_montgomery(&f,&P,&Q);
+  miller_opt_ate_jac_2NAF_lazy_montgomery(&f,&P,&Q);
   final_exp_lazy_montgomery(&e2,&f);
   mpz_mul(ab,a,b);
   fp6_pow_montgomery(&e2,&e2,ab);
@@ -1530,11 +1530,11 @@ void BENCH_Pairingn_lazy_montgomery(int LOOP){
 
   // printf("--------Benching pairing()-------\n");
 
-  // CYBOZU_BENCH_C("miller_opt_ate_proj_2NAF()", LOOP, miller_opt_ate_proj_2NAF,&f,&P,&Q);
+  // CYBOZU_BENCH_C("miller_opt_ate_jac_2NAF()", LOOP, miller_opt_ate_jac_2NAF,&f,&P,&Q);
   // CYBOZU_BENCH_C("final_exp()               ", LOOP, final_exp,&e2, &e1);
   // printf("---------------------------------\n");
 
-  CYBOZU_BENCH_C("miller_opt_ate_proj_2NAF_lazy_montgomery()", LOOP, miller_opt_ate_proj_2NAF_lazy_montgomery,&f,&P,&Q);
+  CYBOZU_BENCH_C("miller_opt_ate_jac_2NAF_lazy_montgomery()", LOOP, miller_opt_ate_jac_2NAF_lazy_montgomery,&f,&P,&Q);
   CYBOZU_BENCH_C("final_exp_lazy_montgomery()               ", LOOP, final_exp_lazy_montgomery, &e2, &e1);
   printf("---------------------------------\n");
 
@@ -1590,10 +1590,10 @@ void BENCH_Pairingn_lazy_montgomery2(int LOOP){
   //e([a]P,[b]Q) を求める
   efp6_scm(&aP,&P,a);
   efp6_scm(&bQ,&Q,b);
-  miller_opt_ate_proj_2NAF(&f,&aP,&bQ);
+  miller_opt_ate_jac_2NAF(&f,&aP,&bQ);
   final_exp(&e1,&f);
   //e(P,Q)^(a*b) を求める
-  miller_opt_ate_proj_2NAF(&f,&P,&Q);
+  miller_opt_ate_jac_2NAF(&f,&P,&Q);
   final_exp(&e2,&f);
   mpz_mul(ab,a,b);
   fp6_pow(&e2,&e2,ab);
@@ -1611,10 +1611,10 @@ void BENCH_Pairingn_lazy_montgomery2(int LOOP){
   printf("---------------------------------\n");
   efp6_scm(&aP,&P,a);
   efp6_scm(&bQ,&Q,b);
-  miller_opt_ate_proj_2NAF_lazy_montgomery(&f,&aP,&bQ);
+  miller_opt_ate_jac_2NAF_lazy_montgomery(&f,&aP,&bQ);
   final_exp_lazy_montgomery2(&e1,&f);
   //e(P,Q)^(a*b) を求める
-  miller_opt_ate_proj_2NAF_lazy_montgomery(&f,&P,&Q);
+  miller_opt_ate_jac_2NAF_lazy_montgomery(&f,&P,&Q);
   final_exp_lazy_montgomery2(&e2,&f);
   mpz_mul(ab,a,b);
   fp6_pow_montgomery(&e2,&e2,ab);
@@ -1630,11 +1630,11 @@ void BENCH_Pairingn_lazy_montgomery2(int LOOP){
 
   // printf("--------Benching pairing()-------\n");
 
-  // CYBOZU_BENCH_C("miller_opt_ate_proj_2NAF()", LOOP, miller_opt_ate_proj_2NAF,&f,&P,&Q);
+  // CYBOZU_BENCH_C("miller_opt_ate_jac_2NAF()", LOOP, miller_opt_ate_jac_2NAF,&f,&P,&Q);
   // CYBOZU_BENCH_C("final_exp()               ", LOOP, final_exp,&e2, &e1);
   // printf("---------------------------------\n");
 
-  CYBOZU_BENCH_C("miller_opt_ate_proj_2NAF_lazy_montgomery()", LOOP, miller_opt_ate_proj_2NAF_lazy_montgomery,&f,&P,&Q);
+  CYBOZU_BENCH_C("miller_opt_ate_jac_2NAF_lazy_montgomery()", LOOP, miller_opt_ate_jac_2NAF_lazy_montgomery,&f,&P,&Q);
   CYBOZU_BENCH_C("final_exp_lazy_montgomery2()               ", LOOP, final_exp_lazy_montgomery2, &e2, &e1);
   printf("---------------------------------\n");
 

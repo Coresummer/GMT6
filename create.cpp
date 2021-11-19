@@ -64,8 +64,6 @@ void check_base(){
   mpz_divexact_ui(expo,expo,3);
   fp_pow(&tmp,&base_c,expo);
   if(fp_cmp_one(&tmp)==0) printf("error!!! c^((p-1)/3)==1\n\n");
-
-
   
   //check base_c = QNR
   fp_set_ui(&tmp2.x1,1);
