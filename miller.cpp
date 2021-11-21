@@ -105,7 +105,9 @@ void ff_lttp_costello(fp6_t *f, efp_jacobian_t *U, efp_t *S){//U = S, S = P
   fp_sqr(&tmpC_fp,&U->z); //U->z
 
   fp_l1shift(&tmpD_fp, &tmpC_fp);
-  fp_add(&tmpD_fp,&tmpD_fp, &tmpC_fp);//D = 3bC
+  fp_add(&tmpD_fp,&tmpD_fp, &tmpC_fp);//D = 3bC (b=-1,twisted b= -base_c_inv)
+  
+  fp_set_neg(&tmpD_fp,&tmpD_fp);
   fp_mul(&tmpD_fp,&tmpD_fp, &base_c_inv);  //D = 3bC
 
   fp_add(&tmpE_fp,&U->x,&U->y);//X1+Y1
