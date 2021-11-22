@@ -583,14 +583,13 @@ void efp_checkOnCurve_Twsit(efp_t* A){
   fp_println("afin_diff:",&tmp1_fp);
 }
 
-void efp_proj_w1_2_checkOnCurve_Twist(efp_jacobian_t* A){
+void efp_proj_w1_1_checkOnCurve_Twist(efp_jacobian_t* A){
   static fp_t tmp1_fp, tmp2_fp, tmp3_fp, tmp4_fp;
 
   fp_inv(&tmp1_fp,&A->z);          //Z^-1
-  fp_sqr(&tmp2_fp,&tmp1_fp);       //Z^-2
 
   fp_mul(&tmp3_fp,&tmp1_fp,&A->x);    //x = X*Z^-1
-  fp_mul(&tmp4_fp,&tmp2_fp,&A->y);    //y = Y*Z^-2
+  fp_mul(&tmp4_fp,&tmp1_fp,&A->y);    //y = Y*Z^-1
 
   fp_sqr(&tmp2_fp,&tmp4_fp);          //y^2
 
@@ -599,6 +598,7 @@ void efp_proj_w1_2_checkOnCurve_Twist(efp_jacobian_t* A){
 
   fp_set_neg(&tmp4_fp, &base_c_inv);
   fp_add(&tmp1_fp,&tmp1_fp,&tmp4_fp);  //x^3 - c^-1
+  // fp_add(&tmp1_fp,&tmp1_fp,&tmp4_fp);     //x^3 - c
 
   fp_sub(&tmp1_fp,&tmp1_fp,&tmp2_fp);
   

@@ -92,7 +92,7 @@ void ff_lttp(fp6_t *f, efp_jacobian_t *S, efp_t *P){
 
 //double line //
 void ff_lttp_costello(fp6_t *f, efp_jacobian_t *U, efp_t *S){//U = S, S = P
-  fp6_sqr(f,f); //update
+  fp6_sqr(f,f); //update should put into line update
 
   static fp_t tmpA_fp, tmpB_fp,tmpC_fp,tmpD_fp,tmpE_fp,tmpF_fp,tmpG_fp;
   static fp_t nextX,nextY,nextZ;
@@ -100,25 +100,24 @@ void ff_lttp_costello(fp6_t *f, efp_jacobian_t *U, efp_t *S){//U = S, S = P
 
   static fp6_t tmp1_fp6;//DBLLine result
 
-  fp_sqr(&tmpA_fp,&U->x); //U->x
-  fp_sqr(&tmpB_fp,&U->y); //U->y
-  fp_sqr(&tmpC_fp,&U->z); //U->z
+  fp_sqr(&tmpA_fp,&U->x); //A=X1^2
+  fp_sqr(&tmpB_fp,&U->y); //B=Y1^2
+  fp_sqr(&tmpC_fp,&U->z); //C=Z1^2
 
-  fp_l1shift(&tmpD_fp, &tmpC_fp);
-  fp_add(&tmpD_fp,&tmpD_fp, &tmpC_fp);//D = 3bC (b=-1,twisted b= -base_c_inv)
-  
-  fp_set_neg(&tmpD_fp,&tmpD_fp);
-  fp_mul(&tmpD_fp,&tmpD_fp, &base_c_inv);  //D = 3bC
+  fp_l1shift(&tmpD_fp, &tmpC_fp);          //D = 2C
+  fp_add(&tmpD_fp,&tmpD_fp, &tmpC_fp);     //D = 3C 
+  fp_set_neg(&tmpD_fp,&tmpD_fp);           //D = 3bC
+  fp_mul(&tmpD_fp,&tmpD_fp, &base_c_inv);  //D = 3bC (b=-1, twisted b= -base_c_inv)
 
   fp_add(&tmpE_fp,&U->x,&U->y);//X1+Y1
   fp_sqr(&tmpE_fp,&tmpE_fp);   //(X1+Y1)^2
   fp_sub(&tmpE_fp,&tmpE_fp,&tmpA_fp); //E=(X1+Y1)^2-A
   fp_sub(&tmpE_fp,&tmpE_fp,&tmpB_fp); //E=(X1+Y1)^2-B-A
 
-  fp_add(&tmpF_fp,&U->z,&U->y);//Z1+Y1
-  fp_sqr(&tmpF_fp,&tmpF_fp);   //(Z1+Y1)^2
-  fp_sub(&tmpF_fp,&tmpF_fp,&tmpC_fp); //E=(Z1+Y1)^2-B 
-  fp_sub(&tmpF_fp,&tmpF_fp,&tmpB_fp); //E=(Z1+Y1)^2-B-C
+  fp_add(&tmpF_fp,&U->z,&U->y);//F=Z1+Y1
+  fp_sqr(&tmpF_fp,&tmpF_fp);   //F=(Z1+Y1)^2
+  fp_sub(&tmpF_fp,&tmpF_fp,&tmpC_fp); //F=(Z1+Y1)^2-B 
+  fp_sub(&tmpF_fp,&tmpF_fp,&tmpB_fp); //F=(Z1+Y1)^2-B-C
 
   fp_l1shift(&tmpG_fp, &tmpD_fp);
   fp_add(&tmpG_fp,&tmpG_fp,&tmpD_fp); //G= 3D
@@ -136,8 +135,8 @@ void ff_lttp_costello(fp6_t *f, efp_jacobian_t *U, efp_t *S){//U = S, S = P
   fp_sub(&nextY,&nextY,&tmp1_fp);   //Y3 = (B+G)^2 - 12D^2
 
   fp_mul(&nextZ,&tmpB_fp,&tmpF_fp); //B*F
-  fp_l1shift(&nextZ,&nextZ);    //2B*F
-  fp_l1shift(&nextZ,&nextZ);    //Z3=4B*F
+  fp_l1shift(&nextZ,&nextZ);        //2B*F
+  fp_l1shift(&nextZ,&nextZ);        //Z3=4B*F
 //-----------------------------------------------
   fp_sub(&tmp1_fp6.x0.x0,&tmpD_fp,&tmpB_fp);        //D-B
   fp_mul_base(&tmp1_fp6.x0.x0,&tmp1_fp6.x0.x0);     //(D-B)*c
@@ -154,9 +153,10 @@ void ff_lttp_costello(fp6_t *f, efp_jacobian_t *U, efp_t *S){//U = S, S = P
   fp_set(&U->x,&nextX);
   fp_set(&U->y,&nextY);
   fp_set(&U->z,&nextZ);
-  efp_proj_w1_2_checkOnCurve_Twist(U);
-}
 
+  // printf("DBL\n");
+  // efp_proj_w1_1_checkOnCurve_Twist(U);
+}
 
 //add line 
 void ff_ltqp(fp6_t *f, efp_jacobian_t *S, efp_t *Q,efp_t *P){
@@ -224,34 +224,39 @@ void ff_ltqp(fp6_t *f, efp_jacobian_t *S, efp_t *Q,efp_t *P){
 
 //add line 
 void ff_ltqp_costello_mixed(fp6_t *f, efp_jacobian_t *U, efp_t *R,efp_t *S){
-  static fp_t tmpD_fp,tmpE_fp,tmpF_fp,tmpH_fp,tmpI_fp,tmpJ_fp;
+  static fp_t tmpD_fp,tmpE_fp,tmpF_fp,tmpG_fp,tmpH_fp,tmpI_fp,tmpJ_fp;
   static fp_t nextX,nextY,nextZ;
   static fp_t tmp1_fp,tmp2_fp;
 
   static fp6_t tmp1_fp6;//ADDLine result
 
-  //A=X1Z2
-  //B=Y1Z2
-  //C=Z1
-  //D=Z1X2-A = Z1X2 - X1Z2 = Z1X2 - X1
-  fp_mul(&tmpD_fp,&U->z,&R->x);   //tmp1 = X2Z1
-  fp_sub(&tmpD_fp,&tmpD_fp,&U->x);// D = X2Z1 - X1 = -(X1-X2Z1)
+  //A=X1Z2 = X1
+  //B=Y1Z2 = Y1
+  //C=Z1Z2 = Z1
+  fp_mul(&tmpD_fp,&U->z,&R->x);   //D=Z1X2-A = Z1X2 - X1Z2 = Z1X2 - X1
+  fp_sub(&tmpD_fp,&tmpD_fp,&U->x);//D = X2Z1 - X1 = -(X1-X2Z1)
   //E=B-Z1Y2
-  fp_mul(&tmpE_fp,&U->z,&R->y);   //res2 = Y2Z1
+  fp_mul(&tmpE_fp,&U->z,&R->y);   //Y2Z1
   fp_sub(&tmpE_fp,&U->y,&tmpE_fp);//B-Z1Y2 = Y1-Y2Z1
   //F=D^2
   fp_sqr(&tmpF_fp,&tmpD_fp);
-  //H= -D
-  fp_set_neg(&tmpH_fp,&tmpD_fp);
+  //G=E^2
+  fp_sqr(&tmpG_fp,&tmpE_fp);
+  //H= -D*F
+  fp_mul(&tmpH_fp,&tmpD_fp,&tmpF_fp);
+  fp_set_neg(&tmpH_fp,&tmpH_fp);
   //I=FA
   fp_mul(&tmpI_fp,&tmpF_fp,&U->x);
-  //J=H+C
-  fp_add(&tmpJ_fp,&tmpH_fp,&U->z);
+  //J=H+C*G-2I
+  fp_mul(&tmpJ_fp,&U->z,&tmpG_fp);  //C*G
+  fp_add(&tmpJ_fp,&tmpH_fp,&tmpJ_fp);//tmp2 = H+C*G
+  fp_l1shift(&tmp1_fp, &tmpI_fp);
+  fp_sub(&tmpJ_fp,&tmpJ_fp,&tmp1_fp);//H + C*G - 2I
 
-  //X3=-D*J
-  fp_mul(&nextX,&tmpD_fp,&tmpH_fp);
+  //X3=-DJ
+  fp_mul(&nextX,&tmpJ_fp,&tmpD_fp);
   fp_set_neg(&nextX,&nextX);
-  
+
   //Y3=E(I-J)-HB
   fp_mul(&tmp1_fp,&tmpH_fp,&U->y);//HB
   fp_sub(&nextY,&tmpI_fp,&tmpJ_fp);//I-J
@@ -265,12 +270,13 @@ void ff_ltqp_costello_mixed(fp6_t *f, efp_jacobian_t *U, efp_t *R,efp_t *S){
   fp_set_neg(&tmp1_fp6.x0.x1,&tmpE_fp);         //-(Y1-Y2Z1)
   fp_mul(&tmp1_fp6.x0.x1,&tmp1_fp6.x0.x1,&S->x);//-(Y1-Y2Z1)xS
 //-----------------------------------------------
-  fp_set_neg(&tmp1_fp,&tmpD_fp);                //(X1-X2Z1)
-  fp_mul(&tmp1_fp6.x2.x0,&tmp1_fp,&S->y);       //(X1-X2Z1)yS
+  fp_mul(&tmp1_fp6.x2.x0,&tmpD_fp,&S->y);       //(X1-X2Z1)yS
+  fp_set_neg(&tmp1_fp6.x2.x0,&tmp1_fp6.x2.x0);  //(X1-X2Z1)
+
 //-----------------------------------------------
-  fp_mul(&tmp1_fp,&tmp1_fp,&R->y);            //Y2(X1-X2Z1)
+  fp_mul(&tmp1_fp,&tmpD_fp,&R->y);            //Y2(X1-X2Z1)
   fp_mul(&tmp2_fp,&tmpE_fp,&R->x);            //X2(Y1-Y2Z1)
-  fp_sub(&tmp1_fp6.x2.x1,&tmp1_fp,&tmp2_fp);  //Y2(X1-X2Z1) - X2(Y1-Y2Z1)
+  fp_add(&tmp1_fp6.x2.x1,&tmp1_fp,&tmp2_fp);  //Y2(X1-X2Z1) - X2(Y1-Y2Z1)
 //-----------------------------------------------
   
   // fp6_mul_sparse_add(f,&tmp1_fp6,f); //Capable for further Karatsuba //update
@@ -279,7 +285,8 @@ void ff_ltqp_costello_mixed(fp6_t *f, efp_jacobian_t *U, efp_t *R,efp_t *S){
   fp_set(&U->x,&nextX);
   fp_set(&U->y,&nextY);
   fp_set(&U->z,&nextZ);
-  efp_proj_w1_2_checkOnCurve_Twist(U);
+  // printf("ADD\n");
+  // efp_proj_w1_1_checkOnCurve_Twist(U);
 }
 
 
@@ -474,7 +481,8 @@ void miller_opt_ate_proj_2NAF(fp6_t *f,efp6_t *P,efp6_t *Q){
     efp6_to_efp(&mapped_Q,Q);//twist
     efp6_to_Jacefp(&S,Q);
     efp_set_neg(&mapped_Q_neg,&mapped_Q);
-    efp_proj_w1_2_checkOnCurve_Twist(&S);
+    // efp_proj_w1_1_checkOnCurve_Twist(&S);
+
     mp_bitcnt_t i;
     for(i=(miller_loop_v.size() -2);i!=-1;i--){
       switch(miller_loop_v[i]){
