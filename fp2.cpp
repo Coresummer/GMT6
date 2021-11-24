@@ -216,11 +216,11 @@ void fp2_mul_lazy_montgomery(fp2_t *ANS,fp2_t *A,fp2_t *B){
   fp_mul_base(&tmp3_fp, &tmp2_fp);  //ab+bdΘ^2
   fp_add(&ANS->x0, &tmp1_fp, &tmp3_fp);  //ab+bdΘ^2
 
-  fp_add_nonmod_single(&tmp3_fp,&tmp_A.x0,&tmp_A.x1);//a+b
-  fp_add_nonmod_single(&tmp4_fp,&tmp_B.x0,&tmp_B.x1);//c+d
+  fp_add(&tmp3_fp,&tmp_A.x0,&tmp_A.x1);//a+b
+  fp_add(&tmp4_fp,&tmp_B.x0,&tmp_B.x1);//c+d
   fp_mulmod_montgomery(&tmp5_fp,&tmp3_fp,&tmp4_fp); //(a+b)(c+d)
   
-  fp_sub_nonmod_single(&tmp3_fp,&tmp5_fp,&tmp1_fp);//(a+b)(c+d) - ac
+  fp_sub(&tmp3_fp,&tmp5_fp,&tmp1_fp);//(a+b)(c+d) - ac
   fp_sub(&ANS->x1,&tmp3_fp,&tmp2_fp);//(a+b)(c+d) - ac -bd
 } 
 

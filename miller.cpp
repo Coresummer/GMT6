@@ -876,7 +876,7 @@ void miller_opt_ate_jac_2NAF_lazy_montgomery(fp6_t *f,efp6_t *P,efp6_t *Q){
         case 1:
           ff_lttp_lazy_montgomery(f,&S,&mapped_P);
           ff_ltqp_lazy_montgomery(f,&S,&mapped_Q,&mapped_P);
-          // fp6_println_montgomery("&f1", f);
+
           break;
         case -1:
           ff_lttp_lazy_montgomery(f,&S,&mapped_P);
@@ -884,6 +884,7 @@ void miller_opt_ate_jac_2NAF_lazy_montgomery(fp6_t *f,efp6_t *P,efp6_t *Q){
 
           break;
         default:
+
             break;
       }
     }
@@ -904,6 +905,7 @@ void miller_opt_ate_proj_2NAF_lazy_montgomery(fp6_t *f,efp6_t *P,efp6_t *Q){
     efp6_to_efp(&mapped_Q,Q);//twist
     efp6_to_Jacefp_montgomery(&S,Q);
     efp_set_neg_montgomery(&mapped_Q_neg,&mapped_Q);//here
+
     ff_lttp_costello_lazy_montgomery_0(f,&S,&mapped_P);
     mp_bitcnt_t i;
     for(i=(miller_loop_v.size() -3);i!=-1;i--){//-1

@@ -1608,7 +1608,7 @@ void BENCH_Pairing_jac_lazy_montgomery(int LOOP){
   #endif
 
   printf("---------------------------------\n");
-  printf("check regular pairing()\n");
+  printf("check regular jac pairing()\n");
   printf("---------------------------------\n");
   //e([a]P,[b]Q) を求める
   efp6_scm(&aP,&P,a);
@@ -1630,7 +1630,7 @@ void BENCH_Pairing_jac_lazy_montgomery(int LOOP){
     printf("e([a]P,[b]Q) != e(P,Q)^(a*b)\n\n");
   }
   printf("---------------------------------\n");
-  printf("check lazy montgomery pairing()\n");
+  printf("check jac lazy montgomery pairing()\n");
   printf("---------------------------------\n");
   efp6_scm(&aP,&P,a);
   efp6_scm(&bQ,&Q,b);
@@ -1709,7 +1709,7 @@ void BENCH_Pairing_proj_lazy_montgomery(int LOOP){
   #endif
 
   printf("---------------------------------\n");
-  printf("check regular pairing()\n");
+  printf("check regular proj pairing()\n");
   printf("---------------------------------\n");
   //e([a]P,[b]Q) を求める
   efp6_scm(&aP,&P,a);
@@ -1731,7 +1731,7 @@ void BENCH_Pairing_proj_lazy_montgomery(int LOOP){
     printf("e([a]P,[b]Q) != e(P,Q)^(a*b)\n\n");
   }
   printf("---------------------------------\n");
-  printf("check lazy montgomery pairing()\n");
+  printf("check proj lazy montgomery pairing()\n");
   printf("---------------------------------\n");
   efp6_scm(&aP,&P,a);
   efp6_scm(&bQ,&Q,b);
