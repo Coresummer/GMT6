@@ -11,6 +11,8 @@ void efp_printf(std::string str ,efp_t *P);
 void efp_println(std::string str ,efp_t *P);
 void efp_projective_printf(std::string str ,efp_projective_t *P);
 void efp_jacobian_printf(std::string str ,efp_jacobian_t *P);
+void efp_jacobian_println(std::string str ,efp_jacobian_t *P);
+void efp_jacobian_println_montgomery(std::string str ,efp_jacobian_t *P);
 void efp_set(efp_t *ANS,efp_t *A);
 void efp_projective_set(efp_projective_t *ANS,efp_projective_t *A);
 void efp_jacobian_set(efp_jacobian_t *ANS,efp_jacobian_t *A);
@@ -40,4 +42,5 @@ void efp_eca_mixture_lazy_montgomery(efp_jacobian_t *ANS,efp_jacobian_t *P1,efp_
 void efp_scm(efp_t *ANS,efp_t *P,mpz_t scalar);
 void efp_jacobi_checkOnCurve_Twist(efp_jacobian_t* A);
 void efp_checkOnCurve_Twsit(efp_t* A);
+void efp_proj_w1_1_checkOnCurve_Twist(efp_jacobian_t* A);
 #endif

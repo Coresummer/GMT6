@@ -77,6 +77,36 @@ void efp_jacobian_printf(std::string str ,efp_jacobian_t *P){
   }
 }
 
+void efp_jacobian_println(std::string str ,efp_jacobian_t *P){
+  printf("%s",str.c_str());
+  if(P->infinity==0){
+    printf("(");
+    fp_printf("",&P->x);
+    printf(",");
+    fp_printf("",&P->y);
+    printf(",");
+    fp_println("",&P->z);
+    printf(")");
+  }else{
+    printf("Infinity");
+  }
+}
+
+void efp_jacobian_println_montgomery(std::string str ,efp_jacobian_t *P){
+  printf("%s",str.c_str());
+  if(P->infinity==0){
+    printf("(");
+    fp_printf_montgomery("",&P->x);
+    printf(",");
+    fp_printf_montgomery("",&P->y);
+    printf(",");
+    fp_println_montgomery("",&P->z);
+    printf(")");
+  }else{
+    printf("Infinity");
+  }
+}
+
 void efp_set(efp_t *ANS,efp_t *A){
   fp_set(&ANS->x,&A->x);
   fp_set(&ANS->y,&A->y);
@@ -581,4 +611,26 @@ void efp_checkOnCurve_Twsit(efp_t* A){
 
   fp_sub(&tmp1_fp,&tmp2_fp,&tmp1_fp);
   fp_println("afin_diff:",&tmp1_fp);
+}
+
+void efp_proj_w1_1_checkOnCurve_Twist(efp_jacobian_t* A){
+  static fp_t tmp1_fp, tmp2_fp, tmp3_fp, tmp4_fp;
+
+  fp_inv(&tmp1_fp,&A->z);          //Z^-1
+
+  fp_mul(&tmp3_fp,&tmp1_fp,&A->x);    //x = X*Z^-1
+  fp_mul(&tmp4_fp,&tmp1_fp,&A->y);    //y = Y*Z^-1
+
+  fp_sqr(&tmp2_fp,&tmp4_fp);          //y^2
+
+  fp_sqr(&tmp1_fp,&tmp3_fp);          //x^2
+  fp_mul(&tmp1_fp,&tmp1_fp,&tmp3_fp); //x^3
+
+  fp_set_neg(&tmp4_fp, &base_c_inv);
+  fp_add(&tmp1_fp,&tmp1_fp,&tmp4_fp);  //x^3 - c^-1
+  // fp_add(&tmp1_fp,&tmp1_fp,&tmp4_fp);     //x^3 - c
+
+  fp_sub(&tmp1_fp,&tmp1_fp,&tmp2_fp);
+  
+  fp_println("proj_diff:",&tmp1_fp),getchar();
 }
