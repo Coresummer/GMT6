@@ -11,6 +11,8 @@ void efp_printf(std::string str ,efp_t *P);
 void efp_println(std::string str ,efp_t *P);
 void efp_projective_printf(std::string str ,efp_projective_t *P);
 void efp_jacobian_printf(std::string str ,efp_jacobian_t *P);
+void efp_jacobian_println(std::string str ,efp_jacobian_t *P);
+void efp_jacobian_println_montgomery(std::string str ,efp_jacobian_t *P);
 void efp_set(efp_t *ANS,efp_t *A);
 void efp_projective_set(efp_projective_t *ANS,efp_projective_t *A);
 void efp_jacobian_set(efp_jacobian_t *ANS,efp_jacobian_t *A);

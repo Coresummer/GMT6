@@ -427,8 +427,8 @@ void check_pairing_count_2NAF(){
   printf("*********************************************************************************************\n\n");
 }
 
-void check_pairing_count_2NAF_lazy_montgomery(){
-  printf("check_pairing_count_lazy_montgomery() 開始\n");
+void check_pairing_jac_count_2NAF_lazy_montgomery(){
+  printf("check_pairing_jac_count_lazy_montgomery() 開始\n");
   cost miller_cost, finalexp_cost, pairing_cost;
 
   efp6_t P,Q;
@@ -441,9 +441,40 @@ void check_pairing_count_2NAF_lazy_montgomery(){
   generate_g1(&P);
   generate_g2(&Q);
 
-  printf("miller_ate_lazy_montgomery count\n");
+  printf("miller_opt_ate_jac_lazy_montgomery count\n");
   cost_zero();
   miller_opt_ate_jac_2NAF_lazy_montgomery(&f,&P,&Q);
+  cost_check(&miller_cost);
+  cost_printf("",&miller_cost,CHECK_PAIRING_TIME_LOOP);
+  printf("---------------------------------\n");
+
+  printf("final_exp()_lazy_montgomery count\n");
+  cost_zero();
+  final_exp_lazy_montgomery(&e,&f);
+  cost_check(&finalexp_cost);
+  cost_printf("",&finalexp_cost,CHECK_PAIRING_TIME_LOOP);
+  printf("---------------------------------\n");
+
+  printf("*********************************************************************************************\n\n");
+}
+
+void check_pairing_proj_count_2NAF_lazy_montgomery(){
+  printf("check_pairing_proj_count_lazy_montgomery() 開始\n");
+  cost miller_cost, finalexp_cost, pairing_cost;
+
+  efp6_t P,Q;
+  fp6_t f,e;
+  efp6_init(&P);
+  efp6_init(&Q);
+  fp6_init(&f);
+  fp6_init(&e);
+
+  generate_g1(&P);
+  generate_g2(&Q);
+
+  printf("miller_opt_ate_proj_lazy_montgomery count\n");
+  cost_zero();
+  miller_opt_ate_proj_2NAF_lazy_montgomery(&f,&P,&Q);
   cost_check(&miller_cost);
   cost_printf("",&miller_cost,CHECK_PAIRING_TIME_LOOP);
   printf("---------------------------------\n");
@@ -494,7 +525,6 @@ void check_pairing_time(){
   printf("*********************************************************************************************\n\n");
 }
 
-
 void check_pairing_time_2NAF(){
   printf("check_pairing_time_2NAF() 開始\n");
   efp6_t P,Q;
@@ -529,7 +559,6 @@ void check_pairing_time_2NAF(){
 
   printf("*********************************************************************************************\n\n");
 }
-
 
 void check_pairing_time_2NAF_lazy_montgomery(){
   printf("check_pairing_time_2NAF_lazy_montgomery() 開始\n");

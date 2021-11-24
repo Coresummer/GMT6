@@ -178,6 +178,8 @@ void pre_montgomery() {
   mpz_clear(tmp_z);
   mpz_clear(R);
   mpz_clear(R3_z);
+
+  fp_to_montgomery(&base_c_invMR, &base_c_inv);
 }
 
 

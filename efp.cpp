@@ -77,6 +77,36 @@ void efp_jacobian_printf(std::string str ,efp_jacobian_t *P){
   }
 }
 
+void efp_jacobian_println(std::string str ,efp_jacobian_t *P){
+  printf("%s",str.c_str());
+  if(P->infinity==0){
+    printf("(");
+    fp_printf("",&P->x);
+    printf(",");
+    fp_printf("",&P->y);
+    printf(",");
+    fp_println("",&P->z);
+    printf(")");
+  }else{
+    printf("Infinity");
+  }
+}
+
+void efp_jacobian_println_montgomery(std::string str ,efp_jacobian_t *P){
+  printf("%s",str.c_str());
+  if(P->infinity==0){
+    printf("(");
+    fp_printf_montgomery("",&P->x);
+    printf(",");
+    fp_printf_montgomery("",&P->y);
+    printf(",");
+    fp_println_montgomery("",&P->z);
+    printf(")");
+  }else{
+    printf("Infinity");
+  }
+}
+
 void efp_set(efp_t *ANS,efp_t *A){
   fp_set(&ANS->x,&A->x);
   fp_set(&ANS->y,&A->y);
