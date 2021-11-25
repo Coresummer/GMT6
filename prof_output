@@ -50,7 +50,7 @@ Each sample counts as 0.01 seconds.
   0.21     37.67     0.08                             mpn_tdiv_q_ui(unsigned long*, unsigned long*, long, unsigned long)
   0.21     37.75     0.08                             fp6_finalexpow_3w_2NAF_lazy_montgomery(fp6_t*, fp6_t*)
   0.20     37.82     0.08                             fp2_lshift(fp2_t*, fp2_t*, unsigned long)
-  0.16     37.88     0.06                             miller_opt_ate_proj_2NAF_lazy_montgomery(fp6_t*, efp6_t*, efp6_t*)
+  0.16     37.88     0.06                             miller_opt_ate_jac_2NAF_lazy_montgomery(fp6_t*, efp6_t*, efp6_t*)
   0.14     37.94     0.06                             fp_mul_base_inv_single(fp_t*, fp_t*)
   0.14     37.99     0.06                             fp_println_montgomery(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, fp_t*)
   0.13     38.04     0.05                             fp_mul(fp_t*, fp_t*, fp_t*)
