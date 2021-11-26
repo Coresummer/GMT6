@@ -442,37 +442,37 @@ void ff_lttp_lazy_montgomery_0(fp6_t *f, efp_jacobian_t *S, efp_t *P){
   // static fp6_t tmp1_fp6;
 
   fp_sqrmod_montgomery(&t1,&S->y);              //t1 = Y^2
-  fp_l1shift_nonmod_single(&tmp2_fp,&t1);      //tmp2 = 2*t1
+  fp_l1shift(&tmp2_fp,&t1);      //tmp2 = 2*t1
 
   fp_mulmod_montgomery(&t2,&tmp2_fp,&S->x);     //t2 = 2*t1*X
-  fp_l1shift_nonmod_single(&t2, &t2);          //t2 = 4*t1*X
+  fp_l1shift(&t2, &t2);          //t2 = 4*t1*X
 
   fp_sqrmod_montgomery(&t3,&S->x);              //t3 = X^2
-  fp_l1shift_nonmod_single(&tmp1_fp, &t3);
-  fp_add_nonmod_single(&t3,&t3,&tmp1_fp);
+  fp_l1shift(&tmp1_fp, &t3);
+  fp_add(&t3,&t3,&tmp1_fp);
 
   fp_sqrmod_montgomery(&nextX,&t3);             //nextX = t3^2
-  fp_l1shift_nonmod_single(&tmp1_fp, &t2);             //tmp1 = 2*t2
-  fp_sub_nonmod_single(&nextX,&nextX,&tmp1_fp); //nextX = t3^2 - 2*t2
+  fp_l1shift(&tmp1_fp, &t2);             //tmp1 = 2*t2
+  fp_sub(&nextX,&nextX,&tmp1_fp); //nextX = t3^2 - 2*t2
 
-  fp_sub_nonmod_single(&nextY,&t2,&nextX);      //nextY = t2-nextX
+  fp_sub(&nextY,&t2,&nextX);      //nextY = t2-nextX
   fp_mulmod_montgomery(&nextY,&nextY,&t3);      //nextY = (t2-nextX)t3
 
   fp_sqrmod_montgomery(&tmp1_fp,&tmp2_fp);      //tmp1 = tmp2^2 = 4t1^2
-  fp_l1shift_nonmod_single(&tmp1_fp,&tmp1_fp); //tmp1 = 8t1^2
+  fp_l1shift(&tmp1_fp,&tmp1_fp); //tmp1 = 8t1^2
 
-  fp_sub_nonmod_single(&nextY,&nextY,&tmp1_fp); //nextY = (t2-nextX)t3 - 8t1^2
+  fp_sub(&nextY,&nextY,&tmp1_fp); //nextY = (t2-nextX)t3 - 8t1^2
 
-  fp_l1shift_nonmod_single(&nextZ,&S->y);      //nextZ = 2Y
+  fp_l1shift(&nextZ,&S->y);      //nextZ = 2Y
   fp_mulmod_montgomery(&nextZ,&nextZ,&S->z);    //nextZ = 2YZ
   fp_sqrmod_montgomery(&tmp1_fp,&S->z);         //tmp1 = Z^2
 
   fp_mulmod_montgomery(&f->x0.x1,&nextZ,&tmp1_fp);           // = nextZ*Z^2
   fp_mulmod_montgomery(&f->x0.x1,&f->x0.x1,&P->y);     // = nextZ*Z^2Py
-  fp_l1shift_nonmod_single(&f->x0.x1,&f->x0.x1);      // = 2*nextZ*Z^2Py
+  fp_l1shift(&f->x0.x1,&f->x0.x1);      // = 2*nextZ*Z^2Py
 
   fp_mulmod_montgomery(&tmp3_fp,&t3,&S->x);                        //tmp3 = t3*X
-  fp_sub_nonmod_single(&f->x0.x0,&tmp3_fp,&tmp2_fp);         // = t3*X - 2*t1
+  fp_sub(&f->x0.x0,&tmp3_fp,&tmp2_fp);         // = t3*X - 2*t1
 
   fp_mulmod_montgomery(&f->x2.x0,&t3,&P->x);                 // = t3*Px
   fp_mulmod_montgomery(&f->x2.x0,&f->x2.x0,&tmp1_fp);  // = t3*Px*Z^2
@@ -494,37 +494,37 @@ void ff_lttp_lazy_montgomery(fp6_t *f, efp_jacobian_t *S, efp_t *P){
   static fp6_t tmp1_fp6;
 
   fp_sqrmod_montgomery(&t1,&S->y);              //t1 = Y^2
-  fp_l1shift_nonmod_single(&tmp2_fp,&t1);      //tmp2 = 2*t1
+  fp_l1shift(&tmp2_fp,&t1);      //tmp2 = 2*t1
 
   fp_mulmod_montgomery(&t2,&tmp2_fp,&S->x);     //t2 = 2*t1*X
-  fp_l1shift_nonmod_single(&t2, &t2);          //t2 = 4*t1*X
+  fp_l1shift(&t2, &t2);          //t2 = 4*t1*X
 
   fp_sqrmod_montgomery(&t3,&S->x);              //t3 = X^2
-  fp_l1shift_nonmod_single(&tmp1_fp, &t3);
-  fp_add_nonmod_single(&t3,&t3,&tmp1_fp);
+  fp_l1shift(&tmp1_fp, &t3);
+  fp_add(&t3,&t3,&tmp1_fp);
 
   fp_sqrmod_montgomery(&nextX,&t3);             //nextX = t3^2
-  fp_l1shift_nonmod_single(&tmp1_fp, &t2);             //tmp1 = 2*t2
-  fp_sub_nonmod_single(&nextX,&nextX,&tmp1_fp); //nextX = t3^2 - 2*t2
+  fp_l1shift(&tmp1_fp, &t2);             //tmp1 = 2*t2
+  fp_sub(&nextX,&nextX,&tmp1_fp); //nextX = t3^2 - 2*t2
 
-  fp_sub_nonmod_single(&nextY,&t2,&nextX);      //nextY = t2-nextX
+  fp_sub(&nextY,&t2,&nextX);      //nextY = t2-nextX
   fp_mulmod_montgomery(&nextY,&nextY,&t3);      //nextY = (t2-nextX)t3
 
   fp_sqrmod_montgomery(&tmp1_fp,&tmp2_fp);      //tmp1 = tmp2^2 = 4t1^2
-  fp_l1shift_nonmod_single(&tmp1_fp,&tmp1_fp); //tmp1 = 8t1^2
+  fp_l1shift(&tmp1_fp,&tmp1_fp); //tmp1 = 8t1^2
 
-  fp_sub_nonmod_single(&nextY,&nextY,&tmp1_fp); //nextY = (t2-nextX)t3 - 8t1^2
+  fp_sub(&nextY,&nextY,&tmp1_fp); //nextY = (t2-nextX)t3 - 8t1^2
 
-  fp_l1shift_nonmod_single(&nextZ,&S->y);      //nextZ = 2Y
+  fp_l1shift(&nextZ,&S->y);      //nextZ = 2Y
   fp_mulmod_montgomery(&nextZ,&nextZ,&S->z);    //nextZ = 2YZ
   fp_sqrmod_montgomery(&tmp1_fp,&S->z);         //tmp1 = Z^2
 
   fp_mulmod_montgomery(&tmp1_fp6.x0.x1,&nextZ,&tmp1_fp);           // = nextZ*Z^2
   fp_mulmod_montgomery(&tmp1_fp6.x0.x1,&tmp1_fp6.x0.x1,&P->y);     // = nextZ*Z^2Py
-  fp_l1shift_nonmod_single(&tmp1_fp6.x0.x1,&tmp1_fp6.x0.x1);      // = 2*nextZ*Z^2Py
+  fp_l1shift(&tmp1_fp6.x0.x1,&tmp1_fp6.x0.x1);      // = 2*nextZ*Z^2Py
 
   fp_mulmod_montgomery(&tmp3_fp,&t3,&S->x);                        //tmp3 = t3*X
-  fp_sub_nonmod_single(&tmp1_fp6.x0.x0,&tmp3_fp,&tmp2_fp);         // = t3*X - 2*t1
+  fp_sub(&tmp1_fp6.x0.x0,&tmp3_fp,&tmp2_fp);         // = t3*X - 2*t1
 
   fp_mulmod_montgomery(&tmp1_fp6.x2.x0,&t3,&P->x);                 // = t3*Px
   fp_mulmod_montgomery(&tmp1_fp6.x2.x0,&tmp1_fp6.x2.x0,&tmp1_fp);  // = t3*Px*Z^2
@@ -687,12 +687,12 @@ void ff_ltqp_lazy_montgomery(fp6_t *f, efp_jacobian_t *S, efp_t *Q,efp_t *P){
 
   fp_sqrmod_montgomery(&tmp1_fp,&S->z);
   fp_mulmod_montgomery(&t1,&Q->x,&tmp1_fp);
-  fp_sub_nonmod_single(&t1,&t1,&S->x);
+  fp_sub(&t1,&t1,&S->x);
   //t1 = (Z^2)*Qx - X
   // fp_println_montgomery("t1", &tq)
   fp_mulmod_montgomery(&tmp1_fp,&tmp1_fp,&S->z);
   fp_mulmod_montgomery(&t2,&tmp1_fp,&Q->y);
-  fp_sub_nonmod_single(&t2,&t2,&S->y);
+  fp_sub(&t2,&t2,&S->y);
   //t2 = Z^3 * Qy - Y
 
   fp_sqrmod_montgomery(&t3,&t1);
@@ -706,15 +706,15 @@ void ff_ltqp_lazy_montgomery(fp6_t *f, efp_jacobian_t *S, efp_t *Q,efp_t *P){
 
   fp_sqrmod_montgomery(&tmp1_fp,&t2);
   // fp_mul_ui(&tmp2_fp,&t5,2);
-  fp_l1shift_nonmod_single(&tmp2_fp, &t5);
-  fp_add_nonmod_single(&tmp2_fp,&tmp2_fp,&t4);
-  fp_sub_nonmod_single(&nextX,&tmp1_fp,&tmp2_fp);
+  fp_l1shift(&tmp2_fp, &t5);
+  fp_add(&tmp2_fp,&tmp2_fp,&t4);
+  fp_sub(&nextX,&tmp1_fp,&tmp2_fp);
   //X = t2^2 -(2t5+t4)
 
-  fp_sub_nonmod_single(&nextY,&t5,&nextX);
+  fp_sub(&nextY,&t5,&nextX);
   fp_mulmod_montgomery(&nextY,&nextY,&t2);
   fp_mulmod_montgomery(&tmp1_fp,&t4,&S->y);
-  fp_sub_nonmod_single(&nextY,&nextY,&tmp1_fp);
+  fp_sub(&nextY,&nextY,&tmp1_fp);
   //Y = (t5 - X)t2 - t4Y
 
   fp_mulmod_montgomery(&nextZ,&S->z,&t1);
@@ -726,9 +726,9 @@ void ff_ltqp_lazy_montgomery(fp6_t *f, efp_jacobian_t *S, efp_t *Q,efp_t *P){
 
   fp_mulmod_montgomery(&tmp1_fp,&t2,&Q->x);
   fp_mulmod_montgomery(&tmp2_fp,&nextZ,&Q->y);
-  fp_sub_nonmod_single(&tmp1_fp6.x1.x1,&tmp1_fp,&tmp2_fp);
+  fp_sub(&tmp1_fp6.x1.x1,&tmp1_fp,&tmp2_fp);
 
-  fp_l1shift_nonmod_single(&tmp1_fp6.x1.x1,&tmp1_fp6.x1.x1);
+  fp_l1shift(&tmp1_fp6.x1.x1,&tmp1_fp6.x1.x1);
   fp_mulmod_montgomery(&tmp1_fp6.x1.x1,&tmp1_fp6.x1.x1,&base_d_inv_montgomery);
 
   fp6_mul_sparse_add_lazy_montgomery(f,&tmp1_fp6,f); //Capable for further Karatsuba //update
@@ -844,16 +844,18 @@ void miller_opt_ate_jac_2NAF(fp6_t *f,efp6_t *P,efp6_t *Q){
 
     mp_bitcnt_t i;
     ff_lttp_0(f,&S,&mapped_P);
-
+    // fp6_println("DBL", f);
     for(i=(miller_loop_v.size() -3);i!=-1;i--){
       switch(miller_loop_v[i]){
         case 0:
           ff_lttp(f,&S,&mapped_P);
+          // if(i>miller_loop_v.size() -6)fp6_println("DBL", f);
+
           break;
-        case 1:
-          ff_lttp(f,&S,&mapped_P);
-          ff_ltqp(f,&S,&mapped_Q,&mapped_P);
-          // fp6_println("&f1", f);
+        // case 1:
+        //   ff_lttp(f,&S,&mapped_P);
+        //   ff_ltqp(f,&S,&mapped_Q,&mapped_P);
+        //   // fp6_println("&f1", f);
           break;
         case -1:
           ff_lttp(f,&S,&mapped_P);
@@ -889,10 +891,10 @@ void miller_opt_ate_proj_2NAF(fp6_t *f,efp6_t *P,efp6_t *Q){
         case 0:
           ff_lttp_costello(f,&S,&mapped_P);
           break;
-        case 1:
-          ff_lttp_costello(f,&S,&mapped_P);
-          ff_ltqp_costello_mixed(f,&S,&mapped_Q,&mapped_P);
-          break;
+        // case 1:
+        //   ff_lttp_costello(f,&S,&mapped_P);
+        //   ff_ltqp_costello_mixed(f,&S,&mapped_Q,&mapped_P);
+        //   break;
         case -1:
           ff_lttp_costello(f,&S,&mapped_P);
           ff_ltqp_costello_mixed(f,&S,&mapped_Q_neg,&mapped_P);
@@ -921,10 +923,13 @@ void miller_opt_ate_jac_2NAF_lazy_montgomery(fp6_t *f,efp6_t *P,efp6_t *Q){
 
     mp_bitcnt_t i;
     ff_lttp_lazy_montgomery_0(f,&S,&mapped_P);
+    // fp6_println_montgomery("mtDBL", f);
+
     for(i=(miller_loop_v.size() -3);i!=-1;i--){//-1
       switch(miller_loop_v[i]){
         case 0:
           ff_lttp_lazy_montgomery(f,&S,&mapped_P);
+          // if(i>miller_loop_v.size() -6)fp6_println_montgomery("mtDBL", f);
           break;
         // case 1:
         //   ff_lttp_lazy_montgomery(f,&S,&mapped_P);
