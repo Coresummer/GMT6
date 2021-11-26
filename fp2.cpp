@@ -673,6 +673,14 @@ void fp2_mul_base(fp2_t *ANS,fp2_t *A){
   fp_l1shift(&ANS->x0, &tmp1_fp);
 }
 
+
+void fp2_mul_base_montgomery(fp2_t *ANS,fp2_t *A){
+  static fp_t tmp1_fp;
+  fp_set_neg_montgomery(&tmp1_fp, &A->x1);
+  fp_l1shift(&ANS->x1, &A->x0);
+  fp_l1shift(&ANS->x0, &tmp1_fp);
+}
+
 void fp2_mul_base_nonmod_single(fp2_t *ANS,fp2_t *A){
   static fp_t tmp1_fp;
   fp_set_neg_montgomery(&tmp1_fp, &A->x1);

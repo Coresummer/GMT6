@@ -25,8 +25,11 @@ void fp6_mul_sparse_add(fp6_t *ANS,fp6_t *A,fp6_t *B);
 void fp6_mul_sparse_add_costello(fp6_t *ANS,fp6_t *A,fp6_t *B);
 void fp6_mul_sparse_dbl(fp6_t *ANS,fp6_t *A,fp6_t *B);
 void fp6_mul_sparse_add_lazy_montgomery(fp6_t *ANS,fp6_t *A,fp6_t *B);
+void fp6_mul_sparse_add_costello_montgomery(fp6_t *ANS,fp6_t *A,fp6_t *B);
 void fp6_mul_sparse_add_costello_lazy_montgomery(fp6_t *ANS,fp6_t *A,fp6_t *B);
 void fp6_mul_sparse_dbl_lazy_montgomery(fp6_t *ANS,fp6_t *A,fp6_t *B);
+void fp6_mul_sparse_dbl_costello_lazy_montgomery(fp6_t *ANS,fp6_t *A,fp6_t *B);
+
 
 void fp6_mul_ui(fp6_t *ANS,fp6_t *A,unsigned long int UI);
 void fp6_mul_mpn(fp6_t *ANS,fp6_t *A,mp_limb_t *B);

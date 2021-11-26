@@ -580,7 +580,7 @@ void efp_checkOnCurve_Twsit(efp_t* A){
   fp_mul(&tmp2_fp,&tmp2_fp,&A->x);
 
   fp_sub(&tmp1_fp,&tmp2_fp,&tmp1_fp);
-  fp_println("afin_diff:",&tmp1_fp);
+  fp_println("affin_diff:",&tmp1_fp);
 }
 
 void efp_proj_w1_1_checkOnCurve_Twist(efp_jacobian_t* A){
