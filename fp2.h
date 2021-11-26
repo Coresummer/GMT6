@@ -77,6 +77,7 @@ void fp2_frobenius_map_p2(fp2_t *ANS,fp2_t *A);
 void fp2_frobenius_map_p3(fp2_t *ANS,fp2_t *A);
 
 void fp2_mul_base(fp2_t *ANS,fp2_t *A);
+void fp2_mul_base_montgomery(fp2_t *ANS,fp2_t *A);
 void fp2_mul_base_nonmod_single(fp2_t *ANS,fp2_t *A);
 void fp2_mul_base_nonmod_double(fpd2_t *ANS,fpd2_t *A);
 #endif

@@ -1,6 +1,5 @@
 #include "fp2.h"
 #include "fp6.h"
-#include <cstdio>
 #define CYBOZU_BENCH_USE_GETTIMEOFDAY
 #include <cybozu/benchmark.hpp>
 #include "miller.h"
@@ -284,18 +283,15 @@ n=1000;
 for(i=0;i<fp6_n;i++){
     fp6_set_random(&A_fp6,state);
     fp6_set_random(&B_fp6,state);
-
     gettimeofday(&tv_A,NULL);
     for(j=0;j<n;j++)fp6_add(&test1_fp6,&A_fp6,&B_fp6);
     gettimeofday(&tv_B,NULL);
     add_time+=timedifference_msec(tv_A,tv_B)/n;
-
     gettimeofday(&tv_A,NULL);
     for(j=0;j<n;j++)fp6_add_lazy(&test2_fp6,FPLIMB,&A_fp6,FPLIMB,&B_fp6,FPLIMB);
     gettimeofday(&tv_B,NULL);
     add_lazy_time+=timedifference_msec(tv_A,tv_B)/n;
     fp6_mod(&test2_fp6,&test2_fp6,FPLIMB);
-
     if(fp6_cmp(&test1_fp6,&test2_fp6)!=0){
         printf("failed!\n\n");
     	fp6_printf("",&test1_fp6);
@@ -306,7 +302,6 @@ for(i=0;i<fp6_n;i++){
 }
     printf("fp6 add.      : %.7f[ms]\n",add_time/fp6_n);
     printf("fp6 add lazy. : %.7f[ms]\n",add_lazy_time/fp6_n);
-
 printf("------------------------------------------------------------------------------------\n");
     printf("fp6_sub test\n");
 sub_time=0,sub_lazy_time=0;
@@ -314,18 +309,15 @@ n=1000;
 for(i=0;i<fp6_n;i++){
     fp6_set_random(&A_fp6,state);
     fp6_set_random(&B_fp6,state);
-
     gettimeofday(&tv_A,NULL);
     for(j=0;j<n;j++)fp6_sub(&test1_fp6,&A_fp6,&B_fp6);
     gettimeofday(&tv_B,NULL);
     sub_time+=timedifference_msec(tv_A,tv_B)/n;
-
     gettimeofday(&tv_A,NULL);
     for(j=0;j<n;j++)fp6_sub_lazy(&test2_fp6,FPLIMB,&A_fp6,FPLIMB,&B_fp6,FPLIMB);
     gettimeofday(&tv_B,NULL);
     sub_lazy_time+=timedifference_msec(tv_A,tv_B)/n;
     fp6_mod(&test2_fp6,&test2_fp6,FPLIMB);
-
     if(fp6_cmp(&test1_fp6,&test2_fp6)!=0){
         printf("failed!\n\n");
     	fp6_printf("",&test1_fp6);
@@ -382,18 +374,15 @@ sqr_time=0,sqr_lazy_time=0;
 n=1000;
 for(i=0;i<fp6_n;i++){
     fp6_set_random(&A_fp6,state);
-
     gettimeofday(&tv_A,NULL);
     for(j=0;j<n;j++)fp6_sqr(&test1_fp6,&A_fp6);
     gettimeofday(&tv_B,NULL);
     sqr_time+=timedifference_msec(tv_A,tv_B)/n;
-
     gettimeofday(&tv_A,NULL);
     for(j=0;j<n;j++)fp6_sqr_lazy(&test2_fp6,&A_fp6);
     gettimeofday(&tv_B,NULL);
     sqr_lazy_time+=timedifference_msec(tv_A,tv_B)/n;
     fp6_mod(&test2_fp6,&test2_fp6,FPLIMB2);
-
     if(fp6_cmp(&test1_fp6,&test2_fp6)!=0){
         printf("failed!\n\n");
     	fp6_printf("",&test1_fp6);
@@ -404,7 +393,6 @@ for(i=0;i<fp6_n;i++){
 }
     printf("fp6 sqr.      : %.6f[ms]\n",sqr_time/fp6_n);
     printf("fp6 sqr lazy. : %.6f[ms]\n",sqr_lazy_time/fp6_n);
-
     printf("------------------------------------------------------------------------------------\n");
     printf("fp6_inv test\n");
 inv_time=0,inv_lazy_time=0;
@@ -412,12 +400,10 @@ n=1000;
 for(i=0;i<fp6_n;i++){
     fp6_set_random(&A_fp6,state);
     fp6_set_random(&B_fp6,state);
-
     gettimeofday(&tv_A,NULL);
     for(j=0;j<n;j++)fp6_inv(&test1_fp6,&A_fp6);
     gettimeofday(&tv_B,NULL);
     inv_time+=timedifference_msec(tv_A,tv_B)/n;
-
 }
     printf("fp6 inv.      : %.6f[ms]\n",inv_time/fp6_n);
 */
@@ -840,40 +826,6 @@ int test_fp_montgomery(int fp_n) {
   printf("fp add nonmod single. : %.7f[ms]\n", add_nonmod_single / fp_n);
   printf("fp add nonmod double. : %.7f[ms]\n", add_nonmod_double / fp_n);
 
-  // printf("------------------------------------------------------------------------------------\n");
-  //     printf("fp_lshift test\n");
-  // lshift_nonmod_time=0,l1shift_nonmod_time=0,lshift3_nonmod_time=0;
-  // n=1000;
-  // for(i=0;i<fp_n;i++){
-  //     fp_set_random_montgomery(&A_fp,state);
-  //     fp_set_random_montgomery(&B_fp,state);
-
-  //     gettimeofday(&tv_A,NULL);
-  //     for(j=0;j<n;j++)fp_lshift_ui_nonmod_single(&test1_fp,&A_fp,1);
-  //     //for(j=0;j<n;j++)fp_mul_ui_nonmod_single(&test1_fp,&A_fp,2);
-  //     gettimeofday(&tv_B,NULL);
-  //     lshift_nonmod_time+=timedifference_msec(tv_A,tv_B)/n;
-
-  //     gettimeofday(&tv_A,NULL);
-  //     for(j=0;j<n;j++)fp_lshift_ui_nonmod_single(&test2_fp,&A_fp,2);
-  //     gettimeofday(&tv_B,NULL);
-  //     l1shift_nonmod_time+=timedifference_msec(tv_A,tv_B)/n;
-
-  //     // fp_mod_montgomery(&test1_fp,&test1_fp);
-  //     // fp_mod_montgomery(&test2_fp,&test2_fp);
-
-  //     // if(fp_cmp(&test1_fp,&test2_fp)!=0){
-  //     //     printf("failed!\n\n");
-  //     // 	fp_printf("",&test1_fp);
-  // 	//     fp_printf("\n",&test2_fp);
-  // 	//     printf("\n\n");
-  // 	//     return 1;
-  //     // }
-  // }
-  //     // printf("fp lshift1.        : %.7f[ms]\n",lshift_nonmod_time/fp_n);
-  //     // printf("fp l1shift. : %.7f[ms]\n",l1shift_nonmod_time/fp_n);
-  //     // printf("fp lshift3. : %.7f[ms]\n",lshift3_nonmod_time/fp_n);
-
   printf("------------------------------------------------------------------------------------\n");
   printf("fp_sub test\n");
   sub_time = 0, sub_nonmod_single = 0, sub_nonmod_double = 0;
@@ -935,13 +887,6 @@ int test_fp_montgomery(int fp_n) {
     mul_nonmod_time += timedifference_msec(tv_A, tv_B) / n;
     fp_mod_montgomery(&test2_fp, &test2_fp);
 
-    // if(fp_cmp(&test1_fp,&test2_fp)!=0){
-    //     printf("failed!\n\n");
-    // 	fp_printf("",&test1_fp);
-    //     fp_printf("\n",&test2_fp);
-    //     printf("\n\n");
-    //     return 1;
-    // }
   }
 
   printf("fp mulmod montgomery.      : %.6f[ms]\n", mul_time / fp_n);
@@ -965,13 +910,6 @@ int test_fp_montgomery(int fp_n) {
     sqr_nonmod += timedifference_msec(tv_A, tv_B) / n;
     fp_mod(&test2_fp, test2_mpn, FPLIMB2);
 
-    // if(fp_cmp(&test1_fp,&test2_fp)!=0){
-    //     printf("failed!\n\n");
-    // 	fp_printf("",&test1_fp);
-    //     fp_printf("\n",&test2_fp);
-    //     printf("\n\n");
-    //     return 1;
-    // }
   }
   printf("fp sqrmod montgomery.      : %.6f[ms]\n", sqr_time / fp_n);
   printf("fp sqr nonmod.             : %.6f[ms]\n", sqr_nonmod / fp_n);
@@ -1095,7 +1033,6 @@ void check_fp_with_montgomery(){
   fp_println("\nA =  ",&A);
   fp_println_montgomery("Am = ",&Am);
   printf("---------------------------------\n");
-  mpz_clear(tmp);
 
 
   printf("*********************************************************************************************\n\n");
@@ -1103,7 +1040,7 @@ void check_fp_with_montgomery(){
 
 void check_fp2_with_montgomery(){
   printf("********************CHECK FP2 WITH MONTGOMERY*************************************************\n\n");
-  printf("check_fp2_with_montogomery() start...\n");
+  printf("check_fp_with_montogomery() start...\n");
   fp2_t A, ANS;
   fp2_t Am, ANSm;
 
@@ -1134,8 +1071,6 @@ void check_fp2_with_montgomery(){
   printf("Check sqrt algorithm\n");
   int flag=fp2_legendre(&A);
   printf("fp_legendre(A) = %d\n",flag);
-
-  
   if(flag==1){
     fp2_sqrt(&ANS,&A);
     fp2_println("fp_sqrt(A) = ",&ANS);
@@ -1173,14 +1108,12 @@ void check_fp2_with_montgomery(){
   fp2_println_montgomery("Am = ",&Am);
   printf("---------------------------------\n");
   printf("*********************************************************************************************\n\n");
-  mpz_clear(tmp);
-
 }
 
 
 void check_fp6_with_montgomery(){
-  printf("********************CHECK FP6 WITH MONTGOMERY*************************************************\n\n");
-  printf("check_fp6_with_montogomery() start...\n");
+  printf("********************CHECK FP2 WITH MONTGOMERY*************************************************\n\n");
+  printf("check_fp_with_montogomery() start...\n");
   fp6_t A, ANS;
   fp6_t Am, ANSm;
 
@@ -1203,6 +1136,7 @@ void check_fp6_with_montgomery(){
 
   fp6_mul(&ANS,&ANS,&A);
   fp6_mul_lazy_montgomery(&ANSm,&ANSm,&Am);
+
   fp6_println("\nA * A^-1 =  ",&ANS);
   fp6_println_montgomery("Am * Am^-1 = ",&ANSm);
   printf("---------------------------------\n");
@@ -1210,7 +1144,6 @@ void check_fp6_with_montgomery(){
   printf("Check sqrt algorithm\n");
   int flag=fp6_legendre(&A);
   printf("fp6_legendre(A) = %d\n",flag);
-
   if(flag==1){
     fp6_sqrt(&ANS,&A);
     fp6_println("fp6_sqrt(A) = ",&ANS);
@@ -1219,15 +1152,15 @@ void check_fp6_with_montgomery(){
 
     fp6_sqr(&ANS,&ANS);
     if(fp6_cmp(&ANS,&A)==0){
-      printf("(fp6_sqrt(A))^2 = A\n\n");
+      printf("(fp6_sqrt(A))^6 = A\n\n");
     }
-    else  printf("(fp_6sqrt(A))^2 != A\n\n");
+    else  printf("(fp_6sqrt(A))^6 != A\n\n");
 
     fp6_sqr_lazy_montgomery(&ANSm,&ANSm);
     if(fp6_cmp(&ANSm,&Am)==0){
-      printf("(fp6_sqrt(Am))^2 = A\n\n");
+      printf("(fp6_sqrt(Am))^6 = A\n\n");
     }
-    else  printf("(fp6_sqrt(Am))^2 != A\n\n");
+    else  printf("(fp6_sqrt(Am))^6 != A\n\n");
 
   }
   printf("---------------------------------\n");
@@ -1248,8 +1181,6 @@ void check_fp6_with_montgomery(){
   fp6_println_montgomery("Am = ",&Am);
   printf("---------------------------------\n");
   printf("*********************************************************************************************\n\n");
-  mpz_clear(tmp);
-
 }
 
 void BENCH_fp2_fp6_mul_lazy_montgomery(int LOOP){
@@ -1269,7 +1200,6 @@ void BENCH_fp2_fp6_mul_lazy_montgomery(int LOOP){
   fp_to_montgomery(&Am_fp, &A_fp);
   fp_set_random(&B_fp,state);
   fp_to_montgomery(&Bm_fp, &B_fp);
-
 
   CYBOZU_BENCH_C("fp_mul()", LOOP, fp_mul,&ANS_fp,&A_fp,&B_fp);
   CYBOZU_BENCH_C("fp_mul_lazy_montgomery()", LOOP, fp_mulmod_montgomery, &ANSm_fp,&Am_fp,&Bm_fp);
@@ -1333,14 +1263,21 @@ void BENCH_fp2_fp6_mul_lazy_montgomery(int LOOP){
   fp6_println("ANS:", &ANS_fp6);
   fp6_println_montgomery("ANSm:", &ANSm_fp6);
 
+  CYBOZU_BENCH_C("fp6_mul_sparse_add_costello()", LOOP, fp6_mul_sparse_add_costello,&ANS_fp6,&A_fp6,&B_fp6);
+  CYBOZU_BENCH_C("fp6_mul_sparse_add_costello_lazy_montgomery()", LOOP, fp6_mul_sparse_add_costello_lazy_montgomery, &ANSm_fp6,&Am_fp6,&Bm_fp6);
+  fp6_println("ANS:", &ANS_fp6);
+  fp6_println_montgomery("ANSm:", &ANSm_fp6);
+
   CYBOZU_BENCH_C("fp6_mul_sparse_dbl()", LOOP, fp6_mul_sparse_dbl,&ANS_fp6,&A_fp6,&B_fp6);
   CYBOZU_BENCH_C("fp6_mul_sparse_dbl_lazy_montgomery()", LOOP, fp6_mul_sparse_dbl_lazy_montgomery, &ANSm_fp6,&Am_fp6,&Bm_fp6);
   fp6_println("ANS:", &ANS_fp6);
   fp6_println_montgomery("ANSm:", &ANSm_fp6);
+  CYBOZU_BENCH_C("fp6_mul_sparse_dbl_costello_lazy_montgomery()", LOOP, fp6_mul_sparse_dbl_costello_lazy_montgomery, &ANSm_fp6,&Am_fp6,&Bm_fp6);
+  fp6_println_montgomery("ANSm:", &ANSm_fp6);
 
 }
 
-void BENCH_miller_lazy_montgomery(int LOOP){
+void BENCH_miller_jac_lazy_montgomery(int LOOP){
   printf("============================================================================\n");
   printf("--------------------------------------ltpq, lttp----------------------------\n");
   printf("============================================================================\n");
@@ -1377,7 +1314,6 @@ void BENCH_miller_lazy_montgomery(int LOOP){
   fp_set(&mapped_P.x,&P.x.x0.x0);
   fp_set(&mapped_P.y,&P.y.x0.x0);
   mapped_P.infinity = 0;
-
 
   efp6_to_efp(&mapped_Q,&Q);//twist
   efp6_to_Jacefp(&S,&Q);
@@ -1423,7 +1359,7 @@ void BENCH_miller_lazy_montgomery(int LOOP){
 }
 
 
-void BENCH_miller_coordinate(int LOOP){
+void BENCH_miller_proj_lazy_montgomery(int LOOP){
   printf("============================================================================\n");
   printf("--------------------------------------ltpq, lttp----------------------------\n");
   printf("============================================================================\n");
@@ -1461,7 +1397,6 @@ void BENCH_miller_coordinate(int LOOP){
   fp_set(&mapped_P.y,&P.y.x0.x0);
   mapped_P.infinity = 0;
 
-
   efp6_to_efp(&mapped_Q,&Q);//twist
   efp6_to_Jacefp(&S,&Q);
   efp_set_neg(&mapped_Q_neg,&mapped_Q);
@@ -1479,72 +1414,30 @@ void BENCH_miller_coordinate(int LOOP){
   efp_set_neg_montgomery(&mapped_Q_negm,&mapped_Q);//here
 //-----------------------------------------
 
-  fp6_set_ui(&f,1);
-  CYBOZU_BENCH_C("ff_lttp_jac()", LOOP, ff_lttp,&f,&S,&mapped_P);
+  CYBOZU_BENCH_C("ff_lttp_costello()", LOOP, ff_lttp_costello,&f,&S,&mapped_Q);
+  CYBOZU_BENCH_C("ff_lttp_costello_lazy_montgomery()", LOOP, ff_lttp_costello_lazy_montgomery, &fm,&Sm,&mapped_Qm);
   fp6_println("ANS:", &f);
-  efp6_to_Jacefp(&S,&Q);
-  fp6_set_ui(&f,1);
-  CYBOZU_BENCH_C("ff_lttp_proj()", LOOP, ff_lttp_proj, &f,&S,&mapped_P);
+  fp6_println_montgomery("ANSm:", &fm);
+  fp6_set_ui_ui(&f,0);
+  fp_set_ui(&f.x0.x0,1);
+  fp6_set_ui_ui(&fm,0);
+  fp_set_ui(&fm.x0.x0,1);
+  fp_to_montgomery(&fm.x0.x0, &fm.x0.x0);
+
+  CYBOZU_BENCH_C("ff_ltqp_costello_mixed()", LOOP, ff_ltqp_costello_mixed,&f,&S,&mapped_Q,&mapped_P);
+  CYBOZU_BENCH_C("ff_ltqp_costello_mixed_lazy_montgomery()", LOOP, ff_ltqp_costello_mixed_lazy_montgomery, &fm,&Sm,&mapped_Qm,&mapped_Pm);
   fp6_println("ANS:", &f);
-  // fp6_set_ui_ui(&f,0);
-  // fp_set_ui(&f.x0.x0,1);
-  // fp6_set_ui_ui(&fm,0);
-  // fp_set_ui(&fm.x0.x0,1);
-  // fp_to_montgomery(&fm.x0.x0, &fm.x0.x0);
+  fp6_println_montgomery("ANSm:", &fm);
 
-  // CYBOZU_BENCH_C("ff_ltpq()", LOOP, ff_ltqp,&f,&S,&mapped_Q,&mapped_P);
-  // CYBOZU_BENCH_C("ff_ltpq_lazy_montgomery()", LOOP, ff_ltqp_lazy_montgomery, &fm,&Sm,&mapped_Qm,&mapped_Pm);
-  // fp6_println("ANS:", &f);
-  // fp6_println_montgomery("ANSm:", &fm);
+  printf("============================================================================\n");
+  printf("--------------------------------------Miller--------------------------------\n");
+  printf("============================================================================\n");
 
-  // printf("============================================================================\n");
-  // printf("--------------------------------------Miller--------------------------------\n");
-  // printf("============================================================================\n");
-
-
-  // CYBOZU_BENCH_C("miller_opt_ate_jac_2NAF()", LOOP, miller_opt_ate_jac_2NAF,&f,&P,&Q);
-  // fp6_println("ANS:", &f);
-  // CYBOZU_BENCH_C("miller_opt_ate_jac_2NAF_lazy_montgomery()", LOOP, miller_opt_ate_jac_2NAF_lazy_montgomery,&fm,&P,&Q);
-  // fp6_println_montgomery("ANSm:", &fm);
+  CYBOZU_BENCH_C("miller_opt_ate_proj_2NAF()", LOOP, miller_opt_ate_proj_2NAF,&f,&P,&Q);
+  fp6_println("ANS:", &f);
+  CYBOZU_BENCH_C("miller_opt_ate_jac_2NAF_lazy_montgomery()", LOOP, miller_opt_ate_jac_2NAF_lazy_montgomery,&fm,&P,&Q);
+  fp6_println_montgomery("ANSm:", &fm);
 }
-
-
-
-void BENCH_GS_sqr_lazy_montgomery(int LOOP){
-  printf("********************CHECK Finalexp WITH MONTGOMERY*************************************************\n\n");
-  printf("check_finalexp_with_montogomery() start...\n");
-  fp6_t A, ANS;
-  fp6_t Am, ANSm;
-  fp6_t Am2, ANSm2;
-
-  fp6_init(&A);
-  fp6_init(&ANS);
-  fp6_init(&Am);
-  fp6_init(&ANSm);
-  fp6_init(&Am2);
-  fp6_init(&ANSm2);
-
-  fp6_set_random(&A, state);
-  fp6_to_montgomery(&Am, &A);
-  fp6_to_montgomery(&Am2, &A);
-
-  CYBOZU_BENCH_C("fp6_sqr_GS()", LOOP, fp6_sqr_GS,&ANS, &A);
-  CYBOZU_BENCH_C("fp6_sqr_GS_lazy_montgomery()", LOOP, fp6_sqr_GS_lazy_montgomery, &ANSm, &Am);
-  CYBOZU_BENCH_C("fp6_sqr_GS_lazy_montgomery2()", LOOP, fp6_sqr_GS_lazy_montgomery2, &ANSm2, &Am2);
-
-  fp6_println("fp6_sqr_GS\n", &ANS);
-  fp6_println_montgomery("fp6_sqr_GS_lazy_montgomery\n", &ANSm);
-  fp6_println_montgomery("fp6_sqr_GS_lazy_montgomery2\n", &ANSm2);
-
-  CYBOZU_BENCH_C("fp6_finalexpow_x_2NAF()", LOOP, fp6_finalexpow_x_2NAF,&ANS, &A);
-  CYBOZU_BENCH_C("fp6_finalexpow_x_2NAF_lazy_montgomery()", LOOP, fp6_finalexpow_x_2NAF_lazy_montgomery, &ANSm, &Am);
-  CYBOZU_BENCH_C("fp6_finalexpow_x_2NAF_lazy_montgomery2()", LOOP, fp6_finalexpow_x_2NAF_lazy_montgomery2, &ANSm2, &Am2);
-
-  fp6_println("fp6_finalexpow_x_2NAF\n", &ANS);
-  fp6_println_montgomery("fp6_finalexpow_x_2NAF_lazy_montgomery\n", &ANSm);
-  fp6_println_montgomery("fp6_finalexpow_x_2NAF_lazy_montgomery2\n", &ANSm2);
-}
-
 
 void BENCH_finalexp_lazy_montgomery(int LOOP){
   printf("********************CHECK Finalexp WITH MONTGOMERY*************************************************\n\n");
@@ -1571,17 +1464,10 @@ void BENCH_finalexp_lazy_montgomery(int LOOP){
 
   fp6_println("fp6_finalexpow_x_2NAF\n", &ANS);
   fp6_println_montgomery("fp6_finalexpow_x_2NAF_lazy_montgomery\n", &ANSm);
-
-  CYBOZU_BENCH_C("final_exp()", LOOP, final_exp,&ANS, &A);
-  CYBOZU_BENCH_C("final_exp_lazy_montgomery()", LOOP, final_exp_lazy_montgomery, &ANSm, &Am);
-
-  fp6_println("final_exp\n", &ANS);
-  fp6_println_montgomery("final_exp_lazy_montgomery\n", &ANSm);
-
 }
 
-void BENCH_Pairing_lazy_montgomery(int LOOP){
-  printf("check_pairing() 開始\n");
+void BENCH_Pairing_jac_lazy_montgomery(int LOOP){
+  printf("check_pairing_jac() 開始\n");
   efp6_t P,Q,aP,bQ,tmp1;
   fp6_t f,e1,e2;
   mpz_t a,b,ab;
@@ -1662,12 +1548,114 @@ void BENCH_Pairing_lazy_montgomery(int LOOP){
     printf("e([a]P,[b]Q) != e(P,Q)^(a*b)\n\n");
   }
 
-  printf("--------Benching pairing()-------\n");
+  // printf("--------Benching pairing()-------\n");
+
   // CYBOZU_BENCH_C("miller_opt_ate_jac_2NAF()", LOOP, miller_opt_ate_jac_2NAF,&f,&P,&Q);
   // CYBOZU_BENCH_C("final_exp()               ", LOOP, final_exp,&e2, &e1);
   // printf("---------------------------------\n");
 
   CYBOZU_BENCH_C("miller_opt_ate_jac_2NAF_lazy_montgomery()", LOOP, miller_opt_ate_jac_2NAF_lazy_montgomery,&f,&P,&Q);
+  CYBOZU_BENCH_C("final_exp_lazy_montgomery()               ", LOOP, final_exp_lazy_montgomery, &e2, &e1);
+  printf("---------------------------------\n");
+
+  mpz_clear(a);
+  mpz_clear(b);
+  mpz_clear(ab);
+
+  printf("*********************************************************************************************\n\n");
+}
+
+
+
+void BENCH_Pairing_proj_lazy_montgomery(int LOOP){
+  printf("check_pairing_proj() 開始\n");
+  efp6_t P,Q,aP,bQ,tmp1;
+  fp6_t f,e1,e2;
+  mpz_t a,b,ab;
+  efp6_init(&P);
+  efp6_init(&Q);
+
+  efp6_init(&aP);
+  efp6_init(&bQ);
+  efp6_init(&tmp1);
+  fp6_init(&f);
+  fp6_init(&e1);
+  fp6_init(&e2);
+  mpz_init(a);
+  mpz_init(b);
+  mpz_init(ab);
+
+  generate_g1(&P);
+  generate_g2(&Q);
+
+  mpz_urandomm(a,state,prime_z);
+  mpz_urandomm(b,state,prime_z);
+
+  #if 1
+  efp6_println("P = ",&P);
+  efp6_println("Q = ",&Q);
+
+  efp6_scm(&tmp1,&P,order_z);
+  efp6_println("[r]P = ",&tmp1);
+  efp6_scm(&tmp1,&Q,order_z);
+  efp6_println("[r]Q = ",&tmp1);
+
+  gmp_printf("a = %Zd\n",a);
+  gmp_printf("b = %Zd\n",b);
+  printf("---------------------------------\n");
+  #endif
+
+  printf("---------------------------------\n");
+  printf("check regular pairing()\n");
+  printf("---------------------------------\n");
+  //e([a]P,[b]Q) を求める
+  efp6_scm(&aP,&P,a);
+  efp6_scm(&bQ,&Q,b);
+  miller_opt_ate_proj_2NAF(&f,&aP,&bQ);
+  final_exp(&e1,&f);
+  //e(P,Q)^(a*b) を求める
+  miller_opt_ate_proj_2NAF(&f,&P,&Q);
+  final_exp(&e2,&f);
+  mpz_mul(ab,a,b);
+  fp6_pow(&e2,&e2,ab);
+  fp6_println("e([a]P,[b]Q) = ",&e1);
+  fp6_println("e(P,Q)^(a*b) = ",&e2);
+  if(fp6_cmp(&e1,&e2)==0)  {
+  printf("=====================================================\n");
+  printf("------------------bilinear!!-------------------------\n");
+  printf("=====================================================\n");
+  }else{
+    printf("e([a]P,[b]Q) != e(P,Q)^(a*b)\n\n");
+  }
+  printf("---------------------------------\n");
+  printf("check lazy montgomery pairing()\n");
+  printf("---------------------------------\n");
+  efp6_scm(&aP,&P,a);
+  efp6_scm(&bQ,&Q,b);
+  miller_opt_ate_proj_2NAF_lazy_montgomery(&f,&aP,&bQ);
+  final_exp_lazy_montgomery(&e1,&f);
+  //e(P,Q)^(a*b) を求める
+  miller_opt_ate_proj_2NAF_lazy_montgomery(&f,&P,&Q);
+  final_exp_lazy_montgomery(&e2,&f);
+  mpz_mul(ab,a,b);
+  fp6_pow_montgomery(&e2,&e2,ab);
+  fp6_println("e([a]P,[b]Q) = ",&e1);
+  fp6_println("e(P,Q)^(a*b) = ",&e2);
+  if(fp6_cmp(&e1,&e2)==0)  {
+  printf("=====================================================\n");
+  printf("------------------bilinear!!-------------------------\n");
+  printf("=====================================================\n\n\n");
+  }else{
+    printf("e([a]P,[b]Q) != e(P,Q)^(a*b)\n\n");
+  }
+
+  // printf("--------Benching pairing()-------\n");
+
+  // CYBOZU_BENCH_C("miller_opt_ate_proj_2NAF()", LOOP, miller_opt_ate_proj_2NAF,&f,&P,&Q);
+  // CYBOZU_BENCH_C("final_exp()               ", LOOP, final_exp,&e2, &e1);
+  // printf("---------------------------------\n");
+
+  CYBOZU_BENCH_C("miller_opt_ate_proj_2NAF_lazy_montgomery()", LOOP, miller_opt_ate_proj_2NAF_lazy_montgomery,&f,&P,&Q);
   CYBOZU_BENCH_C("final_exp_lazy_montgomery()               ", LOOP, final_exp_lazy_montgomery, &e2, &e1);
   printf("---------------------------------\n");
 
