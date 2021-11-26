@@ -1435,7 +1435,7 @@ void BENCH_miller_proj_lazy_montgomery(int LOOP){
 
   CYBOZU_BENCH_C("miller_opt_ate_proj_2NAF()", LOOP, miller_opt_ate_proj_2NAF,&f,&P,&Q);
   fp6_println("ANS:", &f);
-  CYBOZU_BENCH_C("miller_opt_ate_jac_2NAF_lazy_montgomery()", LOOP, miller_opt_ate_jac_2NAF_lazy_montgomery,&fm,&P,&Q);
+  CYBOZU_BENCH_C("miller_opt_ate_proj_2NAF_lazy_montgomery()", LOOP, miller_opt_ate_proj_2NAF_lazy_montgomery,&fm,&P,&Q);
   fp6_println_montgomery("ANSm:", &fm);
 }
 
