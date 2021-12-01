@@ -429,7 +429,7 @@ void fp6_mul_sparse_add_costello_montgomery(fp6_t *ANS,fp6_t *A,fp6_t *B){  //?0
 
 void fp6_mul_sparse_dbl_lazy_montgomery(fp6_t *ANS,fp6_t *A,fp6_t *B){  //??0?00 * ??????
 
-  //fpmul*2 fp2mul*4 = 14 m prob because 2->6
+  //fpmul*2 fp2mul*4 = 13 m fixed
   static fp6_t tmp_A,tmp_B;
   fp6_set(&tmp_A,A);//?? 00 ?0 = a 0 c/
   fp6_set(&tmp_B,B);//?????? = d e f
