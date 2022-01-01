@@ -1566,7 +1566,6 @@ void BENCH_Pairing_jac_lazy_montgomery(int LOOP){
 }
 
 
-
 void BENCH_Pairing_proj_lazy_montgomery(int LOOP){
   printf("check_pairing_proj() 開始\n");
   efp6_t P,Q,aP,bQ,tmp1;
@@ -1662,6 +1661,53 @@ void BENCH_Pairing_proj_lazy_montgomery(int LOOP){
   mpz_clear(a);
   mpz_clear(b);
   mpz_clear(ab);
+
+  printf("*********************************************************************************************\n\n");
+}
+
+void check_count_finalexp_pow_2NAF(){
+  printf("check_final_exp_count() 開始\n");
+  cost  finalexp_cost;
+
+  fp6_t ANS,A;
+  fp6_init(&A);
+  fp6_init(&ANS);
+  fp6_set_random(&A, state);
+
+  printf("fp6_inv_lazy_montgomery count\n");
+  cost_zero();
+  fp6_inv_lazy_montgomery(&ANS,&A);
+  cost_check(&finalexp_cost);
+  cost_printf("",&finalexp_cost,CHECK_PAIRING_TIME_LOOP);
+  printf("---------------------------------\n");
+
+  printf("fp6_finalexpow_x_2NAF_lazy_montgomery count\n");
+  cost_zero();
+  fp6_finalexpow_x_2NAF_lazy_montgomery(&ANS,&A);
+  cost_check(&finalexp_cost);
+  cost_printf("",&finalexp_cost,CHECK_PAIRING_TIME_LOOP);
+  printf("---------------------------------\n");
+
+  printf("fp6_finalexpow_x_1_2NAF_lazy_montgomery count\n");
+  cost_zero();
+  fp6_finalexpow_x_1_2NAF_lazy_montgomery(&ANS,&A);
+  cost_check(&finalexp_cost);
+  cost_printf("",&finalexp_cost,CHECK_PAIRING_TIME_LOOP);
+  printf("---------------------------------\n");
+
+  printf("fp6_finalexpow_3w_2NAF_lazy_montgomery count\n");
+  cost_zero();
+  fp6_finalexpow_3w_2NAF_lazy_montgomery(&ANS,&A);
+  cost_check(&finalexp_cost);
+  cost_printf("",&finalexp_cost,CHECK_PAIRING_TIME_LOOP);
+  printf("---------------------------------\n");
+
+  printf("fp6_finalexpow_w_2NAF_lazy_montgomery count\n");
+  cost_zero();
+  fp6_finalexpow_w_2NAF_lazy_montgomery(&ANS,&A);
+  cost_check(&finalexp_cost);
+  cost_printf("",&finalexp_cost,CHECK_PAIRING_TIME_LOOP);
+  printf("---------------------------------\n");
 
   printf("*********************************************************************************************\n\n");
 }
