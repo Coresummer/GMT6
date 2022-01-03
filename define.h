@@ -26,7 +26,7 @@
 #define ARCBIT 64  //64bit processor
 //#define ARCBIT 32 //32bit processor
 
-// #define DEBUG_COST_A
+#define DEBUG_COST_A
 //#define DEBUG_ASSERT
 #define CHECK_PAIRING_TIME_LOOP 1
 

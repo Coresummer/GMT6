@@ -1183,6 +1183,74 @@ void check_fp6_with_montgomery(){
   printf("*********************************************************************************************\n\n");
 }
 
+void check_fp2_count(){
+  printf("check_fp2_count() 開始\n");
+  fp2_t A,B,ANS;
+  fp2_init(&A);
+  fp2_init(&B);
+  fp2_init(&ANS);
+  cost mulcost, sqrcost;
+
+  fp2_set_random(&A,state);
+  fp2_set_random(&B,state);
+  printf("---------------------------------\n");
+  printf("fp2_mul() count\n");
+  cost_zero();
+  fp2_mul(&ANS,&A,&B);
+  cost_check(&mulcost);
+  cost_printf("",&mulcost,CHECK_PAIRING_TIME_LOOP);
+  printf("---------------------------------\n");
+  printf("fp2_sqr() count\n");
+  cost_zero();
+  fp2_sqr(&ANS,&A);
+  cost_check(&sqrcost);
+  cost_printf("",&sqrcost,CHECK_PAIRING_TIME_LOOP);
+  printf("---------------------------------\n");
+}
+
+void check_fp6_count(){
+  printf("check_fp6_count() 開始\n");
+  fp6_t A,B,ANS;
+  fp6_init(&A);
+  fp6_init(&B);
+  fp6_init(&ANS);
+  cost mulcost, sqrcost, sqrcyclocost,fcost,invcost;
+
+  fp6_set_random(&A,state);
+  fp6_set_random(&B,state);
+  printf("---------------------------------\n");
+  printf("fp6_mul() count\n");
+  cost_zero();
+  fp6_mul(&ANS,&A,&B);
+  cost_check(&mulcost);
+  cost_printf("",&mulcost,CHECK_PAIRING_TIME_LOOP);
+  printf("---------------------------------\n");
+  printf("fp6_sqr() count\n");
+  cost_zero();
+  fp6_sqr(&ANS,&A);
+  cost_check(&sqrcost);
+  cost_printf("",&sqrcost,CHECK_PAIRING_TIME_LOOP);
+  printf("---------------------------------\n");
+  printf("fp6_sqr_GS() count\n");
+  cost_zero();
+  fp6_sqr_GS(&ANS,&A);
+  cost_check(&sqrcyclocost);
+  cost_printf("",&sqrcyclocost,CHECK_PAIRING_TIME_LOOP);
+  printf("---------------------------------\n");
+  printf("fp6_frobenius() count\n");
+  cost_zero();
+  fp6_frobenius_map_p1(&ANS,&A);
+  cost_check(&fcost);
+  cost_printf("",&fcost,CHECK_PAIRING_TIME_LOOP);
+  printf("---------------------------------\n");
+  printf("fp6_inv() count\n");
+  cost_zero();
+  fp6_inv(&ANS,&A);
+  cost_check(&invcost);
+  cost_printf("",&invcost,CHECK_PAIRING_TIME_LOOP);
+  printf("*********************************************************************************************\n\n");
+}
+
 void BENCH_fp2_fp6_mul_lazy_montgomery(int LOOP){
   printf("============================================================================\n");
   printf("-------------------------------fp, fp2, fp6 BENCHMARK-----------------------\n");
