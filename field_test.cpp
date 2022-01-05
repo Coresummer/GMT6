@@ -1562,10 +1562,10 @@ void BENCH_finalexp_lazy_montgomery(int LOOP){
   fp6_println_montgomery("fp6_finalexpow_x_2NAF_lazy_montgomery\n", &ANSm);
 
   CYBOZU_BENCH_C("final_exp()", LOOP, final_exp,&ANS, &A);
-  CYBOZU_BENCH_C("final_exp_lazy_montgomery()", LOOP, final_exp_lazy_montgomery2, &ANSm, &Am);
+  CYBOZU_BENCH_C("final_exp_lazy_montgomery()", LOOP, final_exp_lazy_montgomery, &ANSm, &Am);
 
   fp6_println("final_exp\n", &ANS);
-  fp6_println_montgomery("final_exp_lazy_montgomery2\n", &ANSm);
+  fp6_println_montgomery("final_exp_lazy_montgomery\n", &ANSm);
 
 }
 
