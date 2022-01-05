@@ -1181,7 +1181,31 @@ void fp6_finalexpow_x_1_2NAF(fp6_t *ANS,fp6_t *A){
     }
   }
 }
+void fp6_finalexpow_w_2NAF(fp6_t *ANS,fp6_t *A){
+  static fp6_t tmp_A;
+  fp6_set(&tmp_A,A);
 
+  static fp6_t A_inv;
+  fp6_frobenius_map_p3(&A_inv, A);
+  fp6_set(ANS,&tmp_A);
+  for(int i=(finalexp_pow_w.size() -2);i!=-1;i--){
+    switch(finalexp_pow_w[i]){
+      case 0:
+        fp6_sqr_GS(ANS, ANS);
+        break;
+      case 1:
+        fp6_sqr_GS(ANS, ANS);
+        fp6_mul(ANS,ANS,&tmp_A);
+        break;
+      case -1:
+        fp6_sqr_GS(ANS, ANS);
+        fp6_mul(ANS, ANS,&A_inv);
+        break;
+      default:
+          break;
+    }
+  }
+}
 void fp6_finalexpow_3w_2NAF(fp6_t *ANS,fp6_t *A){
     static fp6_t tmp_A;
   fp6_set(&tmp_A,A);
@@ -1263,6 +1287,31 @@ void fp6_finalexpow_x_1_2NAF_lazy_montgomery(fp6_t *ANS,fp6_t *A){
   }
 }
 
+void fp6_finalexpow_w_2NAF_lazy_montgomery(fp6_t *ANS,fp6_t *A){
+  static fp6_t tmp_A;
+  fp6_set(&tmp_A,A);
+
+  static fp6_t A_inv;
+  fp6_frobenius_map_p3_montgomery(&A_inv, A);
+  fp6_set(ANS,&tmp_A);
+  for(int i=(finalexp_pow_w.size() -2);i!=-1;i--){
+    switch(finalexp_pow_w[i]){
+      case 0:
+        fp6_sqr_GS_lazy_montgomery(ANS, ANS);
+        break;
+      case 1:
+        fp6_sqr_GS_lazy_montgomery(ANS, ANS);
+        fp6_mul_lazy_montgomery(ANS,ANS,&tmp_A);
+        break;
+      case -1:
+        fp6_sqr_GS_lazy_montgomery(ANS, ANS);
+        fp6_mul_lazy_montgomery(ANS, ANS,&A_inv);
+        break;
+      default:
+          break;
+    }
+  }
+}
 void fp6_finalexpow_3w_2NAF_lazy_montgomery(fp6_t *ANS,fp6_t *A){
   static fp6_t tmp_A;
   fp6_set(&tmp_A,A);

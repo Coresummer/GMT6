@@ -54,9 +54,11 @@ void fp6_pow_montgomery(fp6_t *ANS, fp6_t *A, mpz_t scalar);
 
 void fp6_finalexpow_x_2NAF(fp6_t *ANS,fp6_t *A);
 void fp6_finalexpow_x_1_2NAF(fp6_t *ANS,fp6_t *A);
+void fp6_finalexpow_w_2NAF(fp6_t *ANS,fp6_t *A);
 void fp6_finalexpow_3w_2NAF(fp6_t *ANS,fp6_t *A);
 void fp6_finalexpow_x_2NAF_lazy_montgomery(fp6_t *ANS,fp6_t *A);
 void fp6_finalexpow_x_1_2NAF_lazy_montgomery(fp6_t *ANS,fp6_t *A);
+void fp6_finalexpow_w_2NAF_lazy_montgomery(fp6_t *ANS,fp6_t *A);
 void fp6_finalexpow_3w_2NAF_lazy_montgomery(fp6_t *ANS,fp6_t *A);
 int  fp6_cmp(fp6_t *A,fp6_t *B);
 int  fp6_cmp_ui(fp6_t *A,unsigned long int UI);
