@@ -22,7 +22,6 @@ void final_exp(fp6_t *ANS,fp6_t *A){
   fp6_mul(&tmp3_fp6, &tmp3_fp6, &tmp5_fp6); // M^(p-1+x) = M'
 //L2
   //M'^3w //80
-  // fp6_finalexpow_3w_2NAF(&tmp4_fp6, &tmp3_fp6);   //M'(3w)
   fp6_finalexpow_w_2NAF(&tmp5_fp6, &tmp3_fp6);   //M'(w)
   fp6_sqr_GS(&tmp4_fp6,&tmp5_fp6);  //M'(2w)
   fp6_mul(&tmp4_fp6,&tmp4_fp6,&tmp5_fp6);  //M'(3w)
@@ -30,7 +29,6 @@ void final_exp(fp6_t *ANS,fp6_t *A){
   fp6_mul(&tmp6_fp6,&tmp4_fp6,&tmp3_fp6);         //M'(3w+1)                                    //M
   
   //80
-  // fp6_finalexpow_3w_2NAF(&tmp1_fp6, &tmp6_fp6);   //M'^9w^2 +3w
   fp6_finalexpow_w_2NAF(&tmp7_fp6, &tmp6_fp6);   //M'^3w^2 +w
   fp6_sqr_GS(&tmp1_fp6,&tmp7_fp6);  //M'^6w^2 +2w
   fp6_mul(&tmp1_fp6,&tmp1_fp6,&tmp7_fp6);  //M'^9w^2 +3w
@@ -39,7 +37,7 @@ void final_exp(fp6_t *ANS,fp6_t *A){
   //128
   fp6_finalexpow_x_1_2NAF(&tmp5_fp6, &tmp5_fp6);//M'^(9w^2+3w+1)(x-1)
 
-  fp6_mul(&tmp6_fp6, &tmp1_fp6, &tmp4_fp6);       //(9w^2+6w)  
+  fp6_mul(&tmp6_fp6, &tmp1_fp6, &tmp4_fp6);       //M'^9w^2 +3w+ 3w = M'^(9w^2+6w)
   fp6_mul(&tmp5_fp6,&tmp5_fp6,&tmp6_fp6);       //M'^(9w^2+3w+1)(x-1)+(9w^2+6w)                 //M
 
   //128

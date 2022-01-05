@@ -55,7 +55,7 @@ int main(){
   // BENCH_miller_proj_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
   // BENCH_finalexp_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
   // BENCH_Pairing_jac_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
-  // BENCH_Pairing_proj_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
+  BENCH_Pairing_proj_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
 
   // check_efp();
   // check_efp2();
@@ -71,7 +71,7 @@ int main(){
   // check_pairing_count_2NAF();
   // check_pairing_time_2NAF();
 
-  check_count_finalexp_pow_2NAF();
+  // check_count_finalexp_pow_2NAF();
   printf("*********************************************************************************************\n\n");
 
   return 0;
