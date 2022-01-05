@@ -45,15 +45,15 @@ int main(){
   // check_fp_with_montgomery();
   // check_fp2_with_montgomery();
   // check_fp6_with_montgomery();
-  check_fp2_count();
-  check_fp6_count();
+  // check_fp2_count();
+  // check_fp6_count();
 
   // BENCH_fp2_fp6_mul_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
   // BENCH_miller_jac_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
   // BENCH_miller_proj_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
   // BENCH_finalexp_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
   // BENCH_Pairing_jac_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
-  // BENCH_Pairing_proj_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
+  BENCH_Pairing_proj_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
 
   // check_efp();
   // check_efp2();
