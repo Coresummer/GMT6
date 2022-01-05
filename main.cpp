@@ -39,7 +39,7 @@ int main(){
 
   printf("*********************************************************************************************\n\n");
   
-  check_Fundamental_mul(CHECK_PAIRING_TIME_LOOP);
+  // check_Fundamental_mul(CHECK_PAIRING_TIME_LOOP);
 
   //各関数の動作確認、コスト計算、時間計測など
   // test_fp_montgomery(CHECK_PAIRING_TIME_LOOP);
