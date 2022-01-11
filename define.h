@@ -30,7 +30,7 @@
 
 // #define DEBUG_COST_A
 //#define DEBUG_ASSERT
-#define CHECK_PAIRING_TIME_LOOP 100000
+#define CHECK_PAIRING_TIME_LOOP 10000
 
 // **************Option**************/
 #define X64
