@@ -983,3 +983,40 @@ void miller_opt_ate_proj_2NAF_lazy_montgomery(fp6_t *f,efp6_t *P,efp6_t *Q){
       }
     }
 }
+
+
+void pre_miller_opt_ate_proj_loop_2NAF_lazy_montgomery(fp6_t *f,efp_t* mapped_P,efp_t* mapped_Q,efp_t* mapped_Q_neg,efp_jacobian_t *S, efp6_t *P,efp6_t *Q){    
+    fp6_set_ui_ui(f,0);
+    fp_set_ui(&f->x0.x0,1);
+    fp_to_montgomery(&f->x0.x0, &f->x0.x0);
+
+    fp_to_montgomery(&mapped_P->x,&P->x.x0.x0);
+    fp_to_montgomery(&mapped_P->y,&P->y.x0.x0);
+    mapped_P->infinity = 0;
+
+    efp6_to_efp(mapped_Q,Q);//twist
+    efp6_to_Jacefp_montgomery(S,Q);
+    efp_set_neg_montgomery(mapped_Q_neg,mapped_Q);//here
+}
+
+void miller_opt_ate_proj_loop_2NAF_lazy_montgomery(fp6_t *f,efp_t* mapped_P,efp_t* mapped_Q,efp_t* mapped_Q_neg,efp_jacobian_t *S){
+    mp_bitcnt_t i;
+    ff_lttp_costello_lazy_montgomery_0(f,S,mapped_P);
+    for(i=(miller_loop_v.size() -3);i!=-1;i--){//-1
+      switch(miller_loop_v[i]){
+        case 0:
+          ff_lttp_costello_lazy_montgomery(f,S,mapped_P);
+          break;
+        case 1:
+          ff_lttp_costello_lazy_montgomery(f,S,mapped_P);
+          ff_ltqp_costello_mixed_lazy_montgomery(f,S,mapped_Q,mapped_P);
+          break;
+        case -1:
+          ff_lttp_costello_lazy_montgomery(f,S,mapped_P);
+          ff_ltqp_costello_mixed_lazy_montgomery(f,S,mapped_Q_neg,mapped_P);
+          break;
+        default:
+          break;
+      }
+    }
+}
