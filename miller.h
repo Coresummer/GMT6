@@ -23,4 +23,7 @@ void miller_opt_ate_jac_2NAF(fp6_t *f,efp6_t *P,efp6_t *Q);
 void miller_opt_ate_proj_2NAF(fp6_t *f,efp6_t *P,efp6_t *Q);
 void miller_opt_ate_jac_2NAF_lazy_montgomery(fp6_t *f,efp6_t *P,efp6_t *Q);
 void miller_opt_ate_proj_2NAF_lazy_montgomery(fp6_t *f,efp6_t *P,efp6_t *Q);
+void pre_miller_opt_ate_proj_loop_2NAF_lazy_montgomery(fp6_t *f,efp_t* mapped_P,efp_t* mapped_Q,efp_t* mapped_Q_neg,efp_jacobian_t *S, efp6_t *P,efp6_t *Q);
+void miller_opt_ate_proj_loop_2NAF_lazy_montgomery(fp6_t *f,efp_t* mapped_P,efp_t* mapped_Q,efp_t* mapped_Q_neg,efp_jacobian_t *S);
+
 #endif
