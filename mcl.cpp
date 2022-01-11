@@ -1,4 +1,3 @@
-
 #include <mcl/gmp_util.hpp>
 #include "mcl.hpp"
 
@@ -17,4 +16,5 @@ int mcl_init(const char *pStr)
 	fprintf(stderr, "err=%s\n", e.what());
 	return 1;
 }
+
 

@@ -155,6 +155,7 @@ void mpn_invert(mp_limb_t *ANS,mp_limb_t *A,mp_limb_t *p){
 	mpn_mod(ANS,tmp,FPLIMB);
 }
 
+#if 0
 void mpn_mulmod_montgomery(mp_limb_t *ANS, mp_size_t ANS_size, mp_limb_t *A,
                            mp_size_t A_size, mp_limb_t *B, mp_size_t B_size) {
 #ifdef DEBUG_COST_A
@@ -173,6 +174,7 @@ void mpn_mulmod_montgomery(mp_limb_t *ANS, mp_size_t ANS_size, mp_limb_t *A,
   if (mpn_cmp(ANS, prime, FPLIMB) != -1)
     mpn_sub_n(ANS, ANS, prime, FPLIMB);
 }
+#endif
 
 void mpn_pow(mp_limb_t *ans,mp_size_t ans_size,mp_limb_t *a,mp_size_t a_size,mp_limb_t *r,mp_size_t n){
 	mp_limb_t at[ans_size],Temp[2*ans_size],tmp[ans_size];

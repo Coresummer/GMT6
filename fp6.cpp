@@ -2,7 +2,6 @@
 #include "fp.h"
 #include "fp2.h"
 #include "mpn.h"
-#include <ELiPS/define.h>
 #include <cstdio>
 
 void fp6_init(fp6_t *A){

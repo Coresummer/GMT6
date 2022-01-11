@@ -1,7 +1,6 @@
 #include "fp2.h"
 #include "fp.h"
 #include "mpn.h"
-#include <ELiPS/define.h>
 #include <cstdio>
 #include <gmp.h>
 
