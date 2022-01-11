@@ -4,7 +4,7 @@
 #else
     #define TTT_EXTERN extern
 #endif
-#include <ELiPS/define.h>
+
 // int cost_add,cost_add_ui,cost_sub,cost_sub_ui,cost_mul,cost_mul_ui,cost_sqr,cost_inv,cost_mod;
 int cost_add,cost_add_ui,cost_sub,cost_sub_ui,cost_mul,cost_set_neg,cost_sqr,cost_inv,cost_mod;
 int cost_add_nonmod,cost_add_nonmod_double,cost_sub_nonmod,cost_sub_nonmod_double,cost_r1shift,cost_mod_nomal;
