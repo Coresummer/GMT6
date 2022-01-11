@@ -60,19 +60,23 @@ void fp_set_mpn(fp_t *ANS,mp_limb_t *A){
   mpn_copyd(ANS->x0,A,FPLIMB);
 }
 
+#ifndef MCL_ADDSUB
 void fp_set_neg(fp_t *ANS,fp_t *A){
   #ifdef DEBUG_ASSERT
   assert(mpn_cmp(A->x0,prime,FPLIMB)>0)
   #endif
+
   if (fp_cmp_zero(A) == 0) fp_set(ANS, A);
   else mpn_sub_n(ANS->x0, prime, A->x0, FPLIMB);
 }
+#endif
 
-void fp_set_neg_montgomery(fp_t *ANS,fp_t *A){
-  #ifdef DEBUG_ASSERT
-  assert(mpn_cmp(A->x0,prime,FPLIMB)>0)
-  #endif
-  if (fp_cmp_zero(A) == 0) fp_set(ANS, A);
+
+void fp_set_neg_montgomery(fp_t *ANS, fp_t *A) {
+#ifdef DEBUG_ASSERT
+  assert(mpn_cmp(A->x0, prime, FPLIMB) > 0)
+#endif
+  if (fp_cmp_zero(A) == 0)fp_set(ANS, A);
   else mpn_sub_n(ANS->x0, prime, A->x0, FPLIMB);
 }
 
@@ -89,6 +93,7 @@ void fp_lshift(fp_t *ANS, fp_t *A, unsigned long int UI) {
   fp_mod(ANS, ANS->x0, FPLIMB);
 }
 
+#ifndef MCL_ADDSUB
 void fp_l1shift(fp_t *ANS, fp_t *A) {
 #ifdef DEBUG_COST_A
   cost_add++;
@@ -96,6 +101,7 @@ void fp_l1shift(fp_t *ANS, fp_t *A) {
   mpn_lshift(ANS->x0, A->x0, FPLIMB, 1);
   if (mpn_cmp(ANS->x0, prime, FPLIMB) >= 0)mpn_sub_n(ANS->x0, ANS->x0, prime, FPLIMB);
 }
+#endif
 
 void fp_l1shift_nonmod_single(fp_t *ANS, fp_t *A) {
 #ifdef DEBUG_COST_A
@@ -311,16 +317,16 @@ void fp_mul_mpn(fp_t *ANS, fp_t *A, mp_limb_t *B) {
   fp_mod(ANS, tmp_mul, FPLIMB2);
 }
 
+#if 1
 void fp_sqr(fp_t *ANS, fp_t *A) {
 #ifdef DEBUG_COST_A
   cost_sqr++;
 #endif
-  mp_limb_t tmp_sqr[FPLIMB2];
-  mpn_zero(tmp_sqr, FPLIMB2);
-
+  static mp_limb_t tmp_sqr[FPLIMB2];
   mpn_sqr(tmp_sqr, A->x0, FPLIMB);
   fp_mod(ANS, tmp_sqr, FPLIMB2);
 }
+#endif
 
 void fp_sqr_nonmod(fpd_t *ANS, fp_t *A) {
 #ifdef DEBUG_COST_A
@@ -328,9 +334,9 @@ void fp_sqr_nonmod(fpd_t *ANS, fp_t *A) {
 #endif
   // mpn_sqr(ANS->x0, A->x0, FPLIMB);
   mcl_mulPre(ANS->x0, A->x0, A->x0);
-
 }
 
+#ifndef MCL_ADDSUB
 void fp_add(fp_t *ANS, fp_t *A, fp_t *B) {
 #ifdef DEBUG_COST_A
   cost_add++;
@@ -339,6 +345,7 @@ void fp_add(fp_t *ANS, fp_t *A, fp_t *B) {
   if (mpn_cmp(ANS->x0, prime, FPLIMB) >= 0)
     mpn_sub_n(ANS->x0, ANS->x0, prime, FPLIMB);
 }
+#endif
 
 void fp_add_nonmod_single(fp_t *ANS, fp_t *A, fp_t *B) {
 #ifdef DEBUG_COST_A
@@ -379,12 +386,12 @@ void fp_add_mpn(fp_t *ANS, fp_t *A, mp_limb_t *B) {
     mpn_sub_n(ANS->x0, ANS->x0, prime, FPLIMB);
 }
 
+#ifndef MCL_ADDSUB
 void fp_sub(fp_t *ANS, fp_t *A, fp_t *B) {
 #ifdef DEBUG_COST_A
   cost_sub++;
 #endif
-  mp_limb_t buf[FPLIMB];
-  mpn_zero(buf,FPLIMB);
+  static mp_limb_t buf[FPLIMB];
 
   if (mpn_cmp(A->x0, B->x0, FPLIMB) < 0) {
     mpn_sub_n(buf, A->x0, B->x0, FPLIMB);
@@ -393,6 +400,8 @@ void fp_sub(fp_t *ANS, fp_t *A, fp_t *B) {
     mpn_sub_n(ANS->x0, A->x0, B->x0, FPLIMB);
   }
 }
+#endif
+
 
 void fp_sub_nonmod_single(fp_t *ANS, fp_t *A, fp_t *B) {
 #ifdef DEBUG_COST_A
