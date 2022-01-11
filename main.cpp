@@ -4,7 +4,6 @@
 #define TTT_INSTANCE_HERE
 
 #include <cstdio>
-// #include "libmcl/mcl.h"
 #include "define.h"
 #include "./time.h"
 #include "scalar.h"
@@ -12,7 +11,6 @@
 #include "fp.h"
 #include "fp2.h"
 #include "fp6.h"
-// #include "test_fp.h"
 #include "field_test.h"
 #include "efp.h"
 #include "efp6.h"
