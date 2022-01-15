@@ -203,7 +203,7 @@ void fp2_mul_lazy(fp2_t *ANS, fp2_t *A, fp2_t *B) {
 }
 
 void fp2_mul_lazy_montgomery(fp2_t *ANS, fp2_t *A, fp2_t *B) {
-#if 0
+#if 1
   // (a+bi)(c+di) = ac-bd+(ad + bc)i = ac-bd+((a+b)(c+d) - ac - bd)i
   uint64_t AC[sizeof(fp_t) * 2];
   uint64_t BD[sizeof(fp_t) * 2];
