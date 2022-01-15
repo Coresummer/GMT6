@@ -288,6 +288,19 @@ void fp2_sqr(fp2_t *ANS, fp2_t *A) {
 }
 
 void fp2_sqr_lazy(fp2_t *ANS, fp2_t *A) {
+#if 1
+  fp_t tmp1, tmp2, tmp3;
+
+  mcl_addPre(tmp1.x0, A->x0.x0, A->x1.x0);
+  fp_sub(&tmp2, &A->x0, &A->x1);
+
+  //x1
+  fp_mul(&tmp3, &A->x0, &A->x1);
+  fp_add(&ANS->x1, &tmp3, &tmp3);
+
+  //x0
+  fp_mul(&ANS->x0, &tmp1, &tmp2);
+#else
   static fp_t tmp1, tmp2, tmp3, buf;
   static fp_t chk1, chk2;
 
@@ -300,6 +313,7 @@ void fp2_sqr_lazy(fp2_t *ANS, fp2_t *A) {
 
   //x0
   fp_mul(&ANS->x0, &tmp1, &tmp2);
+#endif
 }
 void fp2_sqr_lazy_montgomery(fp2_t *ANS, fp2_t *A) {
   // static fp_t tmp1, tmp2, tmp3, buf;
