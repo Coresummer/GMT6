@@ -203,6 +203,26 @@ void fp2_mul_lazy(fp2_t *ANS, fp2_t *A, fp2_t *B) {
 }
 
 void fp2_mul_lazy_montgomery(fp2_t *ANS, fp2_t *A, fp2_t *B) {
+#if 0
+  // (a+bi)(c+di) = ac-bd+(ad + bc)i = ac-bd+((a+b)(c+d) - ac - bd)i
+  uint64_t AC[sizeof(fp_t) * 2];
+  uint64_t BD[sizeof(fp_t) * 2];
+  uint64_t T[sizeof(fp_t) * 2];
+  const uint64_t *a = A->x0.x0;
+  const uint64_t *b = A->x1.x0;
+  const uint64_t *c = B->x0.x0;
+  const uint64_t *d = B->x1.x0;
+  mcl_addPre(AC, a, b);
+  mcl_addPre(BD, c, d);
+  mcl_mulPre(T, AC, BD); // (a+b)(c+d)
+  mcl_mulPre(AC, a, c); // ac
+  mcl_mulPre(BD, b, d); // bd
+  mcl_subDblPre(T, T, AC);
+  mcl_subDblPre(T, T, BD); // (a+b)(c+d) - ac - bd
+  mcl_subDbl(AC, AC, BD); // ac-bd
+  mcl_mod(ANS->x0.x0, AC);
+  mcl_mod(ANS->x1.x0, T);
+#else
   // static fpd_t buf1, buf2;
   // static fpd_t tmp1, tmp2, tmptmp;
   // static fp_t tmp3, tmp4;
@@ -238,7 +258,7 @@ void fp2_mul_lazy_montgomery(fp2_t *ANS, fp2_t *A, fp2_t *B) {
   fp_mulmod_montgomery(&ANS->x1, &tmp3_fp, &tmp4_fp);  //(a+b)(c+d)
   fp_sub(&ANS->x1, &ANS->x1, &tmp1_fp);
   fp_sub(&ANS->x1, &ANS->x1, &tmp2_fp);
-
+#endif
 }
 
 void fp2_mul_nonmod_montgomery(fpd2_t *ANS, fp2_t *A, fp2_t *B) {
