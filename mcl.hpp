@@ -19,6 +19,19 @@ void3u mcl_add;
 void3u mcl_sub;
 void2u mcl_neg;
 
+void3u mcl_addDbl;
+void3u mcl_subDbl;
+
+void3u mcl_addPre;
+void3u mcl_subDblPre;
+
+template<class T>
+void setFuncInfo(Xbyak::util::Profiler& prof, const char *name, const T& begin, const uint8_t* end)
+{
+	const uint8_t*p = (const uint8_t*)begin;
+	prof.set((std::string("mcl_") + name).c_str(), p, end - p);
+}
+
 template<class T>
 T getMontgomeryCoeff(T pLow)
 {
@@ -64,6 +77,7 @@ struct Code : Xbyak::CodeGenerator {
 	Unit rp_;
 	Unit p_[MAX_N];
 	int bitSize;
+	Xbyak::util::Profiler prof_;
 
 	/*
 		@param op [in] ; use op.p, op.N, op.isFullBit
@@ -100,6 +114,14 @@ struct Code : Xbyak::CodeGenerator {
 	}
 	void init(const char *pStr)
 	{
+		const char *s = getenv("MCL_PERF");
+		int profMode = 0;
+		if (s && s[0] && s[1] == '\0') profMode = s[0] - '0';
+		printf("profMode=%d\n", profMode);
+		if (profMode) {
+			prof_.init(profMode);
+			prof_.setStartAddr(getCurr());
+		}
 		mpz_class p(pStr);
 		bitSize = mcl::gmp::getBitSize(p);
 		N = (bitSize + 63) / 64;
@@ -109,33 +131,32 @@ struct Code : Xbyak::CodeGenerator {
 		rp_ = getMontgomeryCoeff(p_[0]);
 		printf("bitSize=%d rp_=%016llx\n", bitSize, (long long)rp_);
 
-		if (N == 11) {
-			align(16);
-			mcl_mulPre = getCurr<void3u>();
-			gen_mulPre11();
-			align(16);
-			mcl_mont = getCurr<void3u>();
-			gen_montMul11();
-			align(16);
-			mcl_mod = getCurr<void2u>();
-			gen_mod11();
-		} else {
-			align(16);
-			mcl_mulPre = getCurr<void3u>();
-			gen_mulPre9();
-			align(16);
-			mcl_mont = getCurr<void3u>();
-			gen_montMul9();
-			align(16);
-			mcl_mod = getCurr<void2u>();
-			gen_mod9();
-		}
+		gen_mulPre(N);
+		gen_montMul(N);
+		gen_mod(N);
 		mcl_add = getCurr<void3u>();
 		gen_add(N);
+		setFuncInfo(prof_, "_add", mcl_add, getCurr());
 		mcl_sub = getCurr<void3u>();
 		gen_sub(N);
+		setFuncInfo(prof_, "_sub", mcl_sub, getCurr());
 		mcl_neg = getCurr<void2u>();
 		gen_neg(N);
+		setFuncInfo(prof_, "_neg", mcl_neg, getCurr());
+
+		mcl_addDbl = getCurr<void3u>();
+		gen_addDbl(N);
+		setFuncInfo(prof_, "_addDbl", mcl_addDbl, getCurr());
+		mcl_subDbl = getCurr<void3u>();
+		gen_subDbl(N);
+		setFuncInfo(prof_, "_subDbl", mcl_subDbl, getCurr());
+
+		mcl_addPre = getCurr<void3u>();
+		gen_addPre(N);
+		setFuncInfo(prof_, "_addPre", mcl_addPre, getCurr());
+		mcl_subDblPre = getCurr<void3u>();
+		gen_subDblPre(N);
+		setFuncInfo(prof_, "_subDblPre", mcl_subDblPre, getCurr());
 	}
 private:
 	Code(const Code&);
@@ -186,6 +207,38 @@ private:
 	L(exitL);
 		store_mr(pz, t);
 	}
+	void gen_addPre(size_t n)
+	{
+		StackFrame sf(this, 3);
+		const Reg64& pz = sf.p[0];
+		const Reg64& px = sf.p[1];
+		const Reg64& py = sf.p[2];
+		for (size_t i = 0; i < n; i++) {
+			mov(rax, ptr[px + i * 8]);
+			if (i == 0) {
+				add(rax, ptr[py + i * 8]);
+			} else {
+				adc(rax, ptr[py + i * 8]);
+			}
+			mov(ptr[pz + i * 8], rax);
+		}
+	}
+	void gen_subDblPre(size_t n)
+	{
+		StackFrame sf(this, 3);
+		const Reg64& pz = sf.p[0];
+		const Reg64& px = sf.p[1];
+		const Reg64& py = sf.p[2];
+		for (size_t i = 0; i < n * 2; i++) {
+			mov(rax, ptr[px + i * 8]);
+			if (i == 0) {
+				sub(rax, ptr[py + i * 8]);
+			} else {
+				sbb(rax, ptr[py + i * 8]);
+			}
+			mov(ptr[pz + i * 8], rax);
+		}
+	}
 	void gen_neg(size_t n)
 	{
 		StackFrame sf(this, 3, n);
@@ -234,6 +287,39 @@ private:
 		store_mr(pz + 8 * N, pk);
 	}
 
+	void gen_mulPre(int n)
+	{
+		align(16);
+		mcl_mulPre = getCurr<void3u>();
+		switch (n) {
+		case 9: gen_mulPre9(); break;
+		case 11: gen_mulPre11(); break;
+		default: throw cybozu::Exception("bad n") << n;
+		}
+		setFuncInfo(prof_, "_mulPre", mcl_mulPre, getCurr());
+	}
+	void gen_montMul(int n)
+	{
+		align(16);
+		mcl_mont = getCurr<void3u>();
+		switch (n) {
+		case 9: gen_montMul9(); break;
+		case 11: gen_montMul11(); break;
+		default: throw cybozu::Exception("bad n") << n;
+		}
+		setFuncInfo(prof_, "_mont", mcl_mont, getCurr());
+	}
+	void gen_mod(int n)
+	{
+		align(16);
+		mcl_mod = getCurr<void2u>();
+		switch (n) {
+		case 9: gen_mod9(); break;
+		case 11: gen_mod11(); break;
+		default: throw cybozu::Exception("bad n") << n;
+		}
+		setFuncInfo(prof_, "_mod", mcl_mod, getCurr());
+	}
 	// [gp0] <- [gp1] * [gp2]
 	void gen_mulPre11()
 	{
@@ -569,6 +655,71 @@ private:
 		if (addCF) adox(tt, CF); // no carry
 		adcx(c[N], tt);
 		if (updateCF) setc(CF.cvt8());
+	}
+	void gen_addDbl(size_t n)
+	{
+		StackFrame sf(this, 3, n);
+		const Reg64& pz = sf.p[0];
+		const Reg64& px = sf.p[1];
+		const Reg64& py = sf.p[2];
+		Pack t = sf.t;
+		// pz[0:n] = px[0:n] + py[0:n]
+		for (size_t i = 0; i < n; i++) {
+			mov(rax, ptr[px + i * 8]);
+			if (i == 0) {
+				add(rax, ptr[py + i * 8]);
+			} else {
+				adc(rax, ptr[py + i * 8]);
+			}
+			mov(ptr[pz + i * 8], rax);
+		}
+		lea(px, ptr[px + n * 8]);
+		lea(py, ptr[py + n * 8]);
+		lea(pz, ptr[pz + n * 8]);
+		// pz[n:2n] = px[n:2n] + py[n:2n] mod p with CF
+		for (size_t i = 0; i < n; i++) {
+			mov(t[i], ptr[px + i * 8]);
+			adc(t[i], ptr[py + i * 8]);
+			mov(ptr[pz + i * 8], t[i]);
+		}
+		mov(rax, size_t(p_));
+		sub_rm(t, rax);
+		Label exitL;
+		jc(exitL);
+		store_mr(pz, t);
+	L(exitL);
+	}
+	void gen_subDbl(size_t n)
+	{
+		StackFrame sf(this, 3, n);
+		const Reg64& pz = sf.p[0];
+		const Reg64& px = sf.p[1];
+		const Reg64& py = sf.p[2];
+		Pack t = sf.t;
+		// pz[0:n] = px[0:n] - py[0:n]
+		for (size_t i = 0; i < n; i++) {
+			mov(rax, ptr[px + i * 8]);
+			if (i == 0) {
+				sub(rax, ptr[py + i * 8]);
+			} else {
+				sbb(rax, ptr[py + i * 8]);
+			}
+			mov(ptr[pz + i * 8], rax);
+		}
+		lea(px, ptr[px + n * 8]);
+		lea(py, ptr[py + n * 8]);
+		lea(pz, ptr[pz + n * 8]);
+		// pz[n:2n] = px[n:2n] - py[n:2n] mod p with CF
+		for (size_t i = 0; i < n; i++) {
+			mov(t[i], ptr[px + i * 8]);
+			sbb(t[i], ptr[py + i * 8]);
+		}
+		Label exitL;
+		jnc(exitL);
+		mov(rax, size_t(p_));
+		add_rm(t, rax);
+	L(exitL);
+		store_mr(pz, t);
 	}
 	/*
 		z[] = x[]
