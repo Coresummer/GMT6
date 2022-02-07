@@ -1,4 +1,6 @@
 **PARAMETERS**  
+A pairing implementation based on GMT8-542 curve
+
 𝜒(128bit) = 0xefffffffffffffe00000000000000000  
 (HW=58)  
 ℎ_𝑡 = −1, 〖 ℎ〗_𝑦 = 0xffbbffffffffffffc020  
