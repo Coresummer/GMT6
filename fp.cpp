@@ -56,7 +56,7 @@ void fp_set_mpn(fp_t *ANS,mp_limb_t *A){
   mpn_copyd(ANS->x0,A,FPLIMB);
 }
 
-#ifndef MCL_ADDSUB
+#ifndef mcl
 void fp_set_neg(fp_t *ANS,fp_t *A){
   #ifdef DEBUG_ASSERT
   assert(mpn_cmp(A->x0,prime,FPLIMB)>0)
@@ -89,7 +89,7 @@ void fp_lshift(fp_t *ANS, fp_t *A, unsigned long int UI) {
   fp_mod(ANS, ANS->x0, FPLIMB);
 }
 
-#ifndef MCL_ADDSUB
+#ifndef mcl
 void fp_l1shift(fp_t *ANS, fp_t *A) {
 #ifdef DEBUG_COST_A
   cost_add++;
@@ -193,17 +193,22 @@ void fp_mulmod_montgomery(fp_t *ANS, fp_t *A, fp_t *B) {
   cost_mul++;
   cost_mod++;
 #endif
-  // static mp_limb_t T[FPLIMB2];
-  // mpn_zero(T, FPLIMB2);
 
-  // mpn_mul_n(T, A->x0, B->x0, FPLIMB);
-  // for (int i = 0; i < FPLIMB; i++)
-  //   T[i] = mpn_addmul_1(&T[i], prime, FPLIMB, T[i] * Ni_neg);
-
-  // mpn_add_n(ANS->x0, T + FPLIMB, T, FPLIMB);
-  // if (mpn_cmp(ANS->x0, prime, FPLIMB) != -1)
-  //   mpn_sub_n(ANS->x0, ANS->x0, prime, FPLIMB);
+  #ifdef mcl
   mcl_mont(ANS->x0,A->x0, B->x0);
+  
+  #else
+  static mp_limb_t T[FPLIMB2];
+  mpn_zero(T, FPLIMB2);
+
+  mpn_mul_n(T, A->x0, B->x0, FPLIMB);
+  for (int i = 0; i < FPLIMB; i++)
+    T[i] = mpn_addmul_1(&T[i], prime, FPLIMB, T[i] * Ni_neg);
+
+  mpn_add_n(ANS->x0, T + FPLIMB, T, FPLIMB);
+  if (mpn_cmp(ANS->x0, prime, FPLIMB) != -1)
+    mpn_sub_n(ANS->x0, ANS->x0, prime, FPLIMB);
+  #endif
 }
 
 void fp_sqrmod_montgomery(fp_t *ANS, fp_t *A) {
@@ -211,18 +216,20 @@ void fp_sqrmod_montgomery(fp_t *ANS, fp_t *A) {
   cost_sqr++;
   cost_mod++;
 #endif
-  // static mp_limb_t T[FPLIMB2];
-  // mpn_zero(T, FPLIMB2);
-
-  // mpn_sqr(T, A->x0, FPLIMB);
-  // for (int i = 0; i < FPLIMB; i++)
-  //   T[i] = mpn_addmul_1(&T[i], prime, FPLIMB, T[i] * Ni_neg);
-
-  // mpn_add_n(ANS->x0, T + FPLIMB, T, FPLIMB);
-  // if (mpn_cmp(ANS->x0, prime, FPLIMB) != -1)
-  //   mpn_sub_n(ANS->x0, ANS->x0, prime, FPLIMB);
+  #ifdef mcl
   mcl_mont(ANS->x0,A->x0, A->x0);
+  #else
+  static mp_limb_t T[FPLIMB2];
+  mpn_zero(T, FPLIMB2);
 
+  mpn_sqr(T, A->x0, FPLIMB);
+  for (int i = 0; i < FPLIMB; i++)
+    T[i] = mpn_addmul_1(&T[i], prime, FPLIMB, T[i] * Ni_neg);
+
+  mpn_add_n(ANS->x0, T + FPLIMB, T, FPLIMB);
+  if (mpn_cmp(ANS->x0, prime, FPLIMB) != -1)
+    mpn_sub_n(ANS->x0, ANS->x0, prime, FPLIMB);
+  #endif
 }
 
 void fp_mod_montgomery(fp_t *ANS, fp_t *A) {
@@ -284,8 +291,11 @@ void fp_mul_nonmod(fpd_t *ANS, fp_t *A, fp_t *B) {
 #ifdef DEBUG_COST_A
   cost_mul++;
 #endif
-  // mpn_mul_n(ANS->x0, A->x0, B->x0, FPLIMB);
+  #ifdef mcl
   mcl_mulPre(ANS->x0, A->x0, B->x0);
+  #else
+  // mpn_mul_n(ANS->x0, A->x0, B->x0, FPLIMB);
+  #endif
 }
 
 void fp_mul_ui(fp_t *ANS, fp_t *A, unsigned long int UI) {
@@ -321,11 +331,14 @@ void fp_sqr_nonmod(fpd_t *ANS, fp_t *A) {
 #ifdef DEBUG_COST_A
   cost_sqr++;
 #endif
+  #ifdef mcl
   // mpn_sqr(ANS->x0, A->x0, FPLIMB);
-  mcl_mulPre(ANS->x0, A->x0, A->x0);
+  #else
+    mcl_mulPre(ANS->x0, A->x0, A->x0);
+  #endif
 }
 
-#ifndef MCL_ADDSUB
+#ifndef mcl
 void fp_add(fp_t *ANS, fp_t *A, fp_t *B) {
 #ifdef DEBUG_COST_A
   cost_add++;
@@ -384,7 +397,7 @@ void fp_add_mpn(fp_t *ANS, fp_t *A, mp_limb_t *B) {
     mpn_sub_n(ANS->x0, ANS->x0, prime, FPLIMB);
 }
 
-#ifndef MCL_ADDSUB
+#ifndef mcl
 void fp_sub(fp_t *ANS, fp_t *A, fp_t *B) {
 #ifdef DEBUG_COST_A
   cost_sub++;
@@ -761,7 +774,7 @@ int fp_legendre_sqrt_montgomery(fp_t *ANS, fp_t *A) {
   return 1;
 }
 
-#ifndef MCL_ADDSUB
+#ifndef mcl
 void fp_mul_base(fp_t *ANS,fp_t *A){
   #ifdef DEBUG_COST_A
   cost_add++;

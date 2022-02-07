@@ -26,10 +26,13 @@
 #define ARCBIT 64  //64bit processor
 //#define ARCBIT 32 //32bit processor
 
-// #define DEBUG_COST_A
+//#define DEBUG_COST_A
 //#define DEBUG_ASSERT
 #define CHECK_PAIRING_TIME_LOOP 10000
-
+/**************MP Lib**************/
+// #define mcl
+#define gmp
+/**********************************/
 /**************Option**************/
 #define X64
 /**********************************/

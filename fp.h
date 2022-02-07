@@ -4,7 +4,6 @@
 
 #include "mpn.h"
 
-#define MCL_ADDSUB
 #include "mcl.h"
 
 void fp_init(fp_t *A);
@@ -21,7 +20,7 @@ void fpd_set(fpd_t *ANS,fpd_t *A);
 void fpd_set_neg_montgomery(fpd_t *ANS,fpd_t *A);
 void fp_set_ui(fp_t *ANS,unsigned long int UI);
 void fp_set_mpn(fp_t *ANS,mp_limb_t *A);
-#ifdef MCL_ADDSUB
+#ifdef mcl
 inline void fp_set_neg(fp_t *ANS,fp_t *A)
 {
 	mcl_neg(ANS->x0, A->x0);
@@ -31,7 +30,7 @@ void fp_set_neg(fp_t *ANS,fp_t *A);
 #endif
 void fp_set_neg_montgomery(fp_t *ANS,fp_t *A);
 void fp_lshift(fp_t *ANS,fp_t *A, unsigned long int UI);
-#ifdef MCL_ADDSUB
+#ifdef mcl
 inline void fp_l1shift(fp_t *ANS,fp_t *A)
 {
 	mcl_add(ANS->x0, A->x0, A->x0);
@@ -50,7 +49,7 @@ void fp_set_random(fp_t *ANS,gmp_randstate_t state);
 void fp_set_random_montgomery(fp_t *ANS, gmp_randstate_t state);
 void pre_montgomery();
 void fp_mulmod_montgomery(fp_t *ANS,fp_t *A,fp_t *B);
-#ifdef MCL_ADDSUB
+#ifdef mcl
 inline void mpn_mulmod_montgomery(mp_limb_t *ANS,mp_size_t /*ANS_size*/,mp_limb_t *A,mp_size_t /*A_size*/,mp_limb_t *B,mp_size_t /*B_size*/)
 {
 	mcl_mont(ANS, A, B);
@@ -71,7 +70,7 @@ void fp_mul_montgomery(mp_limb_t *ANS,mp_size_t ANS_size,mp_limb_t *A,mp_size_t 
 void fp_mul_ui(fp_t *ANS,fp_t *A,unsigned long int UI);
 void fp_mul_ui_nonmod_single(fp_t *ANS, fp_t *A, unsigned long int UI);
 void fp_mul_mpn(fp_t *ANS,fp_t *A,mp_limb_t *B);
-#if 0//#ifdef MCL_ADDSUB
+#if 0//#ifdef mcl
 inline void fp_sqr(fp_t *ANS,fp_t *A)
 {
 	mcl_mont(ANS->x0, A->x0, A->x0);
@@ -80,7 +79,7 @@ inline void fp_sqr(fp_t *ANS,fp_t *A)
 void fp_sqr(fp_t *ANS,fp_t *A);
 #endif
 void fp_sqr_nonmod(fpd_t *ANS,fp_t *A);
-#ifdef MCL_ADDSUB
+#ifdef mcl
 inline void fp_add(fp_t *ANS,fp_t *A,fp_t *B)
 {
 	mcl_add(ANS->x0, A->x0, B->x0);
@@ -94,7 +93,7 @@ void fp_add_nonmod_single(fp_t *ANS,fp_t *A,fp_t *B);
 void fp_add_nonmod_double(fpd_t *ANS,fpd_t *A,fpd_t *B);
 void fp_add_ui(fp_t *ANS,fp_t *A,unsigned long int UI);
 void fp_add_mpn(fp_t *ANS,fp_t *A,mp_limb_t *B);
-#ifdef MCL_ADDSUB
+#ifdef mcl
 inline void fp_sub(fp_t *ANS,fp_t *A,fp_t *B)
 {
 	mcl_sub(ANS->x0, A->x0, B->x0);
@@ -125,7 +124,7 @@ int fp_montgomery_trick_montgomery(fp_t *A_inv,fp_t *A,int n);
 void fp_lshift_ui_nonmod_single(fp_t *ANS, fp_t *A, int s);
 void fp_lshift_ui_nonmod_double(fpd_t *ANS, fpd_t *A, int s);
 
-#ifdef MCL_ADDSUB
+#ifdef mcl
 #define fp_mul_base fp_set_neg
 #else
 void fp_mul_base(fp_t *ANS,fp_t *A);
