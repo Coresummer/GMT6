@@ -39,6 +39,11 @@ void fp6_sqr_GS(fp6_t *ANS,fp6_t *A);
 void fp6_sqr_GS_lazy_montgomery(fp6_t *ANS,fp6_t *A);
 void fp6_sqr_GS_lazy_montgomery2(fp6_t *ANS,fp6_t *A);
 
+void fp6_sqr_compressed(fp6_t *ANS,fp6_t *A);
+void fp6_sqr_recover_g0(fp6_t *ANS,fp6_t *A);
+void fp6_sqr_recover_g0_noninv(fp6_t *ANS,fp6_t *A);
+void fp6_sqr_recover_g1(fp6_t *ANS,fp6_t *A);
+
 void fp6_sqr_lazy_montgomery(fp6_t *ANS,fp6_t *A);
 void fp6_add(fp6_t *ANS,fp6_t *A,fp6_t *B);
 void fp6_add_lazy(fp6_t *ANS,fp6_t *A,fp6_t *B);

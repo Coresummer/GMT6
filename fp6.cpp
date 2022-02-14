@@ -940,6 +940,27 @@ void fp6_sqr_GS_lazy_montgomery2(fp6_t *ANS,fp6_t *A){
 
 }
 
+void fp6_sqr_recover_g0(fp6_t *ANS,fp6_t *A){
+  static fp_t tmp1_fp, tmp2_fp,tmp3_fp; 
+  if(fp_cmp_zero(&A->x1.x0)==0){ //check if g2 == 0
+    
+  }else{
+
+  }
+}
+
+void fp6_sqr_recover_g0_noninv(fp6_t *ANS,fp6_t *A){
+  
+}
+
+void fp6_sqr_recover_g1(fp6_t *ANS,fp6_t *A){
+  
+}
+
+void fp6_sqr_compressed(fp6_t *ANS,fp6_t *A){
+  
+}
+
 void fp6_add(fp6_t *ANS,fp6_t *A,fp6_t *B){
   fp2_add(&ANS->x0,&A->x0,&B->x0);
   fp2_add(&ANS->x1,&A->x1,&B->x1);
