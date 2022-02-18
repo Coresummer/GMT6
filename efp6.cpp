@@ -124,8 +124,8 @@ void generate_g2(efp6_t *Q){
 }
 
 void efp6_ecd(efp6_t *ANS,efp6_t *P){
-  static efp6_t tmp1_efp6;
-  static fp6_t tmp1_fp6,tmp2_fp6,tmp3_fp6;
+   efp6_t tmp1_efp6;
+  fp6_t tmp1_fp6,tmp2_fp6,tmp3_fp6;
   if(P->infinity==1){
     ANS->infinity=1;
     return;
@@ -160,8 +160,8 @@ void efp6_ecd(efp6_t *ANS,efp6_t *P){
 }
 
 void efp6_eca(efp6_t *ANS,efp6_t *P1,efp6_t *P2){
-  static efp6_t tmp1_efp6,tmp2_efp6;
-  static fp6_t tmp1_fp6,tmp2_fp6,tmp3_fp6;
+   efp6_t tmp1_efp6,tmp2_efp6;
+  fp6_t tmp1_fp6,tmp2_fp6,tmp3_fp6;
   if(P1->infinity==1){
     efp6_set(ANS,P2);
     return;
@@ -237,7 +237,7 @@ void efp6_frobenius_map_p1(efp6_t *ANS,efp6_t *A){
 }
 
 void efp6_checkOnCurve(efp6_t *A){
-  static fp6_t tmp_left_fp6, tmp_right_fp6;
+  fp6_t tmp_left_fp6, tmp_right_fp6;
   fp6_sqr(&tmp_left_fp6,&A->y);
 
   fp6_sqr(&tmp_right_fp6,&A->x);
@@ -253,8 +253,8 @@ void efp6_checkOnCurve(efp6_t *A){
 }
 
 void efp6_checkOnTwsitCurve(efp6_t *A){
-  static fp_t twistedb;
-  static fp6_t tmp_left_fp6, tmp_right_fp6;
+  fp_t twistedb;
+  fp6_t tmp_left_fp6, tmp_right_fp6;
   fp_set_ui(&twistedb,4);
   // fp_set_neg(&twistedb,&twistedb);
   // fp_inv(&twistedb,&twistedb);//-4^-1

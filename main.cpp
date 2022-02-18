@@ -10,7 +10,6 @@
 #include "fp.h"
 #include "fp2.h"
 #include "fp6.h"
-// #include "test_fp.h"
 #include "field_test.h"
 #include "efp.h"
 #include "efp6.h"
@@ -39,16 +38,18 @@ int main(){
   printf("*********************************************************************************************\n\n");
   
   //各関数の動作確認、コスト計算、時間計測など
-  // test_fp_montgomery(CHECK_PAIRING_TIME_LOOP);
-  // test_field(0, CHECK_PAIRING_TIME_LOOP, CHECK_PAIRING_TIME_LOOP, CHECK_PAIRING_TIME_LOOP);
-  // test_fp(CHECK_PAIRING_TIME_LOOP);
-
-  // test_fp2(CHECK_PAIRING_TIME_LOOP);
-  // test_fp6(CHECK_PAIRING_TIME_LOOP);
-
   // check_fp_with_montgomery();
   // check_fp2_with_montgomery();
   // check_fp6_with_montgomery();
+
+  // check_efp();
+  // check_efp2();
+  // check_efp6();
+  // check_g1_g2();
+
+  // check_pairing_2NAF();
+  // check_pairing_2NAF_costello();
+  // check_pairing_time_2NAF();
 
   // BENCH_fp2_fp6_mul_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
   // BENCH_miller_jac_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
@@ -56,24 +57,57 @@ int main(){
   // BENCH_finalexp_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
   // BENCH_Pairing_jac_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
   // BENCH_Pairing_proj_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
-  BENCH_Pairing_proj_lazy_montgomery_static(CHECK_PAIRING_TIME_LOOP);
+  // BENCH_Pairing_proj_lazy_montgomery_static(CHECK_PAIRING_TIME_LOOP);
 
-  // check_efp();
-  // check_efp2();
-  // check_efp6();
-  // check_g1_g2();
-
-  //SCM_func_check();//未完成
-  // check_pairing_2NAF();
-  // check_pairing_2NAF_costello();
-  // check_pairing_static();
+  //check counts
   // check_pairing_jac_count_2NAF_lazy_montgomery();
   // check_pairing_proj_count_2NAF_lazy_montgomery();
   // check_pairing_count_2NAF();
-  // check_pairing_time_2NAF();
-
   // check_count_finalexp_pow_2NAF();
+
   printf("*********************************************************************************************\n\n");
+
+  //playground for testing compressed sqr2345
+  fp6_t A , tmp1_fp6 ,tmp2_fp6, tmp3_fp6, ANS,ANS_GS, ANS_COMP;
+  fp6_set_random(&A, state);
+  
+  fp6_inv(&tmp1_fp6,&A);          //-1
+  fp6_frobenius_map_p3(&tmp2_fp6,&A);        //(p^3)
+  fp6_mul(&tmp1_fp6,&tmp2_fp6,&tmp1_fp6);    //(p^3-1)
+//If sqr needed Use FP6_GS_SQR from here
+  fp6_frobenius_map_p1(&tmp2_fp6,&tmp1_fp6);//(p^3-1)(p)
+  fp6_mul(&tmp1_fp6,&tmp2_fp6,&tmp1_fp6);    //(p^3-1)(p+1) = M
+  
+  fp6_println("tmp1_fp6", &tmp1_fp6);
+
+  fp6_frobenius_map_p3(&tmp2_fp6, &tmp1_fp6);
+  fp6_mul(&tmp2_fp6,&tmp2_fp6,&tmp1_fp6);
+  fp6_println("tmp2_fp6", &tmp2_fp6);
+
+  // //compress
+  // fp6_set(&tmp2_fp6,&tmp1_fp6);
+  // fp_set_ui(&tmp2_fp6.x0.x0,0);
+  // fp_set_ui(&tmp2_fp6.x0.x1,0);
+  // //recover g1
+  // fp6_sqr_recover_g1(&tmp2_fp6,&tmp2_fp6);
+  // fp6_println("ANS_recover_g1", &tmp2_fp6);
+  // //recover g0
+  // fp6_sqr_recover_g0(&tmp2_fp6,&tmp2_fp6);
+  // fp6_println("ANS_recover_g0", &tmp2_fp6);
+
+
+
+  // //tmp1_fp6 on Phi6k
+  // fp6_sqr(&ANS,&tmp1_fp6);
+  // fp6_println("Regular SQR:", &ANS);
+
+  // fp6_sqr_GS(&ANS_GS, &tmp1_fp6);
+  // fp6_println("GS_SQR:", &ANS_GS);
+
+  // fp6_sqr_Karabina(&ANS_COMP,&tmp1_fp6);
+  // fp6_println("SQR2345 SQR:", &ANS_COMP);
+
+  //
 
   return 0;
 }
