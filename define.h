@@ -51,8 +51,6 @@
 
 #define scalar_t mpz_t
 
-#define k6_X_length 128//////37??
-
 /*Field*/
 typedef struct{
   mp_limb_t x0[FPLIMB];

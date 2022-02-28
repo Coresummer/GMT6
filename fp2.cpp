@@ -1,5 +1,6 @@
 #include "fp2.h"
 #include "fp.h"
+#include "mcl.h"
 #include "mpn.h"
 #include <cstdio>
 #include <gmp.h>
@@ -115,13 +116,19 @@ void fp2_to_montgomery(fp2_t *ANS,fp2_t *A){
 }
 
 void fp2_mod_montgomery(fp2_t *ANS,fp2_t *A){
+
   fp_mod_montgomery(&ANS->x0, &A->x0);
   fp_mod_montgomery(&ANS->x1, &A->x1);
 }
 
 void fp2_mod_montgomery_double(fp2_t *ANS,fpd2_t *A){
+  #ifdef mcl
+  mcl_mod(ANS->x0.x0, A->x1.x0);
+  mcl_mod(ANS->x1.x0, A->x1.x0);
+  #else
   mpn_mod_montgomery(ANS->x0.x0,FPLIMB,A->x0.x0,FPLIMB2);
   mpn_mod_montgomery(ANS->x1.x0,FPLIMB,A->x1.x0,FPLIMB2);
+  #endif
 }
 
 void fp2_lshift(fp2_t *ANS, fp2_t *A, unsigned long int UI) {
@@ -205,13 +212,13 @@ void fp2_mul_lazy(fp2_t *ANS, fp2_t *A, fp2_t *B) {
 void fp2_mul_lazy_montgomery(fp2_t *ANS, fp2_t *A, fp2_t *B) {
 #if 1
   // (a+bi)(c+di) = ac-bd+(ad + bc)i = ac-bd+((a+b)(c+d) - ac - bd)i
-  uint64_t AC[sizeof(fp_t) * 2];
-  uint64_t BD[sizeof(fp_t) * 2];
-  uint64_t T[sizeof(fp_t) * 2];
-  const uint64_t *a = A->x0.x0;
-  const uint64_t *b = A->x1.x0;
-  const uint64_t *c = B->x0.x0;
-  const uint64_t *d = B->x1.x0;
+  mp_limb_t AC[FPLIMB2];
+  mp_limb_t BD[FPLIMB2];
+  mp_limb_t T[FPLIMB2];
+  const mp_limb_t *a = A->x0.x0;
+  const mp_limb_t *b = A->x1.x0;
+  const mp_limb_t *c = B->x0.x0;
+  const mp_limb_t *d = B->x1.x0;
   mcl_addPre(AC, a, b);
   mcl_addPre(BD, c, d);
   mcl_mulPre(T, AC, BD); // (a+b)(c+d)
@@ -262,6 +269,25 @@ void fp2_mul_lazy_montgomery(fp2_t *ANS, fp2_t *A, fp2_t *B) {
 }
 
 void fp2_mul_nonmod_montgomery(fpd2_t *ANS, fp2_t *A, fp2_t *B) {
+  #if 1
+  // (a+bi)(c+di) = ac-bd+(ad + bc)i = ac-bd+((a+b)(c+d) - ac - bd)i
+  mp_limb_t AC[FPLIMB2];
+  mp_limb_t BD[FPLIMB2];
+  mp_limb_t T[FPLIMB2];
+  const mp_limb_t *a = A->x0.x0;
+  const mp_limb_t *b = A->x1.x0;
+  const mp_limb_t *c = B->x0.x0;
+  const mp_limb_t *d = B->x1.x0;
+  mcl_addPre(AC, a, b);
+  mcl_addPre(BD, c, d);
+  mcl_mulPre(T, AC, BD); // (a+b)(c+d)
+  mcl_mulPre(AC, a, c); // ac
+  mcl_mulPre(BD, b, d); // bd
+  mcl_subDblPre(T, T, AC);
+  mcl_subDblPre(ANS->x1.x0, T, BD); // (a+b)(c+d) - ac - bd
+  mcl_subDbl(ANS->x0.x0, AC, BD); // ac-bd
+  #else
+
    fpd_t buf1, buf2;
    fpd_t tmp1, tmp2;
    fp_t tmp3, tmp4;
@@ -280,6 +306,7 @@ void fp2_mul_nonmod_montgomery(fpd2_t *ANS, fp2_t *A, fp2_t *B) {
   fp_mul_nonmod(&buf1, &tmp3, &tmp4);
   fp_sub_nonmod_double(&buf2, &buf1, &tmp1);
   fp_sub_nonmod_double(&ANS->x1, &buf2, &tmp2);
+  #endif
 }
 
 void fp2_mul_ui(fp2_t *ANS,fp2_t *A,unsigned long int UI){
@@ -393,14 +420,20 @@ void fp2_add(fp2_t *ANS,fp2_t *A,fp2_t *B){
 }
 
 void fp2_add_double(fpd2_t *ANS,fpd2_t *A,fpd2_t *B){
+
   fp_add_double(&ANS->x0,&A->x0,&B->x0);
   fp_add_double(&ANS->x1,&A->x1,&B->x1);
+
 }
 
 void fp2_add_nonmod_single(fp2_t *ANS,fp2_t *A,fp2_t *B){
+  #ifdef mcl
+  mcl_addDbl(ANS->x0.x0,A->x0.x0,B->x0.x0);
+  mcl_addDbl(ANS->x1.x0,A->x1.x0,B->x1.x0);
+  #elif 
   fp_add_nonmod_single(&ANS->x0,&A->x0,&B->x0);
   fp_add_nonmod_single(&ANS->x1,&A->x1,&B->x1);
-
+  #endif
 }
 
 void fp2_add_nonmod_double(fpd2_t *ANS,fpd2_t *A,fpd2_t *B){
@@ -433,20 +466,27 @@ void fp2_sub(fp2_t *ANS,fp2_t *A,fp2_t *B){
 }
 
 void fp2_sub_double(fpd2_t *ANS,fpd2_t *A,fpd2_t *B){
+
   fp_sub_double(&ANS->x0,&A->x0,&B->x0);
   fp_sub_double(&ANS->x1,&A->x1,&B->x1);
+
 }
 
 void fp2_sub_nonmod_single(fp2_t *ANS,fp2_t *A,fp2_t *B){
+
   fp_sub_nonmod_single(&ANS->x0,&A->x0,&B->x0);
   fp_sub_nonmod_single(&ANS->x1,&A->x1,&B->x1);
 
 }
 
 void fp2_sub_nonmod_double(fpd2_t *ANS,fpd2_t *A,fpd2_t *B){
+  #ifdef mcl
+  mcl_subDbl(ANS->x0.x0,A->x0.x0,B->x0.x0);
+  mcl_subDbl(ANS->x1.x0,A->x1.x0,B->x1.x0);
+  #elif 
   fp_sub_nonmod_double(&ANS->x0,&A->x0,&B->x0);
   fp_sub_nonmod_double(&ANS->x1,&A->x1,&B->x1);
-
+  #endif
 ;}
 
 void fp2_sub_ui(fp2_t *ANS,fp2_t *A,unsigned long int UI){
@@ -747,22 +787,12 @@ void fp2_mul_base_nonmod_single(fp2_t *ANS,fp2_t *A){
 }
 
 void fp2_mul_base_nonmod_double(fpd2_t *ANS,fpd2_t *A){
-   fpd_t tmp1_fpd,tmp2_fpd;
-   fp_t tmp;
-   mp_limb_t buf[FPLIMB];
-
-  // printf("A.x0 size: %lu\n",mpn_sizeinbase(A->x0.x0,FPLIMB2,2));
-  // printf("A.x1 size: %lu\n",mpn_sizeinbase(A->x1.x0,FPLIMB2,2));
-  // printf("A.x01 size: %lu\n",mpn_sizeinbase(A->x1.x0,FPLIMB2,2));
-  // gmp_printf("%Nx\n",A->x1.x0,FPLIMB2);
-  fp_sub_double(&tmp1_fpd, (fpd_t*)prime672,&A->x1);
-
-  // mpn_sub_n(tmp1_fpd.x0,prime672, A->x1.x0, FPLIMB2);
-  // printf("NEG size: %lu\n",mpn_sizeinbase(tmp1_fpd.x0,FPLIMB2,2));
-  // gmp_printf("%Nx\n",tmp1_fpd.x0,FPLIMB2);
-  // fp_add_double(&tmp2_fpd, &A->x1, &tmp1_fpd);
-  // gmp_printf("%Nx\n\n\n",tmp2_fpd.x0,FPLIMB2);
-
-  fp_l1shift_double(&ANS->x1, &A->x0);
-  fp_l1shift_double(&ANS->x0, &tmp1_fpd);
+  //under construction
+  fpd_t tmp1_fpd;
+  // const mp_limb_t *a = A->x0.x0;
+  // const mp_limb_t *b = A->x1.x0;
+  // mcl_subDbl(&tmp1_fpd, (fpd_t*)prime672,&A->x1); //set neg
+  mcl_subDbl(tmp1_fpd.x0,prime672,A->x1.x0);
+  mcl_addDbl(ANS->x0.x0, A->x0.x0,A->x0.x0);
+  mcl_addDbl(ANS->x1.x0, tmp1_fpd.x0,tmp1_fpd.x0);
 }

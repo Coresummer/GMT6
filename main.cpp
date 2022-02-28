@@ -68,21 +68,21 @@ int main(){
   printf("*********************************************************************************************\n\n");
 
   //playground for testing compressed sqr2345
-  fp6_t A , tmp1_fp6 ,tmp2_fp6, tmp3_fp6, ANS,ANS_GS, ANS_COMP;
-  fp6_set_random(&A, state);
+//   fp6_t A , tmp1_fp6 ,tmp2_fp6, tmp3_fp6, ANS,ANS_GS, ANS_COMP;
+//   fp6_set_random(&A, state);
   
-  fp6_inv(&tmp1_fp6,&A);          //-1
-  fp6_frobenius_map_p3(&tmp2_fp6,&A);        //(p^3)
-  fp6_mul(&tmp1_fp6,&tmp2_fp6,&tmp1_fp6);    //(p^3-1)
-//If sqr needed Use FP6_GS_SQR from here
-  fp6_frobenius_map_p1(&tmp2_fp6,&tmp1_fp6);//(p^3-1)(p)
-  fp6_mul(&tmp1_fp6,&tmp2_fp6,&tmp1_fp6);    //(p^3-1)(p+1) = M
+//   fp6_inv(&tmp1_fp6,&A);          //-1
+//   fp6_frobenius_map_p3(&tmp2_fp6,&A);        //(p^3)
+//   fp6_mul(&tmp1_fp6,&tmp2_fp6,&tmp1_fp6);    //(p^3-1)
+// //If sqr needed Use FP6_GS_SQR from here
+//   fp6_frobenius_map_p1(&tmp2_fp6,&tmp1_fp6);//(p^3-1)(p)
+//   fp6_mul(&tmp1_fp6,&tmp2_fp6,&tmp1_fp6);    //(p^3-1)(p+1) = M
   
-  fp6_println("tmp1_fp6", &tmp1_fp6);
+//   fp6_println("tmp1_fp6", &tmp1_fp6);
 
-  fp6_frobenius_map_p3(&tmp2_fp6, &tmp1_fp6);
-  fp6_mul(&tmp2_fp6,&tmp2_fp6,&tmp1_fp6);
-  fp6_println("tmp2_fp6", &tmp2_fp6);
+//   fp6_frobenius_map_p3(&tmp2_fp6, &tmp1_fp6);
+//   fp6_mul(&tmp2_fp6,&tmp2_fp6,&tmp1_fp6);
+//   fp6_println("tmp2_fp6", &tmp2_fp6);
 
   // //compress
   // fp6_set(&tmp2_fp6,&tmp1_fp6);
@@ -94,8 +94,6 @@ int main(){
   // //recover g0
   // fp6_sqr_recover_g0(&tmp2_fp6,&tmp2_fp6);
   // fp6_println("ANS_recover_g0", &tmp2_fp6);
-
-
 
   // //tmp1_fp6 on Phi6k
   // fp6_sqr(&ANS,&tmp1_fp6);

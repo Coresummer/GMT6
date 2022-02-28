@@ -1113,7 +1113,7 @@ void check_fp2_with_montgomery(){
 
 void check_fp6_with_montgomery(){
   printf("********************CHECK FP2 WITH MONTGOMERY*************************************************\n\n");
-  printf("check_fp_with_montogomery() start...\n");
+  printf("check_fp6_with_montogomery() start...\n");
   fp6_t A, ANS;
   fp6_t Am, ANSm;
 
