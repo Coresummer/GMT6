@@ -428,8 +428,8 @@ void fp2_add_double(fpd2_t *ANS,fpd2_t *A,fpd2_t *B){
 
 void fp2_add_nonmod_single(fp2_t *ANS,fp2_t *A,fp2_t *B){
   #ifdef mcl
-  mcl_addDbl(ANS->x0.x0,A->x0.x0,B->x0.x0);
-  mcl_addDbl(ANS->x1.x0,A->x1.x0,B->x1.x0);
+  mcl_addPre(ANS->x0.x0,A->x0.x0,B->x0.x0);
+  mcl_addPre(ANS->x1.x0,A->x1.x0,B->x1.x0);
   #elif 
   fp_add_nonmod_single(&ANS->x0,&A->x0,&B->x0);
   fp_add_nonmod_single(&ANS->x1,&A->x1,&B->x1);
@@ -550,7 +550,6 @@ void fp2_inv_lazy_montgomery(fp2_t *ANS, fp2_t *A) {
   fp_inv_montgomery(&tmp3, &tmp3);
   fp_mulmod_montgomery(&ANS->x0, &tmp1_fp, &tmp3);
   fp_mulmod_montgomery(&ANS->x1, &tmp2_fp, &tmp3);
-
 }
 
 int fp2_legendre(fp2_t *A){
@@ -776,7 +775,7 @@ void fp2_mul_base_montgomery(fp2_t *ANS,fp2_t *A){
 }
 
 void fp2_mul_base_nonmod_single(fp2_t *ANS,fp2_t *A){
-   fp_t tmp1_fp;
+  fp_t tmp1_fp;
   fp_set_neg_montgomery(&tmp1_fp, &A->x1);
   fp_l1shift_nonmod_single(&ANS->x1, &A->x0);
   fp_l1shift_nonmod_single(&ANS->x0, &tmp1_fp);
@@ -791,7 +790,7 @@ void fp2_mul_base_nonmod_double(fpd2_t *ANS,fpd2_t *A){
   const mp_limb_t *a = A->x0.x0;
   const mp_limb_t *b = A->x1.x0;
   // mcl_subDbl(&tmp1_fpd, (fpd_t*)prime672,&A->x1); //set neg
-  // mcl_negDbl(&tmp1_fpd.x0, &A->x1.x0);
-  mcl_addDbl(ANS->x0.x0, A->x0.x0,A->x0.x0);
+  mcl_negDbl(tmp1_fpd.x0, a);
+  mcl_addDbl(ANS->x0.x0, a, a);
   mcl_addDbl(ANS->x1.x0, tmp1_fpd.x0,tmp1_fpd.x0);
 }
