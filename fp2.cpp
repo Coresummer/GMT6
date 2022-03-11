@@ -768,7 +768,6 @@ void fp2_mul_base(fp2_t *ANS,fp2_t *A){
   fp_l1shift(&ANS->x0, &tmp1_fp);
 }
 
-
 void fp2_mul_base_montgomery(fp2_t *ANS,fp2_t *A){
    fp_t tmp1_fp;
   fp_set_neg_montgomery(&tmp1_fp, &A->x1);
@@ -792,7 +791,6 @@ void fp2_mul_base_nonmod_double(fpd2_t *ANS,fpd2_t *A){
   // const mp_limb_t *a = A->x0.x0;
   // const mp_limb_t *b = A->x1.x0;
   // mcl_subDbl(&tmp1_fpd, (fpd_t*)prime672,&A->x1); //set neg
-  mcl_subDbl(tmp1_fpd.x0,prime672,A->x1.x0);
   mcl_addDbl(ANS->x0.x0, A->x0.x0,A->x0.x0);
   mcl_addDbl(ANS->x1.x0, tmp1_fpd.x0,tmp1_fpd.x0);
 }

@@ -563,7 +563,7 @@ void fp6_mul_lazy(fp6_t *ANS,fp6_t *A,fp6_t *B){
 }
 
 void fp6_mul_lazy_montgomery(fp6_t *ANS, fp6_t *A, fp6_t *B) {
-  #if 1
+  #if 0
     fp6_t tmp_A,tmp_B;
     fp6_set(&tmp_A,A);
     fp6_set(&tmp_B,B);
