@@ -30,8 +30,8 @@
 //#define DEBUG_ASSERT
 #define CHECK_PAIRING_TIME_LOOP 10000
 /**************MP Lib**************/
-// #define mcl
-#define gmp
+#define mcl
+// #define gmp
 /**********************************/
 /**************Option**************/
 #define X64
