@@ -18,9 +18,12 @@ void2u mcl_mod;
 void3u mcl_add;
 void3u mcl_sub;
 void2u mcl_neg;
+void2u mcl_mul2;
 
 void3u mcl_addDbl;
 void3u mcl_subDbl;
+void2u mcl_negDbl;
+void2u mcl_mul2Dbl;
 
 void3u mcl_addPre;
 void3u mcl_subPre;
@@ -145,6 +148,9 @@ struct Code : Xbyak::CodeGenerator {
 		mcl_neg = getCurr<void2u>();
 		gen_neg(N);
 		setFuncInfo(prof_, "_neg", mcl_neg, getCurr());
+		mcl_mul2 = getCurr<void2u>();
+		gen_mul2(N);
+		setFuncInfo(prof_, "_mul2", mcl_mul2, getCurr());
 
 		mcl_addDbl = getCurr<void3u>();
 		gen_addDbl(N);
@@ -152,6 +158,12 @@ struct Code : Xbyak::CodeGenerator {
 		mcl_subDbl = getCurr<void3u>();
 		gen_subDbl(N);
 		setFuncInfo(prof_, "_subDbl", mcl_subDbl, getCurr());
+		mcl_negDbl = getCurr<void2u>();
+		gen_negDbl(N);
+		setFuncInfo(prof_, "_negDbl", mcl_negDbl, getCurr());
+		mcl_mul2Dbl = getCurr<void2u>();
+		gen_mul2Dbl(N);
+		setFuncInfo(prof_, "_mul2Dbl", mcl_mul2Dbl, getCurr());
 
 		mcl_addPre = getCurr<void3u>();
 		gen_addPre(N);
@@ -170,6 +182,20 @@ private:
 	Code(const Code&);
 	void operator=(const Code&);
 
+	// addr = t if < p else t-p
+	// use rax
+	template<class ADDR>
+	void store_modp(const ADDR& addr, const Pack& t)
+	{
+		Label exitL;
+		mov(rax, size_t(p_));
+		cmp(t[N-1], ptr[rax + (N-1)*8]); // shortcut
+		jb(exitL, T_NEAR);
+		sub_rm(t, rax);
+		jc(exitL);
+		store_mr(addr, t);
+	L(exitL);
+	}
 	void gen_add(size_t n)
 	{
 		StackFrame sf(this, 3, n);
@@ -186,12 +212,7 @@ private:
 			}
 			mov(ptr[pz + i * 8], t[i]);
 		}
-		mov(rax, size_t(p_));
-		sub_rm(t, rax);
-		Label exitL;
-		jc(exitL);
-		store_mr(pz, t);
-	L(exitL);
+		store_modp(pz, t);
 	}
 	void gen_sub(size_t n)
 	{
@@ -279,6 +300,23 @@ private:
 			mov(ptr[py + i * 8], v);
 		}
 	L(exitL);
+	}
+	void gen_mul2(size_t n)
+	{
+		StackFrame sf(this, 2, n);
+		const Reg64& py = sf.p[0];
+		const Reg64& px = sf.p[1];
+		Pack t = sf.t;
+		for (size_t i = 0; i < n; i++) {
+			mov(t[i], ptr[px + i * 8]);
+			if (i == 0) {
+				add(t[i], t[i]);
+			} else {
+				adc(t[i], t[i]);
+			}
+			mov(ptr[py + i * 8], t[i]);
+		}
+		store_modp(py, t);
 	}
 	void gen_mulPreN(const Reg64& pz, const RegExp& px, const RegExp& py, Pack pk, Reg64 t)
 	{
@@ -680,12 +718,7 @@ private:
 			adc(t[i], ptr[py + i * 8]);
 			mov(ptr[pz + i * 8], t[i]);
 		}
-		mov(rax, size_t(p_));
-		sub_rm(t, rax);
-		Label exitL;
-		jc(exitL);
-		store_mr(pz, t);
-	L(exitL);
+		store_modp(pz, t);
 	}
 	void gen_subDbl(size_t n)
 	{
@@ -718,6 +751,74 @@ private:
 		add_rm(t, rax);
 	L(exitL);
 		store_mr(pz, t);
+	}
+	void gen_negDbl(size_t n)
+	{
+		StackFrame sf(this, 2);
+		const Reg64& py = sf.p[0];
+		const Reg64& px = sf.p[1];
+		Label nonZeroL, exitL;
+		mov(rax, ptr[px]);
+		test(rax, rax);
+		jnz(nonZeroL, T_NEAR); // shortcut
+		for (size_t i = 1; i < n * 2; i++) {
+			or_(rax, ptr[px + i * 8]);
+		}
+		test(rax, rax);
+		jnz(nonZeroL, T_NEAR);
+		// zero clear
+		for (size_t i = 0; i < n * 2; i++) {
+			mov(ptr[py + i * 8], rax);
+		}
+		jmp(exitL, T_NEAR);
+	L(nonZeroL);
+		xor_(rax, rax);
+		// lower : 0 - x
+		for (size_t i = 0; i < n; i++) {
+			mov(rdx, rax);
+			if (i == 0) {
+				sub(rdx, ptr[px + i * 8]);
+			} else {
+				sbb(rdx, ptr[px + i * 8]);
+			}
+			mov(ptr[py + i * 8], rdx);
+		}
+		// higher : p - x
+		mov(rax, size_t(p_));
+		lea(px, ptr[px + n * 8]);
+		lea(py, ptr[py + n * 8]);
+		for (size_t i = 0; i < n; i++) {
+			mov(rdx, ptr[rax + i * 8]);
+			sbb(rdx, ptr[px + i * 8]);
+			mov(ptr[py + i * 8], rdx);
+		}
+	L(exitL);
+	}
+	void gen_mul2Dbl(size_t n)
+	{
+		StackFrame sf(this, 2, n);
+		const Reg64& py = sf.p[0];
+		const Reg64& px = sf.p[1];
+		Pack t = sf.t;
+		// py[0:n] = px[0:n]*2
+		for (size_t i = 0; i < n; i++) {
+			mov(rax, ptr[px + i * 8]);
+			if (i == 0) {
+				add(rax, rax);
+			} else {
+				adc(rax, rax);
+			}
+			mov(ptr[py + i * 8], rax);
+		}
+		lea(px, ptr[px + n * 8]);
+		lea(py, ptr[py + n * 8]);
+		// py[n:2n] = px[n:2n]*2 mod p with CF
+		for (size_t i = 0; i < n; i++) {
+			mov(t[i], ptr[px + i * 8]);
+			adc(t[i], t[i]);
+			mov(ptr[py + i * 8], t[i]);
+		}
+		store_modp(py, t);
 	}
 	/*
 		z[] = x[]
