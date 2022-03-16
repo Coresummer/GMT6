@@ -429,6 +429,7 @@ int test_field(int fp_n, int fp2_n, int fp6_n, int sqr) {
   printf("Field test\n");
   mp_limb_t test1_mpn[FPLIMB2], test2_mpn[FPLIMB2];
   fp_t A_fp, B_fp, test1_fp, test2_fp;
+  fpd_t test2_fpd;
   fp2_t A_fp2, B_fp2, test1_fp2, test2_fp2;
   fp6_t A_fp6, B_fp6, test1_fp6, test2_fp6, test3_fp6;
 
@@ -436,6 +437,7 @@ int test_field(int fp_n, int fp2_n, int fp6_n, int sqr) {
   fp_init(&B_fp);
   fp_init(&test1_fp);
   fp_init(&test2_fp);
+  fpd_init(&test2_fpd);
 
   fp2_init(&A_fp2);
   fp2_init(&B_fp2);
@@ -469,22 +471,22 @@ int test_field(int fp_n, int fp2_n, int fp6_n, int sqr) {
       gettimeofday(&tv_B, NULL);
       add_time += timedifference_msec(tv_A, tv_B) / n;
 
-      gettimeofday(&tv_A, NULL);
-      //for(j=0;j<n;j++)fp_add_lazy(test2_mpn,FPLIMB,A_fp.x0,FPLIMB,B_fp.x0,FPLIMB);
-      gettimeofday(&tv_B, NULL);
-      add_lazy_time += timedifference_msec(tv_A, tv_B) / n;
-      fp_mod(&test2_fp, test2_mpn, FPLIMB);
+      // gettimeofday(&tv_A, NULL);
+      // for(j=0;j<n;j++)fp_add_lazy(test2_mpn,FPLIMB,A_fp.x0,FPLIMB,B_fp.x0,FPLIMB);
+      // gettimeofday(&tv_B, NULL);
+      // add_lazy_time += timedifference_msec(tv_A, tv_B) / n;
+      // fp_mod(&test2_fp, test2_mpn, FPLIMB);
 
-      if (fp_cmp(&test1_fp, &test2_fp) != 0) {
-        printf("failed!\n\n");
-        fp_printf("", &test1_fp);
-        fp_printf("\n", &test2_fp);
-        printf("\n\n");
-        return 1;
-      }
+      // if (fp_cmp(&test1_fp, &test2_fp) != 0) {
+      //   printf("failed!\n\n");
+      //   fp_printf("", &test1_fp);
+      //   fp_printf("\n", &test2_fp);
+      //   printf("\n\n");
+      //   return 1;
+      // }
     }
-    printf("fp add.      : %.6f[ms]\n", add_time / fp_n);
-    printf("fp add lazy. : %.6f[ms]\n", add_lazy_time / fp_n);
+    printf("fp add.      : %.6f[ns]\n", (add_time* 1000000 )/ fp_n);
+    // printf("fp add lazy. : %.6f[ms]\n", add_lazy_time / fp_n);
 
     printf("------------------------------------------------------------------------------------\n");
     printf("fp_mul test\n");
@@ -500,10 +502,10 @@ int test_field(int fp_n, int fp2_n, int fp6_n, int sqr) {
       mul_time += timedifference_msec(tv_A, tv_B) / n;
 
       gettimeofday(&tv_A, NULL);
-      //for(j=0;j<n;j++)fp_mul_lazy(test2_mpn,A_fp.x0,B_fp.x0);
+      for(j=0;j<n;j++)fp_mul_nonmod(&test2_fpd,&A_fp,&B_fp);
       gettimeofday(&tv_B, NULL);
       mul_lazy_time += timedifference_msec(tv_A, tv_B) / n;
-      fp_mod(&test2_fp, test2_mpn, FPLIMB2);
+      mpn_mod(test2_fp.x0, test2_fpd.x0, FPLIMB2);
 
       if (fp_cmp(&test1_fp, &test2_fp) != 0) {
         printf("failed!\n\n");
@@ -514,8 +516,8 @@ int test_field(int fp_n, int fp2_n, int fp6_n, int sqr) {
       }
     }
 
-    printf("fp mul.      : %.6f[ms]\n", mul_time / fp_n);
-    printf("fp mul lazy. : %.6f[ms]\n", mul_lazy_time / fp_n);
+    printf("fp mul.        : %.6f[ns]\n", (mul_time * 1000000) / fp_n);
+    printf("fp mul_nonmod. : %.6f[ns]\n", (mul_lazy_time * 1000000) / fp_n);
 
     printf("------------------------------------------------------------------------------------\n");
     printf("fp_sqr test\n");
@@ -529,22 +531,22 @@ int test_field(int fp_n, int fp2_n, int fp6_n, int sqr) {
       gettimeofday(&tv_B, NULL);
       sqr_time += timedifference_msec(tv_A, tv_B) / n;
 
-      gettimeofday(&tv_A, NULL);
-      //for(j=0;j<n;j++)fp_sqr_lazy(test2_mpn,A_fp.x0);
-      gettimeofday(&tv_B, NULL);
-      sqr_lazy_time += timedifference_msec(tv_A, tv_B) / n;
-      fp_mod(&test2_fp, test2_mpn, FPLIMB2);
+      // gettimeofday(&tv_A, NULL);
+      // for(j=0;j<n;j++)fp_mul(&test2_fp2,&A_fp,&A_fp);
+      // gettimeofday(&tv_B, NULL);
+      // sqr_lazy_time += timedifference_msec(tv_A, tv_B) / n;
+      // fp_mod(&test2_fp, test2_mpn, FPLIMB2);
 
-      if (fp_cmp(&test1_fp, &test2_fp) != 0) {
-        printf("failed!\n\n");
-        fp_printf("", &test1_fp);
-        fp_printf("\n", &test2_fp);
-        printf("\n\n");
-        return 1;
-      }
+      // if (fp_cmp(&test1_fp, &test2_fp) != 0) {
+      //   printf("failed!\n\n");
+      //   fp_printf("", &test1_fp);
+      //   fp_printf("\n", &test2_fp);
+      //   printf("\n\n");
+      //   return 1;
+      // }
     }
-    printf("fp sqr.      : %.6f[ms]\n", sqr_time / fp_n);
-    printf("fp sqr lazy. : %.6f[ms]\n", sqr_lazy_time / fp_n);
+    printf("fp sqr.      : %.6f[ns]\n", sqr_time*1000000 / fp_n);
+    // printf("fp sqr lazy. : %.6f[ms]\n", sqr_lazy_time / fp_n);
 
     printf("------------------------------------------------------------------------------------\n");
     printf("fp_inv test\n");
@@ -561,6 +563,7 @@ int test_field(int fp_n, int fp2_n, int fp6_n, int sqr) {
     }
     printf("fp inv.      : %.6f[ms]\n", inv_time / fp_n);
   }
+  
   if (fp2_n > 0) {
     printf("------------------------------------------------------------------------------------\n");
     printf("fp2_add test\n");
