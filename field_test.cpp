@@ -563,7 +563,7 @@ int test_field(int fp_n, int fp2_n, int fp6_n, int sqr) {
     }
     printf("fp inv.      : %.6f[ms]\n", inv_time / fp_n);
   }
-  
+
   if (fp2_n > 0) {
     printf("------------------------------------------------------------------------------------\n");
     printf("fp2_add test\n");
@@ -921,7 +921,7 @@ int test_fp_montgomery(int fp_n) {
   printf("fp_inv test\n");
   inv_time = 0, inv_lazy_time = 0;
   n = 1000;
-  for (i = 0; i < fp_n; i++) {
+  for (i = 0; i < fp_n/100; i++) {
     fp_set_random(&A_fp, state);
     fp_set_random(&B_fp, state);
 

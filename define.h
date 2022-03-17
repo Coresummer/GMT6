@@ -28,7 +28,7 @@
 
 //#define DEBUG_COST_A
 //#define DEBUG_ASSERT
-#define CHECK_PAIRING_TIME_LOOP 10000
+#define CHECK_PAIRING_TIME_LOOP 100000
 /**************MP Lib**************/
 #define mcl
 // #define gmp

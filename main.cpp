@@ -39,8 +39,8 @@ int main(){
   printf("*********************************************************************************************\n\n");
   
   //各関数の動作確認、コスト計算、時間計測など
-  // test_fp_montgomery(CHECK_PAIRING_TIME_LOOP);
-  test_field(CHECK_PAIRING_TIME_LOOP, 0, 0, 0);
+  test_fp_montgomery(CHECK_PAIRING_TIME_LOOP);
+  // test_field(CHECK_PAIRING_TIME_LOOP, 0, 0, 0);
   // test_fp(CHECK_PAIRING_TIME_LOOP);
   // test_fp2(CHECK_PAIRING_TIME_LOOP);
   // test_fp6(CHECK_PAIRING_TIME_LOOP);
