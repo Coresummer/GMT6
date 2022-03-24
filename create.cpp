@@ -60,7 +60,7 @@ void check_base(){
   fp_init(&tmp);
   fp_init(&base_d);
   fp_set_ui(&base_d, 4);
-  fp_set_neg(&base_d, &base_d);
+  // fp_set_neg(&base_d, &base_d);
   fp2_init(&tmp2);
   mpz_t expo;
   mpz_init(expo);
@@ -89,8 +89,10 @@ void check_base(){
 
   fp2_t base_fp2;
   fp2_init(&base_fp2);
-  fp2_set_ui_ui(&base_fp2, 0);
-  fp_set_ui(&base_fp2.x1,2);
+  fp2_set_ui_ui(&base_fp2, 1);
+  // fp_set_neg(&base_fp2.x1,&base_fp2.x0);
+  // fp2_set_ui_ui(&base_fp2, 0);
+  // fp_set_ui(&base_fp2.x0,2);
   mpz_mul(expo,prime_z,prime_z);
   mpz_sub_ui(expo,expo,1);
   mpz_divexact_ui(expo,expo,3);

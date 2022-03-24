@@ -19,7 +19,7 @@ void final_exp(fp6_t *ANS,fp6_t *A){
   fp6_frobenius_map_p1(&tmp4_fp6, ANS);          //M^p
   fp6_finalexpow_x_2NAF(&tmp5_fp6, ANS);    //M^x
   fp6_mul(&tmp3_fp6, &tmp3_fp6, &tmp4_fp6); // M^(p-1)
-  fp6_mul(&tmp3_fp6, &tmp3_fp6, &tmp5_fp6); // M^(p-1+x) = M'
+  // fp6_mul(&tmp3_fp6, &tmp3_fp6, &tmp5_fp6); // M^(p-1+x) = M'
 //L2
   //M'^3w //80
   fp6_finalexpow_w_2NAF(&tmp5_fp6, &tmp3_fp6);   //M'(w)

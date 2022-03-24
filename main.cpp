@@ -39,7 +39,7 @@ int main(){
   printf("*********************************************************************************************\n\n");
   
   //各関数の動作確認、コスト計算、時間計測など
-  test_fp_montgomery(CHECK_PAIRING_TIME_LOOP);
+  // test_fp_montgomery(CHECK_PAIRING_TIME_LOOP);
   // test_field(CHECK_PAIRING_TIME_LOOP, 0, 0, 0);
   // test_fp(CHECK_PAIRING_TIME_LOOP);
   // test_fp2(CHECK_PAIRING_TIME_LOOP);
@@ -69,7 +69,7 @@ int main(){
   // BENCH_finalexp_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
   // BENCH_Pairing_jac_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
   // BENCH_Pairing_proj_lazy_montgomery(CHECK_PAIRING_TIME_LOOP);
-  // BENCH_Pairing_proj_lazy_montgomery_static(CHECK_PAIRING_TIME_LOOP);
+  BENCH_Pairing_proj_lazy_montgomery_static(CHECK_PAIRING_TIME_LOOP);
 
   printf("*********************************************************************************************\n\n");
 
