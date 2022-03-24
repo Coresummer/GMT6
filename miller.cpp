@@ -53,11 +53,11 @@ void efp6_to_efp_montgomery(efp_t *ANS,efp6_t *A){
 void ff_lttp_0(fp6_t *f, efp_jacobian_t *S, efp_t *P){
   // fp6_sqr(f,f); //update
 
-  static fp_t tmp1_fp, tmp2_fp,tmp3_fp;
-  static fp_t t1,t2,t3;
-  static fp_t nextX,nextY,nextZ;
+   fp_t tmp1_fp, tmp2_fp,tmp3_fp;
+   fp_t t1,t2,t3;
+   fp_t nextX,nextY,nextZ;
 
-  // static fp6_t tmp1_fp6;
+  //  fp6_t tmp1_fp6;
 
   fp_sqr(&t1,&S->y);              //t1 = Y^2
   fp_l1shift(&tmp2_fp,&t1);      //tmp2 = 2*t1
@@ -107,12 +107,12 @@ void ff_lttp_0(fp6_t *f, efp_jacobian_t *S, efp_t *P){
 void ff_lttp(fp6_t *f, efp_jacobian_t *S, efp_t *P){
   fp6_sqr(f,f); //update
 
-  static fp_t tmp1_fp, tmp2_fp,tmp3_fp;
-  static fp_t t1,t2,t3;
-  static fp_t nextX,nextY,nextZ;
+   fp_t tmp1_fp, tmp2_fp,tmp3_fp;
+   fp_t t1,t2,t3;
+   fp_t nextX,nextY,nextZ;
 
-  static fp6_t tmp1_fp6;
-
+   fp6_t tmp1_fp6;
+   fp6_init(&tmp1_fp6);
   fp_sqr(&t1,&S->y);              //t1 = Y^2
   fp_l1shift(&tmp2_fp,&t1);      //tmp2 = 2*t1
 
@@ -162,11 +162,11 @@ void ff_lttp(fp6_t *f, efp_jacobian_t *S, efp_t *P){
 void ff_lttp_costello_0(fp6_t *f, efp_jacobian_t *U, efp_t *S){//U = S, S = P
   // fp6_sqr(f,f); //update should put into line update
 
-  static fp_t tmpA_fp, tmpB_fp,tmpC_fp,tmpD_fp,tmpE_fp,tmpF_fp,tmpG_fp;
-  static fp_t nextX,nextY,nextZ;
-  static fp_t tmp1_fp,tmp2_fp;
+   fp_t tmpA_fp, tmpB_fp,tmpC_fp,tmpD_fp,tmpE_fp,tmpF_fp,tmpG_fp;
+   fp_t nextX,nextY,nextZ;
+   fp_t tmp1_fp,tmp2_fp;
 
-  // static fp6_t tmp1_fp6;//DBLLine result
+  //  fp6_t tmp1_fp6;//DBLLine result
 
   fp_sqr(&tmpA_fp,&U->x); //A=X1^2
   fp_sqr(&tmpB_fp,&U->y); //B=Y1^2
@@ -234,11 +234,12 @@ void ff_lttp_costello_0(fp6_t *f, efp_jacobian_t *U, efp_t *S){//U = S, S = P
 void ff_lttp_costello(fp6_t *f, efp_jacobian_t *U, efp_t *S){//U = S, S = P
   fp6_sqr(f,f); //update should put into line update
 
-  static fp_t tmpA_fp, tmpB_fp,tmpC_fp,tmpD_fp,tmpE_fp,tmpF_fp,tmpG_fp;
-  static fp_t nextX,nextY,nextZ;
-  static fp_t tmp1_fp,tmp2_fp;
+   fp_t tmpA_fp, tmpB_fp,tmpC_fp,tmpD_fp,tmpE_fp,tmpF_fp,tmpG_fp;
+   fp_t nextX,nextY,nextZ;
+   fp_t tmp1_fp,tmp2_fp;
 
-  static fp6_t tmp1_fp6;//DBLLine result
+   fp6_t tmp1_fp6;//DBLLine result
+   fp6_init(&tmp1_fp6);
 
   fp_sqr(&tmpA_fp,&U->x); //A=X1^2
   fp_sqr(&tmpB_fp,&U->y); //B=Y1^2
@@ -304,11 +305,12 @@ void ff_lttp_costello(fp6_t *f, efp_jacobian_t *U, efp_t *S){//U = S, S = P
 
 //add line 
 void ff_ltqp(fp6_t *f, efp_jacobian_t *S, efp_t *Q,efp_t *P){
-  static fp_t tmp1_fp, tmp2_fp,tmp3_fp;
-  static fp_t t1,t2,t3,t4,t5;
-  static fp_t nextX,nextY,nextZ;
+   fp_t tmp1_fp, tmp2_fp,tmp3_fp;
+   fp_t t1,t2,t3,t4,t5;
+   fp_t nextX,nextY,nextZ;
 
-  static fp6_t tmp1_fp6;
+   fp6_t tmp1_fp6;
+   fp6_init(&tmp1_fp6);
 
   fp_sqr(&tmp1_fp,&S->z);
   fp_mul(&t1,&Q->x,&tmp1_fp);
@@ -367,11 +369,12 @@ void ff_ltqp(fp6_t *f, efp_jacobian_t *S, efp_t *Q,efp_t *P){
 
 //add line 
 void ff_ltqp_costello_mixed(fp6_t *f, efp_jacobian_t *U, efp_t *R,efp_t *S){
-  static fp_t tmpD_fp,tmpE_fp,tmpF_fp,tmpG_fp,tmpH_fp,tmpI_fp,tmpJ_fp;
-  static fp_t nextX,nextY,nextZ;
-  static fp_t tmp1_fp,tmp2_fp;
+   fp_t tmpD_fp,tmpE_fp,tmpF_fp,tmpG_fp,tmpH_fp,tmpI_fp,tmpJ_fp;
+   fp_t nextX,nextY,nextZ;
+   fp_t tmp1_fp,tmp2_fp;
 
-  static fp6_t tmp1_fp6;//ADDLine result
+   fp6_t tmp1_fp6;//ADDLine result
+   fp6_init(&tmp1_fp6);
 
   //A=X1Z2 = X1
   //B=Y1Z2 = Y1
@@ -435,11 +438,11 @@ void ff_ltqp_costello_mixed(fp6_t *f, efp_jacobian_t *U, efp_t *R,efp_t *S){
 
 void ff_lttp_lazy_montgomery_0(fp6_t *f, efp_jacobian_t *S, efp_t *P){
   // fp6_sqr_lazy_montgomery(f,f); //update
-  static fp_t tmp1_fp, tmp2_fp,tmp3_fp;
-  static fp_t t1,t2,t3;
-  static fp_t nextX,nextY,nextZ;
+   fp_t tmp1_fp, tmp2_fp,tmp3_fp;
+   fp_t t1,t2,t3;
+   fp_t nextX,nextY,nextZ;
 
-  // static fp6_t tmp1_fp6;
+  //  fp6_t tmp1_fp6;
 
   fp_sqrmod_montgomery(&t1,&S->y);              //t1 = Y^2
   fp_l1shift(&tmp2_fp,&t1);      //tmp2 = 2*t1
@@ -487,11 +490,12 @@ void ff_lttp_lazy_montgomery_0(fp6_t *f, efp_jacobian_t *S, efp_t *P){
 
 void ff_lttp_lazy_montgomery(fp6_t *f, efp_jacobian_t *S, efp_t *P){
   fp6_sqr_lazy_montgomery(f,f); //update
-  static fp_t tmp1_fp, tmp2_fp,tmp3_fp;
-  static fp_t t1,t2,t3;
-  static fp_t nextX,nextY,nextZ;
+   fp_t tmp1_fp, tmp2_fp,tmp3_fp;
+   fp_t t1,t2,t3;
+   fp_t nextX,nextY,nextZ;
 
-  static fp6_t tmp1_fp6;
+   fp6_t tmp1_fp6;
+   fp6_init(&tmp1_fp6);
 
   fp_sqrmod_montgomery(&t1,&S->y);              //t1 = Y^2
   fp_l1shift(&tmp2_fp,&t1);      //tmp2 = 2*t1
@@ -542,11 +546,11 @@ void ff_lttp_lazy_montgomery(fp6_t *f, efp_jacobian_t *S, efp_t *P){
 void ff_lttp_costello_lazy_montgomery_0(fp6_t *f, efp_jacobian_t *U, efp_t *S){//U = S, S = P
   // fp6_sqr_lazy_montgomery(f,f); //update should put into line update
 
-  static fp_t tmpA_fp, tmpB_fp,tmpC_fp,tmpD_fp,tmpE_fp,tmpF_fp,tmpG_fp;
-  static fp_t nextX,nextY,nextZ;
-  static fp_t tmp1_fp,tmp2_fp;
+   fp_t tmpA_fp, tmpB_fp,tmpC_fp,tmpD_fp,tmpE_fp,tmpF_fp,tmpG_fp;
+   fp_t nextX,nextY,nextZ;
+   fp_t tmp1_fp,tmp2_fp;
 
-  // static fp6_t tmp1_fp6;//DBLLine result
+  //  fp6_t tmp1_fp6;//DBLLine result
 
   fp_sqrmod_montgomery(&tmpA_fp,&U->x); //A=X1^2
   fp_sqrmod_montgomery(&tmpB_fp,&U->y); //B=Y1^2
@@ -612,11 +616,12 @@ void ff_lttp_costello_lazy_montgomery_0(fp6_t *f, efp_jacobian_t *U, efp_t *S){/
 void ff_lttp_costello_lazy_montgomery(fp6_t *f, efp_jacobian_t *U, efp_t *S){//U = S, S = P
   fp6_sqr_lazy_montgomery(f,f); //update should put into line update
 
-  static fp_t tmpA_fp, tmpB_fp,tmpC_fp,tmpD_fp,tmpE_fp,tmpF_fp,tmpG_fp;
-  static fp_t nextX,nextY,nextZ;
-  static fp_t tmp1_fp,tmp2_fp;
+   fp_t tmpA_fp, tmpB_fp,tmpC_fp,tmpD_fp,tmpE_fp,tmpF_fp,tmpG_fp;
+   fp_t nextX,nextY,nextZ;
+   fp_t tmp1_fp,tmp2_fp;
 
-  static fp6_t tmp1_fp6;//DBLLine result
+   fp6_t tmp1_fp6;//DBLLine result
+   fp6_init(&tmp1_fp6);
 
   fp_sqrmod_montgomery(&tmpA_fp,&U->x); //A=X1^2
   fp_sqrmod_montgomery(&tmpB_fp,&U->y); //B=Y1^2
@@ -679,11 +684,12 @@ void ff_lttp_costello_lazy_montgomery(fp6_t *f, efp_jacobian_t *U, efp_t *S){//U
 }
 
 void ff_ltqp_lazy_montgomery(fp6_t *f, efp_jacobian_t *S, efp_t *Q,efp_t *P){
-  static fp_t tmp1_fp, tmp2_fp,tmp3_fp;
-  static fp_t t1,t2,t3,t4,t5;
-  static fp_t nextX,nextY,nextZ;
+   fp_t tmp1_fp, tmp2_fp,tmp3_fp;
+   fp_t t1,t2,t3,t4,t5;
+   fp_t nextX,nextY,nextZ;
 
-  static fp6_t tmp1_fp6;
+   fp6_t tmp1_fp6;
+   fp6_init(&tmp1_fp6);
 
   fp_sqrmod_montgomery(&tmp1_fp,&S->z);
   fp_mulmod_montgomery(&t1,&Q->x,&tmp1_fp);
@@ -741,11 +747,12 @@ void ff_ltqp_lazy_montgomery(fp6_t *f, efp_jacobian_t *S, efp_t *Q,efp_t *P){
 
 //add line 
 void ff_ltqp_costello_mixed_lazy_montgomery(fp6_t *f, efp_jacobian_t *U, efp_t *R,efp_t *S){
-  static fp_t tmpD_fp,tmpE_fp,tmpF_fp,tmpG_fp,tmpH_fp,tmpI_fp,tmpJ_fp;
-  static fp_t nextX,nextY,nextZ;
-  static fp_t tmp1_fp,tmp2_fp;
+   fp_t tmpD_fp,tmpE_fp,tmpF_fp,tmpG_fp,tmpH_fp,tmpI_fp,tmpJ_fp;
+   fp_t nextX,nextY,nextZ;
+   fp_t tmp1_fp,tmp2_fp;
 
-  static fp6_t tmp1_fp6;//ADDLine result
+   fp6_t tmp1_fp6;//ADDLine result
+   fp6_init(&tmp1_fp6);
 
   //A=X1Z2 = X1
   //B=Y1Z2 = Y1
@@ -805,8 +812,8 @@ void ff_ltqp_costello_mixed_lazy_montgomery(fp6_t *f, efp_jacobian_t *U, efp_t *
 }
 
 void miller_opt_ate_jac(fp6_t *f,efp6_t *P,efp6_t *Q){
-    static efp_t mapped_P,mapped_Q;
-    static efp_jacobian_t S;
+     efp_t mapped_P,mapped_Q;
+     efp_jacobian_t S;
 
     fp6_set_ui_ui(f,0);
     fp_set_ui(&f->x0.x0,1);
@@ -828,8 +835,8 @@ void miller_opt_ate_jac(fp6_t *f,efp6_t *P,efp6_t *Q){
 }
 
 void miller_opt_ate_jac_2NAF(fp6_t *f,efp6_t *P,efp6_t *Q){
-    static efp_t mapped_P,mapped_Q,mapped_Q_neg;
-    static efp_jacobian_t S;
+     efp_t mapped_P,mapped_Q,mapped_Q_neg;
+     efp_jacobian_t S;
 
     fp6_set_ui_ui(f,0);
     fp_set_ui(&f->x0.x0,1);
@@ -869,8 +876,8 @@ void miller_opt_ate_jac_2NAF(fp6_t *f,efp6_t *P,efp6_t *Q){
 }
 
 void miller_opt_ate_proj_2NAF(fp6_t *f,efp6_t *P,efp6_t *Q){
-    static efp_t mapped_P,mapped_Q,mapped_Q_neg;
-    static efp_jacobian_t S;
+     efp_t mapped_P,mapped_Q,mapped_Q_neg;
+     efp_jacobian_t S;
 
     fp6_set_ui_ui(f,0);
     fp_set_ui(&f->x0.x0,1);
@@ -906,8 +913,8 @@ void miller_opt_ate_proj_2NAF(fp6_t *f,efp6_t *P,efp6_t *Q){
 }
 
 void miller_opt_ate_jac_2NAF_lazy_montgomery(fp6_t *f,efp6_t *P,efp6_t *Q){
-    static efp_t mapped_P,mapped_Q,mapped_Q_neg;
-    static efp_jacobian_t S;
+     efp_t mapped_P,mapped_Q,mapped_Q_neg;
+     efp_jacobian_t S;
 
     fp6_set_ui_ui(f,0);
     fp_set_ui(&f->x0.x0,1);
@@ -949,8 +956,8 @@ void miller_opt_ate_jac_2NAF_lazy_montgomery(fp6_t *f,efp6_t *P,efp6_t *Q){
 
 
 void miller_opt_ate_proj_2NAF_lazy_montgomery(fp6_t *f,efp6_t *P,efp6_t *Q){
-    static efp_t mapped_P,mapped_Q,mapped_Q_neg;
-    static efp_jacobian_t S;
+     efp_t mapped_P,mapped_Q,mapped_Q_neg;
+     efp_jacobian_t S;
 
     fp6_set_ui_ui(f,0);
     fp_set_ui(&f->x0.x0,1);

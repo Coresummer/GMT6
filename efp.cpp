@@ -119,7 +119,7 @@ void efp_affine_to_jacobian_montgomery(efp_jacobian_t *ANS,efp_t *A){
 }
 
 void efp_projective_to_affine(efp_t *ANS,efp_projective_t *A){
-  static fp_t Zi,Zt;
+   fp_t Zi,Zt;
   //TODO:mul->mul_lazy
   fp_inv(&Zi,&A->z);
   fp_mul(&ANS->x,&A->x,&Zi);
@@ -128,7 +128,7 @@ void efp_projective_to_affine(efp_t *ANS,efp_projective_t *A){
 }
 
 void efp_jacobian_to_affine(efp_t *ANS,efp_jacobian_t *A){
-  static fp_t Zi,Zt;
+   fp_t Zi,Zt;
   //TODO:mul->mul_lazy
   fp_inv(&Zi,&A->z);
   fp_sqr(&Zt,&Zi);
@@ -139,7 +139,7 @@ void efp_jacobian_to_affine(efp_t *ANS,efp_jacobian_t *A){
 }
 
 void efp_jacobian_montgomery(efp_t *ANS,efp_jacobian_t *A){
-  static fp_t Zi,Zt;
+   fp_t Zi,Zt;
   fp_inv_montgomery(&Zi,&A->z);
   fp_sqrmod_montgomery(&Zt,&Zi);
   fp_mulmod_montgomery(&ANS->x,&A->x,&Zt);
@@ -149,7 +149,7 @@ void efp_jacobian_montgomery(efp_t *ANS,efp_jacobian_t *A){
 }
 
 void efp_mix(efp_jacobian_t *ANS,efp_jacobian_t *A,fp_t *Zi){
-  static fp_t Zt;
+   fp_t Zt;
   fp_sqr(&Zt,Zi);
   fp_mul(&ANS->x,&A->x,&Zt);
   fp_mul(&Zt,&Zt,Zi);
@@ -159,7 +159,7 @@ void efp_mix(efp_jacobian_t *ANS,efp_jacobian_t *A,fp_t *Zi){
 }
 
 void efp_mix_montgomery(efp_jacobian_t *ANS,efp_jacobian_t *A,fp_t *Zi){
-  static fp_t Zt;
+   fp_t Zt;
   fp_sqrmod_montgomery(&Zt,Zi);
   fp_mulmod_montgomery(&ANS->x,&A->x,&Zt);
   fp_mulmod_montgomery(&Zt,&Zt,Zi);
@@ -247,8 +247,8 @@ void efp_rational_point(efp_t *P){
 }
 
 void efp_ecd(efp_t *ANS,efp_t *P){
-  static efp_t tmp1_efp;
-  static fp_t tmp1_fp,tmp2_fp,tmp3_fp;
+   efp_t tmp1_efp;
+   fp_t tmp1_fp,tmp2_fp,tmp3_fp;
   if(P->infinity==1){
     ANS->infinity=1;
     return;
@@ -282,11 +282,11 @@ void efp_ecd(efp_t *ANS,efp_t *P){
 }
 
 void efp_ecd_jacobian_lazy_montgomery(efp_jacobian_t *ANS,efp_jacobian_t *P){
-  static fp_t s,m,T;
+   fp_t s,m,T;
 
-  static fp_t buf,tmp1;
-  static fp_t tmpY2;
-  static efp_jacobian_t Pt;
+   fp_t buf,tmp1;
+   fp_t tmpY2;
+   efp_jacobian_t Pt;
   if(fp_cmp_zero(&P->y)==0){
     ANS->infinity=1;
     return;
@@ -329,8 +329,8 @@ void efp_ecd_jacobian_lazy_montgomery(efp_jacobian_t *ANS,efp_jacobian_t *P){
 }
 
 void efp_eca(efp_t *ANS,efp_t *P1,efp_t *P2){
-  static efp_t tmp1_efp,tmp2_efp;
-  static fp_t tmp1_fp,tmp2_fp,tmp3_fp;
+   efp_t tmp1_efp,tmp2_efp;
+   fp_t tmp1_fp,tmp2_fp,tmp3_fp;
   if(P1->infinity==1){
     efp_set(ANS,P2);
     return;
@@ -370,11 +370,11 @@ void efp_eca(efp_t *ANS,efp_t *P1,efp_t *P2){
 }
 
 void efp_eca_jacobian_lazy_montgomery(efp_jacobian_t *ANS,efp_jacobian_t *P1,efp_jacobian_t *P2){
-  static efp_jacobian_t Pt1,Pt2;
-  static fp_t U1,U2,S1,S2,H,r;
+   efp_jacobian_t Pt1,Pt2;
+   fp_t U1,U2,S1,S2,H,r;
 
-  static fp_t buf,tmp1,tmp2;
-  static fp_t tmpZ1,tmpZ2,tmpH2,tmpH3,tmpU1H2;
+   fp_t buf,tmp1,tmp2;
+   fp_t tmpZ1,tmpZ2,tmpH2,tmpH3,tmpU1H2;
 
   if(P1->infinity==1){
     efp_jacobian_set(ANS,P2);
@@ -450,10 +450,10 @@ void efp_eca_jacobian_lazy_montgomery(efp_jacobian_t *ANS,efp_jacobian_t *P1,efp
 }
 
 void efp_eca_mixture_lazy_montgomery(efp_jacobian_t *ANS,efp_jacobian_t *P1,efp_jacobian_t *P2){
-  static efp_jacobian_t Pt1,Pt2;
-  static fp_t Z1Z1,HH,I,J,V;
-  static fp_t U1,U2,S1,S2,H,r;
-  static fp_t buf,tmp1,tmp2;
+   efp_jacobian_t Pt1,Pt2;
+   fp_t Z1Z1,HH,I,J,V;
+   fp_t U1,U2,S1,S2,H,r;
+   fp_t buf,tmp1,tmp2;
 
   if(P1->infinity==1){
     efp_jacobian_set(ANS,P2);
@@ -552,7 +552,7 @@ void efp_scm(efp_t *ANS,efp_t *P,mpz_t scalar){
 }
 
 void efp_jacobi_checkOnCurve_Twist(efp_jacobian_t* A){
-  static fp_t tmp1_fp, tmp2_fp, tmp3_fp, tmp4_fp;
+   fp_t tmp1_fp, tmp2_fp, tmp3_fp, tmp4_fp;
 
   fp_sqr(&tmp1_fp,&A->z);           //Z^2
   fp_mul(&tmp2_fp,&tmp1_fp,&A->z);  //Z^3
@@ -573,7 +573,7 @@ void efp_jacobi_checkOnCurve_Twist(efp_jacobian_t* A){
 }
 
 void efp_checkOnCurve_Twsit(efp_t* A){
-  static fp_t tmp1_fp,tmp2_fp,tmp3_fp,tmp4_fp;
+   fp_t tmp1_fp,tmp2_fp,tmp3_fp,tmp4_fp;
 
   fp_sqr(&tmp1_fp,&A->y);
   fp_sqr(&tmp2_fp,&A->x);
@@ -584,7 +584,7 @@ void efp_checkOnCurve_Twsit(efp_t* A){
 }
 
 void efp_proj_w1_1_checkOnCurve_Twist(efp_jacobian_t* A){
-  static fp_t tmp1_fp, tmp2_fp, tmp3_fp, tmp4_fp;
+   fp_t tmp1_fp, tmp2_fp, tmp3_fp, tmp4_fp;
 
   fp_inv(&tmp1_fp,&A->z);          //Z^-1
 

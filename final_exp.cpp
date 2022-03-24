@@ -3,7 +3,7 @@
 #include <cstdio>
 
 void final_exp(fp6_t *ANS,fp6_t *A){
-  static fp6_t tmp1_fp6,tmp2_fp6,tmp3_fp6,tmp4_fp6,tmp5_fp6,tmp6_fp6,tmp7_fp6;
+   fp6_t tmp1_fp6,tmp2_fp6,tmp3_fp6,tmp4_fp6,tmp5_fp6,tmp6_fp6,tmp7_fp6;
 
   fp6_inv(&tmp1_fp6,A);          //-1
   fp6_frobenius_map_p3(ANS,A);        //(p^3)
@@ -52,7 +52,7 @@ void final_exp(fp6_t *ANS,fp6_t *A){
 }
 
 void final_exp_lazy_montgomery(fp6_t *ANS,fp6_t *A){
-  static fp6_t tmp1_fp6,tmp2_fp6,tmp3_fp6,tmp4_fp6,tmp5_fp6,tmp6_fp6,tmp7_fp6;
+   fp6_t tmp1_fp6,tmp2_fp6,tmp3_fp6,tmp4_fp6,tmp5_fp6,tmp6_fp6,tmp7_fp6;
 
   fp6_inv_lazy_montgomery(&tmp1_fp6,A);          //-1
   fp6_frobenius_map_p3_montgomery(ANS,A);        //(p^3)

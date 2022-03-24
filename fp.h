@@ -52,6 +52,9 @@ void fp_mulmod_montgomery(fp_t *ANS,fp_t *A,fp_t *B);
 #ifdef mcl
 inline void mpn_mulmod_montgomery(mp_limb_t *ANS,mp_size_t /*ANS_size*/,mp_limb_t *A,mp_size_t /*A_size*/,mp_limb_t *B,mp_size_t /*B_size*/)
 {
+	#ifdef DEBUG_COST_A
+	cost_mul++;
+	#endif
 	mcl_mont(ANS, A, B);
 }
 #else

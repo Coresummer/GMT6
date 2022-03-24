@@ -1306,10 +1306,10 @@ void BENCH_miller_jac_lazy_montgomery(int LOOP){
   generate_g1(&P);
   generate_g2(&Q);
 
-  static efp_t mapped_P,mapped_Q,mapped_Q_neg;
-  static efp_t mapped_Pm,mapped_Qm,mapped_Q_negm;
-  static efp_jacobian_t S;
-  static efp_jacobian_t Sm;
+   efp_t mapped_P,mapped_Q,mapped_Q_neg;
+   efp_t mapped_Pm,mapped_Qm,mapped_Q_negm;
+   efp_jacobian_t S;
+   efp_jacobian_t Sm;
 //------------------Regular-----------------------
   fp6_set_ui_ui(&f,0);
   fp_set_ui(&f.x0.x0,1);
@@ -1388,10 +1388,10 @@ void BENCH_miller_proj_lazy_montgomery(int LOOP){
   generate_g1(&P);
   generate_g2(&Q);
 
-  static efp_t mapped_P,mapped_Q,mapped_Q_neg;
-  static efp_t mapped_Pm,mapped_Qm,mapped_Q_negm;
-  static efp_jacobian_t S;
-  static efp_jacobian_t Sm;
+   efp_t mapped_P,mapped_Q,mapped_Q_neg;
+   efp_t mapped_Pm,mapped_Qm,mapped_Q_negm;
+   efp_jacobian_t S;
+   efp_jacobian_t Sm;
 //------------------Regular-----------------------
   fp6_set_ui_ui(&f,0);
   fp_set_ui(&f.x0.x0,1);
@@ -1716,7 +1716,7 @@ void check_count_finalexp_pow_2NAF(){
 }
 
 void BENCH_Pairing_proj_lazy_montgomery_static(int LOOP){
-  printf("check_pairing_proj_static() 開始\n");
+  printf("check_pairing_proj_() 開始\n");
   efp6_t P,Q,aP,bQ,tmp1;
   fp6_t f,e1,e2;
   mpz_t a,b,ab;
@@ -1770,7 +1770,7 @@ void BENCH_Pairing_proj_lazy_montgomery_static(int LOOP){
   efp_jacobian_init(&S);
 
 	printf("--------------------------------------\n");
-  printf("check lazy montgomery pairing_static()\n");
+  printf("check lazy montgomery pairing_()\n");
   printf("--------------------------------------\n");
   pre_miller_opt_ate_proj_loop_2NAF_lazy_montgomery(&f, &mapped_P, &mapped_Q, &mapped_Q_neg, &S, &aP, &bQ);
   miller_opt_ate_proj_loop_2NAF_lazy_montgomery(&f,&mapped_P,&mapped_Q,&mapped_Q_neg,&S);

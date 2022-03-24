@@ -119,7 +119,7 @@ void efp2_jacobian_printf(std::string str ,efp2_jacobian_t *P){
 // }
 
 // void efp2_projective_printf_affine(std::string str ,efp2_projective_t *P){
-//   static efp2_t out;
+//    efp2_t out;
 //   efp2_projective_to_affine(&out,P);
 //   printf("%s",str.c_str());
 //   if(P->infinity==0){
@@ -134,7 +134,7 @@ void efp2_jacobian_printf(std::string str ,efp2_jacobian_t *P){
 // }
 
 // void efp2_projective_printf_affine_montgomery(std::string str ,efp2_projective_t *P){
-//   static efp2_t out;
+//    efp2_t out;
 //   efp2_projective_to_affine_montgomery(&out,P);
 //   printf("%s",str.c_str());
 //   if(P->infinity==0){
@@ -197,7 +197,7 @@ void efp2_affine_to_jacobian_montgomery(efp2_jacobian_t *ANS,efp2_t *A){
 }
 
 void efp2_jacobian_to_affine(efp2_t *ANS,efp2_jacobian_t *A){
-  static fp2_t Zi,Zt;
+   fp2_t Zi,Zt;
   //TODO:mul->mul_lazy
   fp2_inv(&Zi,&A->z);
   fp2_mul(&Zt,&Zi,&Zi);
@@ -208,7 +208,7 @@ void efp2_jacobian_to_affine(efp2_t *ANS,efp2_jacobian_t *A){
 }
 
 void efp2_projective_to_affine(efp2_t *ANS,efp2_projective_t *A){
-  static fp2_t Zi;
+   fp2_t Zi;
   //TODO:mul->mul_lazy
   fp2_inv(&Zi,&A->z);
   fp2_mul(&ANS->x,&A->x,&Zi);
@@ -217,7 +217,7 @@ void efp2_projective_to_affine(efp2_t *ANS,efp2_projective_t *A){
 }
 
 // void efp2_jacobian_to_affine_montgomery(efp2_t *ANS,efp2_jacobian_t *A){
-//   static fp2_t Zi,Zt;
+//    fp2_t Zi,Zt;
 //   fp2_inv_lazy_montgomery(&Zi,&A->z);
 //   fp2_mul_lazy_montgomery(&Zt,&Zi,&Zi);
 //   fp2_mul_lazy_montgomery(&ANS->x,&A->x,&Zt);
@@ -227,7 +227,7 @@ void efp2_projective_to_affine(efp2_t *ANS,efp2_projective_t *A){
 // }
 
 // void efp2_projective_to_affine_montgomery(efp2_t *ANS,efp2_projective_t *A){
-//   static fp2_t Zi;
+//    fp2_t Zi;
 //   //TODO:mul->mul_lazy
 //   fp2_inv_lazy_montgomery(&Zi,&A->z);
 //   fp2_mul_lazy_montgomery(&ANS->x,&A->x,&Zi);
@@ -236,7 +236,7 @@ void efp2_projective_to_affine(efp2_t *ANS,efp2_projective_t *A){
 // }
 
 void efp2_mix(efp2_jacobian_t *ANS,efp2_jacobian_t *A,fp2_t *Zi){
-  static fp2_t Zt;
+   fp2_t Zt;
   //TODO:mul->mul_lazy
   fp2_mul(&Zt,Zi,Zi);
   fp2_mul(&ANS->x,&A->x,&Zt);
@@ -247,7 +247,7 @@ void efp2_mix(efp2_jacobian_t *ANS,efp2_jacobian_t *A,fp2_t *Zi){
 }
 
 // void efp2_mix_montgomery(efp2_jacobian_t *ANS,efp2_jacobian_t *A,fp2_t *Zi){
-//   static fp2_t Zt;
+//    fp2_t Zt;
 //   fp2_mul_lazy_montgomery(&Zt,Zi,Zi);
 //   fp2_mul_lazy_montgomery(&ANS->x,&A->x,&Zt);
 //   fp2_mul_lazy_montgomery(&Zt,&Zt,Zi);
@@ -334,8 +334,8 @@ void efp2_rational_point(efp2_t *P){
 }
 
 void efp2_ecd(efp2_t *ANS,efp2_t *P){
-  static efp2_t tmp1_efp2;
-  static fp2_t tmp1_fp2,tmp2_fp2,tmp3_fp2;
+   efp2_t tmp1_efp2;
+   fp2_t tmp1_fp2,tmp2_fp2,tmp3_fp2;
   if(P->infinity==1){
     ANS->infinity=1;
     return;
@@ -369,11 +369,11 @@ void efp2_ecd(efp2_t *ANS,efp2_t *P){
 }
 
 // void efp2_ecd_jacobian_lazy_montgomery(efp2_jacobian_t *ANS,efp2_jacobian_t *P){
-//   static fp2_t s,m,T;
+//    fp2_t s,m,T;
 
-//   static fp2_t buf,tmp1;
-//   static fp2_t tmpY2;
-//   static efp2_jacobian_t Pt;
+//    fp2_t buf,tmp1;
+//    fp2_t tmpY2;
+//    efp2_jacobian_t Pt;
 //   if(fp2_cmp_zero(&P->y)==0){
 //     ANS->infinity=1;
 //     return;
@@ -416,8 +416,8 @@ void efp2_ecd(efp2_t *ANS,efp2_t *P){
 // }
 
 void efp2_eca(efp2_t *ANS,efp2_t *P1,efp2_t *P2){
-  static efp2_t tmp1_efp2,tmp2_efp2;
-  static fp2_t tmp1_fp2,tmp2_fp2,tmp3_fp2;
+   efp2_t tmp1_efp2,tmp2_efp2;
+   fp2_t tmp1_fp2,tmp2_fp2,tmp3_fp2;
   if(P1->infinity==1){
     efp2_set(ANS,P2);
     return;
@@ -456,11 +456,11 @@ void efp2_eca(efp2_t *ANS,efp2_t *P1,efp2_t *P2){
 }
 
 // void efp2_eca_jacobian_lazy_montgomery(efp2_jacobian_t *ANS,efp2_jacobian_t *P1,efp2_jacobian_t *P2){
-//   static efp2_jacobian_t Pt1,Pt2;
-//   static fp2_t U1,U2,S1,S2,H,r;
+//    efp2_jacobian_t Pt1,Pt2;
+//    fp2_t U1,U2,S1,S2,H,r;
 
-//   static fp2_t buf,tmp1,tmp2;
-//   static fp2_t tmpZ1,tmpZ2,tmpH2,tmpH3,tmpU1H2;
+//    fp2_t buf,tmp1,tmp2;
+//    fp2_t tmpZ1,tmpZ2,tmpH2,tmpH3,tmpU1H2;
 
 //   if(P1->infinity==1){
 //     efp2_jacobian_set(ANS,P2);
@@ -534,10 +534,10 @@ void efp2_eca(efp2_t *ANS,efp2_t *P1,efp2_t *P2){
 //   // //getchar();
 // }
 // void efp2_eca_mixture_lazy_montgomery(efp2_jacobian_t *ANS,efp2_jacobian_t *P1,efp2_jacobian_t *P2){
-//   static efp2_jacobian_t Pt1,Pt2;
-//   static fp2_t Z1Z1,HH,I,J,V;
-//   static fp2_t U1,U2,S1,S2,H,r;
-//   static fp2_t buf,tmp1,tmp2;
+//    efp2_jacobian_t Pt1,Pt2;
+//    fp2_t Z1Z1,HH,I,J,V;
+//    fp2_t U1,U2,S1,S2,H,r;
+//    fp2_t buf,tmp1,tmp2;
 
 //   if(P1->infinity==1){
 //     efp2_jacobian_set(ANS,P2);
