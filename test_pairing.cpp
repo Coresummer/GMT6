@@ -1,5 +1,6 @@
 #include "test_pairing.h"
 #include "final_exp.h"
+#include "fp6.h"
 #include "miller.h"
 /*
 void SCM_func_check(){
