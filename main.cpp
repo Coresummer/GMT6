@@ -69,7 +69,7 @@ int main(){
   // check_pairing_2NAF_costello();
   // check_pairing_static();
   // check_pairing_jac_count_2NAF_lazy_montgomery();
-  check_pairing_proj_count_2NAF_lazy_montgomery();
+  // check_pairing_proj_count_2NAF_lazy_montgomery();
   // check_pairing_count_2NAF();
   // check_pairing_time_2NAF();
 

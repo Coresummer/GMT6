@@ -279,17 +279,16 @@ void fp2_sqr(fp2_t *ANS,fp2_t *A){
   // fp_sub(&tmp3_fp,&tmp3_fp, &tmp1_fp); //(a+b)^2 - a^2 
   // fp_sub(&ANS->x1,&tmp3_fp, &tmp2_fp); //(a+b)^2 - a^2 - b^2 
 
-
   fp_l1shift(&tmp1_fp, &tmp_A.x1);  //2b
   fp_add(&tmp2_fp,&tmp_A.x0,&tmp_A.x1);   //a+b
   fp_add(&tmp3_fp,&tmp_A.x0,&tmp1_fp);   //a+2b
-  fp_mul(&tmp1_fp,&tmp2_fp,&tmp3_fp);//(a+b)(a+2b)
+  fp_mul(&tmp3_fp,&tmp2_fp,&tmp3_fp);//(a+b)(a+2b)
 
-  fp_mul(&tmp2_fp,&tmp_A.x0,&tmp_A.x1); //ab
-  fp_l1shift(&ANS->x1,&tmp2_fp);    //2ab
+  fp_mul(&ANS->x1,&tmp_A.x0,&tmp1_fp); //2ab
+  // fp_l1shift(&ANS->x1,&tmp2_fp);    //2ab
 
-  fp_sub(&ANS->x0,&tmp1_fp,&ANS->x1);  //(a+b)(a+2b)-2ab
-  fp_sub(&ANS->x0,&ANS->x0,&tmp2_fp);  //(a+b)(a+2b)-3ab
+  fp_sub(&ANS->x0,&tmp3_fp,&ANS->x1);  //(a+b)(a+2b)-2ab
+  fp_sub(&ANS->x0,&ANS->x0,&ANS->x1);  //(a+b)(a+2b)-3ab
   
 }
 
