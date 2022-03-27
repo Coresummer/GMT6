@@ -21,6 +21,9 @@ void fp_set_mpn(fp_t *ANS,mp_limb_t *A);
 #ifdef MCL_ADDSUB
 inline void fp_set_neg(fp_t *ANS,fp_t *A)
 {
+	#ifdef DEBUG_COST_A
+		cost_sub++;
+	#endif
 	mcl_neg(ANS->x0, A->x0);
 }
 #else
@@ -31,6 +34,9 @@ void fp_lshift(fp_t *ANS,fp_t *A, unsigned long int UI);
 #ifdef MCL_ADDSUB
 inline void fp_l1shift(fp_t *ANS,fp_t *A)
 {
+	#ifdef DEBUG_COST_A
+		cost_add++;
+	#endif
 	mcl_add(ANS->x0, A->x0, A->x0);
 }
 #else
@@ -52,6 +58,9 @@ void fp_mulmod_montgomery(fp_t *ANS,fp_t *A,fp_t *B);
 #ifdef MCL_ADDSUB
 inline void mpn_mulmod_montgomery(mp_limb_t *ANS,mp_size_t /*ANS_size*/,mp_limb_t *A,mp_size_t /*A_size*/,mp_limb_t *B,mp_size_t /*B_size*/)
 {
+	#ifdef DEBUG_COST_A
+		cost_mul++;
+	#endif
 	mcl_mont(ANS, A, B);
 }
 #else
@@ -82,6 +91,10 @@ void fp_sqr_nonmod(fpd_t *ANS,fp_t *A);
 #ifdef MCL_ADDSUB
 inline void fp_add(fp_t *ANS,fp_t *A,fp_t *B)
 {
+	#ifdef DEBUG_COST_A
+		cost_add++;
+	#endif
+
 	mcl_add(ANS->x0, A->x0, B->x0);
 }
 #else
@@ -95,6 +108,9 @@ void fp_add_mpn(fp_t *ANS,fp_t *A,mp_limb_t *B);
 #ifdef MCL_ADDSUB
 inline void fp_sub(fp_t *ANS,fp_t *A,fp_t *B)
 {
+	#ifdef DEBUG_COST_A
+		cost_sub++;
+	#endif
 	mcl_sub(ANS->x0, A->x0, B->x0);
 }
 #else
